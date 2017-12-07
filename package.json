@@ -19,11 +19,12 @@
     "fabric-webpack": "^1.6.0-rc.1",
     "lodash.debounce": "^4.0.8",
     "node-sass": "^4.7.2",
-    "opentype.js": "^0.7.3",
+    "opentype.js": "^0.6.9",
     "potrace": "^2.1.1",
     "sass-loader": "^6.0.6",
     "vue": "^2.5.2",
     "vue-codemirror-lite": "^1.0.3",
+    "vue-i18n": "^7.3.2",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
