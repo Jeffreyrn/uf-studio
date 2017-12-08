@@ -6,10 +6,17 @@
         <span v-if="state.mode === 'greyscale'" v-text="$t('paintApp.dailog.addImage.option1')"></span>
         <span v-else-if="state.mode === 'outline'" v-text="$t('paintApp.dailog.addImage.option2')"></span>
       </div>
-      <el-button @click="newProject()">New</el-button>
-      <el-button @click="visible.setting = true">Print</el-button>
+      <el-button @click="newProject()" type="info" round>
+        <img src="../assets/img/icon_new_project.svg" alt="New Project">
+      </el-button>
+      <el-button @click="visible.setting = true" type="info" round>
+        <img src="../assets/img/icon_start.svg" alt="start print">
+      </el-button>
     </div>
-    <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
+    <div class="fabric-container">
+      <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
+    </div>
+    
     <el-button @click="undoEvent()">
       <img src="../assets/img/tool-undo.svg" alt="undo">
     </el-button>
@@ -431,11 +438,14 @@ export default {
 </script>
 <style scoped lang="scss">
 #paint-wrapper {
-  background: #ccc;
   #fabric {
     background: white;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
+}
+.fabric-container {
+  margin: auto;
+  width: fit-content;
 }
 a {
   color: white;

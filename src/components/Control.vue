@@ -1,6 +1,19 @@
 <template>
   <div class="main-wrapper" id="control-wrapper">
-    <canvas id="canvas-move" data-score="0" width="600" height="600"></canvas>
+    <div class="motion-wrapper">
+      <canvas id="canvas-move" data-score="0" width="600" height="600"></canvas>
+      <el-slider v-model="position.z" vertical height="300px"></el-slider>
+    </div>
+    <div class="config-wrapper">
+      <div class="block">
+        <span class="text">speed</span>
+        <el-slider v-model="state.speed"></el-slider>
+      </div>
+      <div class="block">
+        <span class="text">acceleration</span>
+        <el-slider v-model="state.acceleration"></el-slider>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -26,6 +39,10 @@ export default {
         x: 70,
         y: 70,
         z: 80,
+      },
+      state: {
+        speed: 50,
+        acceleration: 50,
       },
     };
   },
@@ -187,14 +204,30 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 #control-wrapper {
   background: radial-gradient(ellipse farthest-corner, #444, #3A3A3A, #313131, #2B2B2B);
+  .motion-wrapper{
+    display: inline-flex;
+    align-items: center;
+  }
+  .config-wrapper{
+    .block {
+      span{
+        width: 20%;
+      }
+      display: flex;
+      align-items: center;
+      .el-slider {
+        width: 70%;
+      }
+    }
+  }
 }
 #canvas-move:hover {
   cursor: move;
 }
-a {
+a, .text {
   color: white;
 }
 </style>
