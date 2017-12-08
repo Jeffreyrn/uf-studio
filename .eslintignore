@@ -3,4 +3,5 @@
 /dist/
 /*.js
 /test/unit/coverage/
-src/assets/lib-external/*
+/src/assets/lib-external/*
+/src/assets/lib/*

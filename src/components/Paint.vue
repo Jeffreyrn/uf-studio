@@ -10,7 +10,7 @@
     <el-button @click="visible.text = true;">
       <img src="../assets/img/tool-text.svg" alt="text">
     </el-button>
-    <el-button>
+    <el-button @click="$refs.addFile.click()">
       <img src="../assets/img/tool-image.svg" alt="image">
     </el-button>
     <el-button @click="duplicate()">
@@ -43,13 +43,15 @@
         <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
       </span>
     </el-dialog>
+    <input type="file" class="hide" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​
   </div>
 </template>
 <script>
 // import robot from '../assets/lib/robot';
 import { fabric } from 'fabric-webpack';
 import opentype from 'opentype.js';
-// import Potrace from 'potrace';
+import Potrace from '../assets/lib/potrace';
+
 const CONFIG = {
   addPosition: {
     left: 350,
@@ -67,6 +69,7 @@ export default {
         saved: true,
         empty: true,
         backStep: 0,
+        mode: 'outline',
       },
       visible: {
         text: false,
@@ -103,6 +106,52 @@ export default {
     this.updateModifications();
   },
   methods: {
+    addImage() {
+      const file = this.$refs.addFile.files[0];
+      this.$refs.addFile.value = '';
+      if (file) {
+        const fileType = file.type;
+        if (fileType === 'image/svg+xml') { // svg
+          const url = URL.createObjectURL(file);
+          fabric.loadSVGFromURL(url, (objects, options) => {
+            const svg = fabric.util.groupSVGElements(objects, options);
+            svg.scaleToWidth(CONFIG.addPosition.width);
+            svg.scaleToHeight(CONFIG.addPosition.width);
+            svg.set({ left: CONFIG.addPosition.left, top: CONFIG.addPosition.top });
+            this.playground.add(svg);
+            this.updateModifications();
+          });
+        }
+        else if (fileType.match('image.*')) { // not svg
+          const edge = (this.state.mode === 'outline');
+          Potrace.loadImageFromFile(file);
+          Potrace.setParameter({
+            optcurve: true,
+            opttolerance: 0.8,
+            alphamax: 5,
+            edge,
+            // greyscale: true,
+          });
+          Potrace.process(() => {
+            const pathstr = Potrace.getSVGPath(1);
+            const path = new fabric.Path(pathstr);
+            const scale = 100 / path.width;
+            path.set({
+              left: CONFIG.addPosition.left,
+              top: CONFIG.addPosition.top,
+              scaleX: scale,
+              scaleY: scale,
+              fill: 'black',
+            });
+            this.playground.add(path);
+            this.updateModifications();
+          });
+        }
+        else {
+          this.$message(this.$t('paintApp.dailog.onlysvg'));
+        }
+      }
+    },
     addTextAsPath(text) {
       if (text.trim()) {
         opentype.load(this.FONT_LIST[this.dialog.fontSelect].src, (err, font) => {
@@ -206,7 +255,7 @@ export default {
       }).then(() => {
         this.playground.clear().renderAll();
         this.updateModifications();
-      });
+      }).catch(() => {});
     },
   },
   beforeDestroy() {
