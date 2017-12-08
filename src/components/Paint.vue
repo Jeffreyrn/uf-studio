@@ -43,7 +43,7 @@
         <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
       </span>
     </el-dialog>
-    <input type="file" class="hide" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​
+    <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​
   </div>
 </template>
 <script>
@@ -213,8 +213,16 @@ export default {
     },
     duplicate() {
       const activeObject = this.playground.getActiveObject();
-      if (activeObject === null) {
-        const activeGroup = this.playground.getActiveGroup();
+      const activeGroup = this.playground.getActiveGroup();
+      if (activeObject) {
+        activeObject.clone((obj) => {
+          obj.set('left', obj.left + 8);
+          obj.set('top', obj.top + 8);
+          this.playground.add(obj);
+          this.updateModifications();
+        });
+      }
+      else if (activeGroup) {
         const objects = activeGroup.getObjects();
         this.playground.discardActiveGroup();
         objects.forEach((obj) => {
@@ -228,23 +236,31 @@ export default {
           });
         });
         this.playground.discardActiveGroup().renderAll();
+        this.updateModifications();
       }
       else {
-        activeObject.clone((obj) => {
-          obj.set('left', obj.left + 8);
-          obj.set('top', obj.top + 8);
-          this.playground.add(obj);
-        });
+        this.$message('You must select before duplicate.');
       }
-      this.updateModifications();
     },
     removeSelected() {
-      let deleteObj = this.playground.getActiveObject();
-      if (!deleteObj) {
-        deleteObj = this.playground.getActiveGroup();
+      const deleteObj = this.playground.getActiveObject();
+      const deleteGroup = this.playground.getActiveGroup();
+      if (deleteObj) {
+        this.playground.remove(deleteObj);
+        this.updateModifications();
       }
-      this.playground.remove(deleteObj);
-      this.updateModifications();
+      else if (deleteGroup) {
+        console.log(deleteGroup);
+        const objs = deleteGroup.getObjects();
+        this.playground.discardActiveGroup();
+        objs.forEach((obj) => {
+          this.playground.remove(obj);
+        });
+        this.updateModifications();
+      }
+      else {
+        this.$message('You must select before delete.');
+      }
     },
     removeAll() {
       this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
