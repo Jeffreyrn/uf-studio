@@ -44,14 +44,30 @@ export default {
         speed: 50,
         acceleration: 50,
       },
+      event: {},
     };
   },
   mounted() {
     this.move.canvas = document.getElementById('canvas-move');
     this.move.ctx = this.move.canvas.getContext('2d');
     this.drawMoveRange();
-    this.move.canvas.addEventListener('mousedown', this.onMouseDown);
-    this.move.canvas.addEventListener('mouseup', this.removeMouseMove);
+    if ('ontouchstart' in window) {
+      this.event = {
+        down: 'touchstart',
+        up: 'touchend',
+        move: 'touchmove',
+      };
+    }
+    else {
+      this.event = {
+        down: 'mousedown',
+        up: 'mouseup',
+        move: 'mousemove',
+      };
+    }
+    this.move.canvas.addEventListener('touchstart', this.onMouseDown);
+    this.move.canvas.addEventListener(this.event.down, this.onMouseDown);
+    this.move.canvas.addEventListener(this.event.up, this.removeMouseMove);
   },
   methods: {
     drawMoveRange() {
@@ -143,7 +159,7 @@ export default {
         x: cursor.x - this.position.x,
         y: cursor.y - this.position.y,
       };
-      this.move.canvas.addEventListener('mousemove', this.onMouseMove, false);
+      this.move.canvas.addEventListener(this.event.move, this.onMouseMove, false);
     },
     onMouseMove(e) {
       const mouse = {
@@ -172,7 +188,7 @@ export default {
       }
     },
     removeMouseMove() {
-      this.move.canvas.removeEventListener('mousemove', this.onMouseMove);
+      this.move.canvas.removeEventListener(this.event.move, this.onMouseMove);
     },
     setPosition: debounce(function sendposition() {
       const zoom = 2.5;
@@ -188,8 +204,8 @@ export default {
     }, 100),
   },
   beforeDestroy() {
-    this.move.canvas.removeEventListener('mousedown', this.onMouseDown);
-    this.move.canvas.removeEventListener('mouseup', this.removeMouseMove);
+    this.move.canvas.removeEventListener(this.event.down, this.onMouseDown);
+    this.move.canvas.removeEventListener(this.event.up, this.removeMouseMove);
   },
   watch: {
     'position.x': function x() {
