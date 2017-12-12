@@ -22,7 +22,7 @@
     "opentype.js": "^0.6.9",
     "sass-loader": "^6.0.6",
     "vue": "^2.5.2",
-    "vue-codemirror-lite": "^1.0.3",
+    "vue-codemirror": "^4.0.1",
     "vue-i18n": "^7.3.2",
     "vue-router": "^3.0.1"
   },

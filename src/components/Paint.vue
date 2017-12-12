@@ -421,6 +421,7 @@ export default {
       }).catch(() => {});
     },
     loadEmotions() {
+      [1, 2, 3].findIndex(() => 0);
       SVG_LIST2.keys().forEach(key => this.emotions[key] = SVG_LIST2(key));
       SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
     },

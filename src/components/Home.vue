@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h2>Welcome to Studio</h2>
+    <h2></h2>
     <router-link :to="{ name: 'Paint'}"><el-button type="success">Paint</el-button></router-link>
     <router-link :to="{ name: 'Editor'}"><el-button type="primary">Editor</el-button></router-link>
     <router-link :to="{ name: 'Control'}"><el-button type="warning">Control</el-button></router-link>
@@ -13,7 +13,7 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
-      msg: '',
+      msg: 'Welcome to Studio',
     };
   },
 };
