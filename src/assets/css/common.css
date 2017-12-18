@@ -1,0 +1,72 @@
+
+/*
+@font-face{
+  font-family:'Gotham-Bold';
+  src: url('../fonts/Gotham-Bold_0.otf');
+}
+@font-face{
+  font-family:'Gotham-Book';
+  src: url('../fonts/Hiragino_gb_W3.ttf');
+  unicode-range: U+4E00-9FFF;
+}
+@font-face{
+  font-family:'Gotham-Book';
+  src: url('../fonts/Gotham-Book_0.otf');
+}
+@font-face {
+  font-family: 'ufbigfont';
+  src: url('../fonts/BIG-JOHN.otf');
+}
+@font-face {
+  font-family: 'black-light';
+  src: url('../fonts/blackLight.ttf');
+}
+@font-face {
+  font-family: 'xing-kai';
+  src: url('../fonts/STXingkai-SC-Bold.ttf');
+}
+@font-face {
+  font-family: 'lan-ting';
+  src: url('../fonts/lanting.ttf');
+}
+@font-face {
+  font-family: 'kan-ti';
+  src: url('../fonts/kanti.ttf');
+}
+@font-face {
+  font-family: 'gotham-medium';
+  src: url('../fonts/gotham-medium.otf');
+}
+*/
+
+.app-container {
+  /*position: absolute;*/
+}
+
+.limitWH {
+  position: absolute;
+  border:1px;
+  background-color: #fffaf0;
+  // width: 667px;
+  // height: 375px;
+  overflow:scroll;
+}
+.textarea-style {
+  width: 350px;
+  height: 80px;
+}
+.page-01-bg {
+  background-color: #e9e6d3;
+}
+
+div, span, button, textarea {
+  /*font-size: 12px;*/
+  /*font-family: Gotham-Medium;*/
+  /*color: gray;*/
+}
+
+/*span {
+  font-size: 12px;
+  font-family: Gotham-Medium;
+  color: gray;
+}*/
