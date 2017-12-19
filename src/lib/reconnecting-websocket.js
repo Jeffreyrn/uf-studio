@@ -243,7 +243,7 @@
             }
 
             var localWs = ws;
-            var timeout = setTimeout(function() {
+            const timeout = setTimeout(function() {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     logger.debug('ReconnectingWebSocket', 'connection-timeout', self.url);
                 }
@@ -267,32 +267,32 @@
             };
 
             ws.onclose = function(event) {
-                clearTimeout(timeout);
-                ws = null;
-                if (forcedClose) {
-                    self.readyState = WebSocket.CLOSED;
-                    eventTarget.dispatchEvent(generateEvent('close'));
-                }
-                else {
-                    self.readyState = WebSocket.CONNECTING;
-                    var e = generateEvent('connecting');
-                    e.code = event.code;
-                    e.reason = event.reason;
-                    e.wasClean = event.wasClean;
-                    eventTarget.dispatchEvent(e);
-                    if (!reconnectAttempt && !timedOut) {
-                        if (self.debug || ReconnectingWebSocket.debugAll) {
-                            logger.debug('ReconnectingWebSocket', 'onclose', self.url);
-                        }
-                        eventTarget.dispatchEvent(generateEvent('close'));
-                    }
+              clearTimeout(timeout);
+              ws = null;
+              if (forcedClose) {
+                  self.readyState = WebSocket.CLOSED;
+                  eventTarget.dispatchEvent(generateEvent('close'));
+              }
+              else {
+                  self.readyState = WebSocket.CONNECTING;
+                  var e = generateEvent('connecting');
+                  e.code = event.code;
+                  e.reason = event.reason;
+                  e.wasClean = event.wasClean;
+                  eventTarget.dispatchEvent(e);
+                  if (!reconnectAttempt && !timedOut) {
+                      if (self.debug || ReconnectingWebSocket.debugAll) {
+                          logger.debug('ReconnectingWebSocket', 'onclose', self.url);
+                      }
+                      eventTarget.dispatchEvent(generateEvent('close'));
+                  }
 
-                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
-                    setTimeout(function() {
-                        self.reconnectAttempts++;
-                        self.open(true);
-                    }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
-                }
+                  var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
+                  setTimeout(function() {
+                      self.reconnectAttempts++;
+                      self.open(true);
+                  }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
+              }
             };
             ws.onmessage = function(event) {
                 if (self.debug || ReconnectingWebSocket.debugAll) {

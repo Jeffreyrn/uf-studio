@@ -41,6 +41,15 @@
 </template>
 <script>
 
+import Page01 from './params/Page01';
+import Page02 from './params/Page02';
+import Page03 from './params/Page03';
+import Page04 from './params/Page04';
+import Page05 from './params/Page05';
+import Page06 from './params/Page06';
+import ScreenSize from './params/ScreenSize';
+import GlobalUtil from '../core/global_util';
+
 console.log('Rounter = Index');
 
 require('../assets/css/reseet.css');
@@ -49,7 +58,7 @@ require('../assets/css/common.css');
 
 // import './assets/css/sweetalert2.css';
 
-import GlobalUtil from '../core/global_util';
+
 // import JSColor from '../lib/jscolor';
 
 const r = GlobalUtil.getUrlParam('lan');
@@ -59,22 +68,11 @@ GlobalUtil.store.lan = r;
 // console.log('conf = ' + conf);
 
 const min_width = GlobalUtil.getMinWidth();
-console.log('min_width = ' + min_width);
+console.log(`min_width = ${min_width}`);
+
 //
 GlobalUtil.autoSizeScale = min_width / 375.0;
-//
-console.log('main GlobalUtil getUrlParam = ' + r);
-
-import Page01 from './params/Page01.vue';
-import Page02 from './params/Page02.vue';
-import Page03 from './params/Page03.vue';
-import Page04 from './params/Page04.vue';
-import Page05 from './params/Page05.vue';
-import Page06 from './params/Page06.vue';
-import ScreenSize from './params/ScreenSize.vue';
-
-// var html = document.getElementById("index-page");
-// console.log("html = " + html.innerHTML);
+console.log(`main GlobalUtil getUrlParam = ${r}`);
 
 export default {
   data() {
@@ -101,16 +99,16 @@ export default {
   },
   methods: {
     change(e, num) {
-      GlobalUtil.model.localParamsSetting.page = '' + num;
+      GlobalUtil.model.localParamsSetting.page = `${num}`;
       // console.log('params_page = ' + this.model.localParamsSetting.page);
       // console.log('thisBtn id = ' + btnID);
-      var changeBtns = document.getElementsByName('change-btn');
-      for (var i = 0; i < changeBtns.length; i++) {
-        var btn = changeBtns[i];
+      const changeBtns = document.getElementsByName('change-btn');
+      for (let i = 0; i < changeBtns.length; i = i + 1) {
+        const btn = changeBtns[i];
         btn.style.backgroundColor = 'transparent';
-      };
+      }
       if (!e) {
-        changeBtns[num-1].style.backgroundColor = 'yellow';
+        changeBtns[num - 1].style.backgroundColor = 'yellow';
       }
       else {
         e.currentTarget.style.backgroundColor = 'yellow';
@@ -119,10 +117,11 @@ export default {
     onLink() {
       const state = GlobalUtil.socketCom.socket_info.socket.readyState;
       console.log(state);
-      if (1 === state) {
+      if (state === 1) {
         GlobalUtil.socketCom.close();
-      } else {
-         GlobalUtil.socketCom.open();
+      }
+      else {
+        GlobalUtil.socketCom.open();
       }
     },
   },
