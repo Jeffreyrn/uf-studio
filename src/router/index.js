@@ -5,6 +5,7 @@ import Control from '@/components/Control';
 import Editor from '@/components/Editor';
 import Paint from '@/components/Paint';
 import Params from '@/components/Params';
+import Teach from '@/components/Teach';
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/params',
       name: 'Params',
       component: Params,
+    },
+    {
+      path: '/teach',
+      name: 'Teach',
+      component: Teach,
     },
   ],
 });

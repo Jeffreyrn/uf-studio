@@ -30,7 +30,7 @@ export default {
         console.log(`send response = ${JSON.stringify(dict)}`);
         const endTime2 = new Date().getTime();
         const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diss} ms`;
+        self.diff = `time diff = ${diff} ms`;
       });
     },
     xarm_get_state() {
@@ -43,7 +43,7 @@ export default {
         console.log('send response = ' + JSON.stringify(dict));
         var endTime2  = new Date().getTime();
         const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diss} ms`;
+        self.diff = `time diff = ${diff} ms`;
       });
     },
   },

@@ -1,5 +1,5 @@
 <template lang="html">
-    <div id='index-page' class="app-container limitWH">
+    <div id='index-page' class='app-container limitWH'>
       <div>
         uFactory Servo
         <button class="change-btn" @click="onLink()">
