@@ -1373,7 +1373,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror@^5.22.0, codemirror@^5.32.0:
+codemirror@^5.32.0:
   version "5.32.0"
   resolved "http://registry.npm.taobao.org/codemirror/download/codemirror-5.32.0.tgz#cb6ff5d8ef36d0b10f031130e2d9ebeee92c902e"
 
@@ -1927,6 +1927,10 @@ detect-node@^2.0.3:
 di@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/di/-/di-0.0.1.tgz#806649326ceaa7caa3306d75d985ea2748ba913c"
+
+diff-match-patch@^1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/diff-match-patch/download/diff-match-patch-1.0.0.tgz#1cc3c83a490d67f95d91e39f6ad1f2e086b63048"
 
 diff@1.4.0:
   version "1.4.0"
@@ -6857,11 +6861,12 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
-vue-codemirror-lite@^1.0.3:
-  version "1.0.3"
-  resolved "http://registry.npm.taobao.org/vue-codemirror-lite/download/vue-codemirror-lite-1.0.3.tgz#41313265fe92e62646aab22f3c991dd6f84f4807"
+vue-codemirror@^4.0.1:
+  version "4.0.1"
+  resolved "http://registry.npm.taobao.org/vue-codemirror/download/vue-codemirror-4.0.1.tgz#270b4fa1165c9596888612f47b9fcbebcecf5cbe"
   dependencies:
-    codemirror "^5.22.0"
+    codemirror "^5.32.0"
+    diff-match-patch "^1.0.0"
 
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"
