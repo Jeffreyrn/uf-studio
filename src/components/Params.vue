@@ -48,16 +48,15 @@ import Page04 from './params/Page04';
 import Page05 from './params/Page05';
 import Page06 from './params/Page06';
 import ScreenSize from './params/ScreenSize';
+import GlobalUtil from '../core/global_util';
 
 console.log('Rounter = Index');
 
 require('../assets/css/reseet.css');
 require('../assets/css/common.css');
+
 // require('../assets/css/test.scss');
-
 // import './assets/css/sweetalert2.css';
-
-
 // import JSColor from '../lib/jscolor';
 
 const r = GlobalUtil.getUrlParam('lan');
@@ -102,10 +101,36 @@ export default {
       // console.log('params_page = ' + this.model.localParamsSetting.page);
       // console.log('thisBtn id = ' + btnID);
       const changeBtns = document.getElementsByName('change-btn');
-      for (let i = 0; i < changeBtns.length; i = i + 1) {
+      for (let i = 0; i < changeBtns.length; i += 1) {
         const btn = changeBtns[i];
         btn.style.backgroundColor = 'transparent';
       }
+      // Object.entries(changeBtns).forEach(([key, value]) => {
+      //   // console.log(`${key} ${value}`); // "a 5", "b 7", "c 9"
+      //   const btn = value; //changeBtns[i];
+      //   btn.style.backgroundColor = 'transparent';
+      // });
+
+      // for (const [key, value] of Object.entries(changeBtns)) {
+      //   const btn = changeBtns[key];
+      //   btn.style.backgroundColor = 'transparent';
+      // }
+
+      // for(let item in changeBtns) {
+      //   const btn = item;
+      //   btn.style.backgroundColor = 'transparent';
+      // }
+
+      // Array.prototype.forEach((item, index, changeBtns) => {
+      //   const btn = item;
+      //   btn.style.backgroundColor = 'transparent';
+      // });
+
+      // changeBtns.forEach((element, index, array) => {
+      //   const btn = value;
+      //   btn.style.backgroundColor = 'transparent';
+      // });
+
       if (!e) {
         changeBtns[num - 1].style.backgroundColor = 'yellow';
       }

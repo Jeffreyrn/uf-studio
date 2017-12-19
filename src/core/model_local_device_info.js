@@ -25,7 +25,7 @@ self.handleReport = (dict) => {
 };
 
 self.dump = () => {
-	var str = 'device infos:';
+	let str = 'device infos:';
 	str = `${str}\n xarm_port_baudrate: ${self.xarm_port_baudrate}`;
 	str = `${str}\n core_version: ${self.core_version}`;
 	str = `${str}\n xarm_port_name: ${self.xarm_port_name}`;

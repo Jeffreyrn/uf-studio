@@ -236,6 +236,7 @@ export default {
       GlobalUtil.model.localParamsSetting.chartOption.xAxis.data = arr;
       const option = GlobalUtil.model.localParamsSetting.chartOption;
       if (option && typeof option === 'object') {
+        const myChart = window.myChart;
         myChart.setOption(option, true);
       }
     },

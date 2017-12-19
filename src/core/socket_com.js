@@ -28,15 +28,15 @@ SocketCom.init_socket = (args) => {
 };
 
 SocketCom.init_onclose = (onclose) => {
-	SocketCom.socket_info.socket.onclose = onclose;
+  SocketCom.socket_info.socket.onclose = onclose;
 };
 
 SocketCom.init_onopen = (onopen) => {
-	SocketCom.socket_info.socket.onopen = onopen;
+  SocketCom.socket_info.socket.onopen = onopen;
 };
 
 SocketCom.init_onmessage = (onmessage) => {
-	SocketCom.socket_info.socket.onmessage = onmessage;
+  SocketCom.socket_info.socket.onmessage = onmessage;
 };
 
 SocketCom.init_onerror = (onerror) => {
@@ -55,7 +55,7 @@ SocketCom.send_msg = (msg, callback) => {
   msg.id = `${self.msgid}`;
   if (callback) {
     self.penddingCmds[msg.id] = callback;
-  };
+  }
   const js_msg = JSON.stringify(msg);
   self.socket_info.socket.send(js_msg);
   return msg.id;
@@ -66,14 +66,14 @@ SocketCom.handleResponse = (dict) => {
   dict = dict || {};
   if (dict.type !== 'response') {
     return;
-  };
-  if (null === dict.id) {
+  }
+  if (dict.id === null) {
     return;
-  };
+  }
   const callback = self.penddingCmds[dict.id];
   if (callback) {
     callback(dict);
-  };
-}
+  }
+};
 
 export default SocketCom;

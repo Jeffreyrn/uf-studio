@@ -14,6 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "base64-min": "^2.0.0",
     "codemirror": "^5.32.0",
     "echarts": "^3.8.5",
     "element-ui": "^2.0.7",
