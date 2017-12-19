@@ -29,8 +29,9 @@
     </div>
 </template>
 <script>
+import GlobalUtil from '../../core/global_util';
 
-console.log("Rounter = 03");
+console.log('Rounter = 03');
 
 export default {
   data() {
@@ -40,16 +41,16 @@ export default {
   },
   methods: {
     onStartMUAndPVL() {
-      console.log('onStartMUAndPVL = ' + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`onStartMUAndPVL =  ${JSON.stringify(GlobalUtil.model.localParamsSetting)}`);
     },
     onStartMU() {
-      console.log('onStartMU = ' + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`onStartMU =  ${JSON.stringify(GlobalUtil.model.localParamsSetting)}`);
     },
     onStartPAL() {
-      console.log('onStartPAL = ' + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`onStartPAL =  ${JSON.stringify(GlobalUtil.model.localParamsSetting)}`);
     },
     onRefresh() {
-      console.log('onRefresh = ' + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`onRefresh =  ${JSON.stringify(GlobalUtil.model.localParamsSetting)}`);
     },
   },
   mounted() {

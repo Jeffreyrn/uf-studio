@@ -10,7 +10,6 @@
       <div>
         screen.height: {{ screen_height }}
       </div>
-
       <div>
         屏幕可用:
       </div>
@@ -45,7 +44,7 @@
 </template>
 <script>
 
-console.log("Rounter = Screen");
+console.log('Rounter = Screen');
 
 // var html = document.getElementById("index-page");
 // console.log("html = " + html.innerHTML);
@@ -54,36 +53,21 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
-
       screen_width: 0,
       screen_height: 0,
       screen_avail_width: 0,
       screen_avail_height: 0,
       body_client_width: 0,
       body_client_height: 0,
-      screen_avail_width: 0,
-      screen_avail_height: 0,
     };
   },
   mounted() {
-
     this.screen_width = screen.width;
     this.screen_height = screen.height;
     this.screen_avail_width = screen.availWidth;
     this.screen_avail_height = screen.availHeight;
     this.body_client_width = document.body.clientWidth;
     this.body_client_height = document.body.clientHeight;
-    this.screen_avail_width = window.screen.availWidth;
-    this.screen_avail_height = window.screen.availHeight;
-
-    // console.log("mounted");
-    // if (window.WebSocket) {
-    //   console.log('This browser supports WebSocket');
-    //   document.getElementById('show').innerHTML = 'can web WebSocket';
-    // } else {
-    //   console.log('This browser does not supports WebSocket');
-    //   document.getElementById('show').innerHTML = 'can not web WebSocket';
-    // }
   },
   methods: {
   },

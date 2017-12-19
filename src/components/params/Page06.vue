@@ -8,8 +8,9 @@
     </div>
 </template>
 <script>
+import GlobalUtil from '../../core/global_util';
 
-console.log("Rounter = 06");
+console.log('Rounter = 06');
 
 export default {
   data() {
@@ -21,15 +22,15 @@ export default {
   methods: {
     xarm_get_version() {
       const self = this;
-      var startTime  = new Date().getTime();
+      const startTime  = new Date().getTime();
       GlobalUtil.socketCom.send_msg({
         cmd: 'xarm_get_version',
         data: '',
-      }, function(dict) {
-        console.log('send response = ' + JSON.stringify(dict));
-        var endTime2  = new Date().getTime();
+      }, (dict) => {
+        console.log(`send response = ${JSON.stringify(dict)}`);
+        const endTime2 = new Date().getTime();
         const diff = endTime2 - startTime;
-        self.diff = 'time diff = ' + diff + ' ms';
+        self.diff = `time diff = ${diss} ms`;
       });
     },
     xarm_get_state() {
@@ -42,7 +43,7 @@ export default {
         console.log('send response = ' + JSON.stringify(dict));
         var endTime2  = new Date().getTime();
         const diff = endTime2 - startTime;
-        self.diff = 'time diff = ' + diff + ' ms';
+        self.diff = `time diff = ${diss} ms`;
       });
     },
   },

@@ -208,16 +208,15 @@
 
 </template>
 <script>
+import GlobalUtil from '../../core/global_util';
 
-console.log("Rounter = 02");
-
+console.log('Rounter = 02');
 // echarts
-var echarts = require('echarts');
+const echarts = require('echarts');
 // require('echarts/chart/pie');
 // require('echarts/component/toolbox');
 // require('echarts/component/tooltip');
 // require('echarts/component/title');
-
 export default {
   data() {
     return {
@@ -227,24 +226,24 @@ export default {
   methods: {
     onXGridBlur() {
       console.log(GlobalUtil.model.localParamsSetting.monitorSelectionXGrid);
-      var arr = [];
-      var i = 0;
+      const arr = [];
+      let i = 0;
       while (i <= 5000) {
         arr.push(i);
         i += GlobalUtil.model.localParamsSetting.monitorSelectionXGrid - 0;
       }
       console.log(arr);
       GlobalUtil.model.localParamsSetting.chartOption.xAxis.data = arr;
-      var option = GlobalUtil.model.localParamsSetting.chartOption;
-      if (option && typeof option === "object") {
-          myChart.setOption(option, true);
+      const option = GlobalUtil.model.localParamsSetting.chartOption;
+      if (option && typeof option === 'object') {
+        myChart.setOption(option, true);
       }
     },
     onStart() {
-      console.log("on start = " + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`on start = ${JSON.stringify(GlobalUtil.model.localParamsSetting)}`);
     },
     onStop() {
-      console.log("on stop = " + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`on stop = ${JSON.stringify(GlobalUtil.model.localParamsSetting)}`);
     },
     onXGridAddOrMinus(isAdd) {
       if (isAdd) {
@@ -253,49 +252,50 @@ export default {
       else {
         GlobalUtil.model.localParamsSetting.monitorSelectionXGrid -= 1;
       }
-      var arr = [];
-      var i = 0;
+      const arr = [];
+      let i = 0;
       while (i <= 5000) {
         arr.push(i);
         i += GlobalUtil.model.localParamsSetting.monitorSelectionXGrid;
       }
       GlobalUtil.model.localParamsSetting.chartOption.xAxis.data = arr;
-      var option = GlobalUtil.model.localParamsSetting.chartOption;
-      if (option && typeof option === "object") {
-          myChart.setOption(option, true);
+      const option = GlobalUtil.model.localParamsSetting.chartOption;
+      const myChart = window.myChart;
+      if (option && typeof option === 'object') {
+        myChart.setOption(option, true);
       }
     },
     onAddOrMinus(ch, where, isAdd) {
-      var curCH = {};
-      switch(ch) {
+      let curCH = {};
+      switch (ch) {
         case 'CH1': {
-          var curCH = GlobalUtil.model.localParamsSetting.ch1;
+          curCH = GlobalUtil.model.localParamsSetting.ch1;
           break;
         }
         case 'CH2': {
-          var curCH = GlobalUtil.model.localParamsSetting.ch2;
+          curCH = GlobalUtil.model.localParamsSetting.ch2;
           break;
         }
         case 'CH3': {
-          var curCH = GlobalUtil.model.localParamsSetting.ch3;
+          curCH = GlobalUtil.model.localParamsSetting.ch3;
           break;
         }
         case 'CH4': {
-          var curCH = GlobalUtil.model.localParamsSetting.ch4;
+          curCH = GlobalUtil.model.localParamsSetting.ch4;
           break;
         }
         default:
           break;
       }
 
-      switch(where) {
+      switch (where) {
         case 'move': {
-          var value = curCH.move;
+          const value = curCH.move;
           curCH.move = isAdd ? value + 1 : value - 1;
           break;
         }
         case 'grid': {
-          var value = curCH.grid;
+          const value = curCH.grid;
           curCH.grid = isAdd ? value + 1 : value - 1;
           break;
         }
@@ -304,16 +304,15 @@ export default {
       }
     },
     onCHCheckbox(checkboxName) {
-      var selectedIDs = [];
-      var cbs = document.getElementsByName(checkboxName);
-      for (var i = 0; i < cbs.length; i++) {
-        var cb = cbs[i];
-        // console.log(cb.value + ' ' + i + ' is ' + cb.checked);
+      const selectedIDs = [];
+      const cbs = document.getElementsByName(checkboxName);
+      for (let i = 0; i < cbs.length; i++) {
+        const cb = cbs[i];
         if (cb.checked) {
-          selectedIDs.push(cb.value)
-        };
-      };
-      switch(checkboxName) {
+          selectedIDs.push(cb.value);
+        }
+      }
+      switch (checkboxName) {
         case 'checkboxinputCH1': {
           GlobalUtil.model.localParamsSetting.ch1.checkboxModel = selectedIDs;
           break;
@@ -359,12 +358,12 @@ export default {
   },
   mounted() {
     //
-    var dom = document.getElementById("echart-main-1");
-    window.myChart = echarts.init(dom);
-    var app = {};
-    var option = GlobalUtil.model.localParamsSetting.chartOption;
-    if (option && typeof option === "object") {
-        myChart.setOption(option, true);
+    const dom = document.getElementById('echart-main-1');
+    const myChart = echarts.init(dom);
+    window.myChart = myChart;
+    const option = GlobalUtil.model.localParamsSetting.chartOption;
+    if (option && typeof option === 'object') {
+      myChart.setOption(option, true);
     }
     //
     this.resetSelectorColor();

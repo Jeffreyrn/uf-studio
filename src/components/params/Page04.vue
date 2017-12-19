@@ -40,8 +40,9 @@
     </div>
 </template>
 <script>
+import GlobalUtil from '../../core/global_util';
 
-console.log("Rounter = 04");
+console.log('Rounter = 04');
 
 export default {
   data() {
@@ -61,8 +62,8 @@ export default {
       // console.log('tableList = ' + JSON.stringify(GlobalUtil.model.localParamsSetting.filterGroups(1)));
     },
     onSelectedPage(e, index) {
-      const tabs = document.getElementsByClassName('tb-tab-btn')
-      for (var i = 0; i < tabs.length; i++) {
+      const tabs = document.getElementsByClassName('tb-tab-btn');
+      for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         tab.style.backgroundColor = 'transparent';
       }
@@ -70,13 +71,13 @@ export default {
         tabs[GlobalUtil.model.localParamsSetting.curGroup - 1].style.backgroundColor = 'yellow';
       }
       else {
-          e.currentTarget.style.backgroundColor = 'yellow';
+        e.currentTarget.style.backgroundColor = 'yellow';
       }
       GlobalUtil.model.localParamsSetting.curGroup = index;
       this.tableList = GlobalUtil.model.localParamsSetting.filterGroups(index);
     },
     genTabId(index) {
-      return 'tb-tab-btn-' + index;
+      return `tb-tab-btn-${index}`;
     },
   },
   beforeDestroy() {

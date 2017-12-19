@@ -9,6 +9,7 @@ import App from './App';
 import router from './router';
 import robot from './assets/lib/robot';
 import './assets/css/global.css';
+import GlobalUtil from './core/global_util';
 
 Vue.use(CodeMirror);
 Vue.use(ElementUI);

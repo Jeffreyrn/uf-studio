@@ -74,7 +74,7 @@
 </template>
 <script>
 
-console.log("Rounter = 01");
+console.log('Rounter = 01');
 
 // import myPicker from 'my-picker'
 // import Index from './components/Index.vue'
@@ -88,10 +88,10 @@ export default {
   },
   methods: {
     sendData() {
-      console.log("sendData = " + GlobalUtil.model.localParamsSetting.sendData);
+      console.log(`sendData = ${GlobalUtil.model.localParamsSetting.sendData}`);
     },
     submitSerial() {
-      console.log("submitSerial = " + JSON.stringify(GlobalUtil.model.localParamsSetting));
+      console.log(`submitSerial = ${GlobalUtil.model.localParamsSetting.sendData}`);
     },
   },
   mounted() {

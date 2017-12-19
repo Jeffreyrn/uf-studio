@@ -48,7 +48,6 @@ import Page04 from './params/Page04';
 import Page05 from './params/Page05';
 import Page06 from './params/Page06';
 import ScreenSize from './params/ScreenSize';
-import GlobalUtil from '../core/global_util';
 
 console.log('Rounter = Index');
 
