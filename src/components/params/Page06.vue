@@ -63,13 +63,13 @@ export default {
     },
     xarm_get_state() {
       const self = this;
-      var startTime = new Date().getTime();
+      const startTime = new Date().getTime();
       GlobalUtil.socketCom.send_msg({
         cmd: 'xarm_get_state',
         data: '',
-      }, function(dict) {
-        console.log('send response = ' + JSON.stringify(dict));
-        var endTime2  = new Date().getTime();
+      }, (dict) => {
+        console.log(`send response = ${JSON.stringify(dict)}`);
+        const endTime2 = new Date().getTime();
         const diff = endTime2 - startTime;
         self.diff = `time diff = ${diff} ms`;
       });

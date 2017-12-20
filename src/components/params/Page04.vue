@@ -63,7 +63,7 @@ export default {
     },
     onSelectedPage(e, index) {
       const tabs = document.getElementsByClassName('tb-tab-btn');
-      for (let i = 0; i < tabs.length; i++) {
+      for (let i = 0; i < tabs.length; i += 1) {
         const tab = tabs[i];
         tab.style.backgroundColor = 'transparent';
       }

@@ -7,11 +7,12 @@ self.params = Params;
 
 Array.prototype.contains = (obj) => {
   let i = this.length;
-  while (i = i - 1) {
+  while (i >= 0) {
     if (this[i] === obj) {
       return true;
     }
   }
+  i -= 1;
   return false;
 };
 
@@ -24,7 +25,7 @@ self.filterGroups = (page) => {
   // const filterGroups = {};
   for (const [key, value] of Object.entries(Params)) {
   // for (const key in Params) {
-    const row = value; //Params[key];
+    const row = value; // Params[key];
     if (p === row.group) {
       tmpArr.push(Params[key]);
     }

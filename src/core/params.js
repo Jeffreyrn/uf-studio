@@ -36,4 +36,4 @@ export default {
   motor_initial_position:{ group:'P8', name:'Motor Initial Position', unit:'-', address:258, current_value:0, default_value:0, max:100, min:0, sign:false, width:16, input:0, in_eeprom:1 },
 
   power_level:{ group:'P9', name:'Power Level', unit:'-', address:258, current_value:0, default_value:0, max:100, min:0, sign:false, width:16, input:0, in_eeprom:1 },
-}
+};

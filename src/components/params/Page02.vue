@@ -307,7 +307,7 @@ export default {
     onCHCheckbox(checkboxName) {
       const selectedIDs = [];
       const cbs = document.getElementsByName(checkboxName);
-      for (let i = 0; i < cbs.length; i++) {
+      for (let i = 0; i < cbs.length; i += 1) {
         const cb = cbs[i];
         if (cb.checked) {
           selectedIDs.push(cb.value);
