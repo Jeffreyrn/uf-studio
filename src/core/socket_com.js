@@ -2,15 +2,16 @@
 import ReconnectingWebSocket from '../lib/reconnecting-websocket';
 
 const SocketCom = {};
+const self = SocketCom;
 
-SocketCom.socket_info = {
+self.socket_info = {
   socket: null,
   host: null,
   port: null,
   socket_connected: false,
 };
 
-SocketCom.init_socket = (args) => {
+self.init_socket = (args) => {
   const self = SocketCom;
   // if (self.socket_info.socket !== null) return;
   args = args || {};
@@ -27,29 +28,29 @@ SocketCom.init_socket = (args) => {
   });
 };
 
-SocketCom.init_onopen = (onopen) => {
+self.init_onopen = (onopen) => {
   console.log('init onpoen');
-  SocketCom.socket_info.socket.onopen = onopen;
+  self.socket_info.socket.onopen = onopen;
 };
 
-SocketCom.init_onclose = (onclose) => {
+self.init_onclose = (onclose) => {
   console.log('init onclose');
-  SocketCom.socket_info.socket.onclose = onclose;
+  self.socket_info.socket.onclose = onclose;
 };
 
-SocketCom.init_onmessage = (onmessage) => {
+self.init_onmessage = (onmessage) => {
   console.log('init onmessage');
-  SocketCom.socket_info.socket.onmessage = onmessage;
+  self.socket_info.socket.onmessage = onmessage;
 };
 
-SocketCom.init_onerror = (onerror) => {
-  SocketCom.socket_info.socket.onerror = onerror;
+self.init_onerror = (onerror) => {
+  self.socket_info.socket.onerror = onerror;
 };
 
-SocketCom.msgid = 0;
-SocketCom.response = '';
-SocketCom.penddingCmds = {};
-SocketCom.send_msg = (msg, callback) => {
+self.msgid = 0;
+self.response = '';
+self.penddingCmds = {};
+self.send_msg = (msg, callback) => {
   const self = SocketCom;
   if (self.msgid > 100000) { // restart from 100000
     self.msgid = 0;
@@ -64,7 +65,7 @@ SocketCom.send_msg = (msg, callback) => {
   return msg.id;
 };
 
-SocketCom.handleResponse = (dict) => {
+self.handleResponse = (dict) => {
   const self = SocketCom;
   dict = dict || {};
   if (dict.type !== 'response') {
@@ -79,4 +80,4 @@ SocketCom.handleResponse = (dict) => {
   }
 };
 
-export default SocketCom;
+export default self;
