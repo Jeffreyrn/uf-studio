@@ -41,7 +41,7 @@ self.socketCom.close = () => {
 
 self.socketCom.open = () => {
   self.socketCom.init_socket(args);
-  SocketCom.init_onopen = ((evt) => {
+  self.socketCom.init_onopen((evt) => {
     console.log('onopen onopen onopen');
     self.model.localDeviceStatus.xarm_connected = true;
     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;

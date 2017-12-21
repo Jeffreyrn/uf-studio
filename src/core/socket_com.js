@@ -27,15 +27,18 @@ SocketCom.init_socket = (args) => {
   });
 };
 
-SocketCom.init_onclose = (onclose) => {
-  SocketCom.socket_info.socket.onclose = onclose;
-};
-
 SocketCom.init_onopen = (onopen) => {
+  console.log('init onpoen');
   SocketCom.socket_info.socket.onopen = onopen;
 };
 
+SocketCom.init_onclose = (onclose) => {
+  console.log('init onclose');
+  SocketCom.socket_info.socket.onclose = onclose;
+};
+
 SocketCom.init_onmessage = (onmessage) => {
+  console.log('init onmessage');
   SocketCom.socket_info.socket.onmessage = onmessage;
 };
 
