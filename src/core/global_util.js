@@ -4,22 +4,23 @@ import SocketCom from './socket_com';
 import NativeCom from './native_com';
 
 const GlobalUtil = {};
-window.GlobalUtil = GlobalUtil;
-GlobalUtil.store = {};
-GlobalUtil.model = Model;
-GlobalUtil.socketCom = SocketCom;
-GlobalUtil.nativeCom = NativeCom;
+const self = GlobalUtil;
+window.GlobalUtil = self;
+self.store = {};
+self.model = Model;
+self.socketCom = SocketCom;
+self.nativeCom = NativeCom;
 
-GlobalUtil.autoSizeScale = 0;
+self.autoSizeScale = 0;
 
-GlobalUtil.getMinWidth = () => {
+self.getMinWidth = () => {
   const min_width = Math.min(screen.width, screen.height);
-  GlobalUtil.min_width = Math.min(min_width, 480);
-  return GlobalUtil.min_width;
+  self.min_width = Math.min(min_width, 480);
+  return self.min_width;
 };
 
-GlobalUtil.adaptSize = (x) => {
-  return x * GlobalUtil.autoSizeScale;
+self.adaptSize = (x) => {
+  return x * self.autoSizeScale;
 };
 
 GlobalUtil.fixSize = () => {
@@ -34,41 +35,45 @@ const args = {
   port: '18333',
 };
 
-GlobalUtil.socketCom.close = () => {
-  GlobalUtil.socketCom.socket_info.socket.close();
+self.socketCom.close = () => {
+  self.socketCom.socket_info.socket.close();
 };
 
-GlobalUtil.socketCom.open = () => {
-  GlobalUtil.socketCom.init_socket(args);
+self.socketCom.open = () => {
+  self.socketCom.init_socket(args);
   SocketCom.init_onopen = ((evt) => {
     console.log('onopen onopen onopen');
-    GlobalUtil.model.localDeviceStatus.xarm_connected = true;
+    self.model.localDeviceStatus.xarm_connected = true;
+    self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
   });
-  GlobalUtil.socketCom.init_onclose((evt) => {
-    GlobalUtil.model.localDeviceStatus.xarm_connected = false;
+  self.socketCom.init_onclose((evt) => {
+    self.model.localDeviceStatus.xarm_connected = false;
+    self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
     console.log('onclose onclose onclose');
   });
-  GlobalUtil.socketCom.init_onerror((evt) => {
-    GlobalUtil.model.localDeviceStatus.xarm_connected = false;
+  self.socketCom.init_onerror((evt) => {
+    self.model.localDeviceStatus.xarm_connected = false;
+    self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
     const temp_msg = JSON.parse(evt.data);
     console.log(`onerror onerror onerror = ${evt.data}`);
   });
-  GlobalUtil.socketCom.init_onmessage((evt) => {
+  self.socketCom.init_onmessage((evt) => {
     const temp_msg = JSON.parse(evt.data);
     // console.log('onmessage onmessage onmessage = ' + evt.data);
-    GlobalUtil.model.localDeviceInfo.handleReport(temp_msg);
-    GlobalUtil.model.localDeviceStatus.handleReport(temp_msg);
-    GlobalUtil.model.localParamsSetting.handleReport(temp_msg);
+    self.model.localDeviceInfo.handleReport(temp_msg);
+    self.model.localDeviceStatus.handleReport(temp_msg);
+    self.model.localParamsSetting.handleReport(temp_msg);
     if (temp_msg.type === 'response') {
-      GlobalUtil.socketCom.response = evt.data;
+      self.socketCom.response = evt.data;
     }
-    GlobalUtil.socketCom.handleResponse(temp_msg);
+    self.socketCom.handleResponse(temp_msg);
+    self.model.robot.onmessage(evt);
   });
 };
 
-GlobalUtil.socketCom.open();
+self.socketCom.open();
 
-GlobalUtil.getUrlParam = (lan) => {
+self.getUrlParam = (lan) => {
   const reg = new RegExp('(^|&)' + lan + '=([^&]*)(&|$)', 'i');
   const r = window.location.search.substr(1).match(reg);
   if (r === null || r.length < 2) {
@@ -77,4 +82,4 @@ GlobalUtil.getUrlParam = (lan) => {
   return unescape(r[2]);
 };
 
-export default GlobalUtil;
+export default self;

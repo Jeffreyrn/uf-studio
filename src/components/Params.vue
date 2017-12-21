@@ -2,10 +2,6 @@
     <div id='index-page' class='app-container limitWH'>
       <div>
         uFactory Servo
-        <button class="change-btn" @click="onLink()">
-          link/unlink
-        </button>
-        <span id='show'>{{ model.localDeviceStatus.xarm_connected ? 'Linked' : 'Unlinked' }}</span>
       </div>
       <div>
         <button name='change-btn' class="change-btn" @click="change($event, 1)">
@@ -40,7 +36,7 @@
     </div>
 </template>
 <script>
-import GlobalUtil from '../core/global_util';
+// import GlobalUtil from '../core/global_util';
 import Page01 from './params/Page01';
 import Page02 from './params/Page02';
 import Page03 from './params/Page03';
@@ -85,11 +81,9 @@ export default {
 
     if (window.WebSocket) {
       console.log('This browser supports WebSocket');
-      // document.getElementById('show').innerHTML = 'can web WebSocket';
     }
     else {
       console.log('This browser does not supports WebSocket');
-      // document.getElementById('show').innerHTML = 'can not web WebSocket';
     }
     this.change(null, GlobalUtil.model.localParamsSetting.page);
     GlobalUtil.fixSize();
@@ -135,16 +129,6 @@ export default {
       }
       else {
         e.currentTarget.style.backgroundColor = 'yellow';
-      }
-    },
-    onLink() {
-      const state = GlobalUtil.socketCom.socket_info.socket.readyState;
-      console.log(state);
-      if (state === 1) {
-        GlobalUtil.socketCom.close();
-      }
-      else {
-        GlobalUtil.socketCom.open();
       }
     },
   },

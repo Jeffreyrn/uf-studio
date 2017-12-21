@@ -1,5 +1,9 @@
 <template>
   <div class="hello">
+  <button class="change-btn" @click="onLink()">
+    link/unlink
+  </button>
+  <span id='show'>{{ model.localDeviceStatus.xarm_connected ? 'Linked' : 'Unlinked' }}</span>
     <h1>{{ msg }}</h1>
     <h2></h2>
     <router-link :to="{ name: 'Paint'}"><el-button type="success">Paint</el-button></router-link>
@@ -16,7 +20,20 @@ export default {
   data() {
     return {
       msg: 'Welcome to Studio',
+      model: GlobalUtil.model,
     };
+  },
+  methods: {
+    onLink() {
+      const state = GlobalUtil.socketCom.socket_info.socket.readyState;
+      console.log(state);
+      if (state === 1) {
+        GlobalUtil.socketCom.close();
+      }
+      else {
+        GlobalUtil.socketCom.open();
+      }
+    },
   },
 };
 </script>
