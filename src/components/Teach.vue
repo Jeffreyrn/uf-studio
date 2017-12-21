@@ -15,6 +15,8 @@
         <span>Z:</span>
         <el-slider v-model="model.localTeach.curPoint.z" class='teach-slider' @change="onChange('z', $event)"></el-slider>
       </div>
+      <span>send: {{ sentCounter }}</span>
+      <span>rec: {{ recCounter }}</span>
       <button value='start' @click='onClick($event)'>Start</button>
       <button value='pause' @click='onClick($event)'>Pause</button>
       <button value='stop' @click='onClick($event)'>Stop</button>
@@ -28,18 +30,36 @@
 <script>
 import GlobalUtil from '../core/global_util';
 
-let t
+let t;
 
 export default {
   data() {
     return {
       model: GlobalUtil.model,
+      diff: 0,
+      sentCounter: 0,
+      recCounter: 0,
     };
   },
   mounted() {
     // GlobalUtil.fixSize();
   },
   methods: {
+    test_get_pos() {
+      const self = this;
+      self.sentCounter += 1;
+      const startTime = new Date().getTime();
+      GlobalUtil.socketCom.send_msg({
+        cmd: 'xarm_get_tcp_pose',
+        data: '',
+      }, (dict) => {
+        console.log(`send response = ${JSON.stringify(dict)}`);
+        const endTime2 = new Date().getTime();
+        const diff = endTime2 - startTime;
+        self.diff = `time diff = ${diff} ms`;
+        self.recCounter += 1;
+      });
+    },
     onClick(e) {
       const attr = e.currentTarget.value;
       console.log(`attr = ${attr}`);
@@ -55,6 +75,8 @@ export default {
             GlobalUtil.model.localTeach.curDuration = 0;
             clearTimeout(t);
             t = null;
+            this.sentCounter = 0;
+            this.recCounter = 0;
             break;
           }
         case 'start':
@@ -73,7 +95,15 @@ export default {
     },
     timedCount() {
       GlobalUtil.model.localTeach.curDuration -= -1;
-      t = setTimeout(this.timedCount, 100);
+      if (GlobalUtil.model.localTeach.curDuration >= 1800) {
+        GlobalUtil.model.localTeach.curDuration = 1800;
+        clearTimeout(t);
+        t = null;
+      }
+      else {
+        this.test_get_pos();
+        t = setTimeout(this.timedCount, 100);
+      }
    },
   },
   beforeDestroy() {
