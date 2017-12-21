@@ -28,7 +28,6 @@
     </div>
 </template>
 <script>
-import GlobalUtil from '../core/global_util';
 
 let t;
 

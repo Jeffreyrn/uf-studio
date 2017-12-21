@@ -10,8 +10,6 @@
     </div>
 </template>
 <script>
-import GlobalUtil from '../../core/global_util';
-
 console.log('Rounter = 06');
 
 export default {

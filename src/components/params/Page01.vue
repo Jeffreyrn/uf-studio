@@ -73,8 +73,6 @@
     </div>
 </template>
 <script>
-import GlobalUtil from '../../core/global_util';
-
 console.log('Rounter = 01');
 
 // import myPicker from 'my-picker'

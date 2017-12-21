@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-
+import GlobalUtil from '../core/global_util';
 import Page01 from './params/Page01';
 import Page02 from './params/Page02';
 import Page03 from './params/Page03';
@@ -48,7 +48,6 @@ import Page04 from './params/Page04';
 import Page05 from './params/Page05';
 import Page06 from './params/Page06';
 import ScreenSize from './params/ScreenSize';
-import GlobalUtil from '../core/global_util';
 
 console.log('Rounter = Index');
 
@@ -59,7 +58,7 @@ require('../assets/css/common.css');
 // import './assets/css/sweetalert2.css';
 // import JSColor from '../lib/jscolor';
 
-const r = GlobalUtil.getUrlParam('lan');
+const r = window.GlobalUtil.getUrlParam('lan');
 GlobalUtil.store.lan = r;
 
 // import conf from '../../build/webpack.base.conf';

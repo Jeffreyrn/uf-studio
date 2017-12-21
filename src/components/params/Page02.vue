@@ -208,8 +208,6 @@
 
 </template>
 <script>
-import GlobalUtil from '../../core/global_util';
-
 console.log('Rounter = 02');
 // echarts
 const echarts = require('echarts');
