@@ -1,5 +1,5 @@
 
-// import Base64 from '../lib/Base64';
+import Base64 from '../lib/Base64';
 
 // const Base64 = require('base64-min');
 
@@ -19,7 +19,7 @@ function _sendToNative(obj) {
     }
     if (isAndroid === true) {
       //            console.log("isAndroid true");
-      // window.messageHandlers.jsCallWebView(Base64.encode(jsonStr));
+      window.messageHandlers.jsCallWebView(Base64.btoa(jsonStr));
     }
   }
   catch (e) {
@@ -29,7 +29,7 @@ function _sendToNative(obj) {
 
 NativeCom.sendFromNative = (paramsStr) => {
   try {
-    // paramsStr = Base64.atob(paramsStr);
+    paramsStr = Base64.atob(paramsStr);
     let params = JSON.parse(paramsStr);
     params = params || {};
     // const id = params.id;

@@ -1,12 +1,24 @@
 <template>
   <div class="main-wrapper" id="editor-wrapper">
-    
-    <codemirror
-      v-model="code"
-      :options="editorOption"
-      ref="myEditor"
-      @input="onEditorCodeChange">
-    </codemirror>
+    <div>
+      Menu
+    </div>
+    <div style="float:left;background-color:yellow;width:100%;">
+      <ProjMenu style="float:left;width:15%;"></ProjMenu>
+      <div style="float:left;width:85%;background-color:green;">
+        <codemirror
+          v-model="code"
+          :options="editorOption"
+          ref="myEditor"
+          @input="onEditorCodeChange">
+        </codemirror>
+        <div style="height:20px;background-color:green;">
+          Run
+        </div>
+        <div style="height:200px;background-color:blue;">
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -26,6 +38,9 @@ import 'codemirror/addon/fold/foldgutter.css';
 import 'codemirror/addon/display/fullscreen';
 import 'codemirror/addon/display/fullscreen.css';
 import PythonHint from '../assets/lib/python-hint';
+
+import ProjMenu from './editor/ProjMenu';
+
 // require('codemirror/mode/clike/clike.js');
 // require('codemirror/addon/comment/comment.js');
 // require('codemirror/addon/dialog/dialog.js');
@@ -35,6 +50,8 @@ import PythonHint from '../assets/lib/python-hint';
 // require('codemirror/keymap/emacs.js');
 // require('codemirror/theme/monokai.css');
 // require('codemirror/addon/hint/javascript-hint.js');
+
+import '../assets/css/reseet.css';
 
 // let count = 0;
 // const tmp = setInterval(() => {
@@ -108,6 +125,7 @@ export default {
   },
   components: {
     codemirror,
+    ProjMenu,
   },
 };
 </script>
@@ -120,5 +138,3 @@ a {
   color: white;
 }
 </style>
-
-

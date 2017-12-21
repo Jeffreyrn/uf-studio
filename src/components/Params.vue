@@ -86,7 +86,7 @@ export default {
       console.log('This browser does not supports WebSocket');
     }
     this.change(null, GlobalUtil.model.localParamsSetting.page);
-    GlobalUtil.fixSize();
+    // GlobalUtil.fixSize();
   },
   methods: {
     change(e, num) {
