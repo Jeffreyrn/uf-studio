@@ -8,20 +8,23 @@ self.PROJ_TREE_TYPE = {
 }
 
 self.curSelectedFileUUID = '';
-// self.getAllFilesByFolder = (superid) => {
-self.curSelectedFolderUUID = () => {
+self.curSelectedFolderUUID = '';
+
+self.setSelectedFileUUID = (uuid) => {
+  // self.curSelectedFileUUID = uuid;
+
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
-    if (file.uuid === self.curSelectedFileUUID) {
-      if (file.type === self.PROJ_TREE_TYPE.FILE) {
-        return file.superid;
+    if (file.uuid === uuid) {
+      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+        self.curSelectedFolderUUID = file.uuid;
       }
-      else {
-        return file.uuid;
+      if (file.type === self.PROJ_TREE_TYPE.FILE) {
+        self.curSelectedFileUUID = file.uuid;
+        self.curSelectedFolderUUID = file.superid;
       }
     }
   }
-  return '';
 };
 
 self.createFile = (uuid, superid, type, name) => {
@@ -38,9 +41,9 @@ self.createFolder = (uuid, superid, name) => {
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name);
 };
 
-// self.createSimpleFile = (uuid, superid, name) => {
-//   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name);
-// };
+self.createSimpleFile = (uuid, superid, name) => {
+  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name);
+};
 //
 // self.createFile = (uuid, superid, name) => {
 //   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name);

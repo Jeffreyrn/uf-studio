@@ -2,9 +2,10 @@
   <div>
     <template v-for='(data,index) in filesList(superid)'>
       <div v-if="data.type === model.localProjTree.PROJ_TREE_TYPE.FOLDER">
-        <el-submenu :index="Math.random()">
-          <span slot="title">{{ data.name }} -- {{ data.uuid }} </span>
-          <!-- <span>+folder</span> -->
+        <el-submenu :index="data.uuid">
+          <template slot="title">
+            <div> {{ data.name }} -- {{ data.uuid }} </div>
+          </template>
           <items :superid='data.uuid'></items>
         </el-submenu>
       </div>
@@ -31,8 +32,9 @@ export default {
   },
   methods: {
     onClick(e, uuid) {
-      GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
-      console.log(GlobalUtil.model.localProjTree.curSelectedFileUUID);
+      console.log(e);
+      GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
+      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
     },
     filesList(superid) {
       const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(superid);

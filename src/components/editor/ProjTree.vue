@@ -46,9 +46,15 @@ export default {
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
+      GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
+      GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
+      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+      GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
+      GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
+      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
     },
     handleTitleMouseenter() {
     },
