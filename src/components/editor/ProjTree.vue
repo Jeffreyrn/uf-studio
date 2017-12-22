@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5>工程名称</h5>
+    <h5>{{ model.localProjTree.curProj.name }}</h5>
     <el-menu
       default-active="1"
       background-color="transparent"
@@ -9,41 +9,43 @@
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose">
-      <el-submenu index="1">
-        <template slot="title">
-          <span slot="title">文件夹1</span>
-        </template>
-        <el-menu-item index="1-1" @click="onClickItem($event)">aa.py</el-menu-item>
-        <el-menu-item index="1-2">bb.py</el-menu-item>
-        <el-menu-item index="1-3">cc.py</el-menu-item>
-        <el-submenu index="1-4" >
-          <template slot="title">文件夹102</template>
-          <el-menu-item index="1-4-1">dd.py</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-submenu index="2">
-        <template slot="title">
-          <span slot="title">文件夹2</span>
-        </template>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title">
-          <span slot="title">文件夹3</span>
-        </template>
-      </el-submenu>
+
+      <ProjTreeListFolder superid=''></ProjTreeListFolder>
+      
     </el-menu>
   </div>
 </template>
 
 <script>
+import ProjTreeListFolder from './ProjTreeListFolder';
+import Vue from 'vue';
+
+Vue.component('Folder', {
+  // 声明 props
+  props: ['message'],
+  // 同样也可以在 vm 实例中像 "this.message" 这样使用
+  template: '<span>{{ message }}</span>'
+})
+
 export default {
   data() {
     return {
+      model: GlobalUtil.model,
+      // filesList: [],
     };
   },
   mounted() {
+    // const curProj = GlobalUtil.model.localProjTree.curProj;
+    // const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(curProj);
+    // this.filesList = files;
+    // console.log('files');
+    // console.log(files);
   },
   methods: {
+    filesList(superid) {
+      const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(superid);
+      return files;
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -65,6 +67,7 @@ export default {
   computed: {
   },
   components: {
+    ProjTreeListFolder,
   },
 };
 </script>
