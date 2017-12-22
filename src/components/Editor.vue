@@ -1,24 +1,20 @@
 <template>
   <div class="main-wrapper" id="editor-wrapper">
-    <div>
-      Menu
-    </div>
-    <div style="float:left;background-color:yellow;width:100%;">
-      <ProjMenu style="float:left;width:15%;"></ProjMenu>
-      <div style="float:left;width:85%;background-color:green;">
+    <TopMenu></TopMenu>
+    <div class="float-left total-frame">
+      <ProjTree class="float-left left-frame"></ProjTree>
+      <div class="float-left right-frame">
         <CodeEditor></CodeEditor>
-        <div style="height:20px;background-color:green;">
-          Run
-        </div>
-        <div style="height:200px;background-color:blue;">
-        </div>
+        <ResultRun class="result-frame"></ResultRun>
       </div>
     </div>
   </div>
 </template>
 <script>
-import ProjMenu from './editor/ProjMenu';
+import TopMenu from './editor/TopMenu';
+import ProjTree from './editor/ProjTree';
 import CodeEditor from './editor/CodeEditor';
+import ResultRun from './editor/ResultRun';
 
 import '../assets/css/reseet.css';
 
@@ -38,8 +34,10 @@ export default {
   computed: {
   },
   components: {
-    ProjMenu,
+    TopMenu,
+    ProjTree,
     CodeEditor,
+    ResultRun,
   },
 };
 </script>
@@ -51,4 +49,22 @@ export default {
 a {
   color: white;
 }
+.float-left {
+  float: left;
+}
+.total-frame {
+  background-color:yellow;
+  width:100%;
+}
+.left-frame {
+  width:15%;
+}
+.right-frame {
+  width:85%;
+  background-color:green;
+}
+.result-frame {
+  height:200px;
+}
+
 </style>
