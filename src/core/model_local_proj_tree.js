@@ -7,78 +7,64 @@ self.PROJ_TREE_TYPE = {
   FILE: 'file',
 }
 
+self.curSelectedFileUUID = '';
+// self.getAllFilesByFolder = (superid) => {
+self.curSelectedFolderUUID = () => {
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    const file = self.curProj.files[i];
+    if (file.uuid === self.curSelectedFileUUID) {
+      if (file.type === self.PROJ_TREE_TYPE.FILE) {
+        return file.superid;
+      }
+      else {
+        return file.uuid;
+      }
+    }
+  }
+  return '';
+};
+
+self.createFile = (uuid, superid, type, name) => {
+  return {
+    uuid: uuid,
+    superid: superid,
+    type: type,
+    name: name,
+    content: '',
+  };
+};
+
+self.createFolder = (uuid, superid, name) => {
+  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name);
+};
+
+// self.createSimpleFile = (uuid, superid, name) => {
+//   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name);
+// };
+//
+// self.createFile = (uuid, superid, name) => {
+//   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name);
+// };
+
 self.curProj = {
   name: 'Default proj name',
   files: [
-    {
-      uuid: 'uuid_0',
-      type: self.PROJ_TREE_TYPE.FILE,
-      name: '00.py',
-      content: null,
-      superid: '',
-    },
-    {
-      uuid: 'uuid_1',
-      type: self.PROJ_TREE_TYPE.FOLDER,
-      name: '文件夹1',
-      content: null,
-      superid: '',
-    },
-    {
-      uuid: 'uuid_11',
-      type: self.PROJ_TREE_TYPE.FILE,
-      name: 'aa.py',
-      content: null,
-      superid: 'uuid_1',
-    },
-    {
-      uuid: 'uuid_22',
-      type: self.PROJ_TREE_TYPE.FILE,
-      name: 'bb.py',
-      content: null,
-      superid: 'uuid_1',
-    },
-    {
-      uuid: 'uuid_33',
-      type: self.PROJ_TREE_TYPE.FILE,
-      name: 'cc.py',
-      content: null,
-      superid: 'uuid_1',
-    },
-    {
-      uuid: 'uuid_101',
-      type: self.PROJ_TREE_TYPE.FOLDER,
-      name: '文件夹101',
-      content: null,
-      superid: 'uuid_1',
-    },
-    {
-      uuid: 'uuid_55',
-      type: self.PROJ_TREE_TYPE.FILE,
-      name: 'dd.py',
-      content: null,
-      superid: 'uuid_101',
-    },
-    {
-      uuid: 'uuid_2',
-      type: self.PROJ_TREE_TYPE.FOLDER,
-      name: '文件夹2',
-      content: null,
-      superid: '',
-    },
-    {
-      uuid: 'uuid_3',
-      type: self.PROJ_TREE_TYPE.FOLDER,
-      name: '文件夹3',
-      content: null,
-      superid: '',
-    },
+    self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py'),
+    self.createFile('uuid_1', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹1'),
+    self.createFile('uuid_11', 'uuid_1', self.PROJ_TREE_TYPE.FILE, 'aa.py'),
+    self.createFile('uuid_22', 'uuid_1', self.PROJ_TREE_TYPE.FILE, 'bb.py'),
+    self.createFile('uuid_22', 'uuid_1', self.PROJ_TREE_TYPE.FILE, 'cc.py'),
+    self.createFile('uuid_33', 'uuid_1', self.PROJ_TREE_TYPE.FILE, 'dd.py'),
+    self.createFile('uuid_101', 'uuid_1', self.PROJ_TREE_TYPE.FOLDER, '文件夹101'),
+    self.createFile('uuid_55', 'uuid_101', self.PROJ_TREE_TYPE.FILE, 'ff.py'),
+    self.createFile('uuid_2', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹2'),
+    self.createFile('uuid_3', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹3'),
   ],
 };
 
 self.getAllFilesByFolder = (superid) => {
   console.log('curProj');
-  if (superid === null) {
+  if (superid === null || superid === undefined) {
     superid = '';
   }
   // console.log(curProj);

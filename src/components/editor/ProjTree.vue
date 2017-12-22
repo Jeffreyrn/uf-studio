@@ -2,7 +2,6 @@
   <div>
     <h5>{{ model.localProjTree.curProj.name }}</h5>
     <el-menu
-      default-active="1"
       background-color="transparent"
       text-color="blue"
       active-text-color="red"
@@ -11,7 +10,7 @@
       @close="handleClose">
 
       <ProjTreeListFolder superid=''></ProjTreeListFolder>
-      
+
     </el-menu>
   </div>
 </template>
@@ -31,7 +30,6 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
-      // filesList: [],
     };
   },
   mounted() {
