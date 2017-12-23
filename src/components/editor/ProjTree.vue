@@ -4,13 +4,14 @@
     <!-- text-color="blue"
     active-text-color="red" -->
     <el-menu
+      id='pro-menu'
       background-color="transparent"
+      hover-background="transparent"
       class="el-menu-vertical-demo"
       text-color="blue"
       @open="handleOpen"
       @close="handleClose">
       <ProjTreeListFolder superid=''></ProjTreeListFolder>
-
     </el-menu>
   </div>
 </template>
@@ -38,6 +39,7 @@ export default {
     // this.filesList = files;
     // console.log('files');
     // console.log(files);
+    GlobalUtil.rootMenu = document.getElementById('pro-menu');
   },
   methods: {
     filesList(superid) {
@@ -56,9 +58,11 @@ export default {
       GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
     },
-    handleTitleMouseenter() {
+    mouseenter() {
+      console.log(`handleTitleMouseenter`);
     },
-    handleTitleMouseleave() {
+    mouseleave() {
+      console.log(`handleTitleMouseleave`);
     },
     onClickItem(e) {
       console.log(e);

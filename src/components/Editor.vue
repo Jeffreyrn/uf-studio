@@ -8,6 +8,7 @@
         <ResultRun class="result-frame"></ResultRun>
       </div>
     </div>
+    <div style="z-index:10;position:absolute;left:19%;width:15px;height:500px;background-color:red;"></div>
   </div>
 </template>
 <script>
@@ -57,10 +58,10 @@ a {
   width:100%;
 }
 .left-frame {
-  width:15%;
+  width:20%;
 }
 .right-frame {
-  width:85%;
+  width:80%;
   background-color:green;
 }
 .result-frame {
