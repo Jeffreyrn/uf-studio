@@ -1,14 +1,14 @@
 <template>
   <div>
     <h5>{{ model.localProjTree.curProj.name }}</h5>
+    <!-- text-color="blue"
+    active-text-color="red" -->
     <el-menu
       background-color="transparent"
-      text-color="blue"
-      active-text-color="red"
       class="el-menu-vertical-demo"
+      text-color="blue"
       @open="handleOpen"
       @close="handleClose">
-
       <ProjTreeListFolder superid=''></ProjTreeListFolder>
 
     </el-menu>

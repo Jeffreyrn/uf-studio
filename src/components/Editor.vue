@@ -53,7 +53,7 @@ a {
   float: left;
 }
 .total-frame {
-  background-color:yellow;
+  background-color:gray;
   width:100%;
 }
 .left-frame {

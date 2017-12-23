@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="result-run-frame">
-      Run
-    </div>
+
   </div>
 </template>
 
