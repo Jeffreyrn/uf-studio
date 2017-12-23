@@ -4,14 +4,14 @@
       <div v-if="data.type === model.localProjTree.PROJ_TREE_TYPE.FOLDER">
         <el-submenu :index="data.uuid" name="submenu">
           <template slot="title">
-            <span name="file-name"> {{ data.name }} -- {{ data.uuid }} </span>
+            <span name="file-name"> {{ data.name }} </span>
           </template>
           <items :superid='data.uuid'></items>
         </el-submenu>
       </div>
       <div v-if="data.type === model.localProjTree.PROJ_TREE_TYPE.FILE">
         <el-menu-item :index="Math.random()" @click="onClick(data.uuid)">
-          <span :id="genFileId(data.uuid)" name="file-name">{{ data.name }} -- {{ data.uuid }}</span>
+          <span :id="genFileId(data.uuid)" name="file-name">{{ data.name }} </span>
         </el-menu-item>
       </div>
     </template>
@@ -68,8 +68,8 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
       this.setSelected(uuid);
-      const promenu = document.getElementById('pro-menu');
-      console.log(`promenu = ${promenu.innerHTML}`);
+      // const promenu = document.getElementById('pro-menu');
+      // console.log(`promenu = ${promenu.innerHTML}`);
     },
     setSelected(uuid) {
       const fileNames = document.getElementsByName('file-name');

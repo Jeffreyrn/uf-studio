@@ -8,7 +8,7 @@
       <button @click="addFile()">
         +File
       </button>
-      <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFileUUID }} </span>
+      <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span>
     </div>
   </div>
 </template>

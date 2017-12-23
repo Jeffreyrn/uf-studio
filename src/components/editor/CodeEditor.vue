@@ -1,7 +1,7 @@
 <template>
   <div>
     <codemirror
-      v-model="code"
+      v-model="model.localProjTree.curSelectedContent"
       :options="editorOption"
       ref="myEditor"
       @input="onEditorCodeChange">
@@ -30,7 +30,8 @@ import PythonHint from '../../assets/lib/python-hint';
 export default {
   data() {
     return {
-      code: 'def as #123',
+      // code: 'def as #123',
+      model: GlobalUtil.model,
       editorOption: {
         mode: {
           name: 'python',
@@ -72,7 +73,9 @@ export default {
   methods: {
     onEditorCodeChange(newCode) {
       console.log('this is new code', newCode);
-      this.code = newCode;
+      GlobalUtil.model.localProjTree.curSelectedFile.content = newCode;
+      // this.code = newCode;
+      // GlobalUtil.model.localProjTree.curSelectedContent = newCode;
     },
   },
   beforeDestroy() {

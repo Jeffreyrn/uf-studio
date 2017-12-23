@@ -8,7 +8,7 @@
         <ResultRun class="result-frame"></ResultRun>
       </div>
     </div>
-    <div style="z-index:10;position:absolute;left:19%;width:15px;height:500px;background-color:red;"></div>
+    <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
   </div>
 </template>
 <script>
@@ -56,16 +56,20 @@ a {
 .total-frame {
   background-color:gray;
   width:100%;
+  height:450px;
 }
 .left-frame {
   width:20%;
+  height: 100%;
+  overflow: scroll;
 }
 .right-frame {
   width:80%;
+  height: 100%;
   background-color:green;
 }
 .result-frame {
-  height:200px;
+  /*height:200px;*/
 }
 
 </style>
