@@ -2,13 +2,16 @@
   <div>
     <div>
       Top Menu
-      <button @click="addFolder()">
+      <el-button class="top-btn" @click="addFolder()">
         +Folder
-      </button>
-      <button @click="addFile()">
+      </el-button>
+      <el-button class="top-btn" @click="addFile()">
         +File
-      </button>
-      <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span>
+      </el-button>
+      <el-button class="top-btn" @click="delFile()">
+        Delete
+      </el-button>
+      <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
     </div>
   </div>
 </template>
@@ -27,6 +30,24 @@ export default {
   mounted() {
   },
   methods: {
+    delFile() {
+      console.log('del folder');
+      swal({
+        text: 'Delete?',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'CANCEL',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: false,
+        reverseButtons: true,
+        width: '300px',
+        preConfirm: text => new Promise((resolve, reject) => {
+          resolve();
+        }),
+      }).then((text) => {
+
+      });
+    },
     addFolder() {
       console.log('add folder');
       swal({
@@ -90,5 +111,9 @@ export default {
 </script>
 
 <style scoped>
-
+.top-btn {
+  /*width: 50px;
+  height: 20px;*/
+  padding: 10px;
+}
 </style>

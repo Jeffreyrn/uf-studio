@@ -7,25 +7,26 @@ self.PROJ_TREE_TYPE = {
   FILE: 'file',
 }
 
-self.curSelectedFile = '';
+// self.curSelectedFile = '';
+self.curSelectedFileUUID = '';
 self.curSelectedFolderUUID = '';
 self.curSelectedContent = '';
 
-self.setSelectedFileUUID = (uuid) => {
-  for (let i = 0; i < self.curProj.files.length; i += 1) {
-    const file = self.curProj.files[i];
-    if (file.uuid === uuid) {
-      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-        self.curSelectedFolderUUID = file.uuid;
-      }
-      if (file.type === self.PROJ_TREE_TYPE.FILE) {
-        self.curSelectedContent = file.content;
-        self.curSelectedFile = file;
-        self.curSelectedFolderUUID = file.superid;
-      }
-    }
-  }
-};
+// self.setSelectedFileUUID = (uuid) => {
+//   for (let i = 0; i < self.curProj.files.length; i += 1) {
+//     const file = self.curProj.files[i];
+//     if (file.uuid === uuid) {
+//       if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+//         self.curSelectedFolderUUID = file.uuid;
+//       }
+//       if (file.type === self.PROJ_TREE_TYPE.FILE) {
+//         self.curSelectedContent = file.content;
+//         self.curSelectedFile = file;
+//         self.curSelectedFolderUUID = file.superid;
+//       }
+//     }
+//   }
+// };
 
 let indexCounter = 0;
 
