@@ -5,8 +5,8 @@
     active-text-color="red" -->
     <el-menu
       id='pro-menu'
-      background-color="transparent"
-      hover-background="transparent"
+      background-color="yellow"
+      hover-background="red"
       class="el-menu-vertical-demo"
       text-color="blue"
       @open="handleOpen"
@@ -51,12 +51,14 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
       GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
+      this.setSelected(key);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
       GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
       GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
+      this.setSelected(key);
     },
     mouseenter() {
       console.log(`handleTitleMouseenter`);
@@ -66,6 +68,20 @@ export default {
     },
     onClickItem(e) {
       console.log(e);
+    },
+    setSelected(uuid) {
+      const fileNames = document.getElementsByName('file-name');
+      for (let i = 0; i < fileNames.length; i++) {
+        const fileName = fileNames[i];
+        // fileName.style.color = 'blue';
+        fileName.style.backgroundColor = 'transparent';
+        // fileName.parentNode.style.backgroundColor = 'transparent';
+      }
+      if (uuid !== null) {
+        const fileName = document.getElementById(`file-id-${uuid}`);
+        // fileName.style.color = 'red';
+        fileName.style.backgroundColor = 'pink';
+      }
     },
   },
   beforeDestroy() {

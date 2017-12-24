@@ -4,8 +4,11 @@
       <div v-if="data.type === model.localProjTree.PROJ_TREE_TYPE.FOLDER">
         <el-submenu :index="data.uuid" name="submenu">
           <template slot="title">
-            <span name="file-name"> {{ data.name }} </span>
+            <!-- <div style="width:100%;height:100%;background-color:pink;"> -->
+              <span name="file-name" :id="genFileId(data.uuid)"> {{ data.name }} </span>
+            <!-- </div> -->
           </template>
+          <!-- <span slot="title" name="file-name"> {{ data.name }} </span> -->
           <items :superid='data.uuid'></items>
         </el-submenu>
       </div>
@@ -35,15 +38,18 @@ export default {
     console.log(`submenus 1 count = ${fileDivsCount}`);
     for (let i = 0; i < submenus.length; i++) {
       let submenu = submenus[i];
-      // submenu.hoverBackground = 'red';
-      // submenu.style.backgroundColor = 'yellow';
-      // submenu.onmouseenter = null;
-      // const title = submenu.$refs['submenu-title'];
-      // title.style.backgroundColor = 'red';
-
-      // submenu.removeEventListener('mouseenter', document.getElementById('pro-menu').handleTitleMouseenter);
-      // submenu.removeEventListener('click', 'handleClick');
-      // submenu.$off('mouseenter');
+      submenu.onmouseenter = (e) => {
+        // console.log(`onmouseenter onmouseenter`);
+        e.currentTarget.style.backgroundColor = 'pink';
+      };
+      // submenu.onclick = (e) => {
+      //   console.log(`onclick onclick`);
+      //   e.currentTarget.style.backgroundColor = 'pink';
+      // };
+      // submenu.onfocus = (e) => {
+      //   // console.log(`onclick onclick`);
+      //   e.currentTarget.style.backgroundColor = 'pink';
+      // };
     }
 
     const items = document.getElementsByClassName('el-menu-item');
@@ -51,13 +57,26 @@ export default {
     console.log(`items 1 count = ${itemsCount}`);
     for (let i = 0; i < items.length; i++) {
       let item = items[i];
-      // submenu.hoverBackground = 'red';
-      // submenu.style.backgroundColor = 'yellow';
-      // submenu.onmouseenter = null;
-      // const title = submenu.$refs['submenu-title'];
-      // title.style.backgroundColor = 'red';
-      // submenu.removeEventListener('mouseenter', 'handleTitleMouseenter');
-      // item.removeEventListener('click', this.onClick);
+      item.onmouseenter = (e) => {
+        // console.log(`onmouseenter onmouseenter`);
+        e.currentTarget.style.backgroundColor = 'pink';
+      };
+      // item.onclick = (e) => {
+      //   // console.log(`onclick onclick`);
+      //   e.currentTarget.style.backgroundColor = 'pink';
+      // };
+      // item.focus = (e) => {
+      //   // console.log(`onclick onclick`);
+      //   e.currentTarget.style.backgroundColor = 'pink';
+      // };
+      // item.onblur = (e) => {
+      //   // console.log(`onblur onblur`);
+      //   e.currentTarget.style.backgroundColor = 'transparent';
+      // };
+      // item.onmouseleave = (e) => {
+      //   // console.log(`onmouseleave onmouseleave`);
+      //   e.currentTarget.style.backgroundColor = 'transparent';
+      // };
     }
   },
   methods: {
@@ -76,10 +95,12 @@ export default {
       for (let i = 0; i < fileNames.length; i++) {
         const fileName = fileNames[i];
         fileName.style.color = 'blue';
+        fileName.style.backgroundColor = 'transparent';
       }
       if (uuid !== null) {
         const fileName = document.getElementById(`file-id-${uuid}`);
         fileName.style.color = 'red';
+        fileName.style.backgroundColor = 'pink';
       }
     },
     filesList(superid) {

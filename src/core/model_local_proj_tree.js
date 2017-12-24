@@ -27,8 +27,11 @@ self.setSelectedFileUUID = (uuid) => {
   }
 };
 
+let indexCounter = 0;
+
 self.createFile = (uuid, superid, type, name, content) => {
   return {
+    index: indexCounter += 1,
     uuid: uuid,
     superid: superid,
     type: type,
@@ -75,7 +78,7 @@ self.getAllFilesByFolder = (superid) => {
   let ret = [];
   for (let i = 0; i < files.length; i += 1) {
     const file = files[i];
-    console.log(`list name = ${file.name}, file.superid = ${file.superid}, superid = ${superid}`);
+    // console.log(`list name = ${file.name}, file.superid = ${file.superid}, superid = ${superid}`);
     if (file.superid === superid) {
       ret.push(file);
     }
