@@ -94,7 +94,7 @@ self.curProj = {
     self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'g'),
     self.createFile('uuid_c', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹2', ''),
     self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'f'),
-    self.createFile('uuid_55', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'f'),
+    self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'f'),
     self.createFile('uuid_d', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹3', ''),
     self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', ''),
   ],

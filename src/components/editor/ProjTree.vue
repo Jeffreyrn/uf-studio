@@ -74,8 +74,8 @@ export default {
       console.log(e);
     },
     setSelected(uuid) {
-      GlobalUtil.model.localProjTree.resetFileMenuBackground(false);
       GlobalUtil.model.localProjTree.resetFolderMenuBackground();
+      GlobalUtil.model.localProjTree.resetFileMenuBackground(false);
       if (uuid !== null) {
         const fileName = document.getElementById(`menu-id-${uuid}`);
         // fileName.style.color = 'red';

@@ -98,8 +98,8 @@ export default {
       // console.log(`promenu = ${promenu.innerHTML}`);
     },
     setSelected(uuid) {
-      GlobalUtil.model.localProjTree.resetFileMenuBackground(true);
       GlobalUtil.model.localProjTree.resetFolderMenuBackground();
+      GlobalUtil.model.localProjTree.resetFileMenuBackground(true);
       if (uuid !== null) {
         const fileName = document.getElementById(`file-id-${uuid}`);
         fileName.style.color = 'red';
