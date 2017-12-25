@@ -126,7 +126,15 @@ self.createSimpleFile = (name) => {
 };
 
 self.delFiles = () => {
-
+  const curSelectedUUID = self.curSelectedUUID;
+  let tempFiles = [];
+  for (var i = 0; i < self.curProj.files.length; i++) {
+    const file = self.curProj.files[i];
+    if (file.uuid !== curSelectedUUID && file.superid !== curSelectedUUID) {
+      tempFiles.push(file);
+    }
+  }
+  self.curProj.files = tempFiles;
 };
 
 self.resetFileBackground = (isRestFont) => {
@@ -136,7 +144,7 @@ self.resetFileBackground = (isRestFont) => {
     const fileId = file.uuid;
     if (file.type === self.PROJ_TREE_TYPE.FILE) {
       const fileName = document.getElementById(`file-id-${fileId}`);
-      if (isRestFont) {
+      if (isRestFont && fileName !== null) {
         fileName.style.color = 'blue';
       }
     }

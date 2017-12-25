@@ -44,7 +44,7 @@ export default {
           resolve();
         }),
       }).then((text) => {
-
+        GlobalUtil.model.localProjTree.delFiles();
       });
     },
     addFolder() {

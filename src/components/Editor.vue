@@ -4,7 +4,7 @@
     <div class="float-left total-frame">
       <ProjTree class="float-left left-frame"></ProjTree>
       <div class="float-left">
-        <div class="float-left">.</div>
+        <div class="float-left" style="height:20px;width:1px;"></div>
         <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
           <TopTab :data='data'></TopTab>
         </template>
