@@ -78,6 +78,16 @@ export default {
         const fileName = document.getElementById(`file-id-${uuid}`);
         // fileName.style.color = 'red';
         fileName.style.backgroundColor = 'pink';
+
+        // const menuName = document.getElementById(`menu-id-${uuid}`);
+        // const submenus = document.getElementsByClassName('el-submenu__title');
+        // for (let i = 0; i < submenus.length; i += 1) {
+        //   const submenu = submenus[i];
+        //   submenu.style.backgroundColor = 'pink';
+        // }
+
+        // // fileName.style.color = 'red';
+        // fileName.style.backgroundColor = 'pink';
       }
     },
   },
