@@ -75,7 +75,7 @@ export default {
       console.log('this is new code', newCode);
       GlobalUtil.model.localProjTree.curFile.content = newCode;
       // this.code = newCode;
-      // GlobalUtil.model.localProjTree.curSelectedContent = newCode;
+      GlobalUtil.model.localProjTree.curSelectedContent = newCode;
     },
   },
   beforeDestroy() {

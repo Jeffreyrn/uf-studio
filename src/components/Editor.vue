@@ -3,6 +3,12 @@
     <TopMenu></TopMenu>
     <div class="float-left total-frame">
       <ProjTree class="float-left left-frame"></ProjTree>
+      <div class="float-left">
+        <div class="float-left">.</div>
+        <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
+          <TopTab :data='data'></TopTab>
+        </template>
+      </div>
       <div class="float-left right-frame">
         <CodeEditor></CodeEditor>
         <ResultRun class="result-frame"></ResultRun>
@@ -16,12 +22,15 @@ import TopMenu from './editor/TopMenu';
 import ProjTree from './editor/ProjTree';
 import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
+import TopTab from './editor/TopTab';
 
 import '../assets/css/reseet.css';
 
 export default {
   data() {
     return {
+      model: GlobalUtil.model,
+      null: '.',
     };
   },
   mounted() {
@@ -39,6 +48,7 @@ export default {
     ProjTree,
     CodeEditor,
     ResultRun,
+    TopTab,
   },
 };
 </script>
@@ -50,8 +60,14 @@ export default {
 a {
   color: white;
 }
+.float-clear {
+  clear: both;
+}
 .float-left {
   float: left;
+}
+.float-right {
+  float: right;
 }
 .total-frame {
   /*background-color:gray;*/
@@ -71,5 +87,4 @@ a {
 .result-frame {
   /*height:200px;*/
 }
-
 </style>

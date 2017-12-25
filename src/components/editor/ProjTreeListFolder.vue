@@ -45,9 +45,12 @@ export default {
     },
     onClick(uuid) {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
-      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
+      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
       GlobalUtil.model.localProjTree.resetFileBackground(true);
       GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
+      GlobalUtil.model.localProjTree.addOpenFile(uuid);
+      GlobalUtil.model.localProjTree.resetSelectedTab();
+      GlobalUtil.model.localProjTree.setSelectedTab(uuid);
     },
     filesList(superid) {
       const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(superid);

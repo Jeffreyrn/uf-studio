@@ -13,15 +13,60 @@ self.curSelectedUUID = '';
 self.curSelectedFileUUID = '';
 self.curSelectedFolderUUID = '';
 self.curSelectedContent = '';
+self.curOpenedFilesList = [];
+self.addOpenFile = (uuid) => {
+  const file = self.getFile(uuid);
+  if (file === null) {
+    return;
+  }
+  for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
+    const file = self.curOpenedFilesList[i];
+    if (file.uuid === uuid) {
+      return;
+    }
+  }
+  self.curOpenedFilesList.push(file);
+};
+
+self.removeOpenFile = (uuid) => {
+  let newArr = [];
+  for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
+    const file = self.curOpenedFilesList[i];
+    if (file.uuid !== uuid) {
+      newArr.push(file);
+    }
+  }
+  self.curOpenedFilesList = newArr;
+};
+
+self.resetSelectedTab = () => {
+  const tabs = document.getElementsByName('top-tab');
+  for (let i = 0; i < tabs.length; i += 1) {
+    const tab = tabs[i];
+    tab.style.backgroundColor = 'transparent';
+    // if (tab.id === `top-tab-${uuid}`) {
+    //   tab.style.backgroundColor = 'pink';
+    // }
+    // else {
+    //   tab.style.backgroundColor = '';
+    // }
+  }
+};
+self.setSelectedTab = (uuid) => {
+  const tab = document.getElementById(`top-tab-${uuid}`);
+  tab.style.backgroundColor = 'pink';
+};
 
 self.setSelectedFileUUID = (uuid) => {
   self.curSelectedUUID = uuid;
+  if (uuid === '') {
+    self.curSelectedFileUUID = '';
+    self.curSelectedFolderUUID = '';
+    return;
+  }
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
     if (file.uuid === uuid) {
-      // if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-      //   self.curSelectedFolderUUID = file.uuid;
-      // }
       if (file.type === self.PROJ_TREE_TYPE.FILE) {
         self.curSelectedContent = file.content;
         // self.curSelectedFile = file;
@@ -169,13 +214,26 @@ self.curProj = {
     self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'g'),
     self.createFile('uuid_c', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹2', ''),
     self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'f'),
-    self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'f'),
+    self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'g'),
     self.createFile('uuid_d', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹3', ''),
-    self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', ''),
+    self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'h'),
   ],
 };
 
 self.curFile = null;
+self.getFile = (uuid) => {
+  const files = self.curProj.files;
+  for (let i = 0; i < files.length; i += 1) {
+    const file = files[i];
+    const fileId = file.uuid;
+    if (file.type === self.PROJ_TREE_TYPE.FILE) {
+      if (fileId === uuid) {
+        return file;
+      }
+    }
+  }
+  return null;
+};
 
 self.getAllFilesByFolder = (superid) => {
   console.log('curProj');
