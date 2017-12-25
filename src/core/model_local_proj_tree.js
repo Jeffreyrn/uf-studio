@@ -127,6 +127,9 @@ self.createSimpleFile = (name) => {
 
 self.delFiles = () => {
   const curSelectedUUID = self.curSelectedUUID;
+  if (curSelectedUUID === null || curSelectedUUID === '' || curSelectedUUID === undefined) {
+    return;
+  }
   let tempFiles = [];
   for (var i = 0; i < self.curProj.files.length; i++) {
     const file = self.curProj.files[i];
@@ -149,7 +152,9 @@ self.resetFileBackground = (isRestFont) => {
       }
     }
     const menuName = document.getElementById(`menu-id-${fileId}`);
-    menuName.style.backgroundColor = self.treeBgColor;
+    if (menuName !== null) {
+      menuName.style.backgroundColor = self.treeBgColor;
+    }
   }
 };
 
