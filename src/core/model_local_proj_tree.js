@@ -48,7 +48,10 @@ self.resetSelectedTab = () => {
 };
 self.setSelectedTab = (uuid) => {
   const tab = document.getElementById(`top-tab-${uuid}`);
-  tab.style.backgroundColor = 'pink';
+  if (tab !== null) {
+    tab.style.backgroundColor = 'pink';
+  }
+
   // const tabs = document.getElementsByName('top-tab');
   // for (let i = 0; i < tabs.length; i += 1) {
   //   const tab = tabs[i];

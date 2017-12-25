@@ -47,6 +47,7 @@ export default {
         if (uuid === GlobalUtil.model.localProjTree.curFile.uuid) {
           console.log(`close selected uuid`);
           // GlobalUtil.model.localProjTree.curSelectedContent = '';
+          // GlobalUtil.model.localProjTree.curSelectedContent = '';
           GlobalUtil.model.localProjTree.resetFileBackground(true);
         }
         else {
