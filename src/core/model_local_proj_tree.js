@@ -204,7 +204,7 @@ self.resetMenuStyle = () => {
       // console.log(`onclick onclick`);
       e.currentTarget.style.backgroundColor = 'pink';
     };
-    item.focus = (e) => {
+    item.onfocus = (e) => {
       // console.log(`onclick onclick`);
       e.currentTarget.style.backgroundColor = 'pink';
     };
