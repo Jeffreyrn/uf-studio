@@ -51,18 +51,14 @@ export default {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
       GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
-      // GlobalUtil.model.localProjTree.curSelectedFolderUUID = key;
-      // GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
-      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
-      this.setSelected(key);
+      GlobalUtil.model.localProjTree.resetFileBackground();
+      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, false);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
       GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
-      // GlobalUtil.model.localProjTree.curSelectedFolderUUID = key;
-      // GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
-      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
-      this.setSelected(key);
+      GlobalUtil.model.localProjTree.resetFileBackground();
+      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, false);
     },
     mouseenter() {
       console.log(`handleTitleMouseenter`);
@@ -72,16 +68,6 @@ export default {
     },
     onClickItem(e) {
       console.log(e);
-    },
-    setSelected(uuid) {
-      GlobalUtil.model.localProjTree.resetFileBackground();
-      // GlobalUtil.model.localProjTree.resetFileBackground(false);
-      // if (uuid !== null) {
-      //   const fileName = document.getElementById(`menu-id-${uuid}`);
-      //   // fileName.style.color = 'red';
-      //   fileName.style.backgroundColor = 'pink';
-      // }
-      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, false);
     },
   },
   beforeDestroy() {

@@ -49,8 +49,10 @@ export default {
       GlobalUtil.model.localProjTree.resetFileBackground(true);
       GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
       GlobalUtil.model.localProjTree.addOpenFile(uuid);
-      GlobalUtil.model.localProjTree.resetSelectedTab();
-      GlobalUtil.model.localProjTree.setSelectedTab(uuid);
+      setTimeout(() => {
+        GlobalUtil.model.localProjTree.resetSelectedTab();
+        GlobalUtil.model.localProjTree.setSelectedTab(uuid);
+      }, 100);
     },
     filesList(superid) {
       const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(superid);

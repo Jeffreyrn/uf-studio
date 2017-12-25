@@ -1,5 +1,5 @@
 <template>
-  <div class="float-left top-tab" style="background-color:pink;" name="top-tab" :id="getTabId(data.uuid)">
+  <div class="float-left top-tab" name="top-tab" :id="getTabId(data.uuid)">
     <div class="float-left top-tab-item-border">
       <div class="float-left top-tab-item" @click="onselect(data.uuid)">
         <div class="float-left">{{ data.name }}</div>
@@ -23,6 +23,7 @@ export default {
   },
   mounted() {
     console.log('top tab mounted');
+    GlobalUtil.model.localProjTree.resetSelectedTab();
   },
   methods: {
     getTabId(uuid) {
