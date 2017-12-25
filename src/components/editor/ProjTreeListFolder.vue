@@ -42,14 +42,14 @@ export default {
         // console.log(`onmouseenter onmouseenter`);
         e.currentTarget.style.backgroundColor = 'pink';
       };
-      // submenu.onclick = (e) => {
-      //   console.log(`onclick onclick`);
-      //   e.currentTarget.style.backgroundColor = 'pink';
-      // };
-      // submenu.onfocus = (e) => {
-      //   // console.log(`onclick onclick`);
-      //   e.currentTarget.style.backgroundColor = 'pink';
-      // };
+      submenu.onclick = (e) => {
+        console.log(`onclick onclick`);
+        e.currentTarget.style.backgroundColor = 'pink';
+      };
+      submenu.onfocus = (e) => {
+        // console.log(`onclick onclick`);
+        e.currentTarget.style.backgroundColor = 'pink';
+      };
     }
 
     const items = document.getElementsByClassName('el-menu-item');
@@ -61,22 +61,22 @@ export default {
         // console.log(`onmouseenter onmouseenter`);
         e.currentTarget.style.backgroundColor = 'pink';
       };
-      // item.onclick = (e) => {
-      //   // console.log(`onclick onclick`);
-      //   e.currentTarget.style.backgroundColor = 'pink';
-      // };
-      // item.focus = (e) => {
-      //   // console.log(`onclick onclick`);
-      //   e.currentTarget.style.backgroundColor = 'pink';
-      // };
-      // item.onblur = (e) => {
-      //   // console.log(`onblur onblur`);
-      //   e.currentTarget.style.backgroundColor = 'transparent';
-      // };
-      // item.onmouseleave = (e) => {
-      //   // console.log(`onmouseleave onmouseleave`);
-      //   e.currentTarget.style.backgroundColor = 'transparent';
-      // };
+      item.onclick = (e) => {
+        // console.log(`onclick onclick`);
+        e.currentTarget.style.backgroundColor = 'pink';
+      };
+      item.focus = (e) => {
+        // console.log(`onclick onclick`);
+        e.currentTarget.style.backgroundColor = 'pink';
+      };
+      item.onblur = (e) => {
+        // console.log(`onblur onblur`);
+        e.currentTarget.style.backgroundColor = 'transparent';
+      };
+      item.onmouseleave = (e) => {
+        // console.log(`onmouseleave onmouseleave`);
+        e.currentTarget.style.backgroundColor = 'transparent';
+      };
     }
   },
   methods: {

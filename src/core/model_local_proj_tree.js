@@ -23,7 +23,7 @@ self.setSelectedFileUUID = (uuid) => {
         self.curSelectedContent = file.content;
         // self.curSelectedFile = file;
         self.curSelectedFileUUID = uuid
-        self.curSelectedFolderUUID = file.superid;
+        self.curSelectedFolderUUID = '';
       }
     }
   }
