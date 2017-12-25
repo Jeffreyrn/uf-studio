@@ -49,16 +49,16 @@ export default {
       return files;
     },
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
       GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
       GlobalUtil.model.localProjTree.resetFileBackground();
-      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, false);
+      GlobalUtil.model.localProjTree.setSelectedFileStyle(key, false);
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
       GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
       GlobalUtil.model.localProjTree.resetFileBackground();
-      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, false);
+      GlobalUtil.model.localProjTree.setSelectedFileStyle(key, false);
     },
     mouseenter() {
       console.log(`handleTitleMouseenter`);

@@ -156,11 +156,13 @@ self.resetFileBackground = (isRestFont) => {
 self.setSelectedFileStyle = (uuid, isSetFont) => {
   if (uuid !== null) {
     const fileName = document.getElementById(`file-id-${uuid}`);
-    if (isSetFont) {
+    if (isSetFont && fileName !== null) {
       fileName.style.color = 'red';
     }
     const menuName = document.getElementById(`menu-id-${uuid}`);
-    menuName.style.backgroundColor = 'pink';
+    if (menuName !== null) {
+      menuName.style.backgroundColor = 'pink';
+    }
   }
 };
 
