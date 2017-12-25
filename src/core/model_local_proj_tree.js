@@ -9,11 +9,13 @@ self.PROJ_TREE_TYPE = {
 
 // self.curSelectedFile = '';
 self.treeBgColor = 'gray';
+self.curSelectedUUID = '';
 self.curSelectedFileUUID = '';
 self.curSelectedFolderUUID = '';
 self.curSelectedContent = '';
 
 self.setSelectedFileUUID = (uuid) => {
+  self.curSelectedUUID = uuid;
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
     if (file.uuid === uuid) {
@@ -25,6 +27,9 @@ self.setSelectedFileUUID = (uuid) => {
         // self.curSelectedFile = file;
         self.curSelectedFileUUID = uuid
         self.curSelectedFolderUUID = '';
+      }
+      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+        self.curSelectedFolderUUID = uuid;
       }
     }
   }
@@ -47,8 +52,20 @@ self.createFolder = (uuid, superid, name) => {
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
 };
 
-self.createSimpleFile = (uuid, superid, name) => {
-  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, '');
+self.createSimpleFile = (name) => {
+  const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  console.log(`uuid = ${uuid}`);
+  let curSelectedUUID = self.curSelectedUUID;
+  let superid = curSelectedUUID;
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    const file = self.curProj.files[i];
+    if (file.uuid === self.curSelectedFileUUID) {
+      if (file.type === self.PROJ_TREE_TYPE.FILE) {
+        superid = file.superid;
+      }
+    }
+  }
+  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, 'new');
 };
 
 self.delFiles = () => {
@@ -70,6 +87,17 @@ self.resetFileBackground = (isRestFont) => {
     }
     const menuName = document.getElementById(`menu-id-${fileId}`);
     menuName.style.backgroundColor = self.treeBgColor;
+  }
+};
+
+self.setSelectedFileStyle = (uuid, isSetFont) => {
+  if (uuid !== null) {
+    const fileName = document.getElementById(`file-id-${uuid}`);
+    if (isSetFont) {
+      fileName.style.color = 'red';
+    }
+    const menuName = document.getElementById(`menu-id-${uuid}`);
+    menuName.style.backgroundColor = 'pink';
   }
 };
 

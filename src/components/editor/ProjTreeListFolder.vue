@@ -90,22 +90,9 @@ export default {
     },
     onClick(uuid) {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
-      // GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
-      GlobalUtil.model.localProjTree.curSelectedFolderUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
-      this.setSelected(uuid);
-      // const promenu = document.getElementById('pro-menu');
-      // console.log(`promenu = ${promenu.innerHTML}`);
-    },
-    setSelected(uuid) {
-      // GlobalUtil.model.localProjTree.resetFolderBackground();
       GlobalUtil.model.localProjTree.resetFileBackground(true);
-      if (uuid !== null) {
-        const fileName = document.getElementById(`file-id-${uuid}`);
-        fileName.style.color = 'red';
-        const menuName = document.getElementById(`menu-id-${uuid}`);
-        menuName.style.backgroundColor = 'pink';
-      }
+      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
     },
     filesList(superid) {
       const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(superid);

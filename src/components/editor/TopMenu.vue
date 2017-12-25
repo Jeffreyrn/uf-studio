@@ -61,6 +61,7 @@ export default {
         reverseButtons: true,
         width: '300px',
         preConfirm: text => new Promise((resolve, reject) => {
+          GlobalUtil.model.localProjTree.resetFileBackground(true);
           console.log(`text = ${text}`);
           const curSelectedFolderUUID = GlobalUtil.model.localProjTree.curSelectedFolderUUID;
           const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -86,13 +87,19 @@ export default {
         reverseButtons: true,
         width: '300px',
         preConfirm: text => new Promise((resolve, reject) => {
+
           console.log(`text = ${text}`);
-          const curSelectedFolderUUID = GlobalUtil.model.localProjTree.curSelectedFolderUUID;
-          const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-          console.log(`uuid = ${uuid}`);
-          const folder = GlobalUtil.model.localProjTree.createSimpleFile(uuid, curSelectedFolderUUID, text);
-          GlobalUtil.model.localProjTree.curProj.files.push(folder);
+          // const curSelectedFolderUUID = GlobalUtil.model.localProjTree.curSelectedFolderUUID;
+          const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
+          GlobalUtil.model.localProjTree.curProj.files.push(file);
+          GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
+          GlobalUtil.model.localProjTree.resetFileBackground(true);
+          // GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
           resolve();
+          setTimeout(function() {
+            GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
+            resolve();
+          }, 100);
         }),
       }).then((text) => {
 

@@ -50,17 +50,17 @@ export default {
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
-      // GlobalUtil.model.localProjTree.setSelectedFileUUID('');
-      GlobalUtil.model.localProjTree.curSelectedFolderUUID = key;
-      GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
+      GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
+      // GlobalUtil.model.localProjTree.curSelectedFolderUUID = key;
+      // GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
       this.setSelected(key);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-      // GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
-      GlobalUtil.model.localProjTree.curSelectedFolderUUID = key;
-      GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
+      GlobalUtil.model.localProjTree.setSelectedFileUUID(key);
+      // GlobalUtil.model.localProjTree.curSelectedFolderUUID = key;
+      // GlobalUtil.model.localProjTree.curSelectedFileUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
       this.setSelected(key);
     },
@@ -74,23 +74,14 @@ export default {
       console.log(e);
     },
     setSelected(uuid) {
-      // GlobalUtil.model.localProjTree.resetFolderBackground();
-      GlobalUtil.model.localProjTree.resetFileBackground(false);
-      if (uuid !== null) {
-        const fileName = document.getElementById(`menu-id-${uuid}`);
-        // fileName.style.color = 'red';
-        fileName.style.backgroundColor = 'pink';
-
-        // const menuName = document.getElementById(`menu-id-${uuid}`);
-        // const submenus = document.getElementsByClassName('el-submenu__title');
-        // for (let i = 0; i < submenus.length; i += 1) {
-        //   const submenu = submenus[i];
-        //   submenu.style.backgroundColor = 'pink';
-        // }
-
-        // // fileName.style.color = 'red';
-        // fileName.style.backgroundColor = 'pink';
-      }
+      GlobalUtil.model.localProjTree.resetFileBackground();
+      // GlobalUtil.model.localProjTree.resetFileBackground(false);
+      // if (uuid !== null) {
+      //   const fileName = document.getElementById(`menu-id-${uuid}`);
+      //   // fileName.style.color = 'red';
+      //   fileName.style.backgroundColor = 'pink';
+      // }
+      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, false);
     },
   },
   beforeDestroy() {
