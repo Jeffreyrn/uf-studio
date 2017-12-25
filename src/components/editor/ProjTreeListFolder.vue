@@ -84,8 +84,8 @@ export default {
       return `file-id-${uid}`;
     },
     onClick(uuid) {
-      // GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
-      GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+      GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
+      // GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
       GlobalUtil.model.localProjTree.curSelectedFolderUUID = '';
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curSelectedFolderUUID}`);
       this.setSelected(uuid);
