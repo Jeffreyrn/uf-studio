@@ -27,6 +27,7 @@ self.setSelectedFileUUID = (uuid) => {
         // self.curSelectedFile = file;
         self.curSelectedFileUUID = uuid
         self.curSelectedFolderUUID = '';
+        self.curFile = file;
       }
       if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
         self.curSelectedFolderUUID = uuid;
@@ -173,6 +174,8 @@ self.curProj = {
     self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', ''),
   ],
 };
+
+self.curFile = null;
 
 self.getAllFilesByFolder = (superid) => {
   console.log('curProj');

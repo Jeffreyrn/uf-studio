@@ -73,7 +73,7 @@ export default {
   methods: {
     onEditorCodeChange(newCode) {
       console.log('this is new code', newCode);
-      // GlobalUtil.model.localProjTree.curSelectedFile.content = newCode;
+      GlobalUtil.model.localProjTree.curFile.content = newCode;
       // this.code = newCode;
       // GlobalUtil.model.localProjTree.curSelectedContent = newCode;
     },
