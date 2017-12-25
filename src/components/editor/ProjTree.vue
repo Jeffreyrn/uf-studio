@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="pro-tree">
     <h5>{{ model.localProjTree.curProj.name }}</h5>
     <!-- text-color="blue"
     active-text-color="red" -->
@@ -40,6 +40,8 @@ export default {
     // console.log('files');
     // console.log(files);
     GlobalUtil.rootMenu = document.getElementById('pro-menu');
+    const proTree = document.getElementById('pro-tree');
+    proTree.style.backgroundColor = GlobalUtil.model.localProjTree.treeBgColor;
   },
   methods: {
     filesList(superid) {
@@ -75,7 +77,7 @@ export default {
       GlobalUtil.model.localProjTree.resetFileMenuBackground(false);
       GlobalUtil.model.localProjTree.resetFolderMenuBackground();
       if (uuid !== null) {
-        const fileName = document.getElementById(`file-id-${uuid}`);
+        const fileName = document.getElementById(`menu-id-${uuid}`);
         // fileName.style.color = 'red';
         fileName.style.backgroundColor = 'pink';
 

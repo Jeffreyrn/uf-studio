@@ -54,7 +54,7 @@ a {
   float: left;
 }
 .total-frame {
-  background-color:gray;
+  /*background-color:gray;*/
   width:100%;
   height:450px;
 }
