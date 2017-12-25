@@ -13,9 +13,11 @@
         </el-submenu>
       </div>
       <div v-if="data.type === model.localProjTree.PROJ_TREE_TYPE.FILE">
-        <el-menu-item :index="Math.random()" @click="onClick(data.uuid)">
-          <span :id="genFileId(data.uuid)" name="file-name">{{ data.name }} </span>
-        </el-menu-item>
+        <div :id="genMenuId(data.uuid)">
+          <el-menu-item :index="Math.random()" @click="onClick(data.uuid)">
+            <span :id="genFileId(data.uuid)" name="file-name">{{ data.name }} </span>
+          </el-menu-item>
+        </div>
       </div>
     </template>
   </div>
@@ -80,6 +82,9 @@ export default {
     }
   },
   methods: {
+    genMenuId(uid) {
+      return `menu-id-${uid}`;
+    },
     genFileId(uid) {
       return `file-id-${uid}`;
     },
@@ -93,16 +98,13 @@ export default {
       // console.log(`promenu = ${promenu.innerHTML}`);
     },
     setSelected(uuid) {
-      const fileNames = document.getElementsByName('file-name');
-      for (let i = 0; i < fileNames.length; i++) {
-        const fileName = fileNames[i];
-        fileName.style.color = 'blue';
-        fileName.style.backgroundColor = 'transparent';
-      }
+      GlobalUtil.model.localProjTree.resetFileMenuBackground(true);
+      GlobalUtil.model.localProjTree.resetFolderMenuBackground();
       if (uuid !== null) {
         const fileName = document.getElementById(`file-id-${uuid}`);
         fileName.style.color = 'red';
-        fileName.style.backgroundColor = 'pink';
+        const menuName = document.getElementById(`menu-id-${uuid}`);
+        menuName.style.backgroundColor = 'pink';
       }
     },
     filesList(superid) {

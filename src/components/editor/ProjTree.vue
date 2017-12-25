@@ -5,8 +5,8 @@
     active-text-color="red" -->
     <el-menu
       id='pro-menu'
-      background-color="yellow"
-      hover-background="red"
+      background-color="transparent"
+      hover-background=""
       class="el-menu-vertical-demo"
       text-color="blue"
       @open="handleOpen"
@@ -72,13 +72,8 @@ export default {
       console.log(e);
     },
     setSelected(uuid) {
-      const fileNames = document.getElementsByName('file-name');
-      for (let i = 0; i < fileNames.length; i++) {
-        const fileName = fileNames[i];
-        // fileName.style.color = 'blue';
-        fileName.style.backgroundColor = 'transparent';
-        // fileName.parentNode.style.backgroundColor = 'transparent';
-      }
+      GlobalUtil.model.localProjTree.resetFileMenuBackground(false);
+      GlobalUtil.model.localProjTree.resetFolderMenuBackground();
       if (uuid !== null) {
         const fileName = document.getElementById(`file-id-${uuid}`);
         // fileName.style.color = 'red';
