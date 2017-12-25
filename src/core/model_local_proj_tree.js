@@ -55,31 +55,33 @@ self.delFiles = () => {
 
 };
 
-self.resetFileMenuBackground = (isRestFont) => {
-  const files = self.curProj.files;
-  for (let i = 0; i < files.length; i += 1) {
-    const file = files[i];
-    if (file.type === self.PROJ_TREE_TYPE.FILE) {
-      const fileId = file.uuid;
-      const fileName = document.getElementById(`file-id-${fileId}`);
-      if (isRestFont) {
-        fileName.style.color = 'blue';
-      }
-      const menuName = document.getElementById(`menu-id-${fileId}`);
-      menuName.style.backgroundColor = self.treeBgColor;
-    }
-  }
-};
-
-self.resetFolderMenuBackground = () => {
+self.resetFileBackground = (isRestFont) => {
   const files = self.curProj.files;
   for (let i = 0; i < files.length; i += 1) {
     const file = files[i];
     const fileId = file.uuid;
+    if (file.type === self.PROJ_TREE_TYPE.FILE) {
+      const fileName = document.getElementById(`file-id-${fileId}`);
+      if (isRestFont) {
+        fileName.style.color = 'blue';
+      }
+      // const menuName = document.getElementById(`menu-id-${fileId}`);
+      // menuName.style.backgroundColor = self.treeBgColor;
+    }
     const menuName = document.getElementById(`menu-id-${fileId}`);
     menuName.style.backgroundColor = self.treeBgColor;
   }
 };
+
+// self.resetFolderBackground = () => {
+//   const files = self.curProj.files;
+//   for (let i = 0; i < files.length; i += 1) {
+//     const file = files[i];
+//     const fileId = file.uuid;
+//     const menuName = document.getElementById(`menu-id-${fileId}`);
+//     menuName.style.backgroundColor = self.treeBgColor;
+//   }
+// };
 
 self.curProj = {
   name: 'Default proj name',
