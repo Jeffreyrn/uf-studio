@@ -177,6 +177,7 @@ self.resetMenuStyle = () => {
   console.log(`submenus 1 count = ${fileDivsCount}`);
   for (let i = 0; i < submenus.length; i++) {
     let submenu = submenus[i];
+    // submenu.parentNode.style.height = '30px';
     submenu.onmouseenter = (e) => {
       // console.log(`onmouseenter onmouseenter`);
       e.currentTarget.style.backgroundColor = 'pink';
@@ -196,6 +197,7 @@ self.resetMenuStyle = () => {
   console.log(`items 1 count = ${itemsCount}`);
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
+    // item.style.height = '20px';
     item.onmouseenter = (e) => {
       // console.log(`onmouseenter onmouseenter`);
       e.currentTarget.style.backgroundColor = 'pink';
