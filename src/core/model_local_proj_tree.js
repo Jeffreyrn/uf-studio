@@ -8,7 +8,7 @@ self.PROJ_TREE_TYPE = {
 }
 
 // self.curSelectedFile = '';
-self.treeBgColor = 'gray';
+self.treeBgColor = 'white';
 self.curSelectedUUID = '';
 self.curSelectedFileUUID = '';
 self.curSelectedFolderUUID = '';
@@ -48,13 +48,7 @@ self.createFile = (uuid, superid, type, name, content) => {
   };
 };
 
-self.createFolder = (uuid, superid, name) => {
-  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
-};
-
-self.createSimpleFile = (name) => {
-  const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-  console.log(`uuid = ${uuid}`);
+function getSuperid() {
   let curSelectedUUID = self.curSelectedUUID;
   let superid = curSelectedUUID;
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -65,6 +59,20 @@ self.createSimpleFile = (name) => {
       }
     }
   }
+  return superid;
+}
+
+self.createFolder = (name) => {
+  const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  console.log(`uuid = ${uuid}`);
+  const superid = getSuperid();
+  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
+};
+
+self.createSimpleFile = (name) => {
+  const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  console.log(`uuid = ${uuid}`);
+  const superid = getSuperid();
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, 'new');
 };
 
@@ -82,8 +90,6 @@ self.resetFileBackground = (isRestFont) => {
       if (isRestFont) {
         fileName.style.color = 'blue';
       }
-      // const menuName = document.getElementById(`menu-id-${fileId}`);
-      // menuName.style.backgroundColor = self.treeBgColor;
     }
     const menuName = document.getElementById(`menu-id-${fileId}`);
     menuName.style.backgroundColor = self.treeBgColor;
@@ -101,15 +107,53 @@ self.setSelectedFileStyle = (uuid, isSetFont) => {
   }
 };
 
-// self.resetFolderBackground = () => {
-//   const files = self.curProj.files;
-//   for (let i = 0; i < files.length; i += 1) {
-//     const file = files[i];
-//     const fileId = file.uuid;
-//     const menuName = document.getElementById(`menu-id-${fileId}`);
-//     menuName.style.backgroundColor = self.treeBgColor;
-//   }
-// };
+self.resetMenuStyle = () => {
+  const submenus = document.getElementsByClassName('el-submenu__title');
+  const fileDivsCount = submenus.length;
+  console.log(`submenus 1 count = ${fileDivsCount}`);
+  for (let i = 0; i < submenus.length; i++) {
+    let submenu = submenus[i];
+    submenu.onmouseenter = (e) => {
+      // console.log(`onmouseenter onmouseenter`);
+      e.currentTarget.style.backgroundColor = 'pink';
+    };
+    submenu.onclick = (e) => {
+      console.log(`onclick onclick`);
+      e.currentTarget.style.backgroundColor = 'pink';
+    };
+    submenu.onfocus = (e) => {
+      // console.log(`onclick onclick`);
+      e.currentTarget.style.backgroundColor = 'pink';
+    };
+  }
+
+  const items = document.getElementsByClassName('el-menu-item');
+  const itemsCount = items.length;
+  console.log(`items 1 count = ${itemsCount}`);
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    item.onmouseenter = (e) => {
+      // console.log(`onmouseenter onmouseenter`);
+      e.currentTarget.style.backgroundColor = 'pink';
+    };
+    item.onclick = (e) => {
+      // console.log(`onclick onclick`);
+      e.currentTarget.style.backgroundColor = 'pink';
+    };
+    item.focus = (e) => {
+      // console.log(`onclick onclick`);
+      e.currentTarget.style.backgroundColor = 'pink';
+    };
+    item.onblur = (e) => {
+      // console.log(`onblur onblur`);
+      e.currentTarget.style.backgroundColor = 'transparent';
+    };
+    item.onmouseleave = (e) => {
+      // console.log(`onmouseleave onmouseleave`);
+      e.currentTarget.style.backgroundColor = 'transparent';
+    };
+  }
+};
 
 self.curProj = {
   name: 'Default proj name',

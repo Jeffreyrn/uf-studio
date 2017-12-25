@@ -34,52 +34,7 @@ export default {
     };
   },
   mounted() {
-    document.getElementById('pro-menu').hoverBackground = 'red';
-    const submenus = document.getElementsByClassName('el-submenu__title');
-    const fileDivsCount = submenus.length;
-    console.log(`submenus 1 count = ${fileDivsCount}`);
-    for (let i = 0; i < submenus.length; i++) {
-      let submenu = submenus[i];
-      submenu.onmouseenter = (e) => {
-        // console.log(`onmouseenter onmouseenter`);
-        e.currentTarget.style.backgroundColor = 'pink';
-      };
-      submenu.onclick = (e) => {
-        console.log(`onclick onclick`);
-        e.currentTarget.style.backgroundColor = 'pink';
-      };
-      submenu.onfocus = (e) => {
-        // console.log(`onclick onclick`);
-        e.currentTarget.style.backgroundColor = 'pink';
-      };
-    }
-
-    const items = document.getElementsByClassName('el-menu-item');
-    const itemsCount = items.length;
-    console.log(`items 1 count = ${itemsCount}`);
-    for (let i = 0; i < items.length; i++) {
-      let item = items[i];
-      item.onmouseenter = (e) => {
-        // console.log(`onmouseenter onmouseenter`);
-        e.currentTarget.style.backgroundColor = 'pink';
-      };
-      item.onclick = (e) => {
-        // console.log(`onclick onclick`);
-        e.currentTarget.style.backgroundColor = 'pink';
-      };
-      item.focus = (e) => {
-        // console.log(`onclick onclick`);
-        e.currentTarget.style.backgroundColor = 'pink';
-      };
-      item.onblur = (e) => {
-        // console.log(`onblur onblur`);
-        e.currentTarget.style.backgroundColor = 'transparent';
-      };
-      item.onmouseleave = (e) => {
-        // console.log(`onmouseleave onmouseleave`);
-        e.currentTarget.style.backgroundColor = 'transparent';
-      };
-    }
+    GlobalUtil.model.localProjTreelf.resetMenuStyle();
   },
   methods: {
     genMenuId(uid) {

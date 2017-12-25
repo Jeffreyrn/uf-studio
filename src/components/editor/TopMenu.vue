@@ -1,7 +1,6 @@
 <template>
   <div>
     <div>
-      Top Menu
       <el-button class="top-btn" @click="addFolder()">
         +Folder
       </el-button>
@@ -63,10 +62,10 @@ export default {
         preConfirm: text => new Promise((resolve, reject) => {
           GlobalUtil.model.localProjTree.resetFileBackground(true);
           console.log(`text = ${text}`);
-          const curSelectedFolderUUID = GlobalUtil.model.localProjTree.curSelectedFolderUUID;
-          const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-          console.log(`uuid = ${uuid}`);
-          const folder = GlobalUtil.model.localProjTree.createFolder(uuid, curSelectedFolderUUID, text);
+          // const curSelectedFolderUUID = GlobalUtil.model.localProjTree.curSelectedFolderUUID;
+          // const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+          // console.log(`uuid = ${uuid}`);
+          const folder = GlobalUtil.model.localProjTree.createFolder(text);
           GlobalUtil.model.localProjTree.curProj.files.push(folder);
           resolve();
         }),
@@ -94,12 +93,13 @@ export default {
           GlobalUtil.model.localProjTree.curProj.files.push(file);
           GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
           GlobalUtil.model.localProjTree.resetFileBackground(true);
-          // GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
-          resolve();
-          setTimeout(function() {
-            GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
-            resolve();
-          }, 100);
+          GlobalUtil.model.localProjTreelf.resetMenuStyle();
+          GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
+          // resolve();
+          // setTimeout(function() {
+          //
+          //   resolve();
+          // }, 100);
         }),
       }).then((text) => {
 
