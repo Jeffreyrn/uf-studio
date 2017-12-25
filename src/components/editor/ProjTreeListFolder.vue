@@ -5,7 +5,7 @@
         <el-submenu :index="data.uuid" name="submenu" :id="genMenuId(data.uuid)">
           <template slot="title">
             <!-- <div style="width:100%;height:100%;background-color:pink;"> -->
-              <span name="file-name" :id="genFileId(data.uuid)"> {{ data.name }} </span>
+            <span name="file-name" :id="genFileId(data.uuid)"> {{ data.name }} </span>
             <!-- </div> -->
           </template>
           <!-- <span slot="title" name="file-name"> {{ data.name }} </span> -->
