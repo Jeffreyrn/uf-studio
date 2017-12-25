@@ -44,17 +44,17 @@ self.resetSelectedTab = () => {
   for (let i = 0; i < tabs.length; i += 1) {
     const tab = tabs[i];
     tab.style.backgroundColor = 'transparent';
-    // if (tab.id === `top-tab-${uuid}`) {
-    //   tab.style.backgroundColor = 'pink';
-    // }
-    // else {
-    //   tab.style.backgroundColor = '';
-    // }
   }
 };
 self.setSelectedTab = (uuid) => {
   const tab = document.getElementById(`top-tab-${uuid}`);
   tab.style.backgroundColor = 'pink';
+  // const tabs = document.getElementsByName('top-tab');
+  // for (let i = 0; i < tabs.length; i += 1) {
+  //   const tab = tabs[i];
+  //   // tab.style.backgroundColor = 'transparent';
+  //   console.log(`attr= ${tab.attr}`);
+  // }
 };
 
 self.setSelectedFileUUID = (uuid) => {
@@ -204,19 +204,19 @@ self.resetMenuStyle = () => {
 self.curProj = {
   name: 'Default proj name',
   files: [
-    self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py', 'a'),
+    self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py', '100'),
     self.createFile('uuid_a', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹1', ''),
-    self.createFile('uuid_11', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'aa.py', 'b'),
-    self.createFile('uuid_22', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'bb.py', 'c'),
-    self.createFile('uuid_222', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'cc.py', 'd'),
-    self.createFile('uuid_33', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'dd.py', 'f'),
+    self.createFile('uuid_11', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'aa.py', 'aa'),
+    self.createFile('uuid_22', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'bb.py', 'bb'),
+    self.createFile('uuid_222', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'cc.py', 'cc'),
+    self.createFile('uuid_33', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'dd.py', 'dd'),
     self.createFile('uuid_b', 'uuid_a', self.PROJ_TREE_TYPE.FOLDER, '文件夹102', ''),
-    self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'g'),
+    self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'ff'),
     self.createFile('uuid_c', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹2', ''),
-    self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'f'),
-    self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'g'),
+    self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'dd1'),
+    self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'dd2'),
     self.createFile('uuid_d', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹3', ''),
-    self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'h'),
+    self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'ee'),
   ],
 };
 

@@ -42,15 +42,19 @@ export default {
       // GlobalUtil.model.localProjTree.setSelectedFileUUID('');
       // GlobalUtil.model.localProjTree.curSelectedContent = '';
       GlobalUtil.model.localProjTree.resetSelectedTab();
-      if (uuid === GlobalUtil.model.localProjTree.curFile.uuid) {
-        console.log(`close selected uuid`);
-        GlobalUtil.model.localProjTree.curSelectedContent = '';
-        GlobalUtil.model.localProjTree.resetFileBackground(true);
-      }
-      else {
-        console.log(`close other uuid`);
-        GlobalUtil.model.localProjTree.setSelectedTab(GlobalUtil.model.localProjTree.curFile.uuid);
-      }
+
+      setTimeout(() => {
+        if (uuid === GlobalUtil.model.localProjTree.curFile.uuid) {
+          console.log(`close selected uuid`);
+          // GlobalUtil.model.localProjTree.curSelectedContent = '';
+          GlobalUtil.model.localProjTree.resetFileBackground(true);
+        }
+        else {
+          console.log(`close other uuid`);
+          console.log(`current selected uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
+          GlobalUtil.model.localProjTree.setSelectedTab(GlobalUtil.model.localProjTree.curFile.uuid);
+        }
+      }, 100);
     },
   },
   beforeDestroy() {
