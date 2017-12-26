@@ -4,6 +4,7 @@
     <div class="float-left total-frame">
       <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
       <ElTree class="float-left left-frame"></ElTree>
+      <!-- <FilesOpenTab></FilesOpenTab> -->
       <div class="float-left">
         <div class="float-left" style="height:20px;width:1px;"></div>
         <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
@@ -25,6 +26,7 @@ import ElTree from './editor/ElTree';
 import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
 import TopTab from './editor/TopTab';
+// import FilesOpenTab from './editor/FilesOpenTab';
 
 import '../assets/css/reseet.css';
 
@@ -44,6 +46,13 @@ export default {
   watch: {
   },
   computed: {
+    openedFilesList() {
+      // GlobalUtil.model.localProjTree.curOpenedFilesList
+      const proId = GlobalUtil.model.localProjTree.curProj.uuid;
+      const curOpenedTabs = GlobalUtil.model.localProjTree.curOpenedTabs[proId];
+      // console.log(`curOpenedTabs = $`);
+      return curOpenedTabs;
+    },
   },
   components: {
     TopMenu,
@@ -52,6 +61,7 @@ export default {
     CodeEditor,
     ResultRun,
     TopTab,
+    // FilesOpenTab,
   },
 };
 </script>
@@ -62,15 +72,6 @@ export default {
 }
 a {
   color: white;
-}
-.float-clear {
-  clear: both;
-}
-.float-left {
-  float: left;
-}
-.float-right {
-  float: right;
 }
 .total-frame {
   /*background-color:gray;*/
@@ -90,4 +91,5 @@ a {
 .result-frame {
   /*height:200px;*/
 }
+
 </style>

@@ -37,7 +37,7 @@ export default {
     },
     close(uuid) {
       console.log(`close uuid = ${uuid}, curSelectedFileUUID = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-      GlobalUtil.model.localProjTree.removeOpenFile(uuid);
+      GlobalUtil.model.localProjTree.removeOpenTab(uuid);
       GlobalUtil.model.localProjTree.resetSelectedTab();
 
       setTimeout(() => {
@@ -89,8 +89,8 @@ export default {
 }
 .top-tab-item {
   height: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .top-tab-item-border {
   border: solid 1px gray;

@@ -23,9 +23,10 @@ self.addOpenTab = (fileId) => {
     return;
   }
   const proId = self.curProj.uuid;
-  if (self.curOpenedTabs[proId] === null) {
+  if (self.curOpenedTabs[proId] === null || self.curOpenedTabs[proId] === '' || self.curOpenedTabs[proId] === undefined) {
     self.curOpenedTabs[proId] = [];
   }
+  // console.log(`proId = ${proId}, self.curOpenedTabs = ${JSON.stringify(self.curOpenedTabs[proId])}`);
   const proList = self.curOpenedTabs[proId];
   for (let i = 0; i < proList.length; i += 1) {
     const file = proList[i];
@@ -34,6 +35,7 @@ self.addOpenTab = (fileId) => {
     }
   }
   proList.push(file);
+  self.curOpenedFilesList = proList;
 };
 self.removeOpenTab = (fileId) => {
   const file = self.getFile(fileId);
@@ -41,7 +43,7 @@ self.removeOpenTab = (fileId) => {
     return;
   }
   const proId = self.curProj.uuid;
-  if (self.curOpenedTabs[proId] === null) {
+  if (self.curOpenedTabs[proId] === null || self.curOpenedTabs[proId] === '' || self.curOpenedTabs[proId] === undefined) {
     self.curOpenedTabs[proId] = [];
     return;
   }
@@ -53,20 +55,21 @@ self.removeOpenTab = (fileId) => {
       return;
     }
   }
+  self.curOpenedFilesList = proList;
 };
-self.addOpenFile = (uuid) => {
-  const file = self.getFile(uuid);
-  if (file === null) {
-    return;
-  }
-  for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
-    const file = self.curOpenedFilesList[i];
-    if (file.uuid === uuid) {
-      return;
-    }
-  }
-  self.curOpenedFilesList.push(file);
-};
+// self.addOpenFile = (uuid) => {
+//   const file = self.getFile(uuid);
+//   if (file === null) {
+//     return;
+//   }
+//   for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
+//     const file = self.curOpenedFilesList[i];
+//     if (file.uuid === uuid) {
+//       return;
+//     }
+//   }
+//   self.curOpenedFilesList.push(file);
+// };
 
 self.isFile = (uuid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -78,16 +81,16 @@ self.isFile = (uuid) => {
   return false;
 };
 
-self.removeOpenFile = (uuid) => {
-  let newArr = [];
-  for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
-    const file = self.curOpenedFilesList[i];
-    if (file.uuid !== uuid) {
-      newArr.push(file);
-    }
-  }
-  self.curOpenedFilesList = newArr;
-};
+// self.removeOpenFile = (uuid) => {
+//   let newArr = [];
+//   for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
+//     const file = self.curOpenedFilesList[i];
+//     if (file.uuid !== uuid) {
+//       newArr.push(file);
+//     }
+//   }
+//   self.curOpenedFilesList = newArr;
+// };
 
 self.resetSelectedTab = () => {
   const tabs = document.getElementsByName('top-tab');
@@ -204,6 +207,8 @@ self.changeProj = (uuid) => {
   if (isExist === false) {
     self.curProjExpandedKeys.push(uuid);
   }
+  const proList = self.curOpenedTabs[uuid];
+  self.curOpenedFilesList = proList;
 };
 
 self.curProjExpandedKeys = [];
