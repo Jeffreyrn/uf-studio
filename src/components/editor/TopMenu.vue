@@ -1,6 +1,9 @@
 <template>
   <div>
     <div>
+      <el-button class="top-btn" @click="allProjs()">
+        Projs
+      </el-button>
       <el-button class="top-btn" @click="addFolder()">
         +Folder
       </el-button>
@@ -25,6 +28,15 @@
         </span>
       </el-dialog>
 
+      <el-dialog title="Select a project" :visible.sync="projSelectDialog">
+        <el-table :data="gridData">
+          <el-table-column property="name" label="pro name" width="150"></el-table-column>
+          <el-table-column property="time" label="date" width="150"></el-table-column>
+          <el-table-column property="state" label="state" width="150"></el-table-column>
+          <el-table-column property="done" label="done" width="150"></el-table-column>
+        </el-table>
+      </el-dialog>
+
     </div>
   </div>
 </template>
@@ -39,9 +51,16 @@ export default {
     return {
       model: GlobalUtil.model,
       dialogVisible: false,
+      projSelectDialog: false,
       inputText: '',
       folderOrFile: '',
       title: '',
+      // gridData: [{
+      //   time: '2016-05-02',
+      //   name: '王小虎',
+      //   state: 'selected',
+      //   done: 'select',
+      // }],
     };
   },
   mounted() {
@@ -56,10 +75,25 @@ export default {
         //   .catch(_ => {});
       }
     },
+    allProjs() {
+      this.projSelectDialog = true;
+    },
     delFile() {
       console.log('del folder');
+      const curSelectedUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
+      let tempFiles = [];
+      let curFile = null;
+      for (var i = 0; i < GlobalUtil.model.localProjTree.curProj.files.length; i++) {
+        const file = GlobalUtil.model.localProjTree.curProj.files[i];
+        if (file.uuid === curSelectedUUID) {
+          curFile = file;
+        }
+      }
+      if (curFile === null) {
+        return;
+      }
       swal({
-        text: 'Delete?',
+        text: `Delete ${curFile.name}?`,
         showCancelButton: true,
         confirmButtonText: 'OK',
         cancelButtonText: 'CANCEL',
@@ -82,12 +116,10 @@ export default {
         console.log(`text = ${text}`);
         const folder = GlobalUtil.model.localProjTree.createFolder(text);
         GlobalUtil.model.localProjTree.curProj.files.push(folder);
-        GlobalUtil.model.localProjTree.curPro2Tree();
       }
       if (this.folderOrFile === 'file') {
         const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         GlobalUtil.model.localProjTree.curProj.files.push(file);
-        GlobalUtil.model.localProjTree.curPro2Tree();
         GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
         GlobalUtil.model.localProjTree.resetFileBackground(true);
         GlobalUtil.model.localProjTree.resetMenuStyle();
@@ -162,6 +194,14 @@ export default {
   watch: {
   },
   computed: {
+    gridData() {
+      return [{
+        time: '2016-05-02',
+        name: '王小虎',
+        state: 'selected',
+        done: 'select',
+      }];
+    },
   },
   components: {
   },

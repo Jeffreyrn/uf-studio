@@ -3,7 +3,7 @@
   <!-- :render-content="renderContent" -->
   <el-tree
     id="tree-root"
-    :data="model.localProjTree.curProjTreeData"
+    :data="curProjTreeData"
     node-key="uuid"
     :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
     @node-click="handleNodeClick">
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data);
+      console.log(data.__ob__);
       const treeRoot = document.getElementById('tree-root');
       // console.log(`treeRoot = ${treeRoot.innerHTML}`);
       const uuid = data.uuid;
@@ -75,6 +75,9 @@ export default {
   watch: {
   },
   computed: {
+    curProjTreeData() {
+      return GlobalUtil.model.localProjTree.curPro2Tree();
+    },
   },
   components: {
   },

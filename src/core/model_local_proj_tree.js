@@ -150,7 +150,7 @@ self.delFiles = () => {
     }
   }
   self.curProj.files = tempFiles;
-  self.curPro2Tree();
+  // self.curPro2Tree();
 };
 
 self.resetFileBackground = (isRestFont) => {
@@ -244,7 +244,7 @@ self.curProj = LocalProjTreeDatas.curProjList[2];
 //   return this.slice(0,n).concat(this.slice(n+1,this.length);
 // );
 
-self.curProjTreeData = [];
+// self.curProjTreeData = [];
 self.curProjExpandedKeys = [];
 self.curProjExpandedKeys.push(self.curProj.uuid);
 self.curProjAddOrRemoveExpandedKeys = (uuid) => {
@@ -296,10 +296,9 @@ self.curPro2Tree = () => {
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
   self.findFolder(fileDatas, '');
-  self.curProjTreeData = tempDatas;
-  console.log(`self.curProjTreeData = ${JSON.stringify(self.curProjTreeData)}`);
+  console.log(`self.curProjTreeData = ${JSON.stringify(tempDatas)}`);
+  return tempDatas;
 };
-self.curPro2Tree();
 
 self.curFile = null;
 self.getFile = (uuid) => {
