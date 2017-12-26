@@ -236,6 +236,25 @@ self.resetMenuStyle = () => {
 
 self.curProj = LocalProjTreeDatas.curProjList[2];
 self.curProjList = LocalProjTreeDatas.curProjList;
+self.changeProj = (uuid) => {
+  let isExist = false;
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const pro = self.curProjList[i];
+    if (pro.uuid === uuid) {
+      self.curProj = pro;
+      for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
+        if (uuid === self.curProjExpandedKeys[i]) {
+          isExist = true;
+          break;
+        }
+      }
+      break;
+    }
+  }
+  if (isExist === false) {
+    self.curProjExpandedKeys.push(uuid);
+  }
+};
 
 // Array.prototype.del=function(n) {　//n表示第几项，从0开始算起。
 // //prototype为对象原型，注意这里为对象增加自定义方法的方法。

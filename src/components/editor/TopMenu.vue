@@ -154,6 +154,7 @@ export default {
     },
     onSelect(row) {
       console.log(row.uuid);
+      GlobalUtil.model.localProjTree.changeProj(row.uuid);
       this.projSelectDialog = false;
     },
   },
