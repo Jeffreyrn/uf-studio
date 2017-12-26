@@ -5,15 +5,18 @@
       <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
       <ElTree class="float-left left-frame"></ElTree>
       <!-- <FilesOpenTab></FilesOpenTab> -->
-      <div class="float-left">
-        <div class="float-left" style="height:20px;width:1px;"></div>
-        <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
-          <TopTab :data='data'></TopTab>
-        </template>
-      </div>
       <div class="float-left right-frame">
-        <CodeEditor></CodeEditor>
-        <ResultRun class="result-frame"></ResultRun>
+        <div class="float-left">
+          <div class="float-left" style="height:20px;width:1px;"></div>
+          <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
+            <TopTab :data='data'></TopTab>
+          </template>
+        </div>
+        <div class="float-clear"></div>
+        <div class="float-left" style="width:100%">
+          <CodeEditor></CodeEditor>
+          <ResultRun class="result-frame"></ResultRun>
+        </div>
       </div>
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
@@ -86,7 +89,7 @@ a {
 .right-frame {
   width:80%;
   height: 100%;
-  background-color:green;
+  background-color:#e9e6d3;
 }
 .result-frame {
   /*height:200px;*/
