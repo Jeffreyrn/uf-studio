@@ -16,6 +16,44 @@ self.curSelectedFileUUID = '';
 self.curSelectedFolderUUID = '';
 self.curSelectedContent = '';
 self.curOpenedFilesList = [];
+self.curOpenedTabs = {};
+self.addOpenTab = (fileId) => {
+  const file = self.getFile(fileId);
+  if (file === null) {
+    return;
+  }
+  const proId = self.curProj.uuid;
+  if (self.curOpenedTabs[proId] === null) {
+    self.curOpenedTabs[proId] = [];
+  }
+  const proList = self.curOpenedTabs[proId];
+  for (let i = 0; i < proList.length; i += 1) {
+    const file = proList[i];
+    if (file.uuid === fileId) {
+      return;
+    }
+  }
+  proList.push(file);
+};
+self.removeOpenTab = (fileId) => {
+  const file = self.getFile(fileId);
+  if (file === null) {
+    return;
+  }
+  const proId = self.curProj.uuid;
+  if (self.curOpenedTabs[proId] === null) {
+    self.curOpenedTabs[proId] = [];
+    return;
+  }
+  const proList = self.curOpenedTabs[proId];
+  for (let i = 0; i < proList.length; i += 1) {
+    const file = proList[i];
+    if (file.uuid === fileId) {
+      proList.splice(i,1);
+      return;
+    }
+  }
+};
 self.addOpenFile = (uuid) => {
   const file = self.getFile(uuid);
   if (file === null) {
@@ -219,7 +257,7 @@ self.curPro2Tree = () => {
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
   self.findFolder(fileDatas, '');
-  console.log(`self.curProjTreeData = ${JSON.stringify(tempDatas)}`);
+  // console.log(`self.curProjTreeData = ${JSON.stringify(tempDatas)}`);
   return tempDatas;
 };
 
