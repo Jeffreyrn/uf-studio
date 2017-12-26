@@ -28,12 +28,23 @@
         </span>
       </el-dialog>
 
-      <el-dialog title="Select a project" :visible.sync="projSelectDialog">
-        <el-table :data="gridData">
-          <el-table-column property="name" label="pro name" width="150"></el-table-column>
-          <el-table-column property="time" label="date" width="150"></el-table-column>
-          <el-table-column property="state" label="state" width="150"></el-table-column>
-          <el-table-column property="done" label="done" width="150"></el-table-column>
+      <el-dialog
+        title="Select a project"
+        :visible.sync="projSelectDialog">
+        <el-table
+          border
+          width="600px"
+          max-height="250"
+          :row-class-name="tableRowClassName"
+          :data="proListData">
+          <el-table-column property="name" label="pro name" width="200"></el-table-column>
+          <el-table-column property="time" label="date" width="200"></el-table-column>
+          <el-table-column property="state" label="state" width="100"></el-table-column>
+          <el-table-column property="operate" label="Operate" width="100">
+            <template slot-scope="scope">
+              <el-button @click="onSelect(scope.row)" type="text" size="small">Select</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-dialog>
 
@@ -55,25 +66,17 @@ export default {
       inputText: '',
       folderOrFile: '',
       title: '',
-      // gridData: [{
-      //   time: '2016-05-02',
-      //   name: '王小虎',
-      //   state: 'selected',
-      //   done: 'select',
-      // }],
     };
   },
   mounted() {
   },
   methods: {
-    methods: {
-      handleClose(done) {
-        // this.$confirm('确认关闭？')
-        //   .then(_ => {
-        //     done();
-        //   })
-        //   .catch(_ => {});
-      }
+    handleClose(done) {
+      // this.$confirm('确认关闭？')
+      //   .then(_ => {
+      //     done();
+      //   })
+      //   .catch(_ => {});
     },
     allProjs() {
       this.projSelectDialog = true;
@@ -132,61 +135,26 @@ export default {
       this.folderOrFile = 'folder';
       this.title = 'add folder';
       this.dialogVisible = true;
-      // swal({
-      //   text: 'Folder name',
-      //   input: 'text',
-      //   showCancelButton: true,
-      //   confirmButtonText: 'OK',
-      //   cancelButtonText: 'CANCEL',
-      //   showLoaderOnConfirm: true,
-      //   allowOutsideClick: false,
-      //   reverseButtons: true,
-      //   width: '300px',
-      //   preConfirm: text => new Promise((resolve, reject) => {
-      //     GlobalUtil.model.localProjTree.resetFileBackground(true);
-      //     console.log(`text = ${text}`);
-      //     const folder = GlobalUtil.model.localProjTree.createFolder(text);
-      //     GlobalUtil.model.localProjTree.curProj.files.push(folder);
-      //     resolve();
-      //   }),
-      // }).then((text) => {
-      //
-      // });
     },
     addFile() {
       console.log('add file');
       this.folderOrFile = 'file';
       this.title = 'add file';
       this.dialogVisible = true;
-      // swal({
-      //   text: 'File name',
-      //   input: 'text',
-      //   showCancelButton: true,
-      //   confirmButtonText: 'OK',
-      //   cancelButtonText: 'CANCEL',
-      //   showLoaderOnConfirm: true,
-      //   allowOutsideClick: false,
-      //   reverseButtons: true,
-      //   width: '300px',
-      //   preConfirm: text => new Promise((resolve, reject) => {
-      //
-      //     console.log(`text = ${text}`);
-      //     // const curSelectedFolderUUID = GlobalUtil.model.localProjTree.curSelectedFolderUUID;
-      //     const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
-      //     GlobalUtil.model.localProjTree.curProj.files.push(file);
-      //     GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
-      //     GlobalUtil.model.localProjTree.resetFileBackground(true);
-      //     GlobalUtil.model.localProjTreelf.resetMenuStyle();
-      //     GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
-      //     // resolve();
-      //     // setTimeout(function() {
-      //     //
-      //     //   resolve();
-      //     // }, 100);
-      //   }),
-      // }).then((text) => {
-      //
-      // });
+    },
+    tableRowClassName({row, rowIndex}) {
+      console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
+      const uuid = row.uuid;
+      // if (rowIndex === 1) {
+      //   return 'warning-row';
+      // } else if (rowIndex === 3) {
+      //   return 'success-row';
+      // }
+      return '';
+    },
+    onSelect(row) {
+      console.log(row.uuid);
+      this.projSelectDialog = false;
     },
   },
   beforeDestroy() {
@@ -194,13 +162,20 @@ export default {
   watch: {
   },
   computed: {
-    gridData() {
-      return [{
-        time: '2016-05-02',
-        name: '王小虎',
-        state: 'selected',
-        done: 'select',
-      }];
+    proListData() {
+      const proList = GlobalUtil.model.localProjTree.curProjList;
+      const tmpList = [];
+      for (let i = 0; i < proList.length; i += 1) {
+        const pro = proList[i];
+        const onePro = {
+          name: pro.name,
+          time: '2017-12-12 12:12:12',
+          state: GlobalUtil.model.localProjTree.curProj.uuid === pro.uuid ? 'Selected' : '',
+          uuid: pro.uuid,
+        };
+        tmpList.push(onePro);
+      }
+      return tmpList;
     },
   },
   components: {
@@ -213,5 +188,12 @@ export default {
   /*width: 50px;
   height: 20px;*/
   padding: 10px;
+}
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
 }
 </style>
