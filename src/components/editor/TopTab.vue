@@ -1,5 +1,5 @@
 <template>
-  <div class="float-left top-tab" v-bind:class="tabBgColor" name="top-tab" :id="getTabId()">
+  <div class="float-left top-tab" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
       <div class="float-left top-tab-item" @click="onselect()">
         <div class="float-left">{{ data.name }}</div>
@@ -19,13 +19,34 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
-      uuid: '',
+      uuid: 'aabb',
     };
   },
   mounted() {
-    console.log(`top tab mounted data uuid = ${this.data.uuid}`);
-    GlobalUtil.uuid = this.data.uuid;
+    const isSelected = this.uuid === GlobalUtil.model.localProjTree.curSelectedFileUUID;
+    console.log(`top tab mounted data uuid = ${this.data.uuid}, isSelected = ${isSelected}`);
+    // GlobalUtil.uuid = this.data.uuid;
     GlobalUtil.model.localProjTree.resetSelectedTab();
+
+    // setTimeout(() => {
+
+      // const tab = document.getElementById(this.getTabId());
+      // tab.style.backgroundColor = 'pink';
+
+      // if (uuid === GlobalUtil.model.localProjTree.curFile.uuid) {
+        // console.log(`close selected uuid`);
+        // // GlobalUtil.model.localProjTree.curSelectedContent = '';
+        // // GlobalUtil.model.localProjTree.curSelectedContent = '';
+        // GlobalUtil.model.localProjTree.resetFileBackground(true);
+      // }
+      // else {
+        // console.log(`close other uuid`);
+        // console.log(`current selected uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
+        // GlobalUtil.model.localProjTree.setSelectedTab(GlobalUtil.model.localProjTree.curFile.uuid);
+    //   }
+    // }, 100);
+
+
   },
   methods: {
     getTabId() {
@@ -66,7 +87,7 @@ export default {
   },
   computed: {
     tabBgColor: () => {
-      console.log(`self.uuid = ${GlobalUtil.uuid}`);
+      // console.log(`this.uuid = ${this.uuid}`);
       // const isSelected = this.uuid === GlobalUtil.model.localProjTree.curSelectedFileUUID;
       return {
         // 'top-tab-background-color-unselect': !isSelected,
