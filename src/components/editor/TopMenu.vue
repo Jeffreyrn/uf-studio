@@ -143,7 +143,7 @@ export default {
       this.dialogVisible = true;
     },
     tableRowClassName({row, rowIndex}) {
-      console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
+      // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
       const uuid = row.uuid;
       // if (rowIndex === 1) {
       //   return 'warning-row';
