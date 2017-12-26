@@ -63,13 +63,6 @@ self.setSelectedTab = (uuid) => {
   if (tab !== null) {
     tab.style.backgroundColor = 'pink';
   }
-
-  // const tabs = document.getElementsByName('top-tab');
-  // for (let i = 0; i < tabs.length; i += 1) {
-  //   const tab = tabs[i];
-  //   // tab.style.backgroundColor = 'transparent';
-  //   console.log(`attr= ${tab.attr}`);
-  // }
 };
 
 self.setSelectedFileUUID = (uuid) => {
@@ -151,37 +144,6 @@ self.delFiles = () => {
   }
   self.curProj.files = tempFiles;
   // self.curPro2Tree();
-};
-
-self.resetFileBackground = (isRestFont) => {
-  const files = self.curProj.files;
-  for (let i = 0; i < files.length; i += 1) {
-    const file = files[i];
-    const fileId = file.uuid;
-    if (file.type === self.PROJ_TREE_TYPE.FILE) {
-      const fileName = document.getElementById(`file-id-${fileId}`);
-      if (isRestFont && fileName !== null) {
-        fileName.style.color = 'blue';
-      }
-    }
-    const menuName = document.getElementById(`menu-id-${fileId}`);
-    if (menuName !== null) {
-      menuName.style.backgroundColor = self.treeBgColor;
-    }
-  }
-};
-
-self.setSelectedFileStyle = (uuid, isSetFont) => {
-  if (uuid !== null) {
-    const fileName = document.getElementById(`file-id-${uuid}`);
-    if (isSetFont && fileName !== null) {
-      fileName.style.color = 'red';
-    }
-    const menuName = document.getElementById(`menu-id-${uuid}`);
-    if (menuName !== null) {
-      menuName.style.backgroundColor = 'pink';
-    }
-  }
 };
 
 self.curProj = LocalProjTreeDatas.curProjList[2];
@@ -274,33 +236,6 @@ self.getFile = (uuid) => {
     }
   }
   return null;
-};
-
-self.getAllFilesByFolder = (superid) => {
-  console.log('curProj');
-  if (superid === null || superid === undefined) {
-    superid = '';
-  }
-  // console.log(curProj);
-  const files = self.curProj.files;
-  // if null, root folder
-  // if (superid === null || superid === undefined) {
-  //   return files;
-  // }
-  let ret = [];
-  for (let i = 0; i < files.length; i += 1) {
-    const file = files[i];
-    // console.log(`list name = ${file.name}, file.superid = ${file.superid}, superid = ${superid}`);
-    if (file.superid === superid) {
-      ret.push(file);
-    }
-    else if (superid === null && file.superid === null) {
-      ret.push(file);
-    }
-  }
-  const counter = ret.length;
-  console.log(`list name = count ${counter}`);
-  return ret;
 };
 
 export default self;

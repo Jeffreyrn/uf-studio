@@ -32,16 +32,12 @@ export default {
     onselect(uuid) {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-      GlobalUtil.model.localProjTree.resetFileBackground(true);
-      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
       GlobalUtil.model.localProjTree.resetSelectedTab();
       GlobalUtil.model.localProjTree.setSelectedTab(uuid);
     },
     close(uuid) {
       console.log(`close uuid = ${uuid}, curSelectedFileUUID = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
       GlobalUtil.model.localProjTree.removeOpenFile(uuid);
-      // GlobalUtil.model.localProjTree.setSelectedFileUUID('');
-      // GlobalUtil.model.localProjTree.curSelectedContent = '';
       GlobalUtil.model.localProjTree.resetSelectedTab();
 
       setTimeout(() => {

@@ -34,7 +34,7 @@ export default {
     };
   },
   mounted() {
-    
+
   },
   methods: {
     genMenuId(uid) {
@@ -47,7 +47,7 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
       GlobalUtil.model.localProjTree.resetFileBackground(true);
-      GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
+      // GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
       GlobalUtil.model.localProjTree.addOpenFile(uuid);
       setTimeout(() => {
         GlobalUtil.model.localProjTree.resetSelectedTab();

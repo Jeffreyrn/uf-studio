@@ -115,7 +115,6 @@ export default {
     add(file) {
       const text = this.inputText;
       if (this.folderOrFile === 'folder') {
-        GlobalUtil.model.localProjTree.resetFileBackground(true);
         console.log(`text = ${text}`);
         const folder = GlobalUtil.model.localProjTree.createFolder(text);
         GlobalUtil.model.localProjTree.curProj.files.push(folder);
@@ -124,8 +123,6 @@ export default {
         const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         GlobalUtil.model.localProjTree.curProj.files.push(file);
         GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
-        GlobalUtil.model.localProjTree.resetFileBackground(true);
-        GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
       }
       this.dialogVisible = false;
     },
