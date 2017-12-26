@@ -236,27 +236,33 @@ self.resetMenuStyle = () => {
 
 self.curProj = LocalProjTreeDatas.curProjList[2];
 
-// self.curProj = {
-//   name: '项目1',
-//   uuid: 'pro_uuid',
-//   files: [
-//     self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py', '100'),
-//     self.createFile('uuid_a', '', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹1', ''),
-//     self.createFile('uuid_11', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'aa.py', 'aa'),
-//     self.createFile('uuid_22', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'bb.py', 'bb'),
-//     self.createFile('uuid_222', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'cc.py', 'cc'),
-//     self.createFile('uuid_33', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'dd.py', 'dd'),
-//     self.createFile('uuid_b', 'uuid_a', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹11', ''),
-//     self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'ff'),
-//     self.createFile('uuid_c', '', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹2', ''),
-//     self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'dd1'),
-//     self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'dd2'),
-//     self.createFile('uuid_d', '', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹3', ''),
-//     self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'ee'),
-//   ],
-// };
+// Array.prototype.del=function(n) {　//n表示第几项，从0开始算起。
+// //prototype为对象原型，注意这里为对象增加自定义方法的方法。
+// 　if(n<0)　//如果n<0，则不进行任何操作。
+// return this;
+// 　else
+//   return this.slice(0,n).concat(this.slice(n+1,this.length);
+// );
 
 self.curProjTreeData = [];
+self.curProjExpandedKeys = [];
+self.curProjExpandedKeys.push(self.curProj.uuid);
+self.curProjAddOrRemoveExpandedKeys = (uuid) => {
+  const isFile = self.isFile(uuid);
+  let isExist = false;
+  if (isFile === false) {
+    for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
+      if (uuid === self.curProjExpandedKeys[i]) {
+        // self.curProjExpandedKeys[i] = null;
+        self.curProjExpandedKeys.splice(i,1);
+        isExist = true;
+      }
+    }
+  }
+  if (isExist === false) {
+    self.curProjExpandedKeys.push(uuid);
+  }
+};
 self.findFolder = (tmpArr, superid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const aChild = {};
@@ -267,6 +273,7 @@ self.findFolder = (tmpArr, superid) => {
       aChild.children = [];
       tmpArr.push(aChild);
       if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+        // self.curProjExpandedKeys.push(file.uuid);
         self.findFolder(aChild.children, file.uuid);
       }
     }

@@ -1,5 +1,11 @@
 <template>
-  <el-tree :data="model.localProjTree.curProjTreeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+  <!-- :default-expanded-keys="model.localProjTree.curProjExpandedKeys" -->
+  <el-tree
+    :data="model.localProjTree.curProjTreeData"
+    node-key="uuid"
+    :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
+    @node-click="handleNodeClick">
+  </el-tree>
 </template>
 
 <script>
@@ -64,9 +70,14 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      // console.log(data);
+      console.log(data);
       const uuid = data.uuid;
       console.log(`data uuid = ${uuid}`);
+
+      const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
+      console.log(`isFile = ${isFile}`);
+
+      GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
 
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       // console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
@@ -74,7 +85,7 @@ export default {
       // GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
       GlobalUtil.model.localProjTree.addOpenFile(uuid);
       setTimeout(() => {
-        if (GlobalUtil.model.localProjTree.isFile(uuid)) {
+        if (isFile) {
           GlobalUtil.model.localProjTree.resetSelectedTab();
           GlobalUtil.model.localProjTree.setSelectedTab(uuid);
         }
