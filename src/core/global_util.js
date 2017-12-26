@@ -18,6 +18,15 @@ self.getMinWidth = () => {
   self.min_width = Math.min(min_width, 480);
   return self.min_width;
 };
+self.getMinWidth();
+
+self.getScreenWidth = () => {
+  self.screen_width = window.screen.width;
+  // self.screen_width = document.body.clientWidth;
+  console.log(`self.screen_width = ${GlobalUtil.screen_width}`);
+  return self.screen_width;
+};
+self.getScreenWidth();
 
 self.adaptSize = (x) => {
   return x * self.autoSizeScale;
