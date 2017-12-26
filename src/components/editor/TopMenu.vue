@@ -125,7 +125,6 @@ export default {
         GlobalUtil.model.localProjTree.curProj.files.push(file);
         GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
         GlobalUtil.model.localProjTree.resetFileBackground(true);
-        GlobalUtil.model.localProjTree.resetMenuStyle();
         GlobalUtil.model.localProjTree.setSelectedFileStyle(file.uuid);
       }
       this.dialogVisible = false;

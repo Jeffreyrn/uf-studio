@@ -42,7 +42,6 @@ export default {
     GlobalUtil.rootMenu = document.getElementById('pro-menu');
     const proTree = document.getElementById('pro-tree');
     proTree.style.backgroundColor = GlobalUtil.model.localProjTree.treeBgColor;
-    GlobalUtil.model.localProjTreelf.resetMenuStyle();
   },
   methods: {
     filesList(superid) {
