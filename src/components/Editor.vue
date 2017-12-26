@@ -2,7 +2,8 @@
   <div class="main-wrapper" id="editor-wrapper">
     <TopMenu></TopMenu>
     <div class="float-left total-frame">
-      <ProjTree class="float-left left-frame"></ProjTree>
+      <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
+      <ElTree class="float-left left-frame"></ElTree>
       <div class="float-left">
         <div class="float-left" style="height:20px;width:1px;"></div>
         <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
@@ -20,6 +21,7 @@
 <script>
 import TopMenu from './editor/TopMenu';
 import ProjTree from './editor/ProjTree';
+import ElTree from './editor/ElTree';
 import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
 import TopTab from './editor/TopTab';
@@ -46,6 +48,7 @@ export default {
   components: {
     TopMenu,
     ProjTree,
+    ElTree,
     CodeEditor,
     ResultRun,
     TopTab,

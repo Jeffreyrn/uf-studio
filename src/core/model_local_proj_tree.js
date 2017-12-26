@@ -28,6 +28,16 @@ self.addOpenFile = (uuid) => {
   self.curOpenedFilesList.push(file);
 };
 
+self.isFile = (uuid) => {
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    const file = self.curProj.files[i];
+    if (file.uuid === uuid && file.type === self.PROJ_TREE_TYPE.FILE) {
+      return true;
+    }
+  }
+  return false;
+};
+
 self.removeOpenFile = (uuid) => {
   let newArr = [];
   for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
@@ -102,7 +112,7 @@ function getSuperid() {
   let superid = curSelectedUUID;
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
-    if (file.uuid === self.curSelectedFileUUID) {
+    if (file.uuid === curSelectedUUID) {
       if (file.type === self.PROJ_TREE_TYPE.FILE) {
         superid = file.superid;
       }
@@ -138,6 +148,7 @@ self.delFiles = () => {
     }
   }
   self.curProj.files = tempFiles;
+  self.curPro2Tree();
 };
 
 self.resetFileBackground = (isRestFont) => {
@@ -223,6 +234,7 @@ self.resetMenuStyle = () => {
 
 self.curProj = {
   name: 'Default proj name',
+  uuid: 'pro_uuid',
   files: [
     self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py', '100'),
     self.createFile('uuid_a', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹1', ''),
@@ -239,6 +251,37 @@ self.curProj = {
     self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'ee'),
   ],
 };
+
+self.curProjTreeData = [];
+self.findFolder = (tmpArr, superid) => {
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    const aChild = {};
+    const file = self.curProj.files[i];
+    if (superid === file.superid) {
+      aChild.label = file.name;
+      aChild.uuid = file.uuid;
+      aChild.children = [];
+      tmpArr.push(aChild);
+      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+        self.findFolder(aChild.children, file.uuid);
+      }
+    }
+  }
+};
+self.curPro2Tree = () => {
+  const files = self.curProj.files;
+  let tempDatas = [];
+  const aChild = {};
+  aChild.label = 'Default proj name';
+  aChild.uuid = 'uuid_pro';
+  aChild.children = [];
+  tempDatas.push(aChild);
+  let fileDatas = tempDatas[0].children;
+  self.findFolder(fileDatas, '');
+  self.curProjTreeData = tempDatas;
+  console.log(`self.curProjTreeData = ${JSON.stringify(self.curProjTreeData)}`);
+};
+self.curPro2Tree();
 
 self.curFile = null;
 self.getFile = (uuid) => {

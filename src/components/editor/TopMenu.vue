@@ -82,10 +82,12 @@ export default {
         console.log(`text = ${text}`);
         const folder = GlobalUtil.model.localProjTree.createFolder(text);
         GlobalUtil.model.localProjTree.curProj.files.push(folder);
+        GlobalUtil.model.localProjTree.curPro2Tree();
       }
       if (this.folderOrFile === 'file') {
         const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         GlobalUtil.model.localProjTree.curProj.files.push(file);
+        GlobalUtil.model.localProjTree.curPro2Tree();
         GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
         GlobalUtil.model.localProjTree.resetFileBackground(true);
         GlobalUtil.model.localProjTree.resetMenuStyle();
