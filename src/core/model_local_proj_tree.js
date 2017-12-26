@@ -1,4 +1,6 @@
 
+import LocalProjTreeDatas from './model_local_proj_tree_datas';
+
 const LocalProjTree = {};
 const self = LocalProjTree;
 
@@ -232,25 +234,27 @@ self.resetMenuStyle = () => {
   }
 };
 
-self.curProj = {
-  name: 'Default proj name',
-  uuid: 'pro_uuid',
-  files: [
-    self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py', '100'),
-    self.createFile('uuid_a', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹1', ''),
-    self.createFile('uuid_11', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'aa.py', 'aa'),
-    self.createFile('uuid_22', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'bb.py', 'bb'),
-    self.createFile('uuid_222', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'cc.py', 'cc'),
-    self.createFile('uuid_33', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'dd.py', 'dd'),
-    self.createFile('uuid_b', 'uuid_a', self.PROJ_TREE_TYPE.FOLDER, '文件夹102', ''),
-    self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'ff'),
-    self.createFile('uuid_c', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹2', ''),
-    self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'dd1'),
-    self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'dd2'),
-    self.createFile('uuid_d', '', self.PROJ_TREE_TYPE.FOLDER, '文件夹3', ''),
-    self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'ee'),
-  ],
-};
+self.curProj = LocalProjTreeDatas.curProjList[2];
+
+// self.curProj = {
+//   name: '项目1',
+//   uuid: 'pro_uuid',
+//   files: [
+//     self.createFile('uuid_0', '', self.PROJ_TREE_TYPE.FILE, '00.py', '100'),
+//     self.createFile('uuid_a', '', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹1', ''),
+//     self.createFile('uuid_11', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'aa.py', 'aa'),
+//     self.createFile('uuid_22', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'bb.py', 'bb'),
+//     self.createFile('uuid_222', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'cc.py', 'cc'),
+//     self.createFile('uuid_33', 'uuid_a', self.PROJ_TREE_TYPE.FILE, 'dd.py', 'dd'),
+//     self.createFile('uuid_b', 'uuid_a', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹11', ''),
+//     self.createFile('uuid_55', 'uuid_b', self.PROJ_TREE_TYPE.FILE, 'ff.py', 'ff'),
+//     self.createFile('uuid_c', '', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹2', ''),
+//     self.createFile('uuid_44', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd1.py', 'dd1'),
+//     self.createFile('uuid_555', 'uuid_c', self.PROJ_TREE_TYPE.FILE, 'dd2.py', 'dd2'),
+//     self.createFile('uuid_d', '', self.PROJ_TREE_TYPE.FOLDER, '项目1文件夹3', ''),
+//     self.createFile('uuid_66', 'uuid_d', self.PROJ_TREE_TYPE.FILE, 'ee.py', 'ee'),
+//   ],
+// };
 
 self.curProjTreeData = [];
 self.findFolder = (tmpArr, superid) => {
@@ -272,8 +276,8 @@ self.curPro2Tree = () => {
   const files = self.curProj.files;
   let tempDatas = [];
   const aChild = {};
-  aChild.label = 'Default proj name';
-  aChild.uuid = 'uuid_pro';
+  aChild.label = self.curProj.name;
+  aChild.uuid = self.curProj.uuid;
   aChild.children = [];
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
