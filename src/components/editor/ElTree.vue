@@ -43,12 +43,6 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
-      setTimeout(() => {
-        if (isFile) {
-          GlobalUtil.model.localProjTree.resetSelectedTab();
-          GlobalUtil.model.localProjTree.setSelectedTab(uuid);
-        }
-      }, 100);
     },
     renderContent(h, { node, data, store }) {
       return("<span>aabb</span>");

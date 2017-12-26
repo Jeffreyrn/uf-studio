@@ -1,8 +1,6 @@
-<template>
+<!-- <template>
   <div id="pro-tree">
     <h5>{{ model.localProjTree.curProj.name }}</h5>
-    <!-- text-color="blue"
-    active-text-color="red" -->
     <el-menu
       id='pro-menu'
       background-color="transparent"
@@ -90,4 +88,4 @@ el-menu {
 a:hover {
   background-color:transparent;
 }
-</style>
+</style> -->

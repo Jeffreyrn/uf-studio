@@ -1,14 +1,11 @@
-<template>
+<!-- <template>
   <div>
     <template v-for='(data,index) in filesList(superid)'>
       <div v-if="data.type === model.localProjTree.PROJ_TREE_TYPE.FOLDER">
         <el-submenu :index="data.uuid" name="submenu" :id="genMenuId(data.uuid)">
           <template slot="title">
-            <!-- <div style="width:100%;height:100%;background-color:pink;"> -->
             <span name="file-name" :id="genFileId(data.uuid)"> {{ data.name }} </span>
-            <!-- </div> -->
           </template>
-          <!-- <span slot="title" name="file-name"> {{ data.name }} </span> -->
           <items :superid='data.uuid'></items>
         </el-submenu>
       </div>
@@ -49,10 +46,6 @@ export default {
       GlobalUtil.model.localProjTree.resetFileBackground(true);
       // GlobalUtil.model.localProjTree.setSelectedFileStyle(uuid, true);
       GlobalUtil.model.localProjTree.addOpenFile(uuid);
-      setTimeout(() => {
-        GlobalUtil.model.localProjTree.resetSelectedTab();
-        GlobalUtil.model.localProjTree.setSelectedTab(uuid);
-      }, 100);
     },
     filesList(superid) {
       const files = GlobalUtil.model.localProjTree.getAllFilesByFolder(superid);
@@ -73,4 +66,4 @@ export default {
 
 <style scoped>
 
-</style>
+</style> -->

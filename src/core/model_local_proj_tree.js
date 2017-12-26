@@ -81,31 +81,6 @@ self.isFile = (uuid) => {
   return false;
 };
 
-// self.removeOpenFile = (uuid) => {
-//   let newArr = [];
-//   for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
-//     const file = self.curOpenedFilesList[i];
-//     if (file.uuid !== uuid) {
-//       newArr.push(file);
-//     }
-//   }
-//   self.curOpenedFilesList = newArr;
-// };
-
-self.resetSelectedTab = () => {
-  const tabs = document.getElementsByName('top-tab');
-  for (let i = 0; i < tabs.length; i += 1) {
-    const tab = tabs[i];
-    tab.style.backgroundColor = 'transparent';
-  }
-};
-self.setSelectedTab = (uuid) => {
-  const tab = document.getElementById(`top-tab-${uuid}`);
-  if (tab !== null) {
-    tab.style.backgroundColor = 'pink';
-  }
-};
-
 self.setSelectedFileUUID = (uuid) => {
   self.curSelectedUUID = uuid;
   if (uuid === '') {

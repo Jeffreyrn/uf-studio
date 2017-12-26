@@ -2,7 +2,8 @@
   <div class="float-left top-tab" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
       <div class="float-left top-tab-item" @click="onselect()">
-        <div class="float-left">{{ data.name }}</div>
+        <div v-if="data.uuid !== model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
+        <div v-if="data.uuid === model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color">{{ data.name }}</div>
       </div>
       <div @click="close()" class="float-left tab-cancel">X</div>
     </div>
@@ -19,34 +20,11 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
-      uuid: 'aabb',
     };
   },
   mounted() {
     const isSelected = this.uuid === GlobalUtil.model.localProjTree.curSelectedFileUUID;
     console.log(`top tab mounted data uuid = ${this.data.uuid}, isSelected = ${isSelected}`);
-    // GlobalUtil.uuid = this.data.uuid;
-    GlobalUtil.model.localProjTree.resetSelectedTab();
-
-    // setTimeout(() => {
-
-      // const tab = document.getElementById(this.getTabId());
-      // tab.style.backgroundColor = 'pink';
-
-      // if (uuid === GlobalUtil.model.localProjTree.curFile.uuid) {
-        // console.log(`close selected uuid`);
-        // // GlobalUtil.model.localProjTree.curSelectedContent = '';
-        // // GlobalUtil.model.localProjTree.curSelectedContent = '';
-        // GlobalUtil.model.localProjTree.resetFileBackground(true);
-      // }
-      // else {
-        // console.log(`close other uuid`);
-        // console.log(`current selected uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-        // GlobalUtil.model.localProjTree.setSelectedTab(GlobalUtil.model.localProjTree.curFile.uuid);
-    //   }
-    // }, 100);
-
-
   },
   methods: {
     getTabId() {
@@ -57,28 +35,11 @@ export default {
       const uuid = this.data.uuid;
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-      GlobalUtil.model.localProjTree.resetSelectedTab();
-      GlobalUtil.model.localProjTree.setSelectedTab(uuid);
     },
     close() {
       const uuid = this.data.uuid;
       console.log(`close uuid = ${uuid}, curSelectedFileUUID = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
       GlobalUtil.model.localProjTree.removeOpenTab(uuid);
-      GlobalUtil.model.localProjTree.resetSelectedTab();
-
-      setTimeout(() => {
-        if (uuid === GlobalUtil.model.localProjTree.curFile.uuid) {
-          console.log(`close selected uuid`);
-          // GlobalUtil.model.localProjTree.curSelectedContent = '';
-          // GlobalUtil.model.localProjTree.curSelectedContent = '';
-          GlobalUtil.model.localProjTree.resetFileBackground(true);
-        }
-        else {
-          console.log(`close other uuid`);
-          console.log(`current selected uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-          GlobalUtil.model.localProjTree.setSelectedTab(GlobalUtil.model.localProjTree.curFile.uuid);
-        }
-      }, 100);
     },
   },
   beforeDestroy() {
@@ -133,6 +94,6 @@ export default {
   background-color:pink;
 }
 .top-tab-background-color-unselect {
-  background-color:yellow;
+  background-color:transparent;
 }
 </style>

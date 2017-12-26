@@ -24,7 +24,7 @@
 </template>
 <script>
 import TopMenu from './editor/TopMenu';
-import ProjTree from './editor/ProjTree';
+// import ProjTree from './editor/ProjTree';
 import ElTree from './editor/ElTree';
 import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
@@ -59,7 +59,7 @@ export default {
   },
   components: {
     TopMenu,
-    ProjTree,
+    // ProjTree,
     ElTree,
     CodeEditor,
     ResultRun,
