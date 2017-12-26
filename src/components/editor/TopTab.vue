@@ -23,8 +23,6 @@ export default {
     };
   },
   mounted() {
-    const isSelected = this.uuid === GlobalUtil.model.localProjTree.curSelectedFileUUID;
-    console.log(`top tab mounted data uuid = ${this.data.uuid}, isSelected = ${isSelected}`);
   },
   methods: {
     getTabId() {
@@ -47,14 +45,6 @@ export default {
   watch: {
   },
   computed: {
-    tabBgColor: () => {
-      // console.log(`this.uuid = ${this.uuid}`);
-      // const isSelected = this.uuid === GlobalUtil.model.localProjTree.curSelectedFileUUID;
-      return {
-        // 'top-tab-background-color-unselect': !isSelected,
-        // 'top-tab-background-color': isSelected,
-      };
-    },
   },
   components: {
   },
