@@ -4,7 +4,7 @@
       <div class="float-left top-tab-item" @click="onselect()">
         <div class="float-left">{{ data.name }}</div>
       </div>
-      <div @click="close(data.uuid)" class="float-left tab-cancel">X</div>
+      <div @click="close()" class="float-left tab-cancel">X</div>
     </div>
   </div>
 </template>
@@ -19,10 +19,12 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
+      uuid: '',
     };
   },
   mounted() {
     console.log(`top tab mounted data uuid = ${this.data.uuid}`);
+    GlobalUtil.uuid = this.data.uuid;
     GlobalUtil.model.localProjTree.resetSelectedTab();
   },
   methods: {
@@ -37,7 +39,8 @@ export default {
       GlobalUtil.model.localProjTree.resetSelectedTab();
       GlobalUtil.model.localProjTree.setSelectedTab(uuid);
     },
-    close(uuid) {
+    close() {
+      const uuid = this.data.uuid;
       console.log(`close uuid = ${uuid}, curSelectedFileUUID = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
       GlobalUtil.model.localProjTree.removeOpenTab(uuid);
       GlobalUtil.model.localProjTree.resetSelectedTab();
@@ -62,9 +65,12 @@ export default {
   watch: {
   },
   computed: {
-    tabBgColor: (uuid) => {
+    tabBgColor: () => {
+      console.log(`self.uuid = ${GlobalUtil.uuid}`);
+      // const isSelected = this.uuid === GlobalUtil.model.localProjTree.curSelectedFileUUID;
       return {
-        'top-tab-background-color-unselect': true,
+        // 'top-tab-background-color-unselect': !isSelected,
+        // 'top-tab-background-color': isSelected,
       };
     },
   },
