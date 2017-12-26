@@ -259,6 +259,13 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
       }
     }
   }
+  // let arr = [];
+  // for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
+  //   if (self.curProjExpandedKeys[i] !== null) {
+  //     arr.push(self.curProjExpandedKeys[i]);
+  //   }
+  // }
+  // self.curProjExpandedKeys = arr;
   if (isExist === false) {
     self.curProjExpandedKeys.push(uuid);
   }
