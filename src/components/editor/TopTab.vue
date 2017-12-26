@@ -1,7 +1,7 @@
 <template>
-  <div class="float-left top-tab" name="top-tab" :id="getTabId(data.uuid)">
+  <div class="float-left top-tab" v-bind:class="tabBgColor" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
-      <div class="float-left top-tab-item" @click="onselect(data.uuid)">
+      <div class="float-left top-tab-item" @click="onselect()">
         <div class="float-left">{{ data.name }}</div>
       </div>
       <div @click="close(data.uuid)" class="float-left tab-cancel">X</div>
@@ -22,14 +22,16 @@ export default {
     };
   },
   mounted() {
-    console.log('top tab mounted');
+    console.log(`top tab mounted data uuid = ${this.data.uuid}`);
     GlobalUtil.model.localProjTree.resetSelectedTab();
   },
   methods: {
-    getTabId(uuid) {
+    getTabId() {
+      const uuid = this.data.uuid;
       return `top-tab-${uuid}`;
     },
-    onselect(uuid) {
+    onselect() {
+      const uuid = this.data.uuid;
       GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
       GlobalUtil.model.localProjTree.resetSelectedTab();
@@ -60,6 +62,11 @@ export default {
   watch: {
   },
   computed: {
+    tabBgColor: (uuid) => {
+      return {
+        'top-tab-background-color-unselect': true,
+      };
+    },
   },
   components: {
   },
@@ -97,5 +104,8 @@ export default {
 }
 .top-tab-background-color {
   background-color:pink;
+}
+.top-tab-background-color-unselect {
+  background-color:yellow;
 }
 </style>
