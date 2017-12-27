@@ -43,16 +43,25 @@ self.removeOpenTab = (fileId) => {
     return;
   }
   const proId = self.curProj.uuid;
-  if (self.curOpenedTabs[proId] === null || self.curOpenedTabs[proId] === '' || self.curOpenedTabs[proId] === undefined) {
-    self.curOpenedTabs[proId] = [];
+  let proList = self.curOpenedTabs[proId];
+  if (proList === null || proList === '' || proList === undefined) {
+    proList = [];
     return;
   }
-  const proList = self.curOpenedTabs[proId];
+  let spliceIndex = 0;
   for (let i = 0; i < proList.length; i += 1) {
     const file = proList[i];
     if (file.uuid === fileId) {
       proList.splice(i,1);
-      return;
+      spliceIndex = i;
+      break;
+    }
+  }
+  if (fileId === self.curSelectedFileUUID) {
+    console.log(`fileId === this.curSelectedFileUUID`);
+    if (proList.length > 0) {
+      const index = spliceIndex - 1 >= 0 ? spliceIndex - 1 : 0;
+      self.setSelectedFileUUID(proList[index].uuid);
     }
   }
   self.curOpenedFilesList = proList;
@@ -83,9 +92,11 @@ self.isFile = (uuid) => {
 
 self.setSelectedFileUUID = (uuid) => {
   self.curSelectedUUID = uuid;
-  if (uuid === '') {
+  if (uuid === '' || uuid === null || uuid === undefined) {
     self.curSelectedFileUUID = '';
     self.curSelectedFolderUUID = '';
+    // self.curSelectedContent = '';
+    // self.curFile = null
     return;
   }
   for (let i = 0; i < self.curProj.files.length; i += 1) {
