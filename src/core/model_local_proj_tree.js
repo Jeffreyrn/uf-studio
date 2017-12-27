@@ -245,7 +245,7 @@ self.delFiles = () => {
   let tempFiles = [];
   for (var i = 0; i < self.curProj.files.length; i++) {
     const file = self.curProj.files[i];
-    if (file.uuid !== curSelectedUUID && file.superid !== curSelectedUUID) {
+    if (file.uuid !== curUUID && file.superid !== curUUID) {
       tempFiles.push(file);
     }
   }
@@ -292,13 +292,6 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
       }
     }
   }
-  // let arr = [];
-  // for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
-  //   if (self.curProjExpandedKeys[i] !== null) {
-  //     arr.push(self.curProjExpandedKeys[i]);
-  //   }
-  // }
-  // self.curProjExpandedKeys = arr;
   if (isExist === false && isFile === false) {
     self.curProjExpandedKeys.push(uuid);
   }

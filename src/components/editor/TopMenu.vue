@@ -13,6 +13,9 @@
       <el-button class="top-btn" @click="addFile()">
         +File
       </el-button>
+      <el-button class="top-btn" @click="rename()">
+        Rename
+      </el-button>
       <el-button class="top-btn" @click="delFile()">
         Delete
       </el-button>
@@ -84,17 +87,13 @@ export default {
     allProjs() {
       this.projSelectDialog = true;
     },
+    getCurFile() {
+      const curSelectedUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
+      return GlobalUtil.model.localProjTree.getFileInfo(curSelectedUUID);
+    },
     delFile() {
       console.log('del folder');
-      const curSelectedUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-      let tempFiles = [];
-      let curFile = null;
-      for (var i = 0; i < GlobalUtil.model.localProjTree.curProj.files.length; i++) {
-        const file = GlobalUtil.model.localProjTree.curProj.files[i];
-        if (file.uuid === curSelectedUUID) {
-          curFile = file;
-        }
-      }
+      const curFile = this.getCurFile();
       if (curFile === null) {
         return;
       }
@@ -148,6 +147,16 @@ export default {
       console.log('add file');
       this.folderOrFile = 'file';
       this.title = 'add file';
+      this.dialogVisible = true;
+    },
+    rename() {
+      console.log(`Rename`);
+      const curFile = this.getCurFile();
+      if (curFile === null) {
+        return;
+      }
+      this.folderOrFile = 'rename';
+      this.title = `Rename ${curFile.name}`;
       this.dialogVisible = true;
     },
     tableRowClassName({row, rowIndex}) {
