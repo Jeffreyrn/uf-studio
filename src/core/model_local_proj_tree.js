@@ -263,6 +263,20 @@ self.renameProj = (newname) => {
   self.curProj.name = newname;
 }
 
+self.delProj = (uuid) => {
+  if (uuid === self.curProj.uuid) {
+    return;
+  }
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const pro = self.curProjList[i];
+    if (pro.uuid === uuid) {
+      console.log(`delProj uuid = ${uuid}`);
+      self.curProjList.splice(i, 1);
+      break;
+    }
+  }
+};
+
 self.changeProj = (uuid) => {
   let isExist = false;
   for (let i = 0; i < self.curProjList.length; i += 1) {

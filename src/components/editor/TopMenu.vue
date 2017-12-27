@@ -39,16 +39,17 @@
         :visible.sync="projSelectDialog">
         <el-table
           border
-          width="600px"
+          width="800px"
           max-height="250"
           :row-class-name="tableRowClassName"
           :data="proListData">
           <el-table-column property="name" label="pro name" width="200"></el-table-column>
           <el-table-column property="time" label="date" width="200"></el-table-column>
           <el-table-column property="state" label="state" width="100"></el-table-column>
-          <el-table-column property="operate" label="Operate" width="100">
+          <el-table-column property="operate" label="Operate" width="150">
             <template slot-scope="scope">
               <el-button @click="onSelect(scope.row)" type="text" size="small">Select</el-button>
+              <el-button v-if="model.localProjTree.curProj.uuid!==scope.row.uuid" @click="onDelete(scope.row)" type="text" size="small">Delete</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -191,6 +192,25 @@ export default {
       console.log(row.uuid);
       GlobalUtil.model.localProjTree.changeProj(row.uuid);
       this.projSelectDialog = false;
+    },
+    onDelete(row) {
+      this.projSelectDialog = false;
+      swal({
+        text: `Delete project?`,
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'CANCEL',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: false,
+        reverseButtons: true,
+        width: '300px',
+        preConfirm: text => new Promise((resolve, reject) => {
+
+          resolve();
+        }),
+      }).then((text) => {
+        GlobalUtil.model.localProjTree.delProj(row.uuid);
+      });
     },
   },
   beforeDestroy() {
