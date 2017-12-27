@@ -280,6 +280,7 @@ self.changeProj = (uuid) => {
 self.curProjExpandedKeys = [];
 self.curProjExpandedKeys.push(self.curProj.uuid);
 self.curProjAddOrRemoveExpandedKeys = (uuid) => {
+  console.log(`curProjAddOrRemoveExpandedKeys`);
   const isFile = self.isFile(uuid);
   let isExist = false;
   if (isFile === false) {
@@ -298,9 +299,10 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   //   }
   // }
   // self.curProjExpandedKeys = arr;
-  if (isExist === false) {
+  if (isExist === false && isFile === false) {
     self.curProjExpandedKeys.push(uuid);
   }
+  console.log(`curProjAddOrRemoveExpandedKeys count = ${JSON.stringify(self.curProjExpandedKeys)}`);
 };
 self.findFolder = (tmpArr, superid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
