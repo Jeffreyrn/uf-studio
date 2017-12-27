@@ -53,7 +53,7 @@ self.getCurSelectedFileUUIDs = () => {
   self.curSelectedFileUUID = self.curSelectedFileUUIDs[proId];
   self.curSelectedUUID = self.curSelectedFileUUID;
   const curUUID = self.curSelectedFileUUIDs[proId];
-  self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined;
+  self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined && curUUID !== '';
   console.log(`self.hasOpenFileInCurPro = ${self.hasOpenFileInCurPro}, curUUID = ${curUUID}`);
   self.getCurFilePath();
   return self.curSelectedFileUUID;
