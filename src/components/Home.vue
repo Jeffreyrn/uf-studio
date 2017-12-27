@@ -5,6 +5,7 @@
     <router-link :to="{ name: 'Paint'}"><el-button type="success">Paint</el-button></router-link>
     <router-link :to="{ name: 'Editor'}"><el-button type="primary">Editor</el-button></router-link>
     <router-link :to="{ name: 'Control'}"><el-button type="warning">Control</el-button></router-link>
+    <router-link :to="{ name: 'Emulator'}"><el-button type="warning">Emulator</el-button></router-link>
   </div>
 </template>
 

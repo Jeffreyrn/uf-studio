@@ -6562,6 +6562,10 @@ text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
+three@^0.89.0:
+  version "0.89.0"
+  resolved "http://registry.npm.taobao.org/three/download/three-0.89.0.tgz#4442d819a6168871b8d2cb37ad12a24310c170f5"
+
 throttle-debounce@^1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/throttle-debounce/download/throttle-debounce-1.0.1.tgz#dad0fe130f9daf3719fdea33dc36a8e6ba7f30b5"
