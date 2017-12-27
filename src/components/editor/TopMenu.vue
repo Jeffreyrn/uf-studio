@@ -1,6 +1,9 @@
 <template>
   <div>
     <div>
+      <el-button class="top-btn" @click="newProj()">
+        New
+      </el-button>
       <el-button class="top-btn" @click="allProjs()">
         Projs
       </el-button>
@@ -124,7 +127,16 @@ export default {
         GlobalUtil.model.localProjTree.curProj.files.push(file);
         GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
+      if (this.folderOrFile === 'proj') {
+        const proj = GlobalUtil.model.localProjTree.createProj(text);
+        GlobalUtil.model.localProjTree.changeProj(proj.uuid);
+      }
       this.dialogVisible = false;
+    },
+    newProj() {
+      this.folderOrFile = 'proj';
+      this.title = 'new project name';
+      this.dialogVisible = true;
     },
     addFolder() {
       console.log('add folder');

@@ -34,6 +34,9 @@ self.getCurFilePath = () => {
     if (file !== null && file !== undefined) {
       filename = path.join(`${file.name}`, filename);
     }
+    else {
+      break;
+    }
   }
   filename = path.join(`/${self.curProj.name}`, filename);
   // filename = filename.replace("/", "/ ");
@@ -183,7 +186,7 @@ self.createFile = (uuid, superid, type, name, content) => {
   };
 };
 
-function getSuperid() {
+function getFileSuperid() {
   let curSelectedUUID = self.curSelectedUUID;
   let superid = curSelectedUUID;
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -197,17 +200,26 @@ function getSuperid() {
   return superid;
 }
 
+self.createProj = (name) => {
+  const proj = {};
+  proj.name = name;
+  proj.uuid = uuidv4();
+  proj.files = [];
+  self.curProjList.push(proj);
+  return proj;
+};
+
 self.createFolder = (name) => {
   const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
-  const superid = getSuperid();
+  const superid = getFileSuperid();
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
 };
 
 self.createSimpleFile = (name) => {
   const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
-  const superid = getSuperid();
+  const superid = getFileSuperid();
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, 'new');
 };
 

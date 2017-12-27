@@ -23,7 +23,7 @@ self.createFile = (uuid, superid, type, name, content) => {
 self.createTestProj = (index) => {
   const proj = {};
   proj.name = `proj_${index}`;
-  proj.uuid = `pro_uuid_${index}`;
+  proj.uuid = uuidv4();
   proj.files = [];
   let folder1 = self.createFile(uuidv4(), '', self.PROJ_TREE_TYPE.FOLDER, `${proj.name}_folder_1`, '');
   let folder11 = self.createFile(uuidv4(), folder1.uuid, self.PROJ_TREE_TYPE.FOLDER, `${proj.name}_folder_11`, '');
