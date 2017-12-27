@@ -253,6 +253,16 @@ self.delFiles = () => {
   // self.curPro2Tree();
 };
 
+self.renameFile = (newname) => {
+  const curUUID = self.curSelectedUUID;
+  let file = self.getFileInfo(curUUID);
+  file.name = newname;
+};
+
+self.renameProj = (newname) => {
+  self.curProj.name = newname;
+}
+
 self.changeProj = (uuid) => {
   let isExist = false;
   for (let i = 0; i < self.curProjList.length; i += 1) {

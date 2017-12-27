@@ -130,33 +130,51 @@ export default {
         const proj = GlobalUtil.model.localProjTree.createProj(text);
         // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
+      if (this.folderOrFile === 'rename') {
+        GlobalUtil.model.localProjTree.renameFile(text);
+      }
+      if (this.folderOrFile === 'renameproj') {
+        GlobalUtil.model.localProjTree.renameProj(text);
+      }
       this.dialogVisible = false;
     },
     newProj() {
       this.folderOrFile = 'proj';
       this.title = 'new project name';
+      this.inputText = '';
       this.dialogVisible = true;
     },
     addFolder() {
       console.log('add folder');
       this.folderOrFile = 'folder';
       this.title = 'add folder';
+      this.inputText = '';
       this.dialogVisible = true;
     },
     addFile() {
       console.log('add file');
       this.folderOrFile = 'file';
       this.title = 'add file';
+      this.inputText = '';
       this.dialogVisible = true;
     },
     rename() {
       console.log(`Rename`);
+      if (GlobalUtil.model.localProjTree.curSelectedUUID === GlobalUtil.model.localProjTree.curProj.uuid) {
+        console.log(`Rename proj`);
+        this.folderOrFile = 'renameproj';
+        this.title = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
+        this.inputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
+        this.dialogVisible = true;
+        return;
+      }
       const curFile = this.getCurFile();
       if (curFile === null) {
         return;
       }
       this.folderOrFile = 'rename';
       this.title = `Rename ${curFile.name}`;
+      this.inputText = `${curFile.name}`;
       this.dialogVisible = true;
     },
     tableRowClassName({row, rowIndex}) {
