@@ -1,5 +1,6 @@
 
 import LocalProjTreeDatas from './model_local_proj_tree_datas';
+const uuidv4 = require('uuid/v4');
 
 const LocalProjTree = {};
 const self = LocalProjTree;
@@ -144,14 +145,14 @@ function getSuperid() {
 }
 
 self.createFolder = (name) => {
-  const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
   const superid = getSuperid();
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
 };
 
 self.createSimpleFile = (name) => {
-  const uuid = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
   const superid = getSuperid();
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, 'new');
