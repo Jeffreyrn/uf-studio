@@ -13,7 +13,19 @@ self.PROJ_TREE_TYPE = {
 // self.curSelectedFile = '';
 self.treeBgColor = 'white';
 self.curSelectedUUID = '';
+self.curSelectedFileUUIDs = {};
 self.curSelectedFileUUID = '';
+self.getCurSelectedFileUUIDs = () => {
+  const proId = self.curProj.uuid;
+  // model.localProjTree.curSelectedFileUUID[model.localProjTree.curProj.uuid]
+  self.curSelectedFileUUID = self.curSelectedFileUUIDs[proId];
+  return self.curSelectedFileUUID;
+};
+self.setCurSelectedFileUUIDs = (uuid) => {
+  const proId = self.curProj.uuid;
+  self.curSelectedFileUUID = uuid;
+  self.curSelectedFileUUIDs[proId] = uuid;
+};
 self.curSelectedFolderUUID = '';
 self.curSelectedContent = '';
 self.curOpenedFilesList = [];
@@ -58,7 +70,7 @@ self.removeOpenTab = (fileId) => {
       break;
     }
   }
-  if (fileId === self.curSelectedFileUUID) {
+  if (fileId === self.getCurSelectedFileUUIDs()) {
     if (proList.length > 0) {
       const index = spliceIndex - 1 >= 0 ? spliceIndex - 1 : 0;
       self.setSelectedUUID(proList[index].uuid);
@@ -92,8 +104,10 @@ self.isFile = (uuid) => {
 
 self.setSelectedUUID = (uuid) => {
   self.curSelectedUUID = uuid;
+  const proId = self.curProj.uuid;
   if (uuid === '' || uuid === null || uuid === undefined) {
-    self.curSelectedFileUUID = '';
+    // self.curSelectedFileUUID = '';
+    self.setCurSelectedFileUUIDs(uuid);
     self.curSelectedFolderUUID = '';
     // self.curSelectedContent = '';
     // self.curFile = null
@@ -105,7 +119,8 @@ self.setSelectedUUID = (uuid) => {
       if (file.type === self.PROJ_TREE_TYPE.FILE) {
         self.curSelectedContent = file.content;
         // self.curSelectedFile = file;
-        self.curSelectedFileUUID = uuid
+        // self.curSelectedFileUUID = uuid;
+        self.setCurSelectedFileUUIDs(uuid);
         self.curSelectedFolderUUID = '';
         self.curFile = file;
       }
@@ -194,6 +209,7 @@ self.changeProj = (uuid) => {
     self.curProjExpandedKeys.push(uuid);
   }
   const proList = self.curOpenedTabs[uuid];
+  self.getCurSelectedFileUUIDs();
   self.curOpenedFilesList = proList;
 };
 

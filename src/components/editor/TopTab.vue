@@ -45,6 +45,11 @@ export default {
   watch: {
   },
   computed: {
+    // curSelectUUID() {
+    //   const curUUID = GlobalUtil.model.localProjTree.getCurSelectedFileUUIDs();
+    //   console.log(`curUUID = ${curUUID}, data.uuid = ${this.data.uuid}`);
+    //   return curUUID;
+    // },
   },
   components: {
   },
