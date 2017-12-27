@@ -1,15 +1,16 @@
 <template>
   <div>
-    <div v-if="1 === 1">
-      <codemirror
-        style="width:100%;"
-        id="codemirror-id"
-        v-model="model.localProjTree.curSelectedContent"
-        :options="editorOption"
-        ref="myEditor"
-        @input="onEditorCodeChange">
-      </codemirror>
-    </div>
+    <div style="position:absolute;">这家伙很懒,什么文件也没有打开</div>
+    <codemirror
+      v-bind:class="classObject"
+      id="codemirror-id"
+      v-model="model.localProjTree.curSelectedContent"
+      :options="editorOption"
+      ref="myEditor"
+      @input="onEditorCodeChange">
+    </codemirror>
+    <div class="float-clear"></div>
+
   </div>
 </template>
 
@@ -96,6 +97,12 @@ export default {
     editor() {
       // get current editor object
       return this.$refs.myEditor.codemirror;
+    },
+    classObject: () => {
+      return {
+        'opacity0': !GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+        'opacity1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+      }
     },
   },
   components: {
