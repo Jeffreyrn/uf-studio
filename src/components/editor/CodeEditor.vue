@@ -1,17 +1,22 @@
 <template>
   <div>
-    <codemirror
-      v-model="model.localProjTree.curSelectedContent"
-      :options="editorOption"
-      ref="myEditor"
-      @input="onEditorCodeChange">
-    </codemirror>
+    <div v-if="1 === 1">
+      <codemirror
+        style="width:100%;"
+        id="codemirror-id"
+        v-model="model.localProjTree.curSelectedContent"
+        :options="editorOption"
+        ref="myEditor"
+        @input="onEditorCodeChange">
+      </codemirror>
+    </div>
   </div>
 </template>
 
 <script>
 
 import { codemirror, CodeMirror } from 'vue-codemirror';
+import { codemirror2, CodeMirror2 } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/monokai.css';
 import 'codemirror/addon/hint/show-hint';
@@ -32,6 +37,9 @@ export default {
     return {
       // code: 'def as #123',
       model: GlobalUtil.model,
+      uneditorOption: {
+        readOnly : true,
+      },
       editorOption: {
         mode: {
           name: 'python',
@@ -69,6 +77,8 @@ export default {
     // this.editor.focus();
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
+    const codemirrorId = document.getElementById("codemirror-id");
+    console.log(`codemirrorId width = ${codemirrorId.style.width}`);
   },
   methods: {
     onEditorCodeChange(newCode) {
@@ -95,5 +105,10 @@ export default {
 </script>
 
 <style scoped>
-
+.opacity0 {
+  opacity: 0.0;
+}
+.opacity1 {
+  opacity: 1.0;
+}
 </style>

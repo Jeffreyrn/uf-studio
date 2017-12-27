@@ -15,16 +15,24 @@ self.treeBgColor = 'white';
 self.curSelectedUUID = '';
 self.curSelectedFileUUIDs = {};
 self.curSelectedFileUUID = '';
+self.hasOpenFileInCurPro = false;
 self.getCurSelectedFileUUIDs = () => {
   const proId = self.curProj.uuid;
   // model.localProjTree.curSelectedFileUUID[model.localProjTree.curProj.uuid]
   self.curSelectedFileUUID = self.curSelectedFileUUIDs[proId];
+  const curUUID = self.curSelectedFileUUIDs[proId];
+  self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined;
+  console.log(`self.hasOpenFileInCurPro = ${self.hasOpenFileInCurPro}, curUUID = ${curUUID}`);
   return self.curSelectedFileUUID;
 };
+// self.isNull(str) {
+//   return str !== null && str !== '' && str !== undefined;
+// };
 self.setCurSelectedFileUUIDs = (uuid) => {
   const proId = self.curProj.uuid;
   self.curSelectedFileUUID = uuid;
   self.curSelectedFileUUIDs[proId] = uuid;
+  self.getCurSelectedFileUUIDs();
 };
 self.curSelectedFolderUUID = '';
 self.curSelectedContent = '';
@@ -48,6 +56,7 @@ self.addOpenTab = (fileId) => {
     }
   }
   proList.push(file);
+  self.getCurSelectedFileUUIDs()
   self.curOpenedFilesList = proList;
 };
 self.removeOpenTab = (fileId) => {
@@ -70,10 +79,14 @@ self.removeOpenTab = (fileId) => {
       break;
     }
   }
+  // 选中前一个
   if (fileId === self.getCurSelectedFileUUIDs()) {
     if (proList.length > 0) {
       const index = spliceIndex - 1 >= 0 ? spliceIndex - 1 : 0;
       self.setSelectedUUID(proList[index].uuid);
+    }
+    else {
+      self.setCurSelectedFileUUIDs(null);
     }
   }
   self.curOpenedFilesList = proList;

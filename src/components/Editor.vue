@@ -6,7 +6,7 @@
       <ElTree class="float-left left-frame"></ElTree>
       <!-- <FilesOpenTab></FilesOpenTab> -->
       <div class="float-left right-frame">
-        <div class="float-left">
+        <div class="float-left top-tab-color">
           <div class="float-left" style="height:20px;width:1px;"></div>
           <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
             <TopTab :data='data'></TopTab>
@@ -88,10 +88,15 @@ a {
 .right-frame {
   width:80%;
   height: 100%;
-  background-color:#e9e6d3;
+  /*background-color:#e9e6d3;*/
+  background-color:#f6f6f6;
 }
 .result-frame {
+  background-color:#e9e6d3;
   /*height:200px;*/
 }
-
+.top-tab-color {
+  width: 100%;
+  background-color:#e9e6d3;
+}
 </style>
