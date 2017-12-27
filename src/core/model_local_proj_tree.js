@@ -223,17 +223,20 @@ self.createFolder = (name) => {
   console.log(`uuid = ${uuid}`);
   let superid = getFileSuperid();
   const fileInfo = self.getFileInfo(superid);
-  console.log(`createFolder superid = ${superid}`);
   if (superid === self.curProj.uuid || superid === undefined) {
     superid = '';
   }
+  console.log(`createFolder superid = ${superid}`);
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
 };
 
 self.createSimpleFile = (name) => {
   const uuid = uuidv4();
-  console.log(`uuid = ${uuid}`);
-  const superid = getFileSuperid();
+  let superid = getFileSuperid();
+  if (superid === self.curProj.uuid || superid === undefined) {
+    superid = '';
+  }
+  console.log(`createSimpleFile uuid = ${uuid}, superid = ${superid}`);
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, 'new');
 };
 
