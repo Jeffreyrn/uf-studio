@@ -1,6 +1,7 @@
 
 import LocalProjTreeDatas from './model_local_proj_tree_datas';
 const uuidv4 = require('uuid/v4');
+const path = require('path')
 
 const LocalProjTree = {};
 const self = LocalProjTree;
@@ -15,6 +16,30 @@ self.treeBgColor = 'white';
 self.curSelectedUUID = '';
 self.curSelectedFileUUIDs = {};
 self.curSelectedFileUUID = '';
+self.curProj = LocalProjTreeDatas.curProjList[2];
+self.curProjList = LocalProjTreeDatas.curProjList;
+self.curFilePath = `/${self.curProj.name}`;
+
+self.getCurFilePath = () => {
+  const curUUID = self.curSelectedFileUUID;
+  let file = self.getFileInfo(curUUID);
+  if (file === null || file === undefined) {
+    self.curFilePath = `/${self.curProj.name}`;
+    return;
+  }
+  let filename = file.name;
+  while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
+    const superid = file.superid;
+    file = self.getFileInfo(superid);
+    if (file !== null && file !== undefined) {
+      filename = path.join(`${file.name}`, filename);
+    }
+  }
+  filename = path.join(`/${self.curProj.name}`, filename);
+  // filename = filename.replace("/", "/ ");
+  self.curFilePath = filename;
+};
+// self.getCurFilePath();
 self.hasOpenFileInCurPro = false;
 self.getCurSelectedFileUUIDs = () => {
   const proId = self.curProj.uuid;
@@ -23,6 +48,7 @@ self.getCurSelectedFileUUIDs = () => {
   const curUUID = self.curSelectedFileUUIDs[proId];
   self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined;
   console.log(`self.hasOpenFileInCurPro = ${self.hasOpenFileInCurPro}, curUUID = ${curUUID}`);
+  self.getCurFilePath();
   return self.curSelectedFileUUID;
 };
 // self.isNull(str) {
@@ -201,8 +227,6 @@ self.delFiles = () => {
   // self.curPro2Tree();
 };
 
-self.curProj = LocalProjTreeDatas.curProjList[2];
-self.curProjList = LocalProjTreeDatas.curProjList;
 self.changeProj = (uuid) => {
   let isExist = false;
   for (let i = 0; i < self.curProjList.length; i += 1) {
@@ -223,6 +247,7 @@ self.changeProj = (uuid) => {
   }
   const proList = self.curOpenedTabs[uuid];
   self.getCurSelectedFileUUIDs();
+  self.getCurFilePath();
   self.curOpenedFilesList = proList;
 };
 
@@ -291,6 +316,17 @@ self.getFile = (uuid) => {
       if (fileId === uuid) {
         return file;
       }
+    }
+  }
+  return null;
+};
+self.getFileInfo = (uuid) => {
+  const files = self.curProj.files;
+  for (let i = 0; i < files.length; i += 1) {
+    const file = files[i];
+    const fileId = file.uuid;
+    if (fileId === uuid) {
+      return file;
     }
   }
   return null;

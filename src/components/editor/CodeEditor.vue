@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div style="position:absolute;">这家伙很懒,什么文件也没有打开</div>
+    <div style="position:absolute;top:200px;">这家伙很懒,什么文件也没有打开</div>
+    <div class="top-path" style="">{{ model.localProjTree.curFilePath }}</div>
     <codemirror
       v-bind:class="classObject"
       id="codemirror-id"
@@ -117,5 +118,10 @@ export default {
 }
 .opacity1 {
   opacity: 1.0;
+}
+.top-path {
+  color:lightblue;
+  font-size: 12px;
+  background-color:rgba(255, 250, 226, 1.0);
 }
 </style>
