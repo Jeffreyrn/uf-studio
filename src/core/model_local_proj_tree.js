@@ -47,7 +47,11 @@ self.hasOpenFileInCurPro = false;
 self.getCurSelectedFileUUIDs = () => {
   const proId = self.curProj.uuid;
   // model.localProjTree.curSelectedFileUUID[model.localProjTree.curProj.uuid]
+  if (self.curSelectedFileUUIDs[proId] === null || self.curSelectedFileUUIDs[proId] === undefined) {
+    self.curSelectedFileUUIDs[proId] = '';
+  }
   self.curSelectedFileUUID = self.curSelectedFileUUIDs[proId];
+  self.curSelectedUUID = self.curSelectedFileUUID;
   const curUUID = self.curSelectedFileUUIDs[proId];
   self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined;
   console.log(`self.hasOpenFileInCurPro = ${self.hasOpenFileInCurPro}, curUUID = ${curUUID}`);
@@ -205,14 +209,24 @@ self.createProj = (name) => {
   proj.name = name;
   proj.uuid = uuidv4();
   proj.files = [];
+  proj.superid = '';
   self.curProjList.push(proj);
+  self.setCurSelectedFileUUIDs('');
+  self.changeProj(proj.uuid);
+  self.getCurSelectedFileUUIDs(proj.uuid);
+  console.log(`self.curSelectedFileUUID = ${self.curSelectedFileUUID}`);
   return proj;
 };
 
 self.createFolder = (name) => {
   const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
-  const superid = getFileSuperid();
+  let superid = getFileSuperid();
+  const fileInfo = self.getFileInfo(superid);
+  console.log(`createFolder superid = ${superid}`);
+  if (superid === self.curProj.uuid || superid === undefined) {
+    superid = '';
+  }
   return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
 };
 
@@ -224,8 +238,8 @@ self.createSimpleFile = (name) => {
 };
 
 self.delFiles = () => {
-  const curSelectedUUID = self.curSelectedUUID;
-  if (curSelectedUUID === null || curSelectedUUID === '' || curSelectedUUID === undefined) {
+  const curUUID = self.curSelectedUUID;
+  if (curUUID === null || curUUID === '' || curUUID === undefined) {
     return;
   }
   let tempFiles = [];
@@ -257,10 +271,10 @@ self.changeProj = (uuid) => {
   if (isExist === false) {
     self.curProjExpandedKeys.push(uuid);
   }
-  const proList = self.curOpenedTabs[uuid];
+  const openList = self.curOpenedTabs[uuid];
   self.getCurSelectedFileUUIDs();
   self.getCurFilePath();
-  self.curOpenedFilesList = proList;
+  self.curOpenedFilesList = openList;
 };
 
 self.curProjExpandedKeys = [];

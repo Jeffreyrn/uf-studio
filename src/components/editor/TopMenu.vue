@@ -129,7 +129,7 @@ export default {
       }
       if (this.folderOrFile === 'proj') {
         const proj = GlobalUtil.model.localProjTree.createProj(text);
-        GlobalUtil.model.localProjTree.changeProj(proj.uuid);
+        // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
       this.dialogVisible = false;
     },

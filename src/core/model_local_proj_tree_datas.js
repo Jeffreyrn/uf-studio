@@ -23,14 +23,16 @@ self.createFile = (uuid, superid, type, name, content) => {
 self.createTestProj = (index) => {
   const proj = {};
   proj.name = `proj_${index}`;
-  proj.uuid = uuidv4();
+  proj.uuid = `proj_id_${index}`; //uuidv4();
   proj.files = [];
+  proj.superid = '';
+  let fileIndex = 0;
+  let file0 = self.createFile(uuidv4(), '', self.PROJ_TREE_TYPE.FILE, `filename_${fileIndex}.py`, `filename_${fileIndex}.py`);
   let folder1 = self.createFile(uuidv4(), '', self.PROJ_TREE_TYPE.FOLDER, `${proj.name}_folder_1`, '');
   let folder11 = self.createFile(uuidv4(), folder1.uuid, self.PROJ_TREE_TYPE.FOLDER, `${proj.name}_folder_11`, '');
   let folder2 = self.createFile(uuidv4(), '', self.PROJ_TREE_TYPE.FOLDER, `${proj.name}_folder_2`, '');
   let folder3 = self.createFile(uuidv4(), '', self.PROJ_TREE_TYPE.FOLDER, `${proj.name}_folder_3`, '');
 
-  let fileIndex = 0;
   fileIndex += 1;
   let file1 = self.createFile(uuidv4(), folder1.uuid, self.PROJ_TREE_TYPE.FILE, `filename_${fileIndex}.py`, `filename_${fileIndex}.py`);
   fileIndex += 1;
@@ -54,6 +56,7 @@ self.createTestProj = (index) => {
   fileIndex += 1;
   let file11 = self.createFile(uuidv4(), folder3.uuid, self.PROJ_TREE_TYPE.FILE, `filename_${fileIndex}.py`, `filename_${fileIndex}.py`);
 
+  proj.files.push(file0);
   proj.files.push(folder1);
   proj.files.push(folder11);
   proj.files.push(folder2);
