@@ -122,7 +122,7 @@ export default {
       if (this.folderOrFile === 'file') {
         const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         GlobalUtil.model.localProjTree.curProj.files.push(file);
-        GlobalUtil.model.localProjTree.setSelectedFileUUID(file.uuid);
+        GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
       this.dialogVisible = false;
     },

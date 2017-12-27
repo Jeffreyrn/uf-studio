@@ -31,7 +31,7 @@ export default {
     },
     onselect() {
       const uuid = this.data.uuid;
-      GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
+      GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
     },
     close() {

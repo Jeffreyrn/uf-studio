@@ -40,7 +40,7 @@ export default {
 
       GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
 
-      GlobalUtil.model.localProjTree.setSelectedFileUUID(uuid);
+      GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
     },

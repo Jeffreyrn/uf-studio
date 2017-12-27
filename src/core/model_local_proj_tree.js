@@ -59,10 +59,9 @@ self.removeOpenTab = (fileId) => {
     }
   }
   if (fileId === self.curSelectedFileUUID) {
-    console.log(`fileId === this.curSelectedFileUUID`);
     if (proList.length > 0) {
       const index = spliceIndex - 1 >= 0 ? spliceIndex - 1 : 0;
-      self.setSelectedFileUUID(proList[index].uuid);
+      self.setSelectedUUID(proList[index].uuid);
     }
   }
   self.curOpenedFilesList = proList;
@@ -91,7 +90,7 @@ self.isFile = (uuid) => {
   return false;
 };
 
-self.setSelectedFileUUID = (uuid) => {
+self.setSelectedUUID = (uuid) => {
   self.curSelectedUUID = uuid;
   if (uuid === '' || uuid === null || uuid === undefined) {
     self.curSelectedFileUUID = '';
