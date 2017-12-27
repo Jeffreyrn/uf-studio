@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
-      null: '.',
     };
   },
   mounted() {
