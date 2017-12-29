@@ -1,8 +1,20 @@
 <template>
   <div>
     <div>
+      <form id='f_form' v-show='false'>
+        <input id='f_input' type='file' @change="didImport()"/>
+      </form>
+      <form id='f_form_out' v-show='false'>
+        <input id='f_output' type='path' @change="didOutput()"/>
+      </form>
       <el-button class="top-btn" @click="newProj()">
         New
+      </el-button>
+      <!-- <el-button class="top-btn" @click="importPro()">
+        Import
+      </el-button> -->
+      <el-button class="top-btn" @click="exportPro()">
+        Export
       </el-button>
       <el-button class="top-btn" @click="allProjs()">
         Projs
@@ -19,6 +31,7 @@
       <el-button class="top-btn" @click="delFile()">
         Delete
       </el-button>
+      <!-- width: {{ clientWidth }} : {{ clientHeight }} -->
       <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
 
       <el-dialog
@@ -68,6 +81,7 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
+      store: GlobalUtil.store,
       dialogVisible: false,
       projSelectDialog: false,
       inputText: '',
@@ -84,6 +98,28 @@ export default {
       //     done();
       //   })
       //   .catch(_ => {});
+    },
+    importPro() {
+      document.getElementById('f_input').click();
+    },
+    didImport() {
+      console.log(`didImport`);
+      document.getElementById('f_input').value = null;
+      document.getElementById('f_input').files = null;
+    },
+    exportPro() {
+      let csv;
+      // const report = {
+      //   Studio: window.Studio.AppConfig,
+      //   UArm: this.uarmInfo,
+      // };
+      csv = 'data:application/json;charset=utf-8,';
+      csv += JSON.stringify('aabbcc', null, 2);
+      const data = encodeURI(csv);
+      const link = document.createElement('a');
+      link.setAttribute('href', data);
+      link.setAttribute('download', 'report.json');
+      link.click();
     },
     allProjs() {
       this.projSelectDialog = true;

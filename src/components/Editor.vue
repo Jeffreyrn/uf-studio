@@ -1,11 +1,11 @@
 <template>
   <div class="main-wrapper" id="editor-wrapper">
     <TopMenu></TopMenu>
-    <div class="float-left total-frame">
+    <div id="total-frame" class="float-left total-frame position-absolute">
       <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
-      <ElTree class="float-left left-frame"></ElTree>
+      <ElTree id="left-frame" class="float-left left-frame position-absolute"></ElTree>
       <!-- <FilesOpenTab></FilesOpenTab> -->
-      <div class="float-left right-frame">
+      <div id="right-frame" class="float-left right-frame position-absolute">
         <div class="float-left top-tab-color">
           <div class="float-left" style="height:20px;width:1px;"></div>
           <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
@@ -15,7 +15,9 @@
         <div class="float-clear"></div>
         <div class="float-left" style="width:100%">
           <CodeEditor></CodeEditor>
-          <ResultRun class="result-frame"></ResultRun>
+          <div class="" style="background-color:#e9e6d3;height:20px"></div>
+          <div class="float-clear"></div>
+          <ResultRun class="result-frame position-absolute" style="width:100%"></ResultRun>
         </div>
       </div>
     </div>
@@ -37,24 +39,43 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
+      clientWidth: 100,
+      clientHeight: 200,
+      leftFrameWidth: 200,
     };
   },
   mounted() {
+    // let totalFrame = document.getElementById("total-frame");
+    // totalFrame.style.height = `${screen.height - 400}px`;
+    window.addEventListener('resize', this.onwinresize, false);
+    onwinresize();
   },
   methods: {
+    onwinresize() {
+      // console.log(`global window width: ${document.body.clientWidth}, height: ${document.body.clientHeight}`);
+      // let store = self.store;
+      this.clientWidth = document.body.clientWidth;
+      this.clientHeight = document.body.clientHeight;
+      console.log(`2 global window width: ${this.clientWidth}, height: ${this.clientHeight}`);
+      // self.store = store;
+      const leftFrame = document.getElementById("left-frame");
+      // leftFrame.style.width = `${leftFrameWidth}px`;
+      const rightFrame = document.getElementById("right-frame");
+      rightFrame.style.width = `${this.clientWidth - this.leftFrameWidth}px`;
+    },
   },
   beforeDestroy() {
   },
   watch: {
   },
   computed: {
-    openedFilesList() {
-      // GlobalUtil.model.localProjTree.curOpenedFilesList
-      const proId = GlobalUtil.model.localProjTree.curProj.uuid;
-      const curOpenedTabs = GlobalUtil.model.localProjTree.curOpenedTabs[proId];
-      // console.log(`curOpenedTabs = $`);
-      return curOpenedTabs;
-    },
+    // openedFilesList() {
+    //   // GlobalUtil.model.localProjTree.curOpenedFilesList
+    //   const proId = GlobalUtil.model.localProjTree.curProj.uuid;
+    //   const curOpenedTabs = GlobalUtil.model.localProjTree.curOpenedTabs[proId];
+    //   // console.log(`curOpenedTabs = $`);
+    //   return curOpenedTabs;
+    // },
   },
   components: {
     TopMenu,
@@ -75,25 +96,35 @@ export default {
 a {
   color: white;
 }
+.position-absolute {
+  position: absolute;
+}
 .total-frame {
+
   /*background-color:gray;*/
   width:100%;
-  height:450px;
+  height:600px;
 }
 .left-frame {
-  width:20%;
+  width:200px;
   height: 100%;
   overflow: scroll;
 }
 .right-frame {
-  width:80%;
+  left: 200px;
+  width:85%;
+  /*width:100%;*/
   height: 100%;
   /*background-color:#e9e6d3;*/
   background-color:#f6f6f6;
 }
 .result-frame {
+  /*position: absolute;*/
   background-color:#e9e6d3;
-  /*height:200px;*/
+  /*position:absolute;*/
+  bottom:0px;
+  padding:0px;
+  margin:0px;
 }
 .top-tab-color {
   width: 100%;

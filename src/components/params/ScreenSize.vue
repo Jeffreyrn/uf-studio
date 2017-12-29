@@ -24,10 +24,10 @@
         网页可见区域:
       </div>
       <div>
-        window.screen.width: {{ body_client_width }}
+        document.body.clientWidth: {{ body_client_width }}
       </div>
       <div>
-        window.screen.height: {{ body_client_height }}
+        document.body.clientHeight: {{ body_client_height }}
       </div>
 
       <div>

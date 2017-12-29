@@ -20,6 +20,15 @@ self.getMinWidth = () => {
 };
 self.getMinWidth();
 
+// self.onwinresize = () => {
+//   // console.log(`global window width: ${document.body.clientWidth}, height: ${document.body.clientHeight}`);
+//   let store = self.store;
+//   store.clientWidth = document.body.clientWidth;
+//   store.clientHeight = document.body.clientHeight;
+//   console.log(`2 global window width: ${store.clientWidth}, height: ${store.clientHeight}`);
+//   self.store = store;
+// };
+
 self.getScreenWidth = () => {
   self.screen_width = window.screen.width;
   // self.screen_width = document.body.clientWidth;

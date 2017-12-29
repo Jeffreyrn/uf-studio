@@ -26,8 +26,4 @@ export default {
 </script>
 
 <style scoped>
-.result-run-frame {
-  height:20px;
-  background-color:blue;
-}
 </style>
