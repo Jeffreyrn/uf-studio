@@ -3,35 +3,43 @@
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j}}:{{state.joint[j]}}</span>
-        <el-slider v-model="state.joint[j]"></el-slider>
+        <el-slider v-model="state.joint[j]" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
     </div>
     <div class="hello-row">
       <img src="../assets/img/xarm-model.png" width="100" height="100"/>
       <div>{{ msg }}-debug</div>
+      <el-select v-model="select" placeholder="Select" @change="changeJoint">
+        <el-option
+          v-for="item in options"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
       <div class="block">
         <span class="text">Group-X</span>
-        <el-slider v-model="state.test.x" :step="0.1" :max="config.debugMax" :min="config.debugMin"></el-slider>
+        <el-slider v-model="state.test.x" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Group-Y</span>
-        <el-slider v-model="state.test.y" :step="0.1" :max="config.debugMax" :min="config.debugMin"></el-slider>
+        <el-slider v-model="state.test.y" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Group-Z</span>
-        <el-slider v-model="state.test.z" :step="0.1" :max="config.debugMax" :min="config.debugMin"></el-slider>
+        <el-slider v-model="state.test.z" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Joint-X</span>
-        <el-slider v-model="state.test.x" :step="0.1" :max="config.debugMax" :min="config.debugMin"></el-slider>
+        <el-slider v-model="state.test.jx" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Joint-Y</span>
-        <el-slider v-model="state.test.y" :step="0.1" :max="config.debugMax" :min="config.debugMin"></el-slider>
+        <el-slider v-model="state.test.jy" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Joint-Z</span>
-        <el-slider v-model="state.test.z" :step="0.1" :max="config.debugMax" :min="config.debugMin"></el-slider>
+        <el-slider v-model="state.test.jz" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
     </div>
   </div>
@@ -41,6 +49,33 @@
 import * as THREE from 'three';
 // import threeD1 from '../assets/three-d/1.json';
 
+const JOINT_POSITION = [
+  null,
+  [-0.2, 0, -0.1],
+  [-0.2, -3.1, -0.1],
+  [-0.15, 0, -0.1],
+  [0.45, -6.5, 0],
+  [0, -7.35, -0.02],
+  [4.17, -7.35, 0],
+];
+const GROUP_POSITION = [
+  [0.2, 0, 0.1],
+  [0, 3.1, -0.1],
+  [-0.05, -3.2, 0],
+  [-0.55, 6.48, -0.2],
+  [0.45, 0.86, 0.02],
+  [-4.17, 0, -0.05],
+];
+const MODEL_DIR = '../src/assets/three-d/';
+const JOINT_MODEL_SRC = [
+  `${MODEL_DIR}1.json`,
+  `${MODEL_DIR}2.json`,
+  `${MODEL_DIR}3.json`,
+  `${MODEL_DIR}4.json`,
+  `${MODEL_DIR}5.json`,
+  `${MODEL_DIR}6.json`,
+  `${MODEL_DIR}7.json`,
+];
 export default {
   name: 'HelloWorld',
   data() {
@@ -48,7 +83,11 @@ export default {
       config: {
         debugMax: 10,
         debugMin: -10,
+        jointMax: 31,
+        jointMin: -31,
       },
+      options: [0, 1, 2, 3, 4, 5, 6, 7],
+      select: 5,
       state: {
         joint: {
           1: 0,
@@ -87,10 +126,9 @@ export default {
     const camera = new THREE.PerspectiveCamera(125, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.z = 8;
     camera.up = new THREE.Vector3(-1, -1, -1);
-    camera.position.set(5, 7, 5); // 设置相机位置
-    camera.lookAt(new THREE.Vector3(0, 0, 0)); // 让相机指向原点
-    // light
-    const light = new THREE.PointLight(0xffffff, 1, 100);
+    camera.position.set(5, 8, 5); // camera position
+    camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
+    const light = new THREE.PointLight(0xffffff, 1, 100); // light
     light.position.set(10, 15, 5);
     scene.add(light);
     // camera.position.set(25, 25, 25);
@@ -98,53 +136,25 @@ export default {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
-    const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
     const joints = [];
-    joints[1] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
+    const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
+    joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
+    const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
+    joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    scene.add(joints[0]);
     const loader = new THREE.JSONLoader();
-    loader.load('../src/assets/three-d/1.json', (geometry) => {
+    loader.load(JOINT_MODEL_SRC[0], (geometry) => {
       const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
         vertexColors: THREE.FaceColors,
         morphTargets: true,
       }));
       scene.add(mesh);
-      // obj.position.set(0, 2, 0);
-      // scene.add(obj);
     });
-    // const geometry2 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    // const joints[2] = new THREE.Mesh(geometry2, new THREE.MeshBasicMaterial({ color: 0xFF7F00 }));
-
-    // const geometry3 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    // const joints[3] = new THREE.Mesh(geometry3, new THREE.MeshBasicMaterial({ color: 0x0000FF }));
-    // const geometry4 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    // const joints[4] = new THREE.Mesh(geometry4, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
-    // const geometry5 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    // joints[5] = new THREE.Mesh(geometry5, new THREE.MeshBasicMaterial({ color: 0xffff00 }));
-    // const geometry6 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    // joints[6] = new THREE.Mesh(geometry6, new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
-    // const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    // joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0x9400d3 }));
-    const geometry8 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
-    joints[8] = new THREE.Mesh(geometry8, new THREE.MeshBasicMaterial({ color: 0xffffff }));
-    // joints[2].rotateOnAxis(new THREE.Vector3(1, 0, 0).normalize(), 0.075);
-    // joints[5].position.set(0, 1, 0);
-    // joints[6].position.set(0, 0.5, 0); // green
-    // joints[7].position.set(0, 0.5, 0);
-    // joints[8].position.set(0, 1.25, 0);
     const groups = [];
-    for (let i = 0; i < 6; i += 1) {
+    for (let i = 0; i < 7; i += 1) {
       groups[i] = new THREE.Group();
     }
-    // groups[5].position.y = 1; // purple
-    // groups[4].position.y = 1.5; // green
-    // groups[3].position.y = 0; // yellow
-    // groups[3].position.x = 0.5; // yellow
-    // groups[3].position.z = -0.5; // yellow
-    // groups[3].rotation.x = 0.5; // yellow
-    // groups[2].position.y = 1.5;
-    // groups[2].position.x = -0.5;
-    scene.add(joints[1]);
-
+    groups[6].add(joints[7]);
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
@@ -152,62 +162,31 @@ export default {
       groups[1].rotation.z = (0.1 * this.state.joint[2]);
       groups[2].rotation.y = (0.1 * this.state.joint[3]);
       groups[3].rotation.z = (0.1 * this.state.joint[4]);
-      groups[4].rotation.y = (0.1 * this.state.joint[5]);
-      groups[5].rotation.x = (0.1 * this.state.joint[6]);
-      joints[8].rotation.y = (0.1 * this.state.joint[7]);
-      // joints[4].position.x = this.state.test.x;
-      // joints[4].position.y = this.state.test.y;
+      groups[4].rotation.x = (0.1 * this.state.joint[5]);
+      groups[5].rotation.z = (0.1 * this.state.joint[6]);
+      joints[7].rotation.y = (0.1 * this.state.joint[7]);
+      groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
+      if (joints[this.select + 1]) {
+        joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+      }
     };
-    loader.load('../src/assets/three-d/2.json', (geometry) => {
-      joints[2] = new THREE.Mesh(geometry, materialList[0]);
-      // joints[2].position.set(1, 1, 0);
-      // joints[2].position.set(0, 0, 0);
-      groups[0].add(joints[2], groups[1]);
-      scene.add(groups[0]);
-    });
-
-    loader.load('../src/assets/three-d/3.json', (geometry) => {
-      joints[3] = new THREE.Mesh(geometry, materialList[1]);
-      joints[3].position.set(0, -3.2, 0);
-      // joints[2].position.set(1, 1, 0);
-      // joints[2].position.set(0, 0, 0);
-      groups[1].add(joints[3], groups[2]);
-      groups[1].position.y = 3.2;
-    });
-    loader.load('../src/assets/three-d/4.json', (geometry) => {
-      joints[4] = new THREE.Mesh(geometry, materialList[2]);
-      joints[4].position.set(0, 0, 0);
-      // joints[2].position.set(1, 1, 0);
-      // joints[2].position.set(0, 0, 0);
-      groups[2].add(joints[4], groups[3]);
-      groups[2].position.y = -3.2;
-    });
-    loader.load('../src/assets/three-d/5.json', (geometry) => {
-      joints[5] = new THREE.Mesh(geometry, materialList[3]);
-      joints[5].position.set(0, -6.5, 0);
-      // joints[2].position.set(1, 1, 0);
-      // joints[2].position.set(0, 0, 0);
-      groups[3].add(joints[5], groups[4]);
-      groups[3].position.y = 6.5;
-      groups[3].position.x = 0;
-    });
-    loader.load('../src/assets/three-d/6.json', (geometry) => {
-      joints[6] = new THREE.Mesh(geometry, materialList[4]);
-      joints[6].position.set(0, 0, 0);
-      // joints[2].position.set(1, 1, 0);
-      // joints[2].position.set(0, 0, 0);
-      groups[4].add(joints[6], groups[5]);
-      groups[4].position.y = 3.2;
-    });
-    loader.load('../src/assets/three-d/7.json', (geometry) => {
-      joints[7] = new THREE.Mesh(geometry, materialList[5]);
-      joints[7].position.set(0, 0, 0);
-      // joints[2].position.set(1, 1, 0);
-      // joints[2].position.set(0, 0, 0);
-      groups[5].add(joints[7], joints[8]);
-      groups[5].position.y = 3.2;
-      animate();
-    });
+    function loadModel(index) { // model index: 1-6
+      if (index < 7) {
+        loader.load(JOINT_MODEL_SRC[index], (geometry) => {
+          console.log(index, 'model loaded:');
+          joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
+          joints[index].position.set(...JOINT_POSITION[index]);
+          groups[index - 1].add(joints[index], groups[index]);
+          groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
+          loadModel(index + 1); // load next model
+        });
+      }
+      else {
+        scene.add(groups[0]);
+        animate();
+      }
+    }
+    loadModel(1);
     const gridplaneSize = 20;
     const gridstep = 10;
     // const gridcolor = 0xCCCCCC;
@@ -217,9 +196,17 @@ export default {
     scene.add(gridHelper_xy);
     const axisHelper = new THREE.AxesHelper(5);
     scene.add(axisHelper);
+    this.changeJoint(this.select);
   },
   methods: {
-
+    changeJoint(value) {
+      this.state.test.jx = JOINT_POSITION[value + 1][0];
+      this.state.test.jy = JOINT_POSITION[value + 1][1];
+      this.state.test.jz = JOINT_POSITION[value + 1][2];
+      this.state.test.x = GROUP_POSITION[value][0];
+      this.state.test.y = GROUP_POSITION[value][1];
+      this.state.test.z = GROUP_POSITION[value][2];
+    },
   },
 };
 </script>
