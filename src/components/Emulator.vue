@@ -113,6 +113,7 @@ export default {
       msg: 'Emulator',
       three: {
         scene: null,
+        groups: null,
       },
     };
   },
@@ -130,6 +131,7 @@ export default {
     });
     console.log(materialList);
     const scene = new THREE.Scene();
+    // this.three.scene = scene;
     scene.background = new THREE.Color(0xc0c0c0);
     const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
     // camera.position.z = 8;
@@ -167,6 +169,7 @@ export default {
       scene.add(mesh);
     });
     const groups = [];
+    // this.three.groups = groups;
     for (let i = 0; i < 7; i += 1) {
       groups[i] = new THREE.Group();
     }
@@ -199,6 +202,7 @@ export default {
         });
       }
       else {
+        console.log('loading all');
         scene.add(groups[0]);
         animate();
         loading.close(); // hide loading overlay
@@ -215,6 +219,19 @@ export default {
     const axisHelper = new THREE.AxesHelper(5);
     scene.add(axisHelper);
     this.changeJoint(this.select);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener('resize', onWindowResize, false);
+  },
+  beforeDestroy() {
+    // this.three.scene.remove();
+    // this.three.scene.remove(this.three.groups[0]);
+    // this.three.groups.forEach((group) => {
+    //   group.dispose();
+    // });
   },
   methods: {
     changeJoint(value) {
@@ -242,5 +259,9 @@ export default {
   width: 30%;
   padding: 0.2vw 1vw;
   display: inline-block;
+}
+span.text {
+  display: block;
+  float: left;
 }
 </style>
