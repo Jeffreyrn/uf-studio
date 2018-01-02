@@ -5,18 +5,19 @@
         <span class="text">J{{j}}:{{state.joint[j]}}</span>
         <el-slider v-model="state.joint[j]" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
+      <div class="block">{{ msg }}-debug</div>
+      <div class="block">
+        <el-select v-model="select" placeholder="Select" @change="changeJoint">
+          <el-option
+            v-for="item in options"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
+      </div>
     </div>
     <div class="hello-row">
-      <img src="../assets/img/xarm-model.png" width="100" height="100"/>
-      <div>{{ msg }}-debug</div>
-      <el-select v-model="select" placeholder="Select" @change="changeJoint">
-        <el-option
-          v-for="item in options"
-          :key="item"
-          :label="item"
-          :value="item">
-        </el-option>
-      </el-select>
       <div class="block">
         <span class="text">Group-X</span>
         <el-slider v-model="state.test.x" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
@@ -55,7 +56,7 @@ const JOINT_POSITION = [
   [-0.2, 0, -0.1],
   [-0.2, -3.1, -0.1],
   [-0.15, 0, -0.1],
-  [0.45, -6.5, 0],
+  [0.45, -6.48, 0],
   [0, -7.35, -0.02],
   [4.17, -7.35, 0],
 ];
@@ -63,7 +64,7 @@ const GROUP_POSITION = [
   [0.2, 0, 0.1],
   [0, 3.1, -0.1],
   [-0.05, -3.2, 0],
-  [-0.55, 6.48, -0.2],
+  [-0.59, 6.48, -0.12],
   [0.45, 0.86, 0.02],
   [-4.17, 0, -0.05],
 ];
@@ -131,12 +132,15 @@ export default {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xc0c0c0);
     const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
-    camera.position.z = 8;
-    camera.up = new THREE.Vector3(-1, -1, -1);
+    // camera.position.z = 8;
+    // camera.up = new THREE.Vector3(-1, -1, -1);
     camera.position.set(5, 8, 5); // camera position
     camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
     const light = new THREE.PointLight(0xffffff, 1, 100); // light
-    light.position.set(10, 15, 5);
+    light.position.set(7, 10, 7);
+    const lightBottom = new THREE.PointLight(0xffffff, 1, 100); // light
+    lightBottom.position.set(-7, 0, -7);
+    scene.add(lightBottom);
     scene.add(light);
     // camera.position.set(25, 25, 25);
     const renderer = new THREE.WebGLRenderer();
@@ -232,10 +236,11 @@ export default {
   flex-direction: column;
 }
 .hello-row {
-  display: flex;
+  display: inline-block;
 }
 .block {
-  width: 200px;
-  padding: 2vw;
+  width: 30%;
+  padding: 0.2vw 1vw;
+  display: inline-block;
 }
 </style>
