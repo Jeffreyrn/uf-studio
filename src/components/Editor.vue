@@ -48,7 +48,7 @@ export default {
     // let totalFrame = document.getElementById("total-frame");
     // totalFrame.style.height = `${screen.height - 400}px`;
     window.addEventListener('resize', this.onwinresize, false);
-    onwinresize();
+    this.onwinresize();
   },
   methods: {
     onwinresize() {

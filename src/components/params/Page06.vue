@@ -6,7 +6,7 @@
       <button class="change-btn" @click="xarm_get_tcp_pose()">xarm_get_tcp_pose</button>
       <button class="change-btn" @click="xarm_get_joint_pose()">xarm_get_joint_pose</button>
       <div>{{ socketCom.response }}</div>
-      <div>{{ diff }}</div>
+      <div>{{ socketCom.diff }}</div>
     </div>
 </template>
 <script>
@@ -16,60 +16,24 @@ export default {
   data() {
     return {
       socketCom: GlobalUtil.socketCom,
-      diff: 0,
+      // diff: 0,
     };
   },
   methods: {
     xarm_get_joint_pose() {
-      const self = this;
-      const startTime = new Date().getTime();
-      GlobalUtil.socketCom.send_msg({
-        cmd: 'xarm_get_joint_pose',
-        data: '',
-      }, (dict) => {
-        console.log(`send response = ${JSON.stringify(dict)}`);
-        const endTime2 = new Date().getTime();
-        const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diff} ms`;
+      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_POINT_POSE, '', (dict) => {
       });
     },
     xarm_get_tcp_pose() {
-      const self = this;
-      const startTime = new Date().getTime();
-      GlobalUtil.socketCom.send_msg({
-        cmd: 'xarm_get_tcp_pose',
-        data: '',
-      }, (dict) => {
-        console.log(`send response = ${JSON.stringify(dict)}`);
-        const endTime2 = new Date().getTime();
-        const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diff} ms`;
+      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_TCP_POSE, '', (dict) => {
       });
     },
     xarm_get_version() {
-      const self = this;
-      const startTime = new Date().getTime();
-      GlobalUtil.socketCom.send_msg({
-        cmd: 'xarm_get_version',
-        data: '',
-      }, (dict) => {
-        console.log(`send response = ${JSON.stringify(dict)}`);
-        const endTime2 = new Date().getTime();
-        const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diff} ms`;
+      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_VERSION, '', (dict) => {
       });
     },
     xarm_get_state() {
-      const self = this;
-      const startTime = new Date().getTime();
-      GlobalUtil.socketCom.send_msg({
-        cmd: 'xarm_get_state',
-        data: '',
-      }, (dict) => {
-        console.log(`send response = ${JSON.stringify(dict)}`);
-        const endTime2 = new Date().getTime();
-        const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diff} ms`;
+      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_STATE, '', (dict) => {
       });
     },
   },

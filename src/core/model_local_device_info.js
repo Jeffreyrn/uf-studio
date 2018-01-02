@@ -7,7 +7,8 @@ self.xarm_port_name = '';
 self.xarm_port_serial_number = '';
 self.xarm_version = '';
 
-self.handleReport = (dict) => {
+self.onmessage = (evt) => {
+  let dict = JSON.parse(evt.data);
   dict = dict || {};
   if (dict.cmd !== 'devices_info_report') {
     return;
@@ -23,6 +24,23 @@ self.handleReport = (dict) => {
   // console.log(`${self.dump()}`);
   self.dump();
 };
+
+// self.handleReport = (dict) => {
+//   dict = dict || {};
+//   if (dict.cmd !== 'devices_info_report') {
+//     return;
+//   }
+//   if (dict.type !== 'report') {
+//     return;
+//   }
+//   self.xarm_port_baudrate = dict.data.xarm_port_baudrate;
+//   self.core_version = dict.data.core_version;
+//   self.xarm_port_name = dict.data.xarm_port_name;
+//   self.xarm_port_serial_number = dict.data.xarm_port_serial_number;
+//   self.xarm_version = dict.data.xarm_version;
+//   // console.log(`${self.dump()}`);
+//   self.dump();
+// };
 
 self.dump = () => {
   let str = 'device infos:';

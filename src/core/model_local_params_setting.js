@@ -270,7 +270,8 @@ self.chartOption = {
 
 // end of chart option
 
-self.handleReport = (dict) => {
+self.onmessage = (evt) => {
+  let dict = JSON.parse(evt.data);
   dict = dict || {};
   if (dict.cmd !== 'devices_info_report') {
     return;
@@ -279,6 +280,16 @@ self.handleReport = (dict) => {
   self.portName = dict.data.xarm_port_name;
   console.log(`${self.dump()}`);
 };
+
+// self.handleReport = (dict) => {
+//   dict = dict || {};
+//   if (dict.cmd !== 'devices_info_report') {
+//     return;
+//   }
+//   self.baudRate = dict.data.xarm_port_baudrate;
+//   self.portName = dict.data.xarm_port_name;
+//   console.log(`${self.dump()}`);
+// };
 
 self.dump = () => {
   const str = 'local params infos:';

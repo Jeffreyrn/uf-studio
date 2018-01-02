@@ -52,6 +52,7 @@ self.response = '';
 self.penddingCmds = {};
 self.send_msg = (msg, callback) => {
   const self = SocketCom;
+  self.startTime = new Date().getTime();
   if (self.msgid > 100000) { // restart from 100000
     self.msgid = 0;
   }
@@ -65,8 +66,15 @@ self.send_msg = (msg, callback) => {
   return msg.id;
 };
 
-self.handleResponse = (dict) => {
+self.sendCmd = (cmdId, data, callback) => {
   const self = SocketCom;
+  data = data || {};
+  data.cmd = cmdId;
+  self.send_msg(data, callback);
+};
+
+self.onmessage = (evt) => {
+  let dict = JSON.parse(evt.data);
   dict = dict || {};
   if (dict.type !== 'response') {
     return;
@@ -76,8 +84,27 @@ self.handleResponse = (dict) => {
   }
   const callback = self.penddingCmds[dict.id];
   if (callback) {
+    console.log(`send response = ${JSON.stringify(dict)}`);
+    const endTime2 = new Date().getTime();
+    const diff = endTime2 - self.startTime;
+    self.diff = `time diff = ${diff} ms`;
     callback(dict);
   }
 };
+
+// self.handleResponse = (dict) => {
+//   const self = SocketCom;
+//   dict = dict || {};
+//   if (dict.type !== 'response') {
+//     return;
+//   }
+//   if (dict.id === null) {
+//     return;
+//   }
+//   const callback = self.penddingCmds[dict.id];
+//   if (callback) {
+//     callback(dict);
+//   }
+// };
 
 export default self;

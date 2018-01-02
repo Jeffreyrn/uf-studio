@@ -18,7 +18,7 @@
 <script>
 
 import { codemirror, CodeMirror } from 'vue-codemirror';
-import { codemirror2, CodeMirror2 } from 'vue-codemirror';
+// import { codemirror2, CodeMirror2 } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/monokai.css';
 import 'codemirror/addon/hint/show-hint';
@@ -79,8 +79,18 @@ export default {
     // this.editor.focus();
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
-    const codemirrorId = document.getElementById("codemirror-id");
-    console.log(`codemirrorId width = ${codemirrorId.style.width}`);
+    const html = document.getElementById("codemirror-id").innerHTML;
+    console.log(`html = ${html}`);
+    // const codemirrorId = document.getElementById("codemirror-id");
+    // codemirrorId.style.height = '20px';
+    // console.log(`codemirrorId width = ${codemirrorId.style.width}`);
+    // codemirror.setSize('100%', '400px');
+
+    // let editor = CodeMirror.fromTextArea(document.getElementById("codemirror-id"), {
+    //   lineNumbers: true,
+    //   matchBrackets: true,
+    // });
+    // codemirror.setSize('200px', '100px');
   },
   methods: {
     onEditorCodeChange(newCode) {
@@ -88,6 +98,7 @@ export default {
       GlobalUtil.model.localProjTree.curFile.content = newCode;
       // this.code = newCode;
       GlobalUtil.model.localProjTree.curSelectedContent = newCode;
+      // CodeMirror.style.height = '100px';
     },
   },
   beforeDestroy() {
@@ -123,5 +134,9 @@ export default {
   color:lightblue;
   font-size: 12px;
   background-color:rgba(255, 250, 226, 1.0);
+}
+.CodeMirrorOveride {
+  border: 1px solid #eee;
+  height: 10px;
 }
 </style>
