@@ -11,6 +11,12 @@ self.xarm_paused = false;
 self.onmessage = (evt) => {
   let dict = JSON.parse(evt.data);
   dict = dict || {};
+  if (dict.cmd !== 'devices_status_report') {
+    return;
+  }
+  if (dict.type !== 'report') {
+    return;
+  }
   self.xarm_warn_code = dict.data.xarm_warn_code;
   self.xarm_connected = dict.data.xarm_connected;
   self.xarm_printed = dict.data.xarm_printed;
