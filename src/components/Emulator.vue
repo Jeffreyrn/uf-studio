@@ -48,6 +48,7 @@
 <script>
 import * as THREE from 'three';
 // import threeD1 from '../assets/three-d/1.json';
+import OrbitControls from 'three-orbitcontrols';
 
 const JOINT_POSITION = [
   null,
@@ -115,6 +116,12 @@ export default {
     };
   },
   mounted() {
+    const loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)',
+    });
     const RAINBOW_COLOR_LIST = [0x4B0082, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x9400D3];
     const materialList = [];
     RAINBOW_COLOR_LIST.forEach((hex) => {
@@ -123,7 +130,7 @@ export default {
     console.log(materialList);
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xc0c0c0);
-    const camera = new THREE.PerspectiveCamera(125, window.innerWidth / window.innerHeight, 1, 1000);
+    const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.z = 8;
     camera.up = new THREE.Vector3(-1, -1, -1);
     camera.position.set(5, 8, 5); // camera position
@@ -133,6 +140,11 @@ export default {
     scene.add(light);
     // camera.position.set(25, 25, 25);
     const renderer = new THREE.WebGLRenderer();
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+    controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
@@ -157,6 +169,7 @@ export default {
     groups[6].add(joints[7]);
     const animate = () => {
       requestAnimationFrame(animate);
+      controls.update();
       renderer.render(scene, camera);
       groups[0].rotation.y = (0.1 * this.state.joint[1]);
       groups[1].rotation.z = (0.1 * this.state.joint[2]);
@@ -184,6 +197,7 @@ export default {
       else {
         scene.add(groups[0]);
         animate();
+        loading.close(); // hide loading overlay
       }
     }
     loadModel(1);
