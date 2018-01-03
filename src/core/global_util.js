@@ -20,6 +20,7 @@ self.socketCom = SocketCom;
 // self.commandsHttp = CommandsHttp;
 // self.commandsSocket = CommandsSocket;
 CommandsSocket.socketCom = SocketCom;
+CommandsSocket.model = Model;
 window.CommandsSocket = CommandsSocket;
 self.nativeCom = NativeCom;
 
@@ -71,8 +72,11 @@ self.socketCom.open = () => {
     self.model.localDeviceStatus.socket_connected = true;
     self.model.localDeviceStatus.xarm_connected = true;
     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-    GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
-      console.log(`listProjs dict = ${JSON.stringify(dict)}`);
+    // GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
+    //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
+    // });
+    CommandsSocket.listProjs((dict) => {
+      
     });
   });
   self.socketCom.init_onclose((evt) => {

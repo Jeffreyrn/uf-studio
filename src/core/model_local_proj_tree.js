@@ -427,68 +427,73 @@ self.getFileInfo = (uuid) => {
 //////////////////////////////////////////////////////////
 
 // curProjList
-self.getProjsFromArm = (callback) => {
+// self.getProjsFromArm = (callback) => {
+//   const projs = [];
+//   CommandsSocket.listProjs((dict) => {
+//
+//   });
+// };
+
+self.remoteProjs2Local = (dict) => {
   const projs = [];
-  CommandsSocket.listProjs((dict) => {
-    const datas = dict.data;
-    // console.log(`datas = ${datas}`);
-    for (let i = 0; i < datas.length; i += 1) {
-      let files = [];
-      let filesDict = {};
-      const data = datas[i];
-      if (path.basename(data).indexOf('.') === 0) {
-        continue;
-      }
-      // check which project
-      const projName = data.replace(CommandsSocket.ROOT_DIR + "/", "").split("/")[0];
-      const projPath = path.join(CommandsSocket.ROOT_DIR, projName);
-      let curProj = null;
-      for (let i = 0; i < projs.length; i += 1) {
-        const proj = projs[i];
-        if (proj.name === projName) {
-          curProj = proj;
-        }
-      }
-      if (curProj === null) {
-        curProj = {};
-        curProj.name = projName;
-        curProj.uuid = uuidv4();
-        curProj.files = [];
-        curProj.superid = '';
-        projs.push(curProj);
-      }
-      // console.log(`projName 2 = ${projName}, data = ${data}`);
-      // check and create folder
-      // const isProFile = path.basename(data).indexOf('.') > 0;
-      let tempPath = data;
-      do {
-        const isExistFile = filesDict[tempPath] !== undefined;
-        filesDict[tempPath] = Base64.btoa(tempPath); // tempPath; //
-        const uuid = filesDict[tempPath];
-        let superpath = path.dirname(tempPath);
-        if (superpath === projPath || superpath === CommandsSocket.ROOT_DIR) {
-          superpath = '';
-        }
-        const name = path.basename(tempPath);
-        const superid = Base64.btoa(superpath); // superpath; //
-        const isProFile = path.basename(tempPath).indexOf('.') > 0;
-        let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
-        // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
-        if (isExistFile === false) {
-          let file = self.createFile(uuid, superid, fileType, name, '');
-          file.proId = curProj.uuid;
-          curProj.files.push(file);
-        }
-        tempPath = path.dirname(tempPath);
-      } while (tempPath !== projPath/*CommandsSocket.ROOT_DIR*/);
-      // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
+  const datas = dict.data;
+  // console.log(`datas = ${datas}`);
+  for (let i = 0; i < datas.length; i += 1) {
+    let files = [];
+    let filesDict = {};
+    const data = datas[i];
+    if (path.basename(data).indexOf('.') === 0) {
+      continue;
     }
-    self.curProjList = projs;
-    if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
-      self.changeProj(self.curProjList[0].uuid);
+    // check which project
+    const projName = data.replace(CommandsSocket.ROOT_DIR + "/", "").split("/")[0];
+    const projPath = path.join(CommandsSocket.ROOT_DIR, projName);
+    let curProj = null;
+    for (let i = 0; i < projs.length; i += 1) {
+      const proj = projs[i];
+      if (proj.name === projName) {
+        curProj = proj;
+      }
     }
-    callback(projs);
-  });
+    if (curProj === null) {
+      curProj = {};
+      curProj.name = projName;
+      curProj.uuid = uuidv4();
+      curProj.files = [];
+      curProj.superid = '';
+      projs.push(curProj);
+    }
+    // console.log(`projName 2 = ${projName}, data = ${data}`);
+    // check and create folder
+    // const isProFile = path.basename(data).indexOf('.') > 0;
+    let tempPath = data;
+    do {
+      const isExistFile = filesDict[tempPath] !== undefined;
+      filesDict[tempPath] = Base64.btoa(tempPath); // tempPath; //
+      const uuid = filesDict[tempPath];
+      let superpath = path.dirname(tempPath);
+      if (superpath === projPath || superpath === CommandsSocket.ROOT_DIR) {
+        superpath = '';
+      }
+      const name = path.basename(tempPath);
+      const superid = Base64.btoa(superpath); // superpath; //
+      const isProFile = path.basename(tempPath).indexOf('.') > 0;
+      let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
+      // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
+      if (isExistFile === false) {
+        let file = self.createFile(uuid, superid, fileType, name, '');
+        file.proId = curProj.uuid;
+        curProj.files.push(file);
+      }
+      tempPath = path.dirname(tempPath);
+    } while (tempPath !== projPath/*CommandsSocket.ROOT_DIR*/);
+    // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
+  }
+  self.curProjList = projs;
+  if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
+    self.changeProj(self.curProjList[0].uuid);
+  }
+  callback(projs);
 };
 
 export default self;
