@@ -82,7 +82,7 @@ self.delFiles = (uuid) => {
       "file": '', // 文件夹名称, 可省略
     }
   };
-  const isProjFile = name.indexOf('.') > 0;
+  const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
     self.sendCmd(self.FILE_ID_DELETE_FILE, params, (dict) => {
       self.listProjs();
