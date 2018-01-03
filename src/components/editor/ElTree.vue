@@ -3,7 +3,7 @@
   <!-- :render-content="renderContent" -->
   <el-tree
     id="tree-root"
-    :data="curProjTreeData"
+    :data="model.localProjTree.curProTreeDatas"
     node-key="uuid"
     :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
     @node-click="handleNodeClick">
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       model: GlobalUtil.model,
+      // curProTreeDatas: GlobalUtil.model.localProjTree.curProTreeDatas,
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -67,9 +68,9 @@ export default {
   watch: {
   },
   computed: {
-    curProjTreeData() {
-      return GlobalUtil.model.localProjTree.curPro2Tree();
-    },
+    // curProjTreeData() {
+    //   return GlobalUtil.model.localProjTree.curProTreeDatas;
+    // },
   },
   components: {
   },

@@ -132,6 +132,8 @@ export default {
       return GlobalUtil.model.localProjTree.getFileInfo(curSelectedUUID);
     },
     delFile() {
+      // CommandsSocket.delFiles(this.getCurFile().uuid);
+      // return;
       console.log('del folder');
       const curFile = this.getCurFile();
       if (curFile === null) {
@@ -147,7 +149,8 @@ export default {
         reverseButtons: true,
         width: '300px',
         preConfirm: text => new Promise((resolve, reject) => {
-          GlobalUtil.model.localProjTree.delFiles();
+          // GlobalUtil.model.localProjTree.delFiles();
+          CommandsSocket.delFiles(this.getCurFile().uuid);
           resolve();
         }),
       }).then((text) => {

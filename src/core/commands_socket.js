@@ -35,6 +35,7 @@ self.listProjs = (callback) => {
     }
   };
   self.sendCmd(self.FILE_ID_LIST_DIR, params, (dict) => {
+    // console.log(`remoteProjs2Local = ${JSON.stringify(dict)}`);
     self.model.localProjTree.remoteProjs2Local(dict);
   });
 };
@@ -43,32 +44,57 @@ self.listProjs = (callback) => {
 self.createFile = (name) => {
   let filePath = self.model.localProjTree.getSelectedFileFolder();
   filePath = path.join(filePath, name);
-  console.log(`createFile file = ${filePath}`);
+  // console.log(`createFile file = ${filePath}`);
   const isProjFile = name.indexOf('.') > 0;
   let params = {
     data: {
       "userId": self.userId, // 默认是test，用来区分不同用户
       "root": filePath, // 文件夹的父目录，必须
-      "name": "", // 文件夹名称, 可省略
+      "name": '', // 文件夹名称, 可省略
     }
   };
   const proId = self.model.localProjTree.curProj.uuid;
   if (isProjFile === true) {
     self.sendCmd(self.FILE_ID_CREATE_FILE, params, (dict) => {
       // if (self.isFileSuc(dict) === true) {
-      self.model.localProjTree.createSimpleFile(proId, name);
-
+      // self.model.localProjTree.createSimpleFile(proId, name);
+      self.listProjs();
       // }
     });
   }
   else {
     self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
       // if (self.isFileSuc(dict) === true) {
-      self.model.localProjTree.createFolder(proId, name);
+      // self.model.localProjTree.createFolder(proId, name);
       // }
+      self.listProjs();
     });
   }
 };
+
+self.delFiles = (uuid) => {
+  const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  console.log(`filePath = ${filePath}`);
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": filePath, // 文件夹的父目录，必须
+      "file": '', // 文件夹名称, 可省略
+    }
+  };
+  const isProjFile = name.indexOf('.') > 0;
+  if (isProjFile === true) {
+    self.sendCmd(self.FILE_ID_DELETE_FILE, params, (dict) => {
+      self.listProjs();
+    });
+  }
+  else {
+    self.sendCmd(self.FILE_ID_DELETE_DIR, params, (dict) => {
+      self.listProjs();
+    });
+  }
+};
+
 // (uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
 
 self.isFileSuc = (dict) => {
