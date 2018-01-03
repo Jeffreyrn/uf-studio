@@ -29,10 +29,10 @@ self.curFilePath = ''
 
 self.getThisFileFullPath = (uuid) => {
   let file = self.getFileInfo(uuid);
-  // console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
+  console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
   if (file === null || file === undefined) {
     // self.curFilePath = `/${self.curProj.name}`;
-    return '';
+    return path.join(CommandsSocket.ROOT_DIR, self.curProj.name);
   }
   let proj = null;
   for (let i = 0; i < self.curProjList.length; i += 1) {
@@ -55,7 +55,9 @@ self.getThisFileFullPath = (uuid) => {
       break;
     }
   }
-  return path.join(projPath, filename);
+  const fullPath = path.join(projPath, filename);
+  console.log(`fullPath = ${fullPath}`);
+  return fullPath;
 };
 
 self.getCurFilePath = () => {
