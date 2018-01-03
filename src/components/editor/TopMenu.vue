@@ -158,13 +158,16 @@ export default {
       const text = this.inputText;
       if (this.folderOrFile === 'folder') {
         console.log(`text = ${text}`);
-        const folder = GlobalUtil.model.localProjTree.createFolder(text);
-        GlobalUtil.model.localProjTree.curProj.files.push(folder);
+        CommandsSocket.createFile(text);
+        // const folder = GlobalUtil.model.localProjTree.createFolder(text);
+        // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
-        GlobalUtil.model.localProjTree.curProj.files.push(file);
-        GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
+        console.log(`text = ${text}`);
+        CommandsSocket.createFile(text);
+        // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
+        // GlobalUtil.model.localProjTree.curProj.files.push(file);
+        // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
       if (this.folderOrFile === 'proj') {
         const proj = GlobalUtil.model.localProjTree.createProj(text);

@@ -215,15 +215,31 @@ self.setSelectedUUID = (uuid) => {
 
 let indexCounter = 0;
 
-self.createFile = (uuid, superid, type, name, content) => {
-  return {
+self.createFile = (uuid, superid, proId, type, name, content) => {
+  const file = {
     index: indexCounter += 1,
     uuid: uuid,
     superid: superid,
     type: type,
     name: name,
     content: content,
+    proId: proId,
   };
+  // if (self.curProj.files !== undefined) {
+  //   self.curProj.files.push(file);
+  // }
+  return file;
+};
+
+self.getSelectedFileFolder = () => {
+  let curSelectedUUID = self.curSelectedUUID;
+  let filePath = self.getThisFileFullPath(curSelectedUUID);
+  console.log(`getSelectedFileFolder path = ${filePath}`);
+  const isProjFile = filePath.indexOf('.') > 0;
+  if (isProjFile === true) {
+    filePath = path.basename(filePath);
+  }
+  return filePath;
 };
 
 function getFileSuperid() {
@@ -254,26 +270,26 @@ self.createProj = (name) => {
   return proj;
 };
 
-self.createFolder = (name) => {
+self.createFolder = (proId, name) => {
   const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
   let superid = getFileSuperid();
   const fileInfo = self.getFileInfo(superid);
-  if (superid === self.curProj.uuid || superid === undefined) {
+  if (superid === proId || superid === undefined) {
     superid = '';
   }
   console.log(`createFolder superid = ${superid}`);
-  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
+  return self.createFile(uuid, superid, proId, self.PROJ_TREE_TYPE.FOLDER, name, '');
 };
 
-self.createSimpleFile = (name) => {
+self.createSimpleFile = (proId, name) => {
   const uuid = uuidv4();
   let superid = getFileSuperid();
-  if (superid === self.curProj.uuid || superid === undefined) {
+  if (superid === proId || superid === undefined) {
     superid = '';
   }
   console.log(`createSimpleFile uuid = ${uuid}, superid = ${superid}`);
-  return self.createFile(uuid, superid, self.PROJ_TREE_TYPE.FILE, name, 'new');
+  return self.createFile(uuid, superid, proId, self.PROJ_TREE_TYPE.FILE, name, 'new');
 };
 
 self.delFiles = () => {
@@ -469,31 +485,31 @@ self.remoteProjs2Local = (dict) => {
     let tempPath = data;
     do {
       const isExistFile = filesDict[tempPath] !== undefined;
-      filesDict[tempPath] = Base64.btoa(tempPath); // tempPath; //
+      filesDict[tempPath] = tempPath; //Base64.btoa(tempPath); //
       const uuid = filesDict[tempPath];
       let superpath = path.dirname(tempPath);
       if (superpath === projPath || superpath === CommandsSocket.ROOT_DIR) {
         superpath = '';
       }
       const name = path.basename(tempPath);
-      const superid = Base64.btoa(superpath); // superpath; //
+      const superid = superpath; //Base64.btoa(superpath); //
       const isProFile = path.basename(tempPath).indexOf('.') > 0;
       let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
-        let file = self.createFile(uuid, superid, fileType, name, '');
-        file.proId = curProj.uuid;
+        let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
+        // file.proId = curProj.uuid;
         curProj.files.push(file);
       }
       tempPath = path.dirname(tempPath);
     } while (tempPath !== projPath/*CommandsSocket.ROOT_DIR*/);
-    // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
+    console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
   }
   self.curProjList = projs;
   if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
     self.changeProj(self.curProjList[0].uuid);
   }
-  callback(projs);
+  // callback(projs);
 };
 
 export default self;
