@@ -87,10 +87,10 @@ export default {
     // codemirror.setSize('100%', '400px');
 
     // let editor = CodeMirror.fromTextArea(document.getElementById("codemirror-id"), {
-    //   lineNumbers: true,
-    //   matchBrackets: true,
+    //   // lineNumbers: true,
+    //   // matchBrackets: true,
     // });
-    // codemirror.setSize('200px', '100px');
+    this.editor.setSize('auto', '400px');
   },
   methods: {
     onEditorCodeChange(newCode) {
