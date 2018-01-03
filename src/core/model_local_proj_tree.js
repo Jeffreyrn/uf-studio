@@ -27,7 +27,34 @@ self.curProjList = [];
 self.curProj = {};
 self.curFilePath = ''
 
-
+self.getThisFileFullPath = (uuid) => {
+  let file = self.getFileInfo(uuid);
+  if (file === null || file === undefined) {
+    // self.curFilePath = `/${self.curProj.name}`;
+    return '';
+  }
+  let proj = null;
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const pro = self.curProjList[i];
+    if (pro.uuid === file.proId) {
+      proj = pro;
+      break;
+    }
+  }
+  const projPath = path.join(CommandsSocket.ROOT_DIR, proj.name);
+  let filename = file.name;
+  while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
+    const superid = file.superid;
+    file = self.getFileInfo(superid);
+    if (file !== null && file !== undefined) {
+      filename = path.join(`${file.name}`, filename);
+    }
+    else {
+      break;
+    }
+  }
+  return path.join(projPath, filename);
+};
 
 self.getCurFilePath = () => {
   const curUUID = self.curSelectedFileUUID;
@@ -338,7 +365,7 @@ self.findFolder = (tmpArr, superid) => {
     const aChild = {};
     const file = self.curProj.files[i];
     if (superid === file.superid) {
-      aChild.label = file.name;
+      aChild.label = file.name;// self.getThisFileFullPath(file.uuid); //
       aChild.uuid = file.uuid;
       aChild.children = [];
       tmpArr.push(aChild);
@@ -448,7 +475,8 @@ self.getProjsFromArm = (callback) => {
         let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
         // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
         if (isExistFile === false) {
-          const file = self.createFile(uuid, superid, fileType, name, '');
+          let file = self.createFile(uuid, superid, fileType, name, '');
+          file.proId = curProj.uuid;
           curProj.files.push(file);
         }
         tempPath = path.dirname(tempPath);
