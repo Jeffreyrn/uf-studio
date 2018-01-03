@@ -49,6 +49,9 @@ export default {
     // totalFrame.style.height = `${screen.height - 400}px`;
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
+    // GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
+    //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
+    // });
   },
   methods: {
     onwinresize() {

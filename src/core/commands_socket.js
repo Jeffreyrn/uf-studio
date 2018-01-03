@@ -1,7 +1,7 @@
 
 const CommandsSocket = {};
 const self = CommandsSocket;
-
+window.CommandsSocket = CommandsSocket;
 // xArm cmd
 self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
 self.CMD_ID_GET_TCP_POSE = 'xarm_get_tcp_pose';
@@ -12,7 +12,7 @@ self.CMD_ID_GET_STATE = 'xarm_get_state';
 self.FILE_ID_LIST_DIR = 'list_dir';
 
 //
-self.ROOT_DIR = 'python';
+self.ROOT_DIR = '/python';
 
 self.sendCmd = (cmdId, data, callback) => {
   self.socketCom.sendCmd(cmdId, data, callback);

@@ -80,7 +80,7 @@ export default {
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
     const html = document.getElementById("codemirror-id").innerHTML;
-    console.log(`html = ${html}`);
+    // console.log(`html = ${html}`);
     // const codemirrorId = document.getElementById("codemirror-id");
     // codemirrorId.style.height = '20px';
     // console.log(`codemirrorId width = ${codemirrorId.style.width}`);

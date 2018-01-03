@@ -84,7 +84,7 @@ self.onmessage = (evt) => {
   }
   const callback = self.penddingCmds[dict.id];
   if (callback) {
-    console.log(`send response = ${JSON.stringify(dict)}`);
+    // console.log(`send response = ${JSON.stringify(dict)}`);
     const endTime2 = new Date().getTime();
     const diff = endTime2 - self.startTime;
     self.diff = `time diff = ${diff} ms`;

@@ -1,5 +1,6 @@
 
 import LocalProjTreeDatas from './model_local_proj_tree_datas';
+import Base64 from '../lib/Base64';
 const uuidv4 = require('uuid/v4');
 const path = require('path')
 
@@ -16,9 +17,17 @@ self.treeBgColor = 'white';
 self.curSelectedUUID = '';
 self.curSelectedFileUUIDs = {};
 self.curSelectedFileUUID = '';
-self.curProj = LocalProjTreeDatas.curProjList[2];
-self.curProjList = LocalProjTreeDatas.curProjList;
-self.curFilePath = `/${self.curProj.name}`;
+self.curProjList = [];
+
+// self.getProjsFromArm((dict) => {
+//   self.curProjList = dict;
+// }); //LocalProjTreeDatas.curProjList;
+// self.curProj = LocalProjTreeDatas.curProjList[2];
+// self.curFilePath = `/${self.curProj.name}`;
+self.curProj = {};
+self.curFilePath = ''
+
+
 
 self.getCurFilePath = () => {
   const curUUID = self.curSelectedFileUUID;
@@ -305,7 +314,7 @@ self.changeProj = (uuid) => {
 };
 
 self.curProjExpandedKeys = [];
-self.curProjExpandedKeys.push(self.curProj.uuid);
+// self.curProjExpandedKeys.push(self.curProj.uuid);
 self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   console.log(`curProjAddOrRemoveExpandedKeys`);
   const isFile = self.isFile(uuid);
@@ -341,6 +350,12 @@ self.findFolder = (tmpArr, superid) => {
   }
 };
 self.curPro2Tree = () => {
+  if (self.curProj === null || self.curProj === undefined) {
+    return [];
+  }
+  if (self.curProj.files === null || self.curProj.files === undefined) {
+    return [];
+  }
   const files = self.curProj.files;
   let tempDatas = [];
   const aChild = {};
@@ -378,6 +393,74 @@ self.getFileInfo = (uuid) => {
     }
   }
   return null;
+};
+
+//////////////////////////////////////////////////////////
+  // get from remote
+//////////////////////////////////////////////////////////
+
+// curProjList
+self.getProjsFromArm = (callback) => {
+  const projs = [];
+  CommandsSocket.listProjs((dict) => {
+    const datas = dict.data;
+    // console.log(`datas = ${datas}`);
+    for (let i = 0; i < datas.length; i += 1) {
+      let files = [];
+      let filesDict = {};
+      const data = datas[i];
+      if (path.basename(data).indexOf('.') === 0) {
+        continue;
+      }
+      // check which project
+      const projName = data.replace(CommandsSocket.ROOT_DIR + "/", "").split("/")[0];
+      const projPath = path.join(CommandsSocket.ROOT_DIR, projName);
+      let curProj = null;
+      for (let i = 0; i < projs.length; i += 1) {
+        const proj = projs[i];
+        if (proj.name === projName) {
+          curProj = proj;
+        }
+      }
+      if (curProj === null) {
+        curProj = {};
+        curProj.name = projName;
+        curProj.uuid = uuidv4();
+        curProj.files = [];
+        curProj.superid = '';
+        projs.push(curProj);
+      }
+      // console.log(`projName 2 = ${projName}, data = ${data}`);
+      // check and create folder
+      // const isProFile = path.basename(data).indexOf('.') > 0;
+      let tempPath = data;
+      do {
+        const isExistFile = filesDict[tempPath] !== undefined;
+        filesDict[tempPath] = Base64.btoa(tempPath); // tempPath; //
+        const uuid = filesDict[tempPath];
+        let superpath = path.dirname(tempPath);
+        if (superpath === projPath || superpath === CommandsSocket.ROOT_DIR) {
+          superpath = '';
+        }
+        const name = path.basename(tempPath);
+        const superid = Base64.btoa(superpath); // superpath; //
+        const isProFile = path.basename(tempPath).indexOf('.') > 0;
+        let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
+        // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
+        if (isExistFile === false) {
+          const file = self.createFile(uuid, superid, fileType, name, '');
+          curProj.files.push(file);
+        }
+        tempPath = path.dirname(tempPath);
+      } while (tempPath !== projPath/*CommandsSocket.ROOT_DIR*/);
+      // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
+    }
+    self.curProjList = projs;
+    if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
+      self.changeProj(self.curProjList[0].uuid);
+    }
+    callback(projs);
+  });
 };
 
 export default self;

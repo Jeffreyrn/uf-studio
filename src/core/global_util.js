@@ -71,6 +71,9 @@ self.socketCom.open = () => {
     self.model.localDeviceStatus.socket_connected = true;
     self.model.localDeviceStatus.xarm_connected = true;
     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
+    GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
+      console.log(`listProjs dict = ${JSON.stringify(dict)}`);
+    });
   });
   self.socketCom.init_onclose((evt) => {
     self.model.localDeviceStatus.socket_connected = false;

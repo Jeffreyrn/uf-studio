@@ -122,9 +122,9 @@ export default {
       link.click();
     },
     allProjs() {
-      CommandsSocket.listProjs((dict) => {
-        console.log(`listProjs dict = JSON.stringify(dict)`);
-      });
+      // CommandsSocket.listProjs((dict) => {
+      //   // console.log(`listProjs dict = ${JSON.stringify(dict)}`);
+      // });
       this.projSelectDialog = true;
     },
     getCurFile() {
