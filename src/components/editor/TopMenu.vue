@@ -177,7 +177,9 @@ export default {
         // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
       if (this.folderOrFile === 'rename') {
-        GlobalUtil.model.localProjTree.renameFile(text);
+        // GlobalUtil.model.localProjTree.renameFile(text);
+        const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
+        CommandsSocket.renameFile(curUUID, text)
       }
       if (this.folderOrFile === 'renameproj') {
         GlobalUtil.model.localProjTree.renameProj(text);

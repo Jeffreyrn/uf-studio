@@ -16,6 +16,7 @@ self.FILE_ID_CREATE_DIR = 'create_dir';
 self.FILE_ID_CREATE_FILE = 'create_file';
 self.FILE_ID_DELETE_DIR = 'delete_dir';
 self.FILE_ID_DELETE_FILE = 'delete_file';
+self.FILE_ID_CHANGE_NAME = 'change_name';
 
 //
 self.ROOT_DIR = '/python';
@@ -93,6 +94,24 @@ self.delFiles = (uuid) => {
       self.listProjs();
     });
   }
+};
+
+self.renameFile = (uuid, name) => {
+  const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  const fatherDir = path.dirname(filePath);
+  const basename = path.basename(filePath);
+  const newname = name;
+  let params = {
+    "data": {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": fatherDir, // 文件的父目录，必须
+      "old_name": basename, // 原文件（夹）名称
+      "new_name": name, // 新文件（夹）名称
+    }
+  };
+  self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
+    self.listProjs();
+  });
 };
 
 // (uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
