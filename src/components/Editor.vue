@@ -16,6 +16,13 @@
         <div class="float-left" style="width:100%">
           <CodeEditor></CodeEditor>
           <div class="" style="background-color:#e9e6d3;height:20px"></div>
+          <div class="" style="background-color:gray;height:100px;overflow:scroll;">
+            <el-input
+              type="textarea"
+              :rows="4"
+              v-model="model.localProjTree.runningCmdResult">
+            </el-input>
+          </div>
           <div class="float-clear"></div>
           <ResultRun class="result-frame position-absolute" style="width:100%"></ResultRun>
         </div>
@@ -50,7 +57,7 @@ export default {
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
     CommandsSocket.listProjs((dict) => {
-      
+
     });
   },
   methods: {

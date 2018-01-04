@@ -18,11 +18,16 @@ export default {
   methods: {
     runCmd() {
       console.log(`run run`);
+      GlobalUtil.model.localProjTree.runningCmdResult = "";
       CommandsSocket.runPipCommand(this.input, [], (dict) => {
-        const stdout = dict.data.stdout;
+        let stdout = dict.data.stdout;
         const programID = dict.data.program_id;
+        if (stdout === undefined && programID === undefined) {
+          stdout = dict.data;
+        }
         if (stdout !== undefined) {
-          GlobalUtil.model.localProjTree.runningCmdResult = stdout;
+          GlobalUtil.model.localProjTree.runningCmdResult += stdout + "\n";
+          // GlobalUtil.model.localProjTree.runningCmdResult = stdout;
         }
         if (programID !== undefined) {
           GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
