@@ -38,6 +38,9 @@ self.listProjs = (callback) => {
   self.sendCmd(self.FILE_ID_LIST_DIR, params, (dict) => {
     // console.log(`remoteProjs2Local = ${JSON.stringify(dict)}`);
     self.model.localProjTree.remoteProjs2Local(dict);
+    if (callback) {
+      callback();
+    }
   });
 };
 
@@ -51,7 +54,31 @@ self.createProj = (name) => {
     }
   };
   self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
-    self.listProjs();
+    self.listProjs(() => {
+      const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
+      self.model.localProjTree.changeProj(lastProj.uuid);
+    });
+  });
+};
+
+self.renameProj = (name) => {
+  const originName = self.model.localProjTree.curProj.name;
+  // const curProjUUID = self.model.localProjTree.curProj.uuid;
+  const newProjUUID = path.join(self.ROOT_DIR, name);
+  const newname = name;
+  let params = {
+    "data": {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": self.ROOT_DIR, // 文件的父目录，必须
+      "old_name": originName, // 原文件（夹）名称
+      "new_name": name, // 新文件（夹）名称
+    }
+  };
+  self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
+    self.listProjs(() => {
+      self.model.localProjTree.changeProj(newProjUUID);
+      console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
+    });
   });
 };
 

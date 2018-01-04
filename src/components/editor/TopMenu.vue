@@ -177,7 +177,8 @@ export default {
         CommandsSocket.renameFile(curUUID, text)
       }
       if (this.folderOrFile === 'renameproj') {
-        GlobalUtil.model.localProjTree.renameProj(text);
+        // GlobalUtil.model.localProjTree.renameProj(text);
+        CommandsSocket.renameProj(text);
       }
       this.dialogVisible = false;
     },
