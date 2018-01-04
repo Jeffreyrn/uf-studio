@@ -512,8 +512,8 @@ self.remoteProjs2Local = (dict) => {
     // check and create folder
     // const isProFile = path.basename(data).indexOf('.') > 0;
     let tempPath = data;
-    do {
-      // console.log(`filename = ${tempPath}`);
+    while (tempPath !== projPath && tempPath !== CommandsSocket.ROOT_DIR) {
+      console.log(`filename = ${tempPath}`);
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
       filesDict[tempPath] = ''; // tempPath; //
       const uuid = tempPath; // Base64.btoa(tempPath);
@@ -532,7 +532,7 @@ self.remoteProjs2Local = (dict) => {
         curProj.files.push(file);
       }
       tempPath = path.dirname(tempPath);
-    } while (tempPath !== projPath/*CommandsSocket.ROOT_DIR*/);
+    } //;
     console.log(`filesDict = ${JSON.stringify(filesDict)}`);
     // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
   }

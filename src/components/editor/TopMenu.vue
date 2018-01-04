@@ -108,12 +108,7 @@ export default {
       document.getElementById('f_input').files = null;
     },
     exportPro() {
-      let csv;
-      // const report = {
-      //   Studio: window.Studio.AppConfig,
-      //   UArm: this.uarmInfo,
-      // };
-      csv = 'data:application/json;charset=utf-8,';
+      let csv = 'data:application/json;charset=utf-8,';
       csv += JSON.stringify('aabbcc', null, 2);
       const data = encodeURI(csv);
       const link = document.createElement('a');
@@ -159,21 +154,21 @@ export default {
     },
     add(file) {
       const text = this.inputText;
+      console.log(`text = ${text}`);
       if (this.folderOrFile === 'folder') {
-        console.log(`text = ${text}`);
         CommandsSocket.createFile(text);
         // const folder = GlobalUtil.model.localProjTree.createFolder(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        console.log(`text = ${text}`);
         CommandsSocket.createFile(text);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
       if (this.folderOrFile === 'proj') {
-        const proj = GlobalUtil.model.localProjTree.createProj(text);
+        CommandsSocket.createProj(text);
+        // const proj = GlobalUtil.model.localProjTree.createProj(text);
         // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
       if (this.folderOrFile === 'rename') {

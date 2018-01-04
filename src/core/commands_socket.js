@@ -41,6 +41,20 @@ self.listProjs = (callback) => {
   });
 };
 
+self.createProj = (name) => {
+  let filePath = path.join(self.ROOT_DIR, name);
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": filePath, // 文件夹的父目录，必须
+      "name": '', // 文件夹名称, 可省略
+    }
+  };
+  self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
+    self.listProjs();
+  });
+};
+
 // self.delFiles = ()
 self.createFile = (name) => {
   let filePath = self.model.localProjTree.getSelectedFileFolder();
@@ -57,17 +71,11 @@ self.createFile = (name) => {
   const proId = self.model.localProjTree.curProj.uuid;
   if (isProjFile === true) {
     self.sendCmd(self.FILE_ID_CREATE_FILE, params, (dict) => {
-      // if (self.isFileSuc(dict) === true) {
-      // self.model.localProjTree.createSimpleFile(proId, name);
       self.listProjs();
-      // }
     });
   }
   else {
     self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
-      // if (self.isFileSuc(dict) === true) {
-      // self.model.localProjTree.createFolder(proId, name);
-      // }
       self.listProjs();
     });
   }
