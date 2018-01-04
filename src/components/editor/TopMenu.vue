@@ -31,6 +31,9 @@
       <el-button class="top-btn" @click="delFile()">
         Delete
       </el-button>
+      <el-button class="top-btn" @click="run()">
+        Run
+      </el-button>
       <!-- width: {{ clientWidth }} : {{ clientHeight }} -->
       <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
 
@@ -92,6 +95,9 @@ export default {
   mounted() {
   },
   methods: {
+    run() {
+      
+    },
     handleClose(done) {
       // this.$confirm('确认关闭？')
       //   .then(_ => {

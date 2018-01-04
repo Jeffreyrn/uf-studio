@@ -7,6 +7,10 @@ const path = require('path')
 const LocalProjTree = {};
 const self = LocalProjTree;
 
+//
+self.runningCmdProgramID = '';
+self.runningCmdResult = '';
+//
 self.PROJ_TREE_TYPE = {
   FOLDER: 'folder',
   FILE: 'file',

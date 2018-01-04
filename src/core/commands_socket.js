@@ -17,7 +17,9 @@ self.FILE_ID_CREATE_FILE = 'create_file';
 self.FILE_ID_DELETE_DIR = 'delete_dir';
 self.FILE_ID_DELETE_FILE = 'delete_file';
 self.FILE_ID_CHANGE_NAME = 'change_name';
+
 self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
+self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
 
 //
 self.ROOT_DIR = '/python';
@@ -27,6 +29,20 @@ self.sendCmd = (cmdId, data, callback) => {
 };
 
 self.userId = "test";
+
+self.runPipCommand = (command, options, callback) => {
+  let params = {
+    data: {
+      "command": command,
+      "options": options,
+    }
+  };
+  self.sendCmd(self.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
 
 self.autocompletePython = (source, line, column, callback) => {
   let params = {
