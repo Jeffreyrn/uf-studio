@@ -74,6 +74,8 @@ self.createFile = (name) => {
 };
 
 self.delFiles = (uuid) => {
+  self.model.localProjTree.deleteOpenSonTabs(uuid);
+  // return;
   const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`filePath = ${filePath}`);
   let params = {

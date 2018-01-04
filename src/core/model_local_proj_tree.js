@@ -132,6 +132,28 @@ self.addOpenTab = (fileId) => {
   self.getCurSelectedFileUUIDs();
   self.curOpenedFilesList = proTabsList;
 };
+
+// 关闭当前文件或者文件夹及以下子目录的所以文件的打开的tab
+self.deleteOpenSonTabs = (fileId) => {
+  let allFileIDs = [fileId];
+  allFileIDs = allFileIDs.concat(self.findSonFileIDs(fileId));
+  console.log(`deleteOpenSonTabs allFileIDs = ${JSON.stringify(allFileIDs)}`);
+  for (let i = 0; i < allFileIDs.length; i++) {
+    let fileID = allFileIDs[i];
+    self.removeOpenTab(fileID);
+  }
+};
+self.findSonFileIDs = (fileId) => {
+  let sonIDs = [];
+  for (var i = 0; i < self.curProj.files.length; i++) {
+    const sonFile = self.curProj.files[i];
+    if (fileId === sonFile.superid) {
+      sonIDs.push(sonFile.uuid);
+      sonIDs = sonIDs.concat(self.findSonFileIDs(sonFile.uuid));
+    }
+  }
+  return sonIDs;
+};
 self.removeOpenTab = (fileId) => {
   const file = self.getFile(fileId);
   if (file === null) {
