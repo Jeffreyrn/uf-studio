@@ -121,16 +121,16 @@ self.addOpenTab = (fileId) => {
     self.curOpenedTabs[proId] = [];
   }
   // console.log(`proId = ${proId}, self.curOpenedTabs = ${JSON.stringify(self.curOpenedTabs[proId])}`);
-  const proList = self.curOpenedTabs[proId];
-  for (let i = 0; i < proList.length; i += 1) {
-    const file = proList[i];
+  const proTabsList = self.curOpenedTabs[proId];
+  for (let i = 0; i < proTabsList.length; i += 1) {
+    const file = proTabsList[i];
     if (file.uuid === fileId) {
       return;
     }
   }
-  proList.push(file);
-  self.getCurSelectedFileUUIDs()
-  self.curOpenedFilesList = proList;
+  proTabsList.push(file);
+  self.getCurSelectedFileUUIDs();
+  self.curOpenedFilesList = proTabsList;
 };
 self.removeOpenTab = (fileId) => {
   const file = self.getFile(fileId);
@@ -138,31 +138,31 @@ self.removeOpenTab = (fileId) => {
     return;
   }
   const proId = self.curProj.uuid;
-  let proList = self.curOpenedTabs[proId];
-  if (proList === null || proList === '' || proList === undefined) {
-    proList = [];
+  let proTabsList = self.curOpenedTabs[proId];
+  if (proTabsList === null || proTabsList === '' || proTabsList === undefined) {
+    proTabsList = [];
     return;
   }
   let spliceIndex = 0;
-  for (let i = 0; i < proList.length; i += 1) {
-    const file = proList[i];
+  for (let i = 0; i < proTabsList.length; i += 1) {
+    const file = proTabsList[i];
     if (file.uuid === fileId) {
-      proList.splice(i,1);
+      proTabsList.splice(i,1);
       spliceIndex = i;
       break;
     }
   }
   // 选中前一个
   if (fileId === self.getCurSelectedFileUUIDs()) {
-    if (proList.length > 0) {
+    if (proTabsList.length > 0) {
       const index = spliceIndex - 1 >= 0 ? spliceIndex - 1 : 0;
-      self.setSelectedUUID(proList[index].uuid);
+      self.setSelectedUUID(proTabsList[index].uuid);
     }
     else {
       self.setCurSelectedFileUUIDs(null);
     }
   }
-  self.curOpenedFilesList = proList;
+  self.curOpenedFilesList = proTabsList;
 };
 // self.addOpenFile = (uuid) => {
 //   const file = self.getFile(uuid);
