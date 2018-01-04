@@ -77,7 +77,7 @@ export default {
                 prefix.push(self.complete_prefix);
               }
               let allDatas = PythonHint.concat(completeDatas).concat(prefix);
-              // allDatas = GlobalUtil.uniqueArr(allDatas);
+              allDatas = GlobalUtil.uniqueArr(allDatas);
               CodeMirror.registerHelper('hintWords', 'python', allDatas);
               cm.showHint({hint: CodeMirror.hint.anyword})
             });
