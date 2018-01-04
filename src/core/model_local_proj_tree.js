@@ -494,13 +494,13 @@ self.remoteProjs2Local = (dict) => {
       // console.log(`filename = ${tempPath}`);
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
       filesDict[tempPath] = ''; // tempPath; //
-      const uuid = Base64.btoa(tempPath);;
+      const uuid = tempPath; // Base64.btoa(tempPath);
       let superpath = path.dirname(tempPath);
       if (superpath === projPath || superpath === CommandsSocket.ROOT_DIR) {
         superpath = '';
       }
       const name = path.basename(tempPath);
-      const superid = Base64.btoa(superpath); //superpath; //
+      const superid = superpath; //Base64.btoa(superpath); //
       const isProFile = path.basename(tempPath).indexOf('.') > 0;
       let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);

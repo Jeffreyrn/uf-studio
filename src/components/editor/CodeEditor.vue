@@ -76,20 +76,9 @@ export default {
   },
   mounted() {
     CodeMirror.registerHelper('hintWords', 'python', PythonHint);
-    // this.editor.focus();
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
     const html = document.getElementById("codemirror-id").innerHTML;
-    // console.log(`html = ${html}`);
-    // const codemirrorId = document.getElementById("codemirror-id");
-    // codemirrorId.style.height = '20px';
-    // console.log(`codemirrorId width = ${codemirrorId.style.width}`);
-    // codemirror.setSize('100%', '400px');
-
-    // let editor = CodeMirror.fromTextArea(document.getElementById("codemirror-id"), {
-    //   // lineNumbers: true,
-    //   // matchBrackets: true,
-    // });
     this.editor.setSize('auto', '400px');
   },
   methods: {
