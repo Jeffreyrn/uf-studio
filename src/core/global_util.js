@@ -31,6 +31,17 @@ self.getMinWidth = () => {
   self.min_width = Math.min(min_width, 480);
   return self.min_width;
 };
+self.uniqueArr = (arr) => {
+  let result = [];
+  let hash = {};
+  for (let i = 0, elem; (elem = arr[i]) != null; i += 1) {
+    if (!hash[elem]) {
+      result.push(elem);
+      hash[elem] = true;
+    }
+  }
+  return result;
+}
 self.getMinWidth();
 
 // self.onwinresize = () => {
@@ -76,7 +87,7 @@ self.socketCom.open = () => {
     //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
     // });
     CommandsSocket.listProjs((dict) => {
-      
+
     });
   });
   self.socketCom.init_onclose((evt) => {

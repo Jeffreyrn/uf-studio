@@ -39,6 +39,7 @@ export default {
     return {
       // code: 'def as #123',
       model: GlobalUtil.model,
+      complete_prefix: '',
       uneditorOption: {
         readOnly : true,
       },
@@ -52,13 +53,45 @@ export default {
         theme: 'monokai',
         extraKeys: {
           Tab: (cm) => {
-            const cursorLine = cm.getLine(cm.getCursor().line);
-            console.log(cursorLine, CodeMirror.hint.anyword);
-            cm.showHint({ hint: CodeMirror.hint.python });
+            console.log(`Tab`);
+            // const cursorLine = cm.getLine(cm.getCursor().line);
+            // console.log(cursorLine, CodeMirror.hint.anyword);
+            // cm.showHint({ hint: CodeMirror.hint.python });
             // CodeMirror.showHint(cm, CodeMirror.hint.coffeescript);
+
+            const cur = this.editor.getCursor();
+            const curLine = this.editor.getLine(cur.line);
+            const curColumn = cur.ch;
+
+            let List = curLine.split(' ');
+            List = List[List.length-1].split('.');
+            const self = this;
+            self.complete_prefix = List[List.length-1];
+
+            CommandsSocket.autocompletePython(self.editor.getValue(), cur.line, cur.ch, (dict) => {
+              // console.log(`autocompletePython dict = ${JSON.stringify(dict)}`);
+              const completeDatas = dict.data;
+              console.log(`completeDatas = ${JSON.stringify(completeDatas)}`);
+              let prefix = [];
+              if (self.complete_prefix !== '.' && self.complete_prefix !== '*' && self.complete_prefix !== '?' && self.complete_prefix !== '+') {
+                prefix.push(self.complete_prefix);
+              }
+              let allDatas = PythonHint.concat(completeDatas).concat(prefix);
+              // allDatas = GlobalUtil.uniqueArr(allDatas);
+              CodeMirror.registerHelper('hintWords', 'python', allDatas);
+              cm.showHint({hint: CodeMirror.hint.anyword})
+            });
           },
-          F10: (cm) => {
-            cm.setOption('fullScreen', !cm.getOption('fullScreen'));
+          // F11键切换全屏
+          "F11": function(cm) {
+            console.log(`F11`);
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+          },
+          // Esc键退出全屏
+          "Esc": function(cm) {
+            console.log(`Esc`);
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+            // if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
           },
         },
         styleSelectedText: true,

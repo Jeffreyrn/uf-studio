@@ -17,6 +17,7 @@ self.FILE_ID_CREATE_FILE = 'create_file';
 self.FILE_ID_DELETE_DIR = 'delete_dir';
 self.FILE_ID_DELETE_FILE = 'delete_file';
 self.FILE_ID_CHANGE_NAME = 'change_name';
+self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
 
 //
 self.ROOT_DIR = '/python';
@@ -26,6 +27,21 @@ self.sendCmd = (cmdId, data, callback) => {
 };
 
 self.userId = "test";
+
+self.autocompletePython = (source, line, column, callback) => {
+  let params = {
+    data: {
+      "source": source, // 整个文本内容
+      "line": line, // 行号
+      "clolumn": column, // 列号
+    }
+  };
+  self.sendCmd(self.FILE_ID_AUTOCOMPLETE_PYTHON, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
 
 self.listProjs = (callback) => {
   let params = {
