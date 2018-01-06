@@ -22,6 +22,7 @@ self.FILE_ID_GET_FILE = 'get_file';
 self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
 self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
 self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
+self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
 //
 self.ROOT_DIR = '/python';
@@ -42,6 +43,20 @@ self.runPythonScript = (uuid, callback) => {
     }
   };
   self.sendCmd(self.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
+self.stopPythonScript = (callback) => {
+  const pID = self.model.localProjTree.runningCmdProgramID;
+  let params = {
+    data: {
+      "program_id": pID, // 该id在上面两个接口都会有返回, null或者不传代表停止所有的
+    }
+  };
+  self.sendCmd(self.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
     if (callback) {
       callback(dict);
     }

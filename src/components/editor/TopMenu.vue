@@ -112,7 +112,9 @@ export default {
       });
     },
     stop() {
-
+      CommandsSocket.stopPythonScript((dict) => {
+        
+      });
     },
     saveFile() {
       const curFile = this.getCurFile();
