@@ -18,10 +18,18 @@ export default {
   methods: {
     runCmd() {
       console.log(`run run`);
-      GlobalUtil.model.localProjTree.runningCmdResult = "";
-      CommandsSocket.runPipCommand(this.input, [], (dict) => {
-        GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+      if (this.input === null || this.input === undefined || this.input === '') {
+        return;
+      }
+      CommandsSocket.stopPythonScript((dict) => {
+        console.log(`has stopPythonScript = ${JSON.stringify(dict)}`);
+        // GlobalUtil.model.localProjTree.runningCmdResult = "";
+        CommandsSocket.runPipCommand(this.input, [], (dict) => {
+          // GlobalUtil.model.localProjTree.runningCmdResult = "";
+          GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+        });
       });
+
     },
   },
   beforeDestroy() {

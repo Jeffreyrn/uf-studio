@@ -14,6 +14,7 @@
 
 import swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
+import ELTreeNode from './ELTreeNode';
 
 export default {
   data() {
@@ -31,8 +32,8 @@ export default {
   methods: {
     handleNodeClick(data) {
       console.log(data.__ob__);
-      const treeRoot = document.getElementById('tree-root');
-      // console.log(`treeRoot = ${treeRoot.innerHTML}`);
+      const treeRoot = document.getElementById('left-frame');
+      console.log(`treeRoot = ${treeRoot.innerHTML}`);
       const uuid = data.uuid;
       console.log(`data uuid = ${uuid}`);
 
@@ -46,9 +47,20 @@ export default {
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
     },
     renderContent(h, { node, data, store }) {
-      return("<span>aabb</span>");
+      return ( '<div>1234567<div/>' );
     },
-
+    // renderContent(h, { node, data, store }) {
+    //   return (
+    //     <span style="flex: 1; display: flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+    //       <span>
+    //         <span>{node.label}</span>
+    //       </span>
+    //       <span>
+    //         <el-button style="font-size: 12px;" type="text" on-click={ () => this.append(data) }>Append</el-button>
+    //         <el-button style="font-size: 12px;" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
+    //       </span>
+    //     </span>);
+    // }
     // renderContent(h, { node, data, store }) {
     //   return (
     //       <span style="flex:1;display:flex;align-items:center;justify-content:space-between;font-size:14px;padding-right:8px;">
@@ -73,6 +85,7 @@ export default {
     // },
   },
   components: {
+    ELTreeNode,
   },
 };
 </script>

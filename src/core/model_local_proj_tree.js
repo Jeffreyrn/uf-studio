@@ -436,7 +436,7 @@ self.findFolder = (tmpArr, superid) => {
     const aChild = {};
     const file = self.curProj.files[i];
     if (superid === file.superid) {
-      aChild.label = file.name;// self.getThisFileFullPath(file.uuid); //
+      aChild.label = file.name; //`<div>${file.name}</div>`;// self.getThisFileFullPath(file.uuid); //
       aChild.uuid = file.uuid;
       aChild.children = [];
       tmpArr.push(aChild);
