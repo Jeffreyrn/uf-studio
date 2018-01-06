@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="position:absolute;top:200px;">这家伙很懒,什么文件也没有打开</div>
+    <div style="position:absolute;top:100px;">这家伙很懒,什么文件也没有打开</div>
     <div class="top-path" style="">{{ model.localProjTree.curFilePath }}</div>
     <codemirror
       v-bind:class="classObject"
@@ -112,7 +112,8 @@ export default {
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
     const html = document.getElementById("codemirror-id").innerHTML;
-    this.editor.setSize('auto', '400px');
+    GlobalUtil.model.localProjTree.editor = this.editor;
+    // GlobalUtil.model.localProjTree.editor.setSize('auto', '100px');
   },
   methods: {
     onEditorCodeChange(newCode) {

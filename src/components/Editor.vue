@@ -1,7 +1,8 @@
 <template>
   <div class="main-wrapper" id="editor-wrapper">
     <TopMenu></TopMenu>
-    <div id="total-frame" class="float-left total-frame position-absolute">
+    <div class="float-clear"></div>
+    <div id="total-frame" class="total-frame position-absolute">
       <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
       <ElTree id="left-frame" class="float-left left-frame position-absolute"></ElTree>
       <!-- <FilesOpenTab></FilesOpenTab> -->
@@ -15,14 +16,17 @@
         <div class="float-clear"></div>
         <div class="float-left" style="width:100%">
           <CodeEditor></CodeEditor>
-          <div class="" style="background-color:#e9e6d3;height:20px"></div>
-          <div class="" style="background-color:gray;height:100px;overflow:scroll;">
-            <el-input
-              type="textarea"
-              :rows="4"
-              v-model="model.localProjTree.runningCmdResult">
-            </el-input>
-          </div>
+          <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
+          <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
+
+          </div> -->
+          <el-input
+            class="position-absolute"
+            style="width:100%;bottom:40px;"
+            type="textarea"
+            :rows="5"
+            v-model="model.localProjTree.runningCmdResult">
+          </el-input>
           <div class="float-clear"></div>
           <ResultRun class="result-frame position-absolute" style="width:100%"></ResultRun>
         </div>
@@ -71,7 +75,13 @@ export default {
       const leftFrame = document.getElementById("left-frame");
       // leftFrame.style.width = `${leftFrameWidth}px`;
       const rightFrame = document.getElementById("right-frame");
-      rightFrame.style.width = `${this.clientWidth - this.leftFrameWidth}px`;
+      const totalFrame = document.getElementById("total-frame");
+      const totalFrameWidth = this.clientWidth - 20;
+      const totalFrameHeight = this.clientHeight - 120;
+      totalFrame.style.width = `${totalFrameWidth}px`;
+      rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      totalFrame.style.height = `${totalFrameHeight}px`;
+      GlobalUtil.model.localProjTree.editor.setSize('auto', `${totalFrameHeight - 200}px`);
     },
   },
   beforeDestroy() {
@@ -110,10 +120,15 @@ a {
   position: absolute;
 }
 .total-frame {
-
   /*background-color:gray;*/
   width:100%;
   height:600px;
+  left: 0px;
+  top: 90px;
+  left: 10px;
+  border:1px solid #96c2f1;background:#eff7ff;
+  /*top: 200px;
+  left: 100px;*/
 }
 .left-frame {
   width:200px;
