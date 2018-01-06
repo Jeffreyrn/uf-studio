@@ -102,7 +102,14 @@ export default {
   },
   methods: {
     run() {
-
+      const curFile = this.getCurFile();
+      if (curFile === null) {
+        return;
+      }
+      GlobalUtil.model.localProjTree.runningCmdResult = '';
+      CommandsSocket.runPythonScript(curFile.uuid, (dict) => {
+        GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+      });
     },
     stop() {
 

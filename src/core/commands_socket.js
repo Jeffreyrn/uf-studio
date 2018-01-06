@@ -21,6 +21,7 @@ self.FILE_ID_GET_FILE = 'get_file';
 
 self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
 self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
+self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 
 //
 self.ROOT_DIR = '/python';
@@ -30,6 +31,22 @@ self.sendCmd = (cmdId, data, callback) => {
 };
 
 self.userId = "test";
+
+self.runPythonScript = (uuid, callback) => {
+  let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  let params = {
+    data: {
+      "path": filePath, // 要执行的python文件路径, /python/prj1/test.py
+      "userId": self.userId, // 和path共同存在，用来区分不同用户
+      // "script": "", // 要执行的python代码
+    }
+  };
+  self.sendCmd(self.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
 
 self.runPipCommand = (command, options, callback) => {
   let params = {

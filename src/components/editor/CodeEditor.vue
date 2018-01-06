@@ -121,9 +121,7 @@ export default {
       // GlobalUtil.model.localProjTree.curFile.content = newCode;
       const curFile = GlobalUtil.model.localProjTree.curFile;
       GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);
-      // this.code = newCode;
-      // GlobalUtil.model.localProjTree.curSelectedContent = newCode;
-      // CodeMirror.style.height = '100px';
+      GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
     },
   },
   beforeDestroy() {

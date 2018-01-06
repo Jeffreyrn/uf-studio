@@ -508,6 +508,22 @@ self.getFileInfo = (uuid) => {
 //   });
 // };
 
+self.remoteCmdResult2Local = (dict) => {
+  let stdout = dict.data.stdout;
+  const programID = dict.data.program_id;
+  if (stdout === undefined && programID === undefined) {
+    stdout = dict.data;
+  }
+  if (stdout !== undefined) {
+    GlobalUtil.model.localProjTree.runningCmdResult += stdout + "\n";
+    // GlobalUtil.model.localProjTree.runningCmdResult = stdout;
+  }
+  if (programID !== undefined) {
+    GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
+  }
+  console.log(`runPipCommand dict = ${stdout}, programID = ${programID}`);
+};
+
 self.remoteProjs2Local = (dict) => {
   const projs = [];
   const datas = dict.data;
@@ -557,7 +573,7 @@ self.remoteProjs2Local = (dict) => {
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
         const content = self.curSelectedContent[uuid];
-        
+
         // file.proId = curProj.uuid;
 
         // getSelectedContent
