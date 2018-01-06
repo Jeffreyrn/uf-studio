@@ -151,6 +151,22 @@ self.addOpenTab = (fileId) => {
   self.getCurSelectedFileUUIDs();
   self.curOpenedFilesList = proTabsList;
 };
+// self.renamePath = (path, newPath) => {
+//   const proId = self.curProj.uuid;
+//   let proTabsList = self.curOpenedTabs[proId];
+//   if (proTabsList === null || proTabsList === '' || proTabsList === undefined) {
+//     proTabsList = [];
+//     return;
+//   }
+//   for (let i = 0; i < proTabsList.length; i += 1) {
+//     const file = proTabsList[i];
+//     if (file.uuid === path) {
+//       proTabsList.splice(i,1);
+//       spliceIndex = i;
+//       break;
+//     }
+//   }
+// };
 
 // 关闭当前文件或者文件夹及以下子目录的所以文件的打开的tab
 self.deleteOpenSonTabs = (fileId) => {

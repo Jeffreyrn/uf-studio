@@ -242,6 +242,7 @@ self.delFiles = (uuid) => {
 
 self.renameFile = (uuid, name) => {
   const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  const file = self.model.localProjTree.getFile(uuid);
   const fatherDir = path.dirname(filePath);
   const basename = path.basename(filePath);
   const newname = name;
@@ -254,7 +255,10 @@ self.renameFile = (uuid, name) => {
     }
   };
   self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
-    self.listProjs();
+    file.uuid = path.join(self.ROOT_DIR, newname);
+    file.name = newname;
+    self.model.localProjTree.curPro2Tree();
+    // const file = self.getFile(fileId);
   });
 };
 
