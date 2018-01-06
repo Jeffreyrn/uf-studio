@@ -112,7 +112,22 @@ self.setCurSelectedFileUUIDs = (uuid) => {
   self.getCurSelectedFileUUIDs();
 };
 self.curSelectedFolderUUID = '';
+self.curSelectedContents = {};
 self.curSelectedContent = '';
+// self.getSelectedContent = (uuid) => {
+//   if (curSelectedContents[uuid] === null || curSelectedContents[uuid] === undefined) {
+//     curSelectedContents[uuid] = '';
+//   }
+//   self.curSelectedContent = curSelectedContents[uuid];
+//   return curSelectedContents[uuid];
+// };
+self.setSelectedContent = (uuid, content) => {
+
+  self.curSelectedContent = content;
+  self.curSelectedContents[uuid] = content;
+  const curFile = self.getFile(uuid);
+  curFile.localContent = content;
+};
 self.curOpenedFilesList = [];
 self.curOpenedTabs = {};
 self.addOpenTab = (fileId) => {
@@ -221,20 +236,28 @@ self.setSelectedUUID = (uuid) => {
     // self.curSelectedFileUUID = '';
     self.setCurSelectedFileUUIDs(uuid);
     self.curSelectedFolderUUID = '';
-    // self.curSelectedContent = '';
-    // self.curFile = null
     return;
   }
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
     if (file.uuid === uuid) {
       if (file.type === self.PROJ_TREE_TYPE.FILE) {
-        self.curSelectedContent = file.content;
-        // self.curSelectedFile = file;
-        // self.curSelectedFileUUID = uuid;
+        self.setSelectedContent(file.uuid, file.localContent);
         self.setCurSelectedFileUUIDs(uuid);
         self.curSelectedFolderUUID = '';
         self.curFile = file;
+        console.log(`selected = ${file.name}`);
+        CommandsSocket.getFile(file.uuid, (dict) => {
+          let content = dict.data;
+          if (content === null || content === undefined) {
+            content = '';
+          }
+          self.curFile.remoteContent = content;
+          if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
+            // self.curFile.localContent === content;
+            self.setSelectedContent(file.uuid, content);
+          }
+        });
       }
       if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
         self.curSelectedFolderUUID = uuid;
@@ -252,7 +275,8 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
     superid: superid,
     type: type,
     name: name,
-    content: content,
+    localContent: content,
+    remoteContent: content,
     proId: proId,
   };
   // if (self.curProj.files !== undefined) {
@@ -532,7 +556,12 @@ self.remoteProjs2Local = (dict) => {
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
+        const content = self.curSelectedContent[uuid];
+        
         // file.proId = curProj.uuid;
+
+        // getSelectedContent
+
         curProj.files.push(file);
       }
       tempPath = path.dirname(tempPath);

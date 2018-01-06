@@ -118,9 +118,11 @@ export default {
   methods: {
     onEditorCodeChange(newCode) {
       console.log('this is new code', newCode);
-      GlobalUtil.model.localProjTree.curFile.content = newCode;
+      // GlobalUtil.model.localProjTree.curFile.content = newCode;
+      const curFile = GlobalUtil.model.localProjTree.curFile;
+      GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);
       // this.code = newCode;
-      GlobalUtil.model.localProjTree.curSelectedContent = newCode;
+      // GlobalUtil.model.localProjTree.curSelectedContent = newCode;
       // CodeMirror.style.height = '100px';
     },
   },

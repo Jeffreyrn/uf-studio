@@ -31,8 +31,14 @@
       <el-button class="top-btn" @click="delFile()">
         Delete
       </el-button>
+      <el-button class="top-btn" @click="saveFile()">
+        Save
+      </el-button>
       <el-button class="top-btn" @click="run()">
         Run
+      </el-button>
+      <el-button class="top-btn" @click="stop()">
+        Stop
       </el-button>
       <!-- width: {{ clientWidth }} : {{ clientHeight }} -->
       <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
@@ -96,7 +102,25 @@ export default {
   },
   methods: {
     run() {
-      
+
+    },
+    stop() {
+
+    },
+    saveFile() {
+      const curFile = this.getCurFile();
+      if (curFile === null) {
+        return;
+      }
+      const uuid = curFile.uuid;
+      const text = curFile.localContent;
+      CommandsSocket.saveOrUpdateFile(uuid, text, (dict) => {
+        if (dict.data === 'success') {
+          curFile.remoteContent = text;
+          GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
+        }
+        console.log(`update content success`);
+      });
     },
     handleClose(done) {
       // this.$confirm('确认关闭？')

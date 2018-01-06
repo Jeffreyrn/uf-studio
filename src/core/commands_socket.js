@@ -17,6 +17,7 @@ self.FILE_ID_CREATE_FILE = 'create_file';
 self.FILE_ID_DELETE_DIR = 'delete_dir';
 self.FILE_ID_DELETE_FILE = 'delete_file';
 self.FILE_ID_CHANGE_NAME = 'change_name';
+self.FILE_ID_GET_FILE = 'get_file';
 
 self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
 self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
@@ -124,7 +125,8 @@ self.createFile = (name) => {
     data: {
       "userId": self.userId, // 默认是test，用来区分不同用户
       "root": filePath, // 文件夹的父目录，必须
-      "name": '', // 文件夹名称, 可省略
+      "file": '', // 文件夹名称, 可省略
+      "data": '', // 文件内容
     }
   };
   const proId = self.model.localProjTree.curProj.uuid;
@@ -138,6 +140,47 @@ self.createFile = (name) => {
       self.listProjs();
     });
   }
+};
+
+self.saveOrUpdateFile = (uuid, text, callback) => {
+  // text = 'test test';
+  let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
+  // return;
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": filePath, // 文件夹的父目录，必须
+      "file": '', // 文件夹名称, 可省略
+      "data": text, // 文件内容
+    }
+  };
+  self.sendCmd(self.FILE_ID_CREATE_FILE, params, (dict) => {
+    // self.listProjs(callback);
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
+self.getFile = (uuid, callback) => {
+  let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  console.log(`getFile filePath = ${filePath}`);
+  // return;
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": filePath, // 文件夹的父目录，必须
+      "file": '', // 文件夹名称, 可省略
+    }
+  };
+  self.sendCmd(self.FILE_ID_GET_FILE, params, (dict) => {
+    console.log(`get file = ${JSON.stringify(dict)}`);
+    if (callback) {
+      callback(dict);
+    }
+    // self.listProjs(callback);
+  });
 };
 
 self.delFiles = (uuid) => {

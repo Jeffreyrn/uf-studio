@@ -70,7 +70,7 @@ export default {
       // let store = self.store;
       this.clientWidth = document.body.clientWidth;
       this.clientHeight = document.body.clientHeight;
-      console.log(`2 global window width: ${this.clientWidth}, height: ${this.clientHeight}`);
+      // console.log(`2 global window width: ${this.clientWidth}, height: ${this.clientHeight}`);
       // self.store = store;
       const leftFrame = document.getElementById("left-frame");
       // leftFrame.style.width = `${leftFrameWidth}px`;

@@ -2,6 +2,7 @@
   <div class="float-left top-tab" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
       <div class="float-left top-tab-item" @click="onselect()">
+        <div v-if="data.localContent !== data.remoteContent" class="float-left">*</div>
         <div v-if="data.uuid !== model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
         <div v-if="data.uuid === model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color">{{ data.name }}</div>
       </div>
