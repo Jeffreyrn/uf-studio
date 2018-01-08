@@ -215,7 +215,6 @@ self.getFile = (uuid, callback) => {
 };
 
 self.delFiles = (uuid) => {
-  self.model.localProjTree.deleteOpenSonTabs(uuid);
   // return;
   const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`filePath = ${filePath}`);
@@ -229,11 +228,13 @@ self.delFiles = (uuid) => {
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
     self.sendCmd(self.FILE_ID_DELETE_FILE, params, (dict) => {
+      self.model.localProjTree.deleteOpenSonTabs(uuid);
       self.listProjs();
     });
   }
   else {
     self.sendCmd(self.FILE_ID_DELETE_DIR, params, (dict) => {
+      self.model.localProjTree.deleteOpenSonTabs(uuid);
       self.listProjs();
     });
   }
@@ -255,10 +256,12 @@ self.renameFile = (uuid, name) => {
     }
   };
   self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
+    self.model.localProjTree.deleteOpenSonTabs(uuid);
     self.listProjs((dict) => {
-      file.uuid = path.join(newFilePath);
-      file.name = newname;
-      self.model.localProjTree.curPro2Tree();
+      // file.uuid = path.join(newFilePath);
+      // file.name = newname;
+      // self.model.localProjTree.curPro2Tree();
+
     });
 
     // const file = self.getFile(fileId);
