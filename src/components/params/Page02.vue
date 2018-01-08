@@ -387,12 +387,6 @@ export default {
   height: 110px;
   border:1px solid gray;
 }
-.float-left {
-  float: left;
-}
-.float-clear {
-  clear:both;
-}
 .add-btn {
   width: 30px;
   height:20px;

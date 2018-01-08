@@ -58,12 +58,6 @@ export default {
 </script>
 
 <style scoped>
-.float-left {
-  float: left;
-}
-.float-right {
-  float: right;
-}
 .top-tab {
   height: 20px;
   font-size: 10px;
