@@ -9,8 +9,13 @@
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
       <el-button value='stop' @click='onClick($event)'>Stop</el-button>
 
-      <div id="scroll-timer" style="margin-left:50px;width:1000px;height:150px;background-color:lightgray;overflow-x:scroll;">
-        <div style="width:100000px;margin-top:100px;">
+      <!-- chart begin -->
+      <div class="chart" id="echart-main-2">
+      </div>
+      <!-- chart end -->
+
+      <div id="scroll-timer" style="margin-left:50px;width:1000px;height:100px;background-color:lightgray;overflow-x:scroll;">
+        <div style="width:81100px;margin-top:20px;">
           <template v-for='index in showArr'>
             <div class="float-left" style="margin-left:5px;font-size:3px;width:40px;height:20px;background-color:yellow;">
               <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
@@ -121,7 +126,9 @@
 </template>
 <script>
 
+const echarts = require('echarts');
 let t;
+
 
 export default {
   data() {
@@ -139,26 +146,57 @@ export default {
   },
   mounted() {
     // GlobalUtil.fixSize();
+
+    //
+    const dom = document.getElementById('echart-main-2');
+    const myChart = echarts.init(dom);
+    window.myChart = myChart;
+    const option = GlobalUtil.model.localTeach.chartOption;
+    if (option && typeof option === 'object') {
+      myChart.setOption(option, true);
+    }
+
     this.showArr = [];
-    for (let i = this.minMs; i <= this.maxMs; i += 1) {
+    for (let i = GlobalUtil.model.localTeach.msMin; i <= GlobalUtil.model.localTeach.msMax; i += 1) {
       this.showArr.push(i);
     }
+    // GlobalUtil.model.localTeach.chartOption.xAxis.data = this.showArr;
   },
   methods: {
     test_get_pos() {
       const self = this;
-      self.sentCounter += 1;
+
       const startTime = new Date().getTime();
-      GlobalUtil.socketCom.send_msg({
-        cmd: 'xarm_get_tcp_pose',
-        data: '',
-      }, (dict) => {
-        console.log(`send response = ${JSON.stringify(dict)}`);
-        const endTime2 = new Date().getTime();
-        const diff = endTime2 - startTime;
-        self.diff = `time diff = ${diff} ms`;
-        self.recCounter += 1;
-      });
+
+      GlobalUtil.model.localTeach.genAndPushTestPoints();
+      const myChart = window.myChart;
+      const option = GlobalUtil.model.localTeach.chartOption;
+      myChart.setOption(option, true);
+
+      // const points = CommandsSocket.getTestPost();
+      // console.log(`get points = ${JSON.stringify(points)}`);
+      //
+      // if (self.sentCounter % 100 === 0) {
+      //   GlobalUtil.model.localTeach.pushPoint(points);
+      //   const option = GlobalUtil.model.localTeach.chartOption;
+      //   GlobalUtil.model.localTeach.chartOption = option;
+      //   const myChart = window.myChart;
+      //   myChart.setOption(option, true);
+      // }
+
+      self.sentCounter += 1;
+      self.recCounter += 1;
+
+      // GlobalUtil.socketCom.send_msg({
+      //   cmd: 'xarm_get_tcp_pose',
+      //   data: '',
+      // }, (dict) => {
+      //   console.log(`send response = ${JSON.stringify(dict)}`);
+      //   const endTime2 = new Date().getTime();
+      //   const diff = endTime2 - startTime;
+      //   self.diff = `time diff = ${diff} ms`;
+      //   self.recCounter += 1;
+      // });
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -263,5 +301,10 @@ export default {
   background-color: yellow;
   overflow-x: scroll;
 }*/
-
+.chart {
+  margin-left: 50px;
+  background-color: white;
+  width: 1000px;
+  height: 300px;
+}
 </style>

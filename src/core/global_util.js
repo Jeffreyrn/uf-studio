@@ -42,6 +42,11 @@ self.uniqueArr = (arr) => {
   }
   return result;
 }
+
+self.randomNumber = (begin, end) => {
+ return Math.floor(Math.random() * (end - begin)) + begin;
+}
+
 self.getMinWidth();
 
 // self.onwinresize = () => {

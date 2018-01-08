@@ -275,4 +275,15 @@ self.isFileSuc = (dict) => {
   return (dict.code === 0) && (dict.type = "response");
 };
 
+self.getTestPost = () => {
+  const a0 = GlobalUtil.randomNumber(0, 360);
+  const a1 = GlobalUtil.randomNumber(0, 360);
+  const a2 = GlobalUtil.randomNumber(0, 360);
+  const a3 = GlobalUtil.randomNumber(0, 360);
+  const a4 = GlobalUtil.randomNumber(0, 360);
+  const a5 = GlobalUtil.randomNumber(0, 360);
+  const a6 = GlobalUtil.randomNumber(0, 360);
+  return [a0, a1, a2, a3, a4, a5, a6];
+};
+
 export default self;
