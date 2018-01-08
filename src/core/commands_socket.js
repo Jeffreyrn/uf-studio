@@ -140,6 +140,7 @@ self.renameProj = (name) => {
     }
   };
   self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
+    self.model.localProjTree.deleteOpenSonTabs('');
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
