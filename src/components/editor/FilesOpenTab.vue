@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="float-left">
     <div class="float-left" style="height:20px;width:1px;"></div>
     <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
@@ -35,4 +35,4 @@ export default {
 
 <style scoped>
 
-</style>
+</style> -->

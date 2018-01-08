@@ -182,6 +182,10 @@ self.findSonFileIDs = (fileId) => {
   let sonIDs = [];
   for (var i = 0; i < self.curProj.files.length; i++) {
     const sonFile = self.curProj.files[i];
+    if (fileId === '') {
+      sonIDs.push(sonFile.uuid);
+      continue;
+    }
     if (fileId === sonFile.superid) {
       sonIDs.push(sonFile.uuid);
       sonIDs = sonIDs.concat(self.findSonFileIDs(sonFile.uuid));

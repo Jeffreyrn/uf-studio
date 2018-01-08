@@ -147,7 +147,6 @@ self.renameProj = (name) => {
   });
 };
 
-// self.delFiles = ()
 self.createFile = (name) => {
   let filePath = self.model.localProjTree.getSelectedFileFolder();
   filePath = path.join(filePath, name);
@@ -242,10 +241,11 @@ self.delFiles = (uuid) => {
 
 self.renameFile = (uuid, name) => {
   const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
-  const file = self.model.localProjTree.getFile(uuid);
+  const file = self.model.localProjTree.getFileInfo(uuid);
   const fatherDir = path.dirname(filePath);
   const basename = path.basename(filePath);
   const newname = name;
+  const newFilePath = path.join(fatherDir, newname);
   let params = {
     "data": {
       "userId": self.userId, // 默认是test，用来区分不同用户
@@ -255,9 +255,12 @@ self.renameFile = (uuid, name) => {
     }
   };
   self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
-    file.uuid = path.join(self.ROOT_DIR, newname);
-    file.name = newname;
-    self.model.localProjTree.curPro2Tree();
+    self.listProjs((dict) => {
+      file.uuid = path.join(newFilePath);
+      file.name = newname;
+      self.model.localProjTree.curPro2Tree();
+    });
+
     // const file = self.getFile(fileId);
   });
 };
