@@ -21,13 +21,11 @@
               <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
                 {{ parseInt(index / 10) }}.0
               </div>
-              <div class="float-left" v-if="index % 10 !== 0 && index <= model.localTeach.curDuration">
-                <div style="background-color:lightgreen">
+              <div class="float-left" v-if="index % 10 !== 0">
+                <div style="background-color:lightgreen" v-if="index <= model.localTeach.curDuration">
                   .{{ index % 10 }}
                 </div>
-              </div>
-              <div class="float-left" v-if="index % 10 !== 0 && index > model.localTeach.curDuration">
-                <div style="">
+                <div style="" v-if="index > model.localTeach.curDuration">
                   .{{ index % 10 }}
                 </div>
               </div>
@@ -273,6 +271,14 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+
+.background-color-transparent {
+  background-color: transparent;
+}
+
+.background-color-green {
+  background-color: green;
+}
 
 .block {
   span{
