@@ -5,14 +5,15 @@
       </div>
       <span>send: {{ sentCounter }}</span>
       <span>rec: {{ recCounter }}</span>
-      <el-button value='start' @click='onClick($event)'>Start</el-button>
+      <el-button value='new' @click='newProj()'>New</el-button>
+      <el-button value='file' @click='addFile()'>+File</el-button>
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
       <el-button value='stop' @click='onClick($event)'>Stop</el-button>
 
       <div id="total-frame" class="total-frame position-absolute">
         <div id="left-frame" class="left-frame position-absolute">
           <el-tree
-            :data="model.localProjTree.curProTreeDatas"
+            :data="model.localTeach.curProTreeDatas"
             node-key="uuid"
             :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
             @node-click="handleNodeClick">
@@ -171,6 +172,22 @@
 
         </div>
       </div>
+
+      <!-- dialog -->
+      <el-dialog
+        :title="title"
+        :visible.sync="dialogVisible"
+        width="300px"
+        :before-close="handleClose"
+        center>
+        <el-input v-model="inputText" auto-complete="off"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible=false">取 消</el-button>
+          <el-button type="primary" @click="add()">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- dialog end -->
+
     </div>
 </template>
 <script>
@@ -187,17 +204,16 @@ export default {
       diff: 0,
       sentCounter: 0,
       recCounter: 0,
-      minMs: 0,
-      maxMs: 1800,
       aMin: 0,
       aMax: 360,
       curSelectedIndex: 0,
+      dialogVisible: false,
+      folderOrFile: '',
+      title: '',
+      inputText: '',
     };
   },
   mounted() {
-    // GlobalUtil.fixSize();
-
-    //
     const dom = document.getElementById('echart-main-2');
     const myChart = echarts.init(dom);
     window.myChart = myChart;
@@ -211,8 +227,37 @@ export default {
     // GlobalUtil.model.localTeach.chartOption.xAxis.data = this.showArr;
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
+
+    CommandsTeachSocket.listProjs((dict) => {
+
+    });
   },
   methods: {
+    add() {
+      console.log(`add add add`);
+      this.dialogVisible = false;
+      const text = this.inputText;
+      console.log(`text = ${text}`);
+      if (this.folderOrFile === 'proj') {
+        CommandsTeachSocket.createProj(text);
+      }
+      if (this.folderOrFile === 'file') {
+        CommandsTeachSocket.createFile(text);
+      }
+    },
+    newProj() {
+      this.folderOrFile = 'proj';
+      this.title = 'new project name';
+      this.inputText = '';
+      this.dialogVisible = true;
+    },
+    addFile() {
+      console.log('add file');
+      this.folderOrFile = 'file';
+      this.title = 'add file';
+      this.inputText = '';
+      this.dialogVisible = true;
+    },
     onwinresize() {
       const leftFrame = document.getElementById("left-frame");
       const rightFrame = document.getElementById("right-frame");
@@ -223,8 +268,11 @@ export default {
       rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
       totalFrame.style.height = `${totalFrameHeight}px`;
     },
-    handleNodeClick() {
-
+    handleNodeClick(data) {
+      const uuid = data.uuid;
+      const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
+      console.log(`handleNodeClick 2 uuid = ${uuid}, proj = ${JSON.stringify(proj)}`);
+      GlobalUtil.model.localTeach.curProj = proj;
     },
     checkscroll() {
       // console.log(`check scroll = ${document.getElementById("scroll-timer").scrollLeft}`);

@@ -1,6 +1,139 @@
 
+const path = require('path')
+
 const LocalTeach = {};
 const self = LocalTeach;
+
+self.curProjList = [];
+self.curProj = {};
+
+self.PROJ_TREE_TYPE = {
+  FOLDER: 'folder',
+  FILE: 'file',
+};
+
+self.createFile = (uuid, superid, proId, type, name, content) => {
+  const file = {
+    // index: indexCounter += 1,
+    uuid: uuid,
+    superid: superid,
+    type: type,
+    name: name,
+    localContent: content,
+    remoteContent: content,
+    proId: proId,
+  };
+  // if (self.curProj.files !== undefined) {
+  //   self.curProj.files.push(file);
+  // }
+  return file;
+};
+
+self.getProjInfo = (uuid) => {
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const proj = self.curProjList[i];
+    if (proj.uuid === uuid) {
+      return proj;
+    }
+  }
+  return null;
+};
+
+self.remoteProjs2Local = (dict) => {
+  const projs = [];
+  const datas = dict.data;
+  console.log(`dict.data = ${JSON.stringify(dict.data)}`);
+  let filesDict = {};
+  // console.log(`datas = ${datas}`);
+  for (let i = 0; i < datas.length; i += 1) {
+    const data = datas[i];
+    if (path.basename(data).indexOf('.') === 0) {
+      continue;
+    }
+    // check which project
+    const projName = data.replace(CommandsTeachSocket.ROOT_DIR + "/", "").split("/")[0];
+    const projPath = path.join(CommandsTeachSocket.ROOT_DIR, projName);
+    let curProj = null;
+    for (let i = 0; i < projs.length; i += 1) {
+      const proj = projs[i];
+      if (proj.name === projName) {
+        curProj = proj;
+      }
+    }
+    if (curProj === null) {
+      curProj = {};
+      curProj.name = projName;
+      curProj.uuid = projPath;
+      curProj.files = [];
+      projs.push(curProj);
+    }
+    // const filename = path.basename(data);
+    // let file = {
+    //   uuid: data,
+    //   name: filename,
+    //   localContent: '',
+    //   remoteContent: '',
+    //   proId: projPath,
+    // };
+    // if (file.uuid !==  projPath) {
+    //   curProj.files.push(file);
+    // }
+
+    let tempPath = data;
+    while (tempPath !== projPath && tempPath !== CommandsTeachSocket.ROOT_DIR) {
+      const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
+      filesDict[tempPath] = ''; // tempPath; //
+      const uuid = tempPath; // Base64.btoa(tempPath);
+      let superpath = path.dirname(tempPath);
+      if (superpath === projPath || superpath === CommandsTeachSocket.ROOT_DIR) {
+        superpath = '';
+      }
+      const name = path.basename(tempPath);
+      const superid = superpath; //Base64.btoa(superpath); //
+      const isProFile = path.basename(tempPath).indexOf('.') > 0;
+      let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
+      // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
+      if (isExistFile === false) {
+        let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
+        curProj.files.push(file);
+      }
+      tempPath = path.dirname(tempPath);
+    } //;
+
+    // console.log(`filesDict = ${JSON.stringify(filesDict)}`);
+    // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
+  }
+  self.curProjList = projs;
+  // if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
+  //   self.changeProj(self.curProjList[0].uuid);
+  // }
+  // else {
+  //   self.changeProj(self.curProj.uuid);
+  // }
+  console.log(`self.curProjList = ${JSON.stringify(self.curProjList)}`);
+  self.curPro2Tree();
+};
+
+self.curProTreeDatas = [];
+self.curPro2Tree = () => {
+  let tempDatas = [];
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const proj = self.curProjList[i]
+    const aChild = {};
+    aChild.label = proj.name;
+    aChild.uuid = proj.uuid;
+    aChild.children = [];
+    tempDatas.push(aChild);
+    for (let j = 0; j < proj.files.length; j += 1) {
+      const file = proj.files[j];
+      const bChild = {};
+      bChild.label = file.name;
+      bChild.uuid = file.uuid;
+      aChild.children.push(bChild);
+    }
+  }
+  self.curProTreeDatas = tempDatas;
+};
 
 self.curPoint = {
   a0: 50,
@@ -17,14 +150,10 @@ self.msMin = 0;
 self.msMax = 1800;
 let allX = [];
 for (let i = 0; i <= self.msMax; i += 1) {
-  // if (i % 100 === 0) {
-  //   allX.push(i);
-  // }
   allX.push(i);
 }
 
 // chart option
-
 self.ch0 = {};
 self.ch0.color = 'pink';
 

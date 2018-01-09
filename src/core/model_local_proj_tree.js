@@ -572,7 +572,7 @@ self.remoteProjs2Local = (dict) => {
     // const isProFile = path.basename(data).indexOf('.') > 0;
     let tempPath = data;
     while (tempPath !== projPath && tempPath !== CommandsSocket.ROOT_DIR) {
-      console.log(`filename = ${tempPath}`);
+      // console.log(`filename = ${tempPath}`);
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
       filesDict[tempPath] = ''; // tempPath; //
       const uuid = tempPath; // Base64.btoa(tempPath);
@@ -597,7 +597,7 @@ self.remoteProjs2Local = (dict) => {
       }
       tempPath = path.dirname(tempPath);
     } //;
-    console.log(`filesDict = ${JSON.stringify(filesDict)}`);
+    // console.log(`filesDict = ${JSON.stringify(filesDict)}`);
     // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
   }
   self.curProjList = projs;

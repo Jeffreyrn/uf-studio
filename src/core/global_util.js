@@ -3,6 +3,8 @@ import Model from './model';
 import SocketCom from './socket_com';
 import NativeCom from './native_com';
 import CommandsSocket from './commands_socket';
+import CommandsTeachSocket from './commands_teach_socket';
+
 // import CommandsHttp from './commands_http';
 
 const args = {
@@ -22,6 +24,9 @@ self.socketCom = SocketCom;
 CommandsSocket.socketCom = SocketCom;
 CommandsSocket.model = Model;
 window.CommandsSocket = CommandsSocket;
+CommandsTeachSocket.socketCom = SocketCom;
+CommandsTeachSocket.model = Model;
+window.CommandsTeachSocket = CommandsTeachSocket;
 self.nativeCom = NativeCom;
 
 self.autoSizeScale = 0;
