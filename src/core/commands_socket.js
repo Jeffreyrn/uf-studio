@@ -24,6 +24,8 @@ self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
 self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
+self.DEBUG_SET_BEART = 'debug_set_beart';
+
 //
 self.ROOT_DIR = '/python';
 
@@ -32,6 +34,20 @@ self.sendCmd = (cmdId, data, callback) => {
 };
 
 self.userId = "test";
+
+self.debugSetBeart = (isOpen, sleepTime, callback) => {
+  let params = {
+    data: {
+      "isOpen": isOpen,
+      "sleepTime": sleepTime,
+    }
+  };
+  self.sendCmd(self.DEBUG_SET_BEART, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
 
 self.runPythonScript = (uuid, callback) => {
   let filePath = self.model.localProjTree.getThisFileFullPath(uuid);

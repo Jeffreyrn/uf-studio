@@ -137,6 +137,21 @@ self.pushPoint = (points) => {
   self.chartOption.series[6].data.push(points[6]);
 }
 
+self.setPoint = (ch, index, value) => {
+  self.chartOption.series[ch].data[index] = value;
+};
+
+self.getPoint = (index) => {
+  const a0 = self.chartOption.series[0].data[index];
+  const a1 = self.chartOption.series[1].data[index];
+  const a2 = self.chartOption.series[2].data[index];
+  const a3 = self.chartOption.series[3].data[index];
+  const a4 = self.chartOption.series[4].data[index];
+  const a5 = self.chartOption.series[5].data[index];
+  const a6 = self.chartOption.series[6].data[index];
+  return [a0, a1, a2, a3, a4, a5, a6];
+};
+
 self.genAndPushTestPoints = () => {
   // const data = self.chartOption.series[0].data;
   if (1 == 2) {

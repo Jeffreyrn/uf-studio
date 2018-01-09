@@ -76,13 +76,19 @@ self.sendCmd = (cmdId, data, callback) => {
 self.onmessage = (evt) => {
   let dict = JSON.parse(evt.data);
   dict = dict || {};
+  const callback = self.penddingCmds[dict.id];
+  if (dict.type === 'beart') {
+    if (callback) {
+      callback(dict);
+    }
+    return;
+  }
   if (dict.type !== 'response') {
     return;
   }
   if (dict.id === null) {
     return;
   }
-  const callback = self.penddingCmds[dict.id];
   if (callback) {
     // console.log(`send response = ${JSON.stringify(dict)}`);
     const endTime2 = new Date().getTime();
