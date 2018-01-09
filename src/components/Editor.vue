@@ -116,17 +116,15 @@ export default {
 a {
   color: white;
 }
-.position-absolute {
-  position: absolute;
-}
+
 .total-frame {
   /*background-color:gray;*/
   width:100%;
   height:600px;
-  left: 0px;
   top: 90px;
   left: 10px;
-  border:1px solid #96c2f1;background:#eff7ff;
+  border:1px solid #96c2f1;
+  background:#eff7ff;
   /*top: 200px;
   left: 100px;*/
 }

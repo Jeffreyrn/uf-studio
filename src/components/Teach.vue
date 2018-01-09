@@ -9,155 +9,167 @@
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
       <el-button value='stop' @click='onClick($event)'>Stop</el-button>
 
-      <!-- chart begin -->
-      <div class="chart" id="echart-main-2">
-      </div>
-      <!-- chart end -->
+      <div id="total-frame" class="total-frame position-absolute">
+        <div id="left-frame" class="left-frame position-absolute">
+          <el-tree
+            :data="model.localProjTree.curProTreeDatas"
+            node-key="uuid"
+            :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
+            @node-click="handleNodeClick">
+          </el-tree>
+        </div>
+        <div id="right-frame" class="right-frame position-absolute">
+          <!-- chart begin -->
+          <div class="chart" id="echart-main-2">
+          </div>
+          <!-- chart end -->
 
-      <div id="scroll-timer" style="font-size:5px;margin-left:50px;width:1000px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
-        <div style="width:81100px;">
-          <template v-for='index in showArr'>
-            <div class="float-left" style="border:1px solid lightgray;width:40px;height:200px;background-color:#fffae2;" @click='onSelect($event, index)'>
-              <!-- button -->
-              <div style="width:40px;height:20px;background-color:yellow;">
-                <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
-                  {{ parseInt(index / 10) }}.0
-                </div>
-                <div class="float-left" v-if="index % 10 !== 0">
-                  <div style="background-color:lightgreen" v-if="index <= model.localTeach.curDuration">
-                    .{{ index % 10 }}
+          <!-- scroll -->
+          <div id="scroll-timer" style="font-size:5px;margin-left:50px;width:1000px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
+            <div style="width:81100px;">
+              <template v-for='index in showArr'>
+                <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;background-color:#fffae2;" @click='onSelect($event, index)'>
+                  <!-- button -->
+                  <div style="width:40px;height:20px;background-color:yellow;">
+                    <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
+                      {{ parseInt(index / 10) }}.0
+                    </div>
+                    <div class="float-left" v-if="index % 10 !== 0">
+                      <div style="background-color:lightgreen" v-if="index <= model.localTeach.curDuration">
+                        .{{ index % 10 }}
+                      </div>
+                      <div style="" v-if="index > model.localTeach.curDuration">
+                        .{{ index % 10 }}
+                      </div>
+                    </div>
+                    <div class="float-left" v-if="index === curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
                   </div>
-                  <div style="" v-if="index > model.localTeach.curDuration">
-                    .{{ index % 10 }}
-                  </div>
-                </div>
-                <div class="float-left" v-if="index === curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
-              </div>
-              <!-- button end -->
+                  <!-- button end -->
 
-              <!-- data -->
-              <!-- <div>
-                {{ model.localTeach.chartOption.series[0].data[index] }}
-              </div>
-              <div>
-                {{ model.localTeach.chartOption.series[1].data[index] }}
-              </div>
-              <div>
-                {{ model.localTeach.chartOption.series[2].data[index] }}
-              </div>
-              <div>
-                {{ model.localTeach.chartOption.series[3].data[index] }}
-              </div>
-              <div>
-                {{ model.localTeach.chartOption.series[4].data[index] }}
-              </div>
-              <div>
-                {{ model.localTeach.chartOption.series[5].data[index] }}
-              </div>
-              <div>
-                {{ model.localTeach.chartOption.series[6].data[index] }}
-              </div> -->
-              <!-- data end -->
+                  <!-- data -->
+                  <!-- <div>
+                    {{ model.localTeach.chartOption.series[0].data[index] }}
+                  </div>
+                  <div>
+                    {{ model.localTeach.chartOption.series[1].data[index] }}
+                  </div>
+                  <div>
+                    {{ model.localTeach.chartOption.series[2].data[index] }}
+                  </div>
+                  <div>
+                    {{ model.localTeach.chartOption.series[3].data[index] }}
+                  </div>
+                  <div>
+                    {{ model.localTeach.chartOption.series[4].data[index] }}
+                  </div>
+                  <div>
+                    {{ model.localTeach.chartOption.series[5].data[index] }}
+                  </div>
+                  <div>
+                    {{ model.localTeach.chartOption.series[6].data[index] }}
+                  </div> -->
+                  <!-- data end -->
+                </div>
+              </template>
             </div>
-          </template>
+          </div>
+          <!-- scroll end -->
+
+          <!-- One setting -->
+          <div class="float-clear"></div>
+          <div class="block">
+            <span>hand(ms):</span>
+            <el-slider
+              v-model="model.localTeach.curDuration"
+              class='teach-slider'
+              :min='minMs'
+              :max='maxMs'
+              @change="onChange('ms-time', $event)">
+            </el-slider>
+            <span>{{ model.localTeach.curDuration }}</span>
+          </div>
+
+          <el-button value='scroll' @click='onClick($event)'>Scroll to {{ model.localTeach.curDuration }}</el-button>
+
+          <div class="block">
+            <span>A0:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a0"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a0', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a0 }}</span>
+          </div>
+
+          <div class="block">
+            <span>A1:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a1"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a1', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a1 }}</span>
+          </div>
+
+          <div class="block">
+            <span>A2:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a2"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a2', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a2 }}</span>
+          </div>
+
+          <div class="block">
+            <span>A3:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a3"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a3', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a3 }}</span>
+          </div>
+
+          <div class="block">
+            <span>A4:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a4"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a4', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a4 }}</span>
+          </div>
+
+          <div class="block">
+            <span>A5:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a5"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a5', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a5 }}</span>
+          </div>
+
+          <div class="block">
+            <span>A6:</span>
+            <el-slider
+              v-model="model.localTeach.curPoint.a6"
+              class='teach-slider'
+              :min='aMin'
+              :max='aMax'
+              @change="onChange('a6', $event)"></el-slider>
+              <span>{{ model.localTeach.curPoint.a6 }}</span>
+          </div>
+          <!-- One setting end -->
+
         </div>
-      </div>
-      <!-- <div>
-        <div class="float-left" style="margin-left:20px;width:20px;height:20px;background-color:yellow">
-        </div>
-        <div class="float-left" style="margin-left:20px;width:20px;height:20px;background-color:yellow">
-        </div>
-      </div> -->
-      <div class="float-clear"></div>
-      <div class="block">
-        <!-- <span>hand(ms):</span>
-        <el-slider
-          v-model="model.localTeach.curDuration"
-          class='teach-slider'
-          :min='minMs'
-          :max='maxMs'
-          @change="onChange('ms-time', $event)">
-        </el-slider> -->
-        <span>{{ model.localTeach.curDuration }}</span>
-      </div>
-
-      <el-button value='scroll' @click='onClick($event)'>Scroll to {{ model.localTeach.curDuration }}</el-button>
-
-      <div class="block">
-        <span>A0:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a0"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a0', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a0 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A1:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a1"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a1', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a1 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A2:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a2"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a2', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a2 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A3:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a3"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a3', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a3 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A4:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a4"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a4', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a4 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A5:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a5"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a5', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a5 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A6:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a6"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a6', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a6 }}</span>
       </div>
     </div>
 </template>
@@ -197,8 +209,23 @@ export default {
       this.showArr.push(i);
     }
     // GlobalUtil.model.localTeach.chartOption.xAxis.data = this.showArr;
+    window.addEventListener('resize', this.onwinresize, false);
+    this.onwinresize();
   },
   methods: {
+    onwinresize() {
+      const leftFrame = document.getElementById("left-frame");
+      const rightFrame = document.getElementById("right-frame");
+      const totalFrame = document.getElementById("total-frame");
+      const totalFrameWidth = this.clientWidth - 20;
+      const totalFrameHeight = this.clientHeight - 120;
+      totalFrame.style.width = `${totalFrameWidth}px`;
+      rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      totalFrame.style.height = `${totalFrameHeight}px`;
+    },
+    handleNodeClick() {
+
+    },
     checkscroll() {
       // console.log(`check scroll = ${document.getElementById("scroll-timer").scrollLeft}`);
     },
@@ -426,5 +453,30 @@ export default {
   background-color: white;
   width: 1000px;
   height: 300px;
+}
+.total-frame {
+  /*background-color:gray;*/
+  width:100%;
+  height:600px;
+  top: 90px;
+  left: 10px;
+  border:1px solid #96c2f1;
+  background:#eff7ff;
+  /*top: 200px;
+  left: 100px;*/
+}
+.left-frame {
+  width:200px;
+  height: 100%;
+  overflow: scroll;
+}
+.right-frame {
+  left: 200px;
+  width:85%;
+  /*width:100%;*/
+  height: 100%;
+  /*background-color:#e9e6d3;*/
+  background-color:#f6f6f6;
+  overflow-y: scroll;
 }
 </style>
