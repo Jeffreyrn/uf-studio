@@ -152,6 +152,33 @@ self.getPoint = (index) => {
   return [a0, a1, a2, a3, a4, a5, a6];
 };
 
+let isA0Add = true;
+let isA1Add = true;
+let isA2Add = true;
+let isA3Add = true;
+let isA4Add = true;
+let isA5Add = true;
+let isA6Add = true;
+
+let isChAdd = [true, false, true, false, true, false];
+
+self.pushTestData = (ch) => {
+  // ch0
+  let data = self.chartOption.series[ch].data;
+  let diff = GlobalUtil.randomNumber(0, 10);
+  let lastData = data[data.length - 1];
+  if (lastData >= 360) {
+    isChAdd[ch] = false;
+  }
+  else if (lastData <= 0) {
+    isChAdd[ch] = true;
+  }
+  if (isChAdd[ch] === false) {
+    diff = -diff;
+  }
+  data.push(lastData + diff);
+};
+
 self.genAndPushTestPoints = () => {
   // const data = self.chartOption.series[0].data;
   if (1 == 2) {
@@ -164,26 +191,61 @@ self.genAndPushTestPoints = () => {
     self.chartOption.series[6].data.push(CommandsSocket.getTestPost());
   }
   else {
-    let data0 = self.chartOption.series[0].data;
-    data0.push(data0[data0.length - 1] + GlobalUtil.randomNumber(-5, 5));
+    self.pushTestData(0);
+    self.pushTestData(1);
+    self.pushTestData(2);
+    self.pushTestData(3);
+    self.pushTestData(4);
+    self.pushTestData(5);
+    self.pushTestData(6);
 
-    let data1 = self.chartOption.series[1].data;
-    data1.push(data1[data1.length - 1] + GlobalUtil.randomNumber(-5, 5));
+    // ch0
+    // let data0 = self.chartOption.series[0].data;
+    // let diff0 = GlobalUtil.randomNumber(0, 5);
+    // let lastData0 = data0[data0.length - 1];
+    // if (lastData0 >= 360) {
+    //   isA0Add = false;
+    // }
+    // else if (lastData0 <= 0) {
+    //   isA0Add = true;
+    // }
+    // if (isA0Add === false) {
+    //   diff0 = -diff0;
+    // }
+    // data0.push(lastData0 + diff0);
 
-    let data2 = self.chartOption.series[2].data;
-    data2.push(data2[data2.length - 1] + GlobalUtil.randomNumber(-5, 5));
+    // ch1
+    // let data1 = self.chartOption.series[1].data;
+    // let diff1 = GlobalUtil.randomNumber(0, 5);
+    // let lastData1 = data1[data1.length - 1];
+    // if (lastData1 >= 360) {
+    //   isA1Add = false;
+    // }
+    // else if (lastData1 <= 0) {
+    //   isA1Add = true;
+    // }
+    // if (isA1Add === false) {
+    //   diff1 = -diff1;
+    // }
+    // data1.push(lastData1 + diff1);
 
-    let data3 = self.chartOption.series[3].data;
-    data3.push(data3[data3.length - 1] + GlobalUtil.randomNumber(-5, 5));
+    // let data1 = self.chartOption.series[1].data;
+    // data1.push(data1[data1.length - 1] + GlobalUtil.randomNumber(-5, 5));
 
-    let data4 = self.chartOption.series[4].data;
-    data4.push(data4[data4.length - 1] + GlobalUtil.randomNumber(-5, 5));
-
-    let data5 = self.chartOption.series[5].data;
-    data5.push(data5[data5.length - 1] + GlobalUtil.randomNumber(-5, 5));
-
-    let data6 = self.chartOption.series[6].data;
-    data6.push(data6[data6.length - 1] + GlobalUtil.randomNumber(-5, 5));
+    // let data2 = self.chartOption.series[2].data;
+    // data2.push(data2[data2.length - 1] + GlobalUtil.randomNumber(0, 10));
+    //
+    // let data3 = self.chartOption.series[3].data;
+    // data3.push(data3[data3.length - 1] + GlobalUtil.randomNumber(0, 10));
+    //
+    // let data4 = self.chartOption.series[4].data;
+    // data4.push(data4[data4.length - 1] + GlobalUtil.randomNumber(0, 10));
+    //
+    // let data5 = self.chartOption.series[5].data;
+    // data5.push(data5[data5.length - 1] + GlobalUtil.randomNumber(0, 10));
+    //
+    // let data6 = self.chartOption.series[6].data;
+    // data6.push(data6[data6.length - 1] + GlobalUtil.randomNumber(0, 10));
 
     // data0[data0.length] = data0[data0.length - 1] + GlobalUtil.randomNumber(-5, 5);
     // data0[data0.length] = Math.min(360, Math.max(data0[data0.length], 0));

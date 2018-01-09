@@ -211,7 +211,7 @@ export default {
       const myChart = window.myChart;
       const option = GlobalUtil.model.localTeach.chartOption;
       if (self.sentCounter % 100 === 0) {
-        // myChart.setOption(option, true);
+        myChart.setOption(option, true);
       }
 
       // const points = CommandsSocket.getTestPost();
