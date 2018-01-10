@@ -82,6 +82,28 @@ GlobalUtil.fixSize = () => {
   div.style.height = `${GlobalUtil.min_width}px`;
 };
 
+self.getTimeString = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const hour = date.getHours();
+  const min = date.getMinutes();
+  const sec = date.getSeconds();
+  const mill = date.getMilliseconds();
+  const allStr = `${year}${self.pad(month + 1, 2)}${self.pad(day + 1, 2)}${self.pad(hour + 1, 2)}${self.pad(min + 1, 2)}${self.pad(sec + 1, 2)}${mill}`;
+  return allStr;
+};
+
+self.pad = (num, n) => {
+  let len = num.toString().length;
+   while(len < n) {
+     num = "0" + num;
+     len += 1;
+   }
+   return num;
+};
+
 self.socketCom.close = () => {
   self.socketCom.socket_info.socket.close();
 };

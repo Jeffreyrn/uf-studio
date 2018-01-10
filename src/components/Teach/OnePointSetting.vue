@@ -1,83 +1,83 @@
 <template lang="html">
-    <div>
-      <div class="block">
-        <span>A0:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a0"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a0', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a0 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A1:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a1"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a1', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a1 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A2:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a2"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a2', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a2 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A3:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a3"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a3', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a3 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A4:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a4"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a4', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a4 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A5:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a5"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a5', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a5 }}</span>
-      </div>
-
-      <div class="block">
-        <span>A6:</span>
-        <el-slider
-          v-model="model.localTeach.curPoint.a6"
-          class='teach-slider'
-          :min='aMin'
-          :max='aMax'
-          @change="onChange('a6', $event)"></el-slider>
-          <span>{{ model.localTeach.curPoint.a6 }}</span>
-      </div>
-      <!-- One setting end -->
+  <div>
+    <div class="block">
+      <span>A0:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a0"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a0', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a0 }}</span>
     </div>
+
+    <div class="block">
+      <span>A1:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a1"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a1', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a1 }}</span>
+    </div>
+
+    <div class="block">
+      <span>A2:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a2"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a2', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a2 }}</span>
+    </div>
+
+    <div class="block">
+      <span>A3:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a3"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a3', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a3 }}</span>
+    </div>
+
+    <div class="block">
+      <span>A4:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a4"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a4', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a4 }}</span>
+    </div>
+
+    <div class="block">
+      <span>A5:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a5"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a5', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a5 }}</span>
+    </div>
+
+    <div class="block">
+      <span>A6:</span>
+      <el-slider
+        v-model="model.localTeach.curPoint.a6"
+        class='teach-slider'
+        :min='aMin'
+        :max='aMax'
+        @change="onChange('a6', $event)"></el-slider>
+        <span>{{ model.localTeach.curPoint.a6 }}</span>
+    </div>
+    <!-- One setting end -->
+  </div>
 </template>
 <script>
 
@@ -134,7 +134,6 @@ export default {
           break;
       }
     },
-
   },
   beforeDestroy() {
   },

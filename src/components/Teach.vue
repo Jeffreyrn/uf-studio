@@ -9,7 +9,7 @@
       <span>rec: {{ recCounter }}</span>
 
       <el-button value='new' @click='newProj()'>New</el-button>
-      <el-button value='file' @click='addFile()'>+File</el-button>
+      <!-- <el-button value='file' @click='addFile()'>+File</el-button> -->
       <el-button value='start' @click='onClick($event)'>Start</el-button>
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
       <el-button value='stop' @click='onClick($event)'>Stop</el-button>
@@ -31,37 +31,14 @@
           <!-- chart end -->
 
           <!-- scroll -->
-          <div id="scroll-timer" style="font-size:5px;margin-left:50px;width:1000px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
-            <div style="width:81100px;">
-              <template v-for='index in showArr'>
-                <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;background-color:#fffae2;" @click='onSelect($event, index)'>
-                  <!-- button -->
-                  <div style="width:40px;height:20px;background-color:yellow;">
-                    <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
-                      {{ parseInt(index / 10) }}.0
-                    </div>
-                    <div class="float-left" v-if="index % 10 !== 0">
-                      <div style="background-color:lightgreen" v-if="index <= model.localTeach.curDuration">
-                        .{{ index % 10 }}
-                      </div>
-                      <div style="" v-if="index > model.localTeach.curDuration">
-                        .{{ index % 10 }}
-                      </div>
-                    </div>
-                    <div class="float-left" v-if="index === curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
-                  </div>
-                  <!-- button end -->
-                </div>
-              </template>
-            </div>
-          </div>
+          <ListProj></ListProj>
           <!-- scroll end -->
 
-          <!-- One setting -->
           <div class="float-clear"></div>
+
+          <!-- One setting -->
           <OnePointSetting></OnePointSetting>
           <!-- One setting end -->
-
         </div>
       </div>
 
@@ -85,15 +62,15 @@
 <script>
 
 import OnePointSetting from './Teach/OnePointSetting';
+import ListProj from './Teach/ListProj';
 
 const echarts = require('echarts');
 let t;
 
-
 export default {
   data() {
     return {
-      showArr: [],
+
       model: GlobalUtil.model,
       diff: 0,
       sentCounter: 0,
@@ -115,11 +92,6 @@ export default {
     const option = GlobalUtil.model.localTeach.chartOption;
     myChart.setOption(option, true);
 
-    this.showArr = [];
-    for (let i = GlobalUtil.model.localTeach.msMin; i <= GlobalUtil.model.localTeach.msMax; i += 1) {
-      this.showArr.push(i);
-    }
-    // GlobalUtil.model.localTeach.chartOption.xAxis.data = this.showArr;
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
 
@@ -169,11 +141,8 @@ export default {
     handleNodeClick(data) {
       const uuid = data.uuid;
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
-      console.log(`handleNodeClick 2 uuid = ${uuid}, proj = ${JSON.stringify(proj)}`);
+      // console.log(`handleNodeClick 2 uuid = ${uuid}, proj = ${JSON.stringify(proj)}`);
       GlobalUtil.model.localTeach.curProj = proj;
-    },
-    checkscroll() {
-      // console.log(`check scroll = ${document.getElementById("scroll-timer").scrollLeft}`);
     },
     test_get_pos() {
       const self = this;
@@ -211,18 +180,6 @@ export default {
       //   self.diff = `time diff = ${diff} ms`;
       //   self.recCounter += 1;
       // });
-    },
-    onSelect(e, index) {
-      console.log(`onSelect = ${index}`);
-      this.curSelectedIndex = index;
-      const point = GlobalUtil.model.localTeach.getPoint(index);
-      GlobalUtil.model.localTeach.curPoint.a0 = point[0];
-      GlobalUtil.model.localTeach.curPoint.a1 = point[1];
-      GlobalUtil.model.localTeach.curPoint.a2 = point[2];
-      GlobalUtil.model.localTeach.curPoint.a3 = point[3];
-      GlobalUtil.model.localTeach.curPoint.a4 = point[4];
-      GlobalUtil.model.localTeach.curPoint.a5 = point[5];
-      GlobalUtil.model.localTeach.curPoint.a6 = point[6];
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -286,54 +243,6 @@ export default {
     scrollTo(time) {
       document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
     },
-    onChange(uid, value) {
-      console.log(`${uid} change = ${value}, this.curSelectedIndex = ${this.curSelectedIndex}`);
-      switch (uid) {
-        case 'a0':
-        {
-          GlobalUtil.model.localTeach.setPoint(0, this.curSelectedIndex, value);
-          break;
-        }
-        case 'a1':
-        {
-          GlobalUtil.model.localTeach.setPoint(1, this.curSelectedIndex, value);
-          break;
-        }
-        case 'a2':
-        {
-          GlobalUtil.model.localTeach.setPoint(2, this.curSelectedIndex, value);
-          break;
-        }
-        case 'a3':
-        {
-          GlobalUtil.model.localTeach.setPoint(3, this.curSelectedIndex, value);
-          break;
-        }
-        case 'a4':
-        {
-          GlobalUtil.model.localTeach.setPoint(4, this.curSelectedIndex, value);
-          break;
-        }
-        case 'a5':
-        {
-          GlobalUtil.model.localTeach.setPoint(5, this.curSelectedIndex, value);
-          break;
-        }
-        case 'a6':
-        {
-          GlobalUtil.model.localTeach.setPoint(6, this.curSelectedIndex, value);
-          break;
-        }
-        case 'ms-time':
-          {
-            // console.log(`value = ${parseInt(value / 10)}`);
-            this.scrollTo(value);
-            break;
-          }
-        default:
-          break;
-      }
-    },
     timedCount() {
       GlobalUtil.model.localTeach.curDuration -= -1;
       this.scrollTo(GlobalUtil.model.localTeach.curDuration);
@@ -352,6 +261,7 @@ export default {
   },
   components: {
     OnePointSetting,
+    ListProj,
   },
   computed: {
   },

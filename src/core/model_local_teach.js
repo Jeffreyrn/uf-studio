@@ -33,17 +33,33 @@ self.getProjInfo = (uuid) => {
     if (proj.uuid === uuid) {
       return proj;
     }
+    for (let i = 0; i < proj.files.length; i += 1) {
+      const file = proj.files[i];
+      if (file.uuid === uuid) {
+        return self.getProjInfo(file.proId);
+      }
+    }
   }
-  for (let i = 0; i < self.curProj.files.length; i += 1) {
-    const file = self.curProj.files[i];
-    if (file.uuid === uuid) {
-      return self.getProjInfo(file.proId);
+  return null;
+};
+
+self.getFileInfo = (uuid) => {
+  const files = self.curProj.files;
+  for (let i = 0; i < files.length; i += 1) {
+    const file = files[i];
+    const fileId = file.uuid;
+    if (fileId === uuid) {
+      return file;
     }
   }
   return null;
 };
 
 self.remoteProjs2Local = (dict) => {
+  if (dict.code !== 0) {
+    console.log(`datas is not array`);
+    return;
+  }
   const projs = [];
   const datas = dict.data;
   console.log(`dict.data = ${JSON.stringify(dict.data)}`);
@@ -96,6 +112,9 @@ self.remoteProjs2Local = (dict) => {
   }
   self.curProjList = projs;
   console.log(`self.curProjList = ${JSON.stringify(self.curProjList)}`);
+  if (self.curProj === null || self.curProj === undefined || self.curProj === {} || self.curProj.uuid === undefined) {
+    self.curProj = self.curProjList[0];
+  }
   self.curPro2Tree();
 };
 
