@@ -111,7 +111,7 @@ self.remoteProjs2Local = (dict) => {
     } //;
   }
   self.curProjList = projs;
-  console.log(`self.curProjList = ${JSON.stringify(self.curProjList)}`);
+  // console.log(`self.curProjList = ${JSON.stringify(self.curProjList)}`);
   if (self.curProj === null || self.curProj === undefined || self.curProj === {} || self.curProj.uuid === undefined) {
     self.curProj = self.curProjList[0];
   }
