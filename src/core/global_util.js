@@ -99,6 +99,9 @@ self.socketCom.open = () => {
     CommandsSocket.listProjs((dict) => {
 
     });
+    CommandsTeachSocket.listProjs((dict) => {
+
+    });
   });
   self.socketCom.init_onclose((evt) => {
     self.model.localDeviceStatus.socket_connected = false;

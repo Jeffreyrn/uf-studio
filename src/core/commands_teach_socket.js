@@ -62,9 +62,7 @@ self.createFile = (name) => {
   if (curProj === null || curProj === undefined || curProj === {}) {
     return;
   }
-  const filePath = path.join(curProj.uuid, name);
-  // console.log(`createFile file = ${filePath}`);
-  const isProjFile = name.indexOf('.') > 0;
+  const filePath = path.join(curProj.uuid, `${name}.json`);
   let params = {
     data: {
       "userId": self.userId, // 默认是test，用来区分不同用户

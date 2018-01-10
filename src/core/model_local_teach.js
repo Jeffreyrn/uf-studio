@@ -6,6 +6,7 @@ const self = LocalTeach;
 
 self.curProjList = [];
 self.curProj = {};
+self.curProjExpandedKeys = [];
 
 self.PROJ_TREE_TYPE = {
   FOLDER: 'folder',
@@ -23,9 +24,6 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
     remoteContent: content,
     proId: proId,
   };
-  // if (self.curProj.files !== undefined) {
-  //   self.curProj.files.push(file);
-  // }
   return file;
 };
 
@@ -34,6 +32,12 @@ self.getProjInfo = (uuid) => {
     const proj = self.curProjList[i];
     if (proj.uuid === uuid) {
       return proj;
+    }
+  }
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    const file = self.curProj.files[i];
+    if (file.uuid === uuid) {
+      return self.getProjInfo(file.proId);
     }
   }
   return null;
@@ -45,6 +49,7 @@ self.remoteProjs2Local = (dict) => {
   console.log(`dict.data = ${JSON.stringify(dict.data)}`);
   let filesDict = {};
   // console.log(`datas = ${datas}`);
+  self.curProjExpandedKeys = [];
   for (let i = 0; i < datas.length; i += 1) {
     const data = datas[i];
     if (path.basename(data).indexOf('.') === 0) {
@@ -53,6 +58,7 @@ self.remoteProjs2Local = (dict) => {
     // check which project
     const projName = data.replace(CommandsTeachSocket.ROOT_DIR + "/", "").split("/")[0];
     const projPath = path.join(CommandsTeachSocket.ROOT_DIR, projName);
+    self.curProjExpandedKeys.push(projPath);
     let curProj = null;
     for (let i = 0; i < projs.length; i += 1) {
       const proj = projs[i];
@@ -67,18 +73,6 @@ self.remoteProjs2Local = (dict) => {
       curProj.files = [];
       projs.push(curProj);
     }
-    // const filename = path.basename(data);
-    // let file = {
-    //   uuid: data,
-    //   name: filename,
-    //   localContent: '',
-    //   remoteContent: '',
-    //   proId: projPath,
-    // };
-    // if (file.uuid !==  projPath) {
-    //   curProj.files.push(file);
-    // }
-
     let tempPath = data;
     while (tempPath !== projPath && tempPath !== CommandsTeachSocket.ROOT_DIR) {
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
@@ -99,17 +93,8 @@ self.remoteProjs2Local = (dict) => {
       }
       tempPath = path.dirname(tempPath);
     } //;
-
-    // console.log(`filesDict = ${JSON.stringify(filesDict)}`);
-    // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
   }
   self.curProjList = projs;
-  // if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
-  //   self.changeProj(self.curProjList[0].uuid);
-  // }
-  // else {
-  //   self.changeProj(self.curProj.uuid);
-  // }
   console.log(`self.curProjList = ${JSON.stringify(self.curProjList)}`);
   self.curPro2Tree();
 };
@@ -136,13 +121,13 @@ self.curPro2Tree = () => {
 };
 
 self.curPoint = {
-  a0: 50,
-  a1: 50,
-  a2: 50,
-  a3: 50,
-  a4: 50,
-  a5: 50,
-  a6: 50,
+  a0: 360,
+  a1: 360,
+  a2: 360,
+  a3: 360,
+  a4: 360,
+  a5: 360,
+  a6: 360,
 };
 
 self.curDuration = 0;
@@ -309,7 +294,6 @@ self.pushTestData = (ch) => {
 };
 
 self.genAndPushTestPoints = () => {
-  // const data = self.chartOption.series[0].data;
   if (1 == 2) {
     self.chartOption.series[0].data.push(CommandsSocket.getTestPost());
     self.chartOption.series[1].data.push(CommandsSocket.getTestPost());
@@ -327,83 +311,6 @@ self.genAndPushTestPoints = () => {
     self.pushTestData(4);
     self.pushTestData(5);
     self.pushTestData(6);
-
-    // ch0
-    // let data0 = self.chartOption.series[0].data;
-    // let diff0 = GlobalUtil.randomNumber(0, 5);
-    // let lastData0 = data0[data0.length - 1];
-    // if (lastData0 >= 360) {
-    //   isA0Add = false;
-    // }
-    // else if (lastData0 <= 0) {
-    //   isA0Add = true;
-    // }
-    // if (isA0Add === false) {
-    //   diff0 = -diff0;
-    // }
-    // data0.push(lastData0 + diff0);
-
-    // ch1
-    // let data1 = self.chartOption.series[1].data;
-    // let diff1 = GlobalUtil.randomNumber(0, 5);
-    // let lastData1 = data1[data1.length - 1];
-    // if (lastData1 >= 360) {
-    //   isA1Add = false;
-    // }
-    // else if (lastData1 <= 0) {
-    //   isA1Add = true;
-    // }
-    // if (isA1Add === false) {
-    //   diff1 = -diff1;
-    // }
-    // data1.push(lastData1 + diff1);
-
-    // let data1 = self.chartOption.series[1].data;
-    // data1.push(data1[data1.length - 1] + GlobalUtil.randomNumber(-5, 5));
-
-    // let data2 = self.chartOption.series[2].data;
-    // data2.push(data2[data2.length - 1] + GlobalUtil.randomNumber(0, 10));
-    //
-    // let data3 = self.chartOption.series[3].data;
-    // data3.push(data3[data3.length - 1] + GlobalUtil.randomNumber(0, 10));
-    //
-    // let data4 = self.chartOption.series[4].data;
-    // data4.push(data4[data4.length - 1] + GlobalUtil.randomNumber(0, 10));
-    //
-    // let data5 = self.chartOption.series[5].data;
-    // data5.push(data5[data5.length - 1] + GlobalUtil.randomNumber(0, 10));
-    //
-    // let data6 = self.chartOption.series[6].data;
-    // data6.push(data6[data6.length - 1] + GlobalUtil.randomNumber(0, 10));
-
-    // data0[data0.length] = data0[data0.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data0[data0.length] = Math.min(360, Math.max(data0[data0.length], 0));
-
-    // let data1 = self.chartOption.series[1].data;
-    // data1[data1.length] = data1[data1.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data1[data1.length] = Math.min(360, Math.max(data1[data1.length], 0));
-    //
-    // let data2 = self.chartOption.series[2].data;
-    // data2[data2.length] = data2[data2.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data2[data2.length] = Math.min(360, Math.max(data2[data2.length], 0));
-    //
-    // let data3 = self.chartOption.series[3].data;
-    // data3[data3.length] = data3[data3.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data1[data3.length] = Math.min(360, Math.max(data3[data3.length], 0));
-    //
-    // let data4 = self.chartOption.series[4].data;
-    // data4[data4.length] = data4[data4.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data4[data4.length] = Math.min(360, Math.max(data4[data4.length], 0));
-    //
-    // let data5 = self.chartOption.series[5].data;
-    // data5[data5.length] = data5[data5.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data5[data5.length] = Math.min(360, Math.max(data5[data5.length], 0));
-    //
-    // let data6 = self.chartOption.series[6].data;
-    // data6[data6.length] = data6[data6.length - 1] + GlobalUtil.randomNumber(-5, 5);
-    // data6[data6.length] = Math.min(360, Math.max(data6[data6.length], 0));
-
-    // console.log(`data0 = ${JSON.stringify(data0)}`);
   }
 };
 
