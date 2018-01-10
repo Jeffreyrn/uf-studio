@@ -10,8 +10,8 @@
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
       <el-button value='stop' @click='onClick($event)'>Stop</el-button>
 
-      <div id="total-frame" class="total-frame position-absolute">
-        <div id="left-frame" class="left-frame position-absolute">
+      <div id="total-teach-frame" class="total-frame position-absolute">
+        <div id="left-teach-frame" class="left-frame position-absolute">
           <el-tree
             :data="model.localTeach.curProTreeDatas"
             node-key="uuid"
@@ -19,7 +19,7 @@
             @node-click="handleNodeClick">
           </el-tree>
         </div>
-        <div id="right-frame" class="right-frame position-absolute">
+        <div id="right-teach-frame" class="right-frame position-absolute">
           <!-- chart begin -->
           <div class="chart" id="echart-main-2">
           </div>
@@ -211,6 +211,9 @@ export default {
       folderOrFile: '',
       title: '',
       inputText: '',
+      clientWidth: 100,
+      clientHeight: 200,
+      leftFrameWidth: 200,
     };
   },
   mounted() {
@@ -259,14 +262,17 @@ export default {
       this.dialogVisible = true;
     },
     onwinresize() {
-      const leftFrame = document.getElementById("left-frame");
-      const rightFrame = document.getElementById("right-frame");
-      const totalFrame = document.getElementById("total-frame");
+      this.clientWidth = document.body.clientWidth;
+      this.clientHeight = document.body.clientHeight;
+      const leftFrame = document.getElementById("left-teach-frame");
+      const rightFrame = document.getElementById("right-teach-frame");
+      const totalFrame = document.getElementById("total-teach-frame");
       const totalFrameWidth = this.clientWidth - 20;
       const totalFrameHeight = this.clientHeight - 120;
       totalFrame.style.width = `${totalFrameWidth}px`;
-      rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
       totalFrame.style.height = `${totalFrameHeight}px`;
+      rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      // console.log(`totalFrameHeight = ${totalFrameHeight}, totalFrameHeight = ${totalFrame.style.height}, rightFrameWidth = ${rightFrame.style.width}`);
     },
     handleNodeClick(data) {
       const uuid = data.uuid;
