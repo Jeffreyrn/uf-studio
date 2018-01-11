@@ -4,10 +4,10 @@ const path = require('path')
 const LocalTeach = {};
 const self = LocalTeach;
 
-self.curSelectedIndex = 0;
 self.curProjList = [];
 self.curProj = {};
 self.curProjExpandedKeys = [];
+self.curSelectedIndex = 0;
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.pushFileData = (uuid, datas) => {
@@ -56,8 +56,8 @@ self.getProjInfo = (uuid) => {
   return null;
 };
 
-self.getFileInfo = (uuid) => {
-  const files = self.curProj.files;
+self.getTeachFileInfo = (proj, uuid) => {
+  const files = proj.files;
   for (let i = 0; i < files.length; i += 1) {
     const file = files[i];
     const fileId = file.uuid;

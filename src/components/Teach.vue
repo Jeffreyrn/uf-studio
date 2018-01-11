@@ -69,7 +69,6 @@ let t;
 export default {
   data() {
     return {
-
       model: GlobalUtil.model,
       diff: 0,
       sentCounter: 0,
@@ -140,11 +139,12 @@ export default {
     handleNodeClick(data) {
       const uuid = data.uuid;
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
-      // console.log(`handleNodeClick 2 uuid = ${uuid}, proj = ${JSON.stringify(proj)}`);
       GlobalUtil.model.localTeach.curProj = proj;
-      // GlobalUtil.model.localTeach.curProjExpandedKeys = [proj.uuid];
-      // GlobalUtil.model.localTeach = GlobalUtil.model.localTeach;
-      // console.log(`extend uuid = ${GlobalUtil.model.localTeach.curProjExpandedKeys}`);
+      const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
+      console.log(`curFile file = ${JSON.stringify(file)}`);
+      if (file !== null && file !== undefined) {
+        GlobalUtil.model.localTeach.curEditingFileUUID = file.uuid;
+      }
     },
     test_get_pos() {
       const self = this;

@@ -3,11 +3,14 @@
     <el-button @click='addRecord()'>addRecord</el-button>
     <div class="float-clear"></div>
     <template v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
+      <div style="background-color:red;height:2px;width:1000px;"></div>
       <div>{{ index }} -- {{ file.uuid }} </div>
-      <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button>
-      <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
-      <el-button value='pause' @click='onClick($event)'>Pause</el-button>
-      <el-button value='stop' @click='onClick($event)'>Stop</el-button>
+      <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
+        <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button>
+        <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
+        <el-button value='pause' @click='onClick($event)'>Pause</el-button>
+        <el-button value='stop' @click='onClick($event)'>Stop</el-button>
+      </div>
       <!-- scroll timer  -->
       <div id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
         <div style="width:81100px;">
@@ -77,7 +80,7 @@ export default {
     onClick(e, uuid) {
       const attr = e.currentTarget.value;
       console.log(`attr = ${attr}, uuid = ${uuid}`);
-      const file = GlobalUtil.model.localTeach.getFileInfo(uuid);
+      const file = GlobalUtil.model.localTeach.getTeachFileInfo(GlobalUtil.model.localTeach.curProj, uuid);
       switch (attr) {
         case 'stop':
           {
