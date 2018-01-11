@@ -5,15 +5,9 @@
       </div>
 
       <span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>
-      <!-- <span>send: {{ sentCounter }}</span>
-      <span>rec: {{ recCounter }}</span> -->
 
       <el-button value='new' @click='newProj()'>New</el-button>
       <span> {{ socketCom.diff }} </span>
-      <!-- <el-button value='file' @click='addFile()'>+File</el-button> -->
-      <!-- <el-button value='start' @click='onClick($event)'>Start</el-button>
-      <el-button value='pause' @click='onClick($event)'>Pause</el-button>
-      <el-button value='stop' @click='onClick($event)'>Stop</el-button> -->
 
       <div id="total-teach-frame" class="total-frame position-absolute">
         <div id="left-teach-frame" class="left-frame position-absolute">
@@ -159,20 +153,6 @@ export default {
         });
       }
     },
-    // test_get_pos() {
-    //   const self = this;
-    //
-    //   const startTime = new Date().getTime();
-    //
-    //   GlobalUtil.model.localTeach.genAndPushTestPoints();
-    //   const myChart = window.myChart;
-    //   const option = GlobalUtil.model.localTeach.chartOption;
-    //   if (self.sentCounter % 100 === 0) {
-    //     myChart.setOption(option, true);
-    //   }
-    //   self.sentCounter += 1;
-    //   self.recCounter += 1;
-    // },
     onClick(e) {
       const attr = e.currentTarget.value;
       console.log(`attr = ${attr}`);
@@ -183,29 +163,10 @@ export default {
             document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
             break;
           }
-        // case 'pause':
-        //   {
-        //     clearTimeout(t);
-        //     t = null;
-        //     break;
-        //   }
         default:
           break;
       }
     },
-   //  timedCount() {
-   //    GlobalUtil.model.localTeach.curDuration -= -1;
-   //    this.scrollTo(GlobalUtil.model.localTeach.curDuration);
-   //    if (GlobalUtil.model.localTeach.curDuration >= 1800) {
-   //      GlobalUtil.model.localTeach.curDuration = 1800;
-   //      // clearTimeout(t);
-   //      // t = null;
-   //    }
-   //    else {
-   //      this.test_get_pos();
-   //      // t = setTimeout(this.timedCount, 100);
-   //    }
-   // },
   },
   beforeDestroy() {
   },
@@ -234,27 +195,11 @@ export default {
   }
   display: flex;
   align-items: center;
-  /*.el-slider {
-    width: 400px;
-  }*/
   .teach-slider {
     width: 400px;
   }
-  .teach-slider-timer {
-    /*width: 8000px;
-    left: 20px;
-    right: 20px;*/
-  }
 }
 
-/*.time-slider-wrapper {
-  margin-left: 20px;
-  margin-right: 20px;
-  width: 800px;
-  height: 100px;
-  background-color: yellow;
-  overflow-x: scroll;
-}*/
 .chart {
   margin-left: 50px;
   background-color: white;
