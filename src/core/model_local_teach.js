@@ -251,37 +251,37 @@ self.chartOption = {
     {
       name: 'CH0',
       type: 'line',
-      data: [180],
+      data: [],
     },
     {
       name: 'CH1',
       type: 'line',
-      data: [180],
+      data: [],
     },
     {
       name: 'CH2',
       type: 'line',
-      data: [180],
+      data: [],
     },
     {
       name: 'CH3',
       type: 'line',
-      data: [180],
+      data: [],
     },
     {
       name: 'CH4',
       type: 'line',
-      data: [180],
+      data: [],
     },
     {
       name: 'CH5',
       type: 'line',
-      data: [180],
+      data: [],
     },
     {
       name: 'CH6',
       type: 'line',
-      data: [180],
+      data: [],
     },
   ],
 };
@@ -295,6 +295,28 @@ self.pushPoint = (points) => {
   self.chartOption.series[5].data.push(points[5]);
   self.chartOption.series[6].data.push(points[6]);
 }
+
+self.fileData2ChartSeries = (uuid) => {
+  const fileData = self.fileDatas[uuid];
+  const fileDataLength = fileData.length;
+  self.chartOption.series[0].data = [];
+  self.chartOption.series[1].data = [];
+  self.chartOption.series[2].data = [];
+  self.chartOption.series[3].data = [];
+  self.chartOption.series[4].data = [];
+  self.chartOption.series[5].data = [];
+  self.chartOption.series[6].data = [];
+  for (let i = 0; i < fileDataLength; i += 1) {
+    const oneData = fileData[i];
+    self.chartOption.series[0].data.push(oneData[0]);
+    self.chartOption.series[1].data.push(oneData[1]);
+    self.chartOption.series[2].data.push(oneData[2]);
+    self.chartOption.series[3].data.push(oneData[3]);
+    self.chartOption.series[4].data.push(oneData[4]);
+    self.chartOption.series[5].data.push(oneData[5]);
+    self.chartOption.series[6].data.push(oneData[6]);
+  }
+};
 
 // self.setPoint = (ch, index, value) => {
 //   self.chartOption.series[ch].data[index] = value;
@@ -361,17 +383,20 @@ self.genAndPushTestPoints = () => {
 
 self.testData = {};
 self.testData.ch0 = [20];
-self.testData.ch1 = [30];
-self.testData.ch2 = [40];
-self.testData.ch3 = [50];
-self.testData.ch4 = [60];
-self.testData.ch5 = [70];
-self.testData.ch6 = [80];
+self.testData.ch1 = [80];
+self.testData.ch2 = [140];
+self.testData.ch3 = [190];
+self.testData.ch4 = [260];
+self.testData.ch5 = [300];
+self.testData.ch6 = [330];
+self.randomNumber = (begin, end) => {
+ return Math.floor(Math.random() * (end - begin)) + begin;
+}
 self.chs = [self.testData.ch0, self.testData.ch1, self.testData.ch2, self.testData.ch3, self.testData.ch4, self.testData.ch5, self.testData.ch6];
 for (let i = 1; i < self.msMax; i += 1) {
-  for (let j = 0; j <self. chs.length; j += 1) {
+  for (let j = 0; j <self.chs.length; j += 1) {
     let ch = self.chs[j];
-    ch.push((ch[i - 1] + 5) % 360);
+    ch.push((ch[i - 1] + self.randomNumber(1, 3)) % 360);
   }
 }
 

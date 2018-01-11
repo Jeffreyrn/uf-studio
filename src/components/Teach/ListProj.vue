@@ -124,7 +124,12 @@ export default {
                 const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
                 GlobalUtil.model.localTeach.pushFileData(uuid, testData);
                 this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
-                // GlobalUtil.model.localTeach = GlobalUtil.model.localTeach;
+              }
+              if (GlobalUtil.model.localTeach.curDuration % 100 === 0) {
+                const myChart = window.myChart;
+                GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
+                const option = GlobalUtil.model.localTeach.chartOption;
+                myChart.setOption(option, true);
               }
               GlobalUtil.model.localTeach.curDuration -= -1;
             });
