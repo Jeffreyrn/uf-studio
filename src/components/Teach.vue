@@ -5,8 +5,8 @@
       </div>
 
       <span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>
-      <span>send: {{ sentCounter }}</span>
-      <span>rec: {{ recCounter }}</span>
+      <!-- <span>send: {{ sentCounter }}</span>
+      <span>rec: {{ recCounter }}</span> -->
 
       <el-button value='new' @click='newProj()'>New</el-button>
       <!-- <el-button value='file' @click='addFile()'>+File</el-button> -->
@@ -80,7 +80,7 @@ export default {
       inputText: '',
       clientWidth: 100,
       clientHeight: 200,
-      leftFrameWidth: 200,
+      leftFrameWidth: 250,
     };
   },
   mounted() {
@@ -146,20 +146,20 @@ export default {
         GlobalUtil.model.localTeach.curEditingFileUUID = file.uuid;
       }
     },
-    test_get_pos() {
-      const self = this;
-
-      const startTime = new Date().getTime();
-
-      GlobalUtil.model.localTeach.genAndPushTestPoints();
-      const myChart = window.myChart;
-      const option = GlobalUtil.model.localTeach.chartOption;
-      if (self.sentCounter % 100 === 0) {
-        myChart.setOption(option, true);
-      }
-      self.sentCounter += 1;
-      self.recCounter += 1;
-    },
+    // test_get_pos() {
+    //   const self = this;
+    //
+    //   const startTime = new Date().getTime();
+    //
+    //   GlobalUtil.model.localTeach.genAndPushTestPoints();
+    //   const myChart = window.myChart;
+    //   const option = GlobalUtil.model.localTeach.chartOption;
+    //   if (self.sentCounter % 100 === 0) {
+    //     myChart.setOption(option, true);
+    //   }
+    //   self.sentCounter += 1;
+    //   self.recCounter += 1;
+    // },
     onClick(e) {
       const attr = e.currentTarget.value;
       console.log(`attr = ${attr}`);
@@ -180,19 +180,19 @@ export default {
           break;
       }
     },
-    timedCount() {
-      GlobalUtil.model.localTeach.curDuration -= -1;
-      this.scrollTo(GlobalUtil.model.localTeach.curDuration);
-      if (GlobalUtil.model.localTeach.curDuration >= 1800) {
-        GlobalUtil.model.localTeach.curDuration = 1800;
-        // clearTimeout(t);
-        // t = null;
-      }
-      else {
-        this.test_get_pos();
-        // t = setTimeout(this.timedCount, 100);
-      }
-   },
+   //  timedCount() {
+   //    GlobalUtil.model.localTeach.curDuration -= -1;
+   //    this.scrollTo(GlobalUtil.model.localTeach.curDuration);
+   //    if (GlobalUtil.model.localTeach.curDuration >= 1800) {
+   //      GlobalUtil.model.localTeach.curDuration = 1800;
+   //      // clearTimeout(t);
+   //      // t = null;
+   //    }
+   //    else {
+   //      this.test_get_pos();
+   //      // t = setTimeout(this.timedCount, 100);
+   //    }
+   // },
   },
   beforeDestroy() {
   },
@@ -260,12 +260,12 @@ export default {
   left: 100px;*/
 }
 .left-frame {
-  width:200px;
+  width:250px;
   height: 100%;
   overflow: scroll;
 }
 .right-frame {
-  left: 200px;
+  left: 250px;
   width:85%;
   /*width:100%;*/
   height: 100%;

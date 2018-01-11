@@ -11,7 +11,7 @@
         <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
         <el-button value='stop' @click='onClick($event)'>Stop</el-button>
         <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button>
-        <el-button value='save' @click='onClick($event)'>Save</el-button>
+        <el-button value='save' @click='onClick($event, file.uuid)'>Save</el-button>
         <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span>
       </div>
       <!-- scroll timer  -->
@@ -85,6 +85,10 @@ export default {
       console.log(`attr = ${attr}, uuid = ${uuid}`);
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(GlobalUtil.model.localTeach.curProj, uuid);
       switch (attr) {
+        case 'save':
+          {
+            break;
+          }
         case 'stop':
           {
             CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
