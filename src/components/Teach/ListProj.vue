@@ -22,7 +22,7 @@
               <!-- button -->
               <div style="width:40px;height:20px;background-color:yellow;">
                 <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
-                  {{ parseInt(index / 10) }}.0
+                  {{ parseInt(index / 10) }}.0s
                 </div>
                 <div v-if="index % 10 !== 0">
                   <div class="float-left" style="background-color:lightgreen" v-if="index < model.localTeach.fileDatas[file.uuid].length">
@@ -160,12 +160,12 @@ export default {
       });
     },
     onSelect(e, index) {
-      GlobalUtil.model.localTeach.curSelectedIndex = index;
       const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
       if (point === null || point === undefined) {
         console.log(`point null null null`);
         return;
       }
+      GlobalUtil.model.localTeach.curSelectedIndex = index;
       console.log(`onSelect = ${index}, point = ${JSON.stringify(point)}`);
       GlobalUtil.model.localTeach.curPoint.a0 = point[0];
       GlobalUtil.model.localTeach.curPoint.a1 = point[1];
