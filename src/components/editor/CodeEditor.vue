@@ -68,7 +68,7 @@ export default {
             const self = this;
             self.complete_prefix = List[List.length-1];
 
-            CommandsSocket.autocompletePython(self.editor.getValue(), cur.line, cur.ch, (dict) => {
+            CommandsEditorSocket.autocompletePython(self.editor.getValue(), cur.line, cur.ch, (dict) => {
               // console.log(`autocompletePython dict = ${JSON.stringify(dict)}`);
               const completeDatas = dict.data;
               console.log(`completeDatas = ${JSON.stringify(completeDatas)}`);
@@ -122,6 +122,19 @@ export default {
       const curFile = GlobalUtil.model.localProjTree.curFile;
       GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);
       GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
+      // const curFile = this.getCurFile();
+      if (curFile === null) {
+        return;
+      }
+      const uuid = curFile.uuid;
+      const text = curFile.localContent;
+      CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
+        if (dict.data === 'success') {
+          curFile.remoteContent = text;
+          GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
+        }
+        console.log(`update content success`);
+      });
     },
   },
   beforeDestroy() {

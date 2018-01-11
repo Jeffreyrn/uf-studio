@@ -1,9 +1,9 @@
 
 const path = require('path')
 
-const CommandsSocket = {};
-const self = CommandsSocket;
-window.CommandsSocket = CommandsSocket;
+const CommandsEditorSocket = {};
+const self = CommandsEditorSocket;
+window.CommandsEditorSocket = CommandsEditorSocket;
 // xArm cmd
 self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
 self.CMD_ID_GET_TCP_POSE = 'xarm_get_tcp_pose';

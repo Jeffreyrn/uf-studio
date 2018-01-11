@@ -36,7 +36,7 @@ self.getThisFileFullPath = (uuid) => {
   console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
   if (file === null || file === undefined) {
     // self.curFilePath = `/${self.curProj.name}`;
-    return path.join(CommandsSocket.ROOT_DIR, self.curProj.name);
+    return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
   }
   let proj = null;
   for (let i = 0; i < self.curProjList.length; i += 1) {
@@ -47,7 +47,7 @@ self.getThisFileFullPath = (uuid) => {
     }
   }
   // console.log(`getThisFileFullPath proj = ${JSON.stringify(proj)}`);
-  const projPath = path.join(CommandsSocket.ROOT_DIR, proj.name);
+  const projPath = path.join(CommandsEditorSocket.ROOT_DIR, proj.name);
   let filename = file.name;
   while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
     const superid = file.superid;
@@ -262,7 +262,7 @@ self.setSelectedUUID = (uuid) => {
         self.curSelectedFolderUUID = '';
         self.curFile = file;
         console.log(`selected = ${file.name}`);
-        CommandsSocket.getFile(file.uuid, (dict) => {
+        CommandsEditorSocket.getFile(file.uuid, (dict) => {
           let content = dict.data;
           if (content === null || content === undefined) {
             content = '';
@@ -518,7 +518,7 @@ self.getFileInfo = (uuid) => {
 // curProjList
 // self.getProjsFromArm = (callback) => {
 //   const projs = [];
-//   CommandsSocket.listProjs((dict) => {
+//   CommandsEditorSocket.listProjs((dict) => {
 //
 //   });
 // };
@@ -554,8 +554,8 @@ self.remoteProjs2Local = (dict) => {
       continue;
     }
     // check which project
-    const projName = data.replace(CommandsSocket.ROOT_DIR + "/", "").split("/")[0];
-    const projPath = path.join(CommandsSocket.ROOT_DIR, projName);
+    const projName = data.replace(CommandsEditorSocket.ROOT_DIR + "/", "").split("/")[0];
+    const projPath = path.join(CommandsEditorSocket.ROOT_DIR, projName);
     let curProj = null;
     for (let i = 0; i < projs.length; i += 1) {
       const proj = projs[i];
@@ -566,7 +566,7 @@ self.remoteProjs2Local = (dict) => {
     if (curProj === null) {
       curProj = {};
       curProj.name = projName;
-      curProj.uuid = path.join(CommandsSocket.ROOT_DIR, projName);
+      curProj.uuid = path.join(CommandsEditorSocket.ROOT_DIR, projName);
       curProj.files = [];
       curProj.superid = '';
       projs.push(curProj);
@@ -575,13 +575,13 @@ self.remoteProjs2Local = (dict) => {
     // check and create folder
     // const isProFile = path.basename(data).indexOf('.') > 0;
     let tempPath = data;
-    while (tempPath !== projPath && tempPath !== CommandsSocket.ROOT_DIR) {
+    while (tempPath !== projPath && tempPath !== CommandsEditorSocket.ROOT_DIR) {
       // console.log(`filename = ${tempPath}`);
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
       filesDict[tempPath] = ''; // tempPath; //
       const uuid = tempPath; // Base64.btoa(tempPath);
       let superpath = path.dirname(tempPath);
-      if (superpath === projPath || superpath === CommandsSocket.ROOT_DIR) {
+      if (superpath === projPath || superpath === CommandsEditorSocket.ROOT_DIR) {
         superpath = '';
       }
       const name = path.basename(tempPath);

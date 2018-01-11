@@ -2,7 +2,7 @@
 import Model from './model';
 import SocketCom from './socket_com';
 import NativeCom from './native_com';
-import CommandsSocket from './commands_socket';
+import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
 
 // import CommandsHttp from './commands_http';
@@ -20,10 +20,10 @@ self.store = {};
 self.model = Model;
 self.socketCom = SocketCom;
 // self.commandsHttp = CommandsHttp;
-// self.commandsSocket = CommandsSocket;
-CommandsSocket.socketCom = SocketCom;
-CommandsSocket.model = Model;
-window.CommandsSocket = CommandsSocket;
+// self.CommandsEditorSocket = CommandsEditorSocket;
+CommandsEditorSocket.socketCom = SocketCom;
+CommandsEditorSocket.model = Model;
+window.CommandsEditorSocket = CommandsEditorSocket;
 CommandsTeachSocket.socketCom = SocketCom;
 CommandsTeachSocket.model = Model;
 window.CommandsTeachSocket = CommandsTeachSocket;
@@ -118,7 +118,7 @@ self.socketCom.open = () => {
     // GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
     //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
     // });
-    CommandsSocket.listProjs((dict) => {
+    CommandsEditorSocket.listProjs((dict) => {
 
     });
     CommandsTeachSocket.listProjs((dict) => {

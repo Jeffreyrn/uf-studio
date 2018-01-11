@@ -107,13 +107,13 @@ export default {
         return;
       }
       GlobalUtil.model.localProjTree.runningCmdResult = '';
-      CommandsSocket.runPythonScript(curFile.uuid, (dict) => {
+      CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
         GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
       });
     },
     stop() {
-      CommandsSocket.stopPythonScript((dict) => {
-        
+      CommandsEditorSocket.stopPythonScript((dict) => {
+
       });
     },
     saveFile() {
@@ -123,7 +123,7 @@ export default {
       }
       const uuid = curFile.uuid;
       const text = curFile.localContent;
-      CommandsSocket.saveOrUpdateFile(uuid, text, (dict) => {
+      CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
         if (dict.data === 'success') {
           curFile.remoteContent = text;
           GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
@@ -156,7 +156,7 @@ export default {
       link.click();
     },
     allProjs() {
-      // CommandsSocket.listProjs((dict) => {
+      // CommandsEditorSocket.listProjs((dict) => {
       //   // console.log(`listProjs dict = ${JSON.stringify(dict)}`);
       // });
       this.projSelectDialog = true;
@@ -166,7 +166,7 @@ export default {
       return GlobalUtil.model.localProjTree.getFileInfo(curSelectedUUID);
     },
     delFile() {
-      // CommandsSocket.delFiles(this.getCurFile().uuid);
+      // CommandsEditorSocket.delFiles(this.getCurFile().uuid);
       // return;
       console.log('del folder');
       const curFile = this.getCurFile();
@@ -184,7 +184,7 @@ export default {
         width: '300px',
         preConfirm: text => new Promise((resolve, reject) => {
           // GlobalUtil.model.localProjTree.delFiles();
-          CommandsSocket.delFiles(this.getCurFile().uuid);
+          CommandsEditorSocket.delFiles(this.getCurFile().uuid);
           resolve();
         }),
       }).then((text) => {
@@ -195,29 +195,29 @@ export default {
       const text = this.inputText;
       console.log(`text = ${text}`);
       if (this.folderOrFile === 'folder') {
-        CommandsSocket.createFile(text);
+        CommandsEditorSocket.createFile(text);
         // const folder = GlobalUtil.model.localProjTree.createFolder(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        CommandsSocket.createFile(text);
+        CommandsEditorSocket.createFile(text);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
       if (this.folderOrFile === 'proj') {
-        CommandsSocket.createProj(text);
+        CommandsEditorSocket.createProj(text);
         // const proj = GlobalUtil.model.localProjTree.createProj(text);
         // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
       if (this.folderOrFile === 'rename') {
         // GlobalUtil.model.localProjTree.renameFile(text);
         const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-        CommandsSocket.renameFile(curUUID, text)
+        CommandsEditorSocket.renameFile(curUUID, text)
       }
       if (this.folderOrFile === 'renameproj') {
         // GlobalUtil.model.localProjTree.renameProj(text);
-        CommandsSocket.renameProj(text);
+        CommandsEditorSocket.renameProj(text);
       }
       this.dialogVisible = false;
     },

@@ -21,19 +21,19 @@ export default {
   },
   methods: {
     xarm_get_joint_pose() {
-      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_POINT_POSE, '', (dict) => {
+      CommandsEditorSocket.sendCmd(CommandsEditorSocket.CMD_ID_GET_POINT_POSE, '', (dict) => {
       });
     },
     xarm_get_tcp_pose() {
-      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_TCP_POSE, '', (dict) => {
+      CommandsEditorSocket.sendCmd(CommandsEditorSocket.CMD_ID_GET_TCP_POSE, '', (dict) => {
       });
     },
     xarm_get_version() {
-      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_VERSION, '', (dict) => {
+      CommandsEditorSocket.sendCmd(CommandsEditorSocket.CMD_ID_GET_VERSION, '', (dict) => {
       });
     },
     xarm_get_state() {
-      CommandsSocket.sendCmd(CommandsSocket.CMD_ID_GET_STATE, '', (dict) => {
+      CommandsEditorSocket.sendCmd(CommandsEditorSocket.CMD_ID_GET_STATE, '', (dict) => {
       });
     },
   },

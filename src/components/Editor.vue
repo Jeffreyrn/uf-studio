@@ -60,7 +60,7 @@ export default {
     // totalFrame.style.height = `${screen.height - 400}px`;
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
-    CommandsSocket.listProjs((dict) => {
+    CommandsEditorSocket.listProjs((dict) => {
 
     });
   },

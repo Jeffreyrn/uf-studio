@@ -340,13 +340,13 @@ self.pushTestData = (ch) => {
 
 self.genAndPushTestPoints = () => {
   if (1 == 2) {
-    self.chartOption.series[0].data.push(CommandsSocket.getTestPost());
-    self.chartOption.series[1].data.push(CommandsSocket.getTestPost());
-    self.chartOption.series[2].data.push(CommandsSocket.getTestPost());
-    self.chartOption.series[3].data.push(CommandsSocket.getTestPost());
-    self.chartOption.series[4].data.push(CommandsSocket.getTestPost());
-    self.chartOption.series[5].data.push(CommandsSocket.getTestPost());
-    self.chartOption.series[6].data.push(CommandsSocket.getTestPost());
+    self.chartOption.series[0].data.push(CommandsEditorSocket.getTestPost());
+    self.chartOption.series[1].data.push(CommandsEditorSocket.getTestPost());
+    self.chartOption.series[2].data.push(CommandsEditorSocket.getTestPost());
+    self.chartOption.series[3].data.push(CommandsEditorSocket.getTestPost());
+    self.chartOption.series[4].data.push(CommandsEditorSocket.getTestPost());
+    self.chartOption.series[5].data.push(CommandsEditorSocket.getTestPost());
+    self.chartOption.series[6].data.push(CommandsEditorSocket.getTestPost());
   }
   else {
     self.pushTestData(0);
