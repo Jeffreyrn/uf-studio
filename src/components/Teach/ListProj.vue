@@ -8,11 +8,13 @@
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
         <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button>
         <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
-        <el-button value='pause' @click='onClick($event)'>Pause</el-button>
+        <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
         <el-button value='stop' @click='onClick($event)'>Stop</el-button>
+        <el-button value='save' @click='onClick($event)'>Save</el-button>
+        <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span>
       </div>
       <!-- scroll timer  -->
-      <div id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
+      <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
         <div style="width:81100px;">
           <template v-for='index in showArr'>
             <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;" @click='onSelect($event, index)'>
@@ -22,14 +24,15 @@
                   {{ parseInt(index / 10) }}.0
                 </div>
                 <div class="float-left" v-if="index % 10 !== 0">
-                  <div style="background-color:lightgreen" v-if="index <= model.localTeach.curDuration">
+                  <div style="background-color:lightgreen" v-if="index < model.localTeach.fileDatas[file.uuid].length">
                     .{{ index % 10 }}
                   </div>
-                  <div style="" v-if="index > model.localTeach.curDuration">
+                  <div style="" v-if="index >= model.localTeach.fileDatas[file.uuid].length">
                     .{{ index % 10 }}
                   </div>
+                  <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
                 </div>
-                <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
+
               </div>
               <!-- button end -->
             </div>
@@ -97,23 +100,26 @@ export default {
         case 'start':
           {
             self.curEditingFileUUID = uuid;
+            GlobalUtil.model.localTeach.curDuration = 0;
             CommandsSocket.debugSetBeart(true, 0.1, (dict) => {
               console.log(`SetBeart true = dict = ${JSON.stringify(dict)}`);
-              GlobalUtil.model.localTeach.curDuration -= -1;
-              // GlobalUtil.model.localTeach.pushFileData(uuid, )
-              this.scrollTo(GlobalUtil.model.localTeach.curDuration);
-              if (GlobalUtil.model.localTeach.curDuration >= 1800) {
-                GlobalUtil.model.localTeach.curDuration = 1800;
-                // clearTimeout(t);
-                // t = null;
+              const curFileDatas = GlobalUtil.model.localTeach.fileDatas[uuid];
+              // this.scrollTo(GlobalUtil.model.localTeach.curDuration);
+              this.scrollTo(curFileDatas.length);
+              if (curFileDatas.length >= 1800) {
+                // GlobalUtil.model.localTeach.curDuration = 1800;
                 CommandsSocket.debugSetBeart(false, (dict) => {
                   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
                 });
               }
               else {
-                this.test_get_pos();
-                // t = setTimeout(this.timedCount, 100);
+                // test data
+                const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+                GlobalUtil.model.localTeach.pushFileData(uuid, testData);
+                this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
+                // GlobalUtil.model.localTeach = GlobalUtil.model.localTeach;
               }
+              GlobalUtil.model.localTeach.curDuration -= -1;
             });
             break;
           }
@@ -154,9 +160,13 @@ export default {
       });
     },
     onSelect(e, index) {
-      console.log(`onSelect = ${index}`);
       GlobalUtil.model.localTeach.curSelectedIndex = index;
-      const point = GlobalUtil.model.localTeach.getPoint(index);
+      const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
+      if (point === null || point === undefined) {
+        console.log(`point null null null`);
+        return;
+      }
+      console.log(`onSelect = ${index}, point = ${JSON.stringify(point)}`);
       GlobalUtil.model.localTeach.curPoint.a0 = point[0];
       GlobalUtil.model.localTeach.curPoint.a1 = point[1];
       GlobalUtil.model.localTeach.curPoint.a2 = point[2];

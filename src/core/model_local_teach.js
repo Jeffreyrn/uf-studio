@@ -21,6 +21,14 @@ self.pushFileData = (uuid, datas) => {
   self.fileDatas[uuid].push(datas);
 };
 
+self.getFileData = (uuid, index) => {
+  return self.fileDatas[uuid][index];
+};
+
+self.updateFileData = (uuid, index, ch, value) => {
+  self.fileDatas[uuid][index][ch] = value;
+};
+
 self.PROJ_TREE_TYPE = {
   FOLDER: 'folder',
   FILE: 'file',
@@ -37,6 +45,10 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
     remoteContent: content,
     proId: proId,
   };
+  let dict = self.fileDatas[uuid];
+  if (dict === null || dict === undefined) {
+    self.fileDatas[uuid] = [];
+  }
   return file;
 };
 
@@ -284,20 +296,20 @@ self.pushPoint = (points) => {
   self.chartOption.series[6].data.push(points[6]);
 }
 
-self.setPoint = (ch, index, value) => {
-  self.chartOption.series[ch].data[index] = value;
-};
-
-self.getPoint = (index) => {
-  const a0 = self.chartOption.series[0].data[index];
-  const a1 = self.chartOption.series[1].data[index];
-  const a2 = self.chartOption.series[2].data[index];
-  const a3 = self.chartOption.series[3].data[index];
-  const a4 = self.chartOption.series[4].data[index];
-  const a5 = self.chartOption.series[5].data[index];
-  const a6 = self.chartOption.series[6].data[index];
-  return [a0, a1, a2, a3, a4, a5, a6];
-};
+// self.setPoint = (ch, index, value) => {
+//   self.chartOption.series[ch].data[index] = value;
+// };
+//
+// self.getPoint = (index) => {
+//   const a0 = self.chartOption.series[0].data[index];
+//   const a1 = self.chartOption.series[1].data[index];
+//   const a2 = self.chartOption.series[2].data[index];
+//   const a3 = self.chartOption.series[3].data[index];
+//   const a4 = self.chartOption.series[4].data[index];
+//   const a5 = self.chartOption.series[5].data[index];
+//   const a6 = self.chartOption.series[6].data[index];
+//   return [a0, a1, a2, a3, a4, a5, a6];
+// };
 
 let isA0Add = true;
 let isA1Add = true;
