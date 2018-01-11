@@ -142,6 +142,10 @@ export default {
         default:
           break;
       }
+      const myChart = window.myChart;
+      GlobalUtil.model.localTeach.fileData2ChartSeries(curEditingFileUUID);
+      const option = GlobalUtil.model.localTeach.chartOption;
+      myChart.setOption(option, true);
     },
   },
   beforeDestroy() {

@@ -9,6 +9,7 @@
       <span>rec: {{ recCounter }}</span> -->
 
       <el-button value='new' @click='newProj()'>New</el-button>
+      <span> {{ socketCom.diff }} </span>
       <!-- <el-button value='file' @click='addFile()'>+File</el-button> -->
       <!-- <el-button value='start' @click='onClick($event)'>Start</el-button>
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
@@ -69,6 +70,7 @@ let t;
 export default {
   data() {
     return {
+      socketCom: GlobalUtil.socketCom,
       model: GlobalUtil.model,
       diff: 0,
       sentCounter: 0,
