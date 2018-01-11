@@ -4,7 +4,7 @@
     <div class="float-clear"></div>
     <template v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
       <div style="background-color:red;height:2px;width:1000px;"></div>
-      <div>{{ index }} -- {{ file.uuid }} </div>
+      <div>{{ index }} -- {{ file.uuid }}</div>
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
         <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button>
         <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
@@ -31,9 +31,8 @@
                   <div class="float-left" style="" v-if="index >= model.localTeach.fileDatas[file.uuid].length">
                     .{{ index % 10 }}
                   </div>
-                  <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
                 </div>
-
+                <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
               </div>
               <!-- button end -->
             </div>
