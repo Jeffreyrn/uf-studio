@@ -143,7 +143,18 @@ export default {
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
       console.log(`curFile file = ${JSON.stringify(file)}`);
       if (file !== null && file !== undefined) {
-        GlobalUtil.model.localTeach.curEditingFileUUID = file.uuid;
+        CommandsTeachSocket.getFile(file.uuid, (dict) => {
+          // console.log(`CommandsTeachSocket.getFile dict = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            if (dict.data === "" || dict.data === undefined || dict.data === null) {
+              GlobalUtil.model.localTeach.fileDatas[file.uuid] = [];
+            }
+            else {
+              GlobalUtil.model.localTeach.fileDatas[file.uuid] = JSON.parse(dict.data);
+            }
+            GlobalUtil.model.localTeach.curEditingFileUUID = file.uuid;
+          }
+        });
       }
     },
     // test_get_pos() {

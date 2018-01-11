@@ -87,6 +87,9 @@ export default {
       switch (attr) {
         case 'save':
           {
+            CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
+              // console.log(`CommandsTeachSocket.saveOrUpdateFile = ${JSON.stringify(dict)}`);
+            });
             break;
           }
         case 'stop':

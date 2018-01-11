@@ -76,7 +76,6 @@ self.createFile = (name, callback) => {
   });
 };
 
-
 self.delFiles = (uuid, callback) => {
   // return;
   const filePath = uuid;
@@ -90,6 +89,47 @@ self.delFiles = (uuid, callback) => {
   };
   self.sendCmd(self.TEACH_ID_DELETE_FILE, params, (dict) => {
     self.listProjs(callback);
+  });
+};
+
+self.saveOrUpdateFile = (uuid, callback) => {
+  // text = 'test test';
+  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
+  // return;
+  const text = JSON.stringify(self.model.localTeach.fileDatas[uuid]);
+  // console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": uuid, // 文件夹的父目录，必须
+      "file": '', // 文件夹名称, 可省略
+      "data": text, // 文件内容
+    }
+  };
+  self.sendCmd(self.TEACH_ID_CREATE_FILE, params, (dict) => {
+    // self.listProjs(callback);
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
+self.getFile = (uuid, callback) => {
+  let filePath = uuid;
+  console.log(`getFile filePath = ${filePath}`);
+  // return;
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": filePath, // 文件夹的父目录，必须
+      "file": '', // 文件夹名称, 可省略
+    }
+  };
+  self.sendCmd(self.TEACH_ID_GET_FILE, params, (dict) => {
+    // console.log(`get file = ${JSON.stringify(dict)}`);
+    if (callback) {
+      callback(dict);
+    }
   });
 };
 
