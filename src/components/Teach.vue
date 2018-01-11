@@ -10,16 +10,15 @@
 
       <el-button value='new' @click='newProj()'>New</el-button>
       <!-- <el-button value='file' @click='addFile()'>+File</el-button> -->
-      <el-button value='start' @click='onClick($event)'>Start</el-button>
+      <!-- <el-button value='start' @click='onClick($event)'>Start</el-button>
       <el-button value='pause' @click='onClick($event)'>Pause</el-button>
-      <el-button value='stop' @click='onClick($event)'>Stop</el-button>
+      <el-button value='stop' @click='onClick($event)'>Stop</el-button> -->
 
       <div id="total-teach-frame" class="total-frame position-absolute">
         <div id="left-teach-frame" class="left-frame position-absolute">
           <el-tree
             :data="model.localTeach.curProTreeDatas"
             node-key="uuid"
-            :expand-on-click-node=false
             :default-expanded-keys="model.localTeach.curProjExpandedKeys"
             @node-click="handleNodeClick">
           </el-tree>
@@ -35,12 +34,12 @@
           <!-- scroll end -->
 
           <div class="float-clear"></div>
-
-          <!-- One setting -->
-          <OnePointSetting></OnePointSetting>
-          <!-- One setting end -->
         </div>
       </div>
+
+      <!-- One setting -->
+      <OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>
+      <!-- One setting end -->
 
       <!-- dialog -->
       <el-dialog
@@ -75,7 +74,7 @@ export default {
       diff: 0,
       sentCounter: 0,
       recCounter: 0,
-      curSelectedIndex: 0,
+      // curSelectedIndex: 0,
       dialogVisible: false,
       folderOrFile: '',
       title: '',
@@ -143,6 +142,9 @@ export default {
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
       // console.log(`handleNodeClick 2 uuid = ${uuid}, proj = ${JSON.stringify(proj)}`);
       GlobalUtil.model.localTeach.curProj = proj;
+      // GlobalUtil.model.localTeach.curProjExpandedKeys = [proj.uuid];
+      // GlobalUtil.model.localTeach = GlobalUtil.model.localTeach;
+      // console.log(`extend uuid = ${GlobalUtil.model.localTeach.curProjExpandedKeys}`);
     },
     test_get_pos() {
       const self = this;
@@ -155,31 +157,8 @@ export default {
       if (self.sentCounter % 100 === 0) {
         myChart.setOption(option, true);
       }
-
-      // const points = CommandsSocket.getTestPost();
-      // console.log(`get points = ${JSON.stringify(points)}`);
-      //
-      // if (self.sentCounter % 100 === 0) {
-      //   GlobalUtil.model.localTeach.pushPoint(points);
-      //   const option = GlobalUtil.model.localTeach.chartOption;
-      //   GlobalUtil.model.localTeach.chartOption = option;
-      //   const myChart = window.myChart;
-      //   myChart.setOption(option, true);
-      // }
-
       self.sentCounter += 1;
       self.recCounter += 1;
-
-      // GlobalUtil.socketCom.send_msg({
-      //   cmd: 'xarm_get_tcp_pose',
-      //   data: '',
-      // }, (dict) => {
-      //   console.log(`send response = ${JSON.stringify(dict)}`);
-      //   const endTime2 = new Date().getTime();
-      //   const diff = endTime2 - startTime;
-      //   self.diff = `time diff = ${diff} ms`;
-      //   self.recCounter += 1;
-      // });
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -197,51 +176,9 @@ export default {
         //     t = null;
         //     break;
         //   }
-        case 'stop':
-          {
-            CommandsSocket.debugSetBeart(false, 0.1, (dict) => {
-              console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-            });
-            // GlobalUtil.model.localTeach.curDuration = 0;
-            // clearTimeout(t);
-            // t = null;
-            this.sentCounter = 0;
-            this.recCounter = 0;
-            break;
-          }
-        case 'start':
-          {
-            CommandsSocket.debugSetBeart(true, 0.1, (dict) => {
-              console.log(`SetBeart true = dict = ${JSON.stringify(dict)}`);
-
-              GlobalUtil.model.localTeach.curDuration -= -1;
-              this.scrollTo(GlobalUtil.model.localTeach.curDuration);
-              if (GlobalUtil.model.localTeach.curDuration >= 1800) {
-                GlobalUtil.model.localTeach.curDuration = 1800;
-                // clearTimeout(t);
-                // t = null;
-
-                CommandsSocket.debugSetBeart(false, (dict) => {
-                  console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-                });
-              }
-              else {
-                this.test_get_pos();
-                // t = setTimeout(this.timedCount, 100);
-              }
-
-            });
-            // if (t === undefined || t === null) {
-            //   this.timedCount();
-            // }
-            break;
-          }
         default:
           break;
       }
-    },
-    scrollTo(time) {
-      document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
     },
     timedCount() {
       GlobalUtil.model.localTeach.curDuration -= -1;

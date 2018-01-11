@@ -140,11 +140,6 @@ self.socketCom.open = () => {
   });
   self.socketCom.init_onmessage((evt) => {
     const temp_msg = JSON.parse(evt.data);
-    // console.log('onmessage onmessage onmessage = ' + evt.data);
-    // self.model.localDeviceInfo.handleReport(temp_msg);
-    // self.model.localDeviceStatus.handleReport(temp_msg);
-    // self.model.localParamsSetting.handleReport(temp_msg);
-    // self.socketCom.handleResponse(temp_msg);
     self.model.localDeviceInfo.onmessage(evt);
     self.model.localDeviceStatus.onmessage(evt);
     self.model.localParamsSetting.onmessage(evt);

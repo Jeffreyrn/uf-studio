@@ -4,9 +4,22 @@ const path = require('path')
 const LocalTeach = {};
 const self = LocalTeach;
 
+self.curSelectedIndex = 0;
 self.curProjList = [];
 self.curProj = {};
 self.curProjExpandedKeys = [];
+self.curEditingFileUUID = '';
+self.fileDatas = {};
+self.pushFileData = (uuid, datas) => {
+  let dict = self.fileDatas[uuid];
+  if (dict === null || dict === undefined) {
+    self.fileDatas[uuid] = [];
+  }
+  if (self.fileDatas[uuid].length > self.msMax) {
+    return;
+  }
+  self.fileDatas[uuid].push(datas);
+};
 
 self.PROJ_TREE_TYPE = {
   FOLDER: 'folder',
@@ -62,7 +75,7 @@ self.remoteProjs2Local = (dict) => {
   }
   const projs = [];
   const datas = dict.data;
-  console.log(`dict.data = ${JSON.stringify(dict.data)}`);
+  // console.log(`dict.data = ${JSON.stringify(dict.data)}`);
   let filesDict = {};
   // console.log(`datas = ${datas}`);
   self.curProjExpandedKeys = [];
@@ -114,6 +127,7 @@ self.remoteProjs2Local = (dict) => {
   // console.log(`self.curProjList = ${JSON.stringify(self.curProjList)}`);
   if (self.curProj === null || self.curProj === undefined || self.curProj === {} || self.curProj.uuid === undefined) {
     self.curProj = self.curProjList[0];
+    // self.curProjExpandedKeys = [self.curProj.uuid];
   }
   self.curPro2Tree();
 };
@@ -331,6 +345,26 @@ self.genAndPushTestPoints = () => {
     self.pushTestData(5);
     self.pushTestData(6);
   }
+};
+
+self.testData = {};
+self.testData.ch0 = [20];
+self.testData.ch1 = [30];
+self.testData.ch2 = [40];
+self.testData.ch3 = [50];
+self.testData.ch4 = [60];
+self.testData.ch5 = [70];
+self.testData.ch6 = [80];
+self.chs = [self.testData.ch0, self.testData.ch1, self.testData.ch2, self.testData.ch3, self.testData.ch4, self.testData.ch5, self.testData.ch6];
+for (let i = 1; i < self.msMax; i += 1) {
+  for (let j = 0; j <self. chs.length; j += 1) {
+    let ch = self.chs[j];
+    ch.push((ch[i - 1] + 5) % 360);
+  }
+}
+
+self.getTestData = (index) => {
+  return [self.testData.ch0[index], self.testData.ch1[index], self.testData.ch2[index], self.testData.ch2[index], self.testData.ch3[index], self.testData.ch4[index], self.testData.ch5[index], self.testData.ch6[index]]
 };
 
 // end of chart option

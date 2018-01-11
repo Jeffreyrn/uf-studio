@@ -93,41 +93,42 @@ export default {
   },
   methods: {
     onChange(uid, value) {
-      console.log(`${uid} change = ${value}, this.curSelectedIndex = ${this.curSelectedIndex}`);
+      const curSelectedIndex = GlobalUtil.model.localTeach.curSelectedIndex
+      console.log(`${uid} change = ${value}, curSelectedIndex = ${curSelectedIndex}`);
       switch (uid) {
         case 'a0':
         {
-          GlobalUtil.model.localTeach.setPoint(0, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(0, curSelectedIndex, value);
           break;
         }
         case 'a1':
         {
-          GlobalUtil.model.localTeach.setPoint(1, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(1, curSelectedIndex, value);
           break;
         }
         case 'a2':
         {
-          GlobalUtil.model.localTeach.setPoint(2, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(2, curSelectedIndex, value);
           break;
         }
         case 'a3':
         {
-          GlobalUtil.model.localTeach.setPoint(3, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(3, curSelectedIndex, value);
           break;
         }
         case 'a4':
         {
-          GlobalUtil.model.localTeach.setPoint(4, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(4, curSelectedIndex, value);
           break;
         }
         case 'a5':
         {
-          GlobalUtil.model.localTeach.setPoint(5, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(5, curSelectedIndex, value);
           break;
         }
         case 'a6':
         {
-          GlobalUtil.model.localTeach.setPoint(6, this.curSelectedIndex, value);
+          GlobalUtil.model.localTeach.setPoint(6, curSelectedIndex, value);
           break;
         }
         default:
@@ -147,12 +148,12 @@ export default {
 <style lang="scss" scoped>
 .block {
   span{
-    width: 150px;
+    width: 50px;
   }
   display: flex;
   align-items: center;
   .teach-slider {
-    width: 400px;
+    width: 200px;
   }
 }
 
