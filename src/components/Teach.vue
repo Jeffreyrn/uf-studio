@@ -89,6 +89,12 @@ export default {
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
 
+    const nodes = document.getElementsByClassName('el-tree-node__label');
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      node.style.color = 'gray';
+    }
+
     CommandsTeachSocket.listProjs((dict) => {
 
     });
@@ -138,7 +144,18 @@ export default {
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
       console.log(`curFile file = ${JSON.stringify(file)}`);
+      // el-tree-node__label
       if (file !== null && file !== undefined) {
+        const nodes = document.getElementsByClassName('el-tree-node__label');
+        for (let i = 0; i < nodes.length; i += 1) {
+          const node = nodes[i];
+          if (file.name === node.innerHTML) {
+            node.style.color = 'blue';
+          }
+          else {
+            node.style.color = 'gray';
+          }
+        }
         CommandsTeachSocket.getFile(file.uuid, (dict) => {
           // console.log(`CommandsTeachSocket.getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {

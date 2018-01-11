@@ -28,6 +28,11 @@ export default {
     };
   },
   mounted() {
+    const nodes = document.getElementsByClassName('el-tree-node__label');
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      node.style.color = 'gray';
+    }
   },
   methods: {
     handleNodeClick(data) {
@@ -45,6 +50,20 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
+
+      const file = GlobalUtil.model.localProjTree.getFile(uuid);
+      if (file !== null) {
+        const nodes = document.getElementsByClassName('el-tree-node__label');
+        for (let i = 0; i < nodes.length; i += 1) {
+          const node = nodes[i];
+          if (file.name === node.innerHTML) {
+            node.style.color = 'blue';
+          }
+          else {
+            node.style.color = 'gray';
+          }
+        }  
+      }
     },
     renderContent(h, { node, data, store }) {
       return ( '<div>1234567<div/>' );
