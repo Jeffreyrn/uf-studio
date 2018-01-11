@@ -10,6 +10,7 @@
         <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
         <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
         <el-button value='stop' @click='onClick($event)'>Stop</el-button>
+        <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button>
         <el-button value='save' @click='onClick($event)'>Save</el-button>
         <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span>
       </div>
@@ -23,11 +24,11 @@
                 <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
                   {{ parseInt(index / 10) }}.0
                 </div>
-                <div class="float-left" v-if="index % 10 !== 0">
-                  <div style="background-color:lightgreen" v-if="index < model.localTeach.fileDatas[file.uuid].length">
+                <div v-if="index % 10 !== 0">
+                  <div class="float-left" style="background-color:lightgreen" v-if="index < model.localTeach.fileDatas[file.uuid].length">
                     .{{ index % 10 }}
                   </div>
-                  <div style="" v-if="index >= model.localTeach.fileDatas[file.uuid].length">
+                  <div class="float-left" style="" v-if="index >= model.localTeach.fileDatas[file.uuid].length">
                     .{{ index % 10 }}
                   </div>
                   <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
