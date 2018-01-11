@@ -35,20 +35,6 @@ self.sendCmd = (cmdId, data, callback) => {
 
 self.userId = "test";
 
-self.debugSetBeart = (isOpen, sleepTime, callback) => {
-  let params = {
-    data: {
-      "isOpen": isOpen,
-      "sleepTime": sleepTime,
-    }
-  };
-  self.sendCmd(self.DEBUG_SET_BEART, params, (dict) => {
-    if (callback) {
-      callback(dict);
-    }
-  });
-};
-
 self.runPythonScript = (uuid, callback) => {
   let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
   let params = {

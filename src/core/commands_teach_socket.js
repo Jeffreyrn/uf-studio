@@ -93,4 +93,18 @@ self.delFiles = (uuid, callback) => {
   });
 };
 
+self.debugSetBeart = (isOpen, sleepTime, callback) => {
+  let params = {
+    data: {
+      "isOpen": isOpen,
+      "sleepTime": sleepTime,
+    }
+  };
+  self.sendCmd(self.DEBUG_SET_BEART, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
 export default self;

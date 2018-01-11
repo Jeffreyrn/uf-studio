@@ -87,7 +87,7 @@ export default {
       switch (attr) {
         case 'stop':
           {
-            CommandsSocket.debugSetBeart(false, 0.1, (dict) => {
+            CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
               console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
             });
             // GlobalUtil.model.localTeach.curDuration = 0;
@@ -101,14 +101,14 @@ export default {
           {
             self.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.curDuration = 0;
-            CommandsSocket.debugSetBeart(true, 0.1, (dict) => {
+            CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
               console.log(`SetBeart true = dict = ${JSON.stringify(dict)}`);
               const curFileDatas = GlobalUtil.model.localTeach.fileDatas[uuid];
               // this.scrollTo(GlobalUtil.model.localTeach.curDuration);
               this.scrollTo(curFileDatas.length);
               if (curFileDatas.length >= 1800) {
                 // GlobalUtil.model.localTeach.curDuration = 1800;
-                CommandsSocket.debugSetBeart(false, (dict) => {
+                CommandsTeachSocket.debugSetBeart(false, (dict) => {
                   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
                 });
               }
