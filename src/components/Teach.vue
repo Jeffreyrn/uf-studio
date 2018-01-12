@@ -8,12 +8,13 @@
 
       <el-button value='new' @click='newProj()'>New</el-button>
       <span> {{ socketCom.diff }} </span>
-
+            <!-- :default-expanded-keys="model.localTeach.curProjExpandedKeys" -->
       <div id="total-teach-frame" class="total-frame position-absolute">
         <div id="left-teach-frame" class="left-frame position-absolute">
           <el-tree
             :data="model.localTeach.curProTreeDatas"
             node-key="uuid"
+            highlight-current
             :default-expanded-keys="model.localTeach.curProjExpandedKeys"
             @node-click="handleNodeClick">
           </el-tree>

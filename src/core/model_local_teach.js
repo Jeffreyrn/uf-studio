@@ -131,6 +131,7 @@ self.remoteProjs2Local = (dict) => {
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
         curProj.files.push(file);
+        self.curProjExpandedKeys.push(uuid);
       }
       tempPath = path.dirname(tempPath);
     } //;
