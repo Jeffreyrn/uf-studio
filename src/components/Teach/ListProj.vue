@@ -19,22 +19,6 @@
         <div style="width:81100px;">
           <template v-for='index in showArr'>
             <ListProjCell :index='index' :file='file'></ListProjCell>
-            <!-- <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;" @click='onSelect($event, index)'>
-              <div style="width:40px;height:20px;background-color:yellow;">
-                <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
-                  {{ parseInt(index / 10) }}.0s
-                </div>
-                <div v-if="index % 10 !== 0">
-                  <div class="float-left" style="background-color:lightgreen" v-if="index < model.localTeach.fileDatas[file.uuid].length">
-                    .{{ index % 10 }}
-                  </div>
-                  <div class="float-left" style="" v-if="index >= model.localTeach.fileDatas[file.uuid].length">
-                    .{{ index % 10 }}
-                  </div>
-                </div>
-                <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
-              </div>
-            </div> -->
           </template>
         </div>
       </div>
