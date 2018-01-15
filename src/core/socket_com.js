@@ -52,6 +52,10 @@ self.response = '';
 self.penddingCmds = {};
 self.send_msg = (msg, callback) => {
   const self = SocketCom;
+  if (self.socket_info.socket.readyState !== ReconnectingWebSocket.OPEN) {
+    console.log(`self.socket_info.socket.readyState is not open`);
+    return -1;
+  }
   self.startTime = new Date().getTime();
   if (self.msgid > 100000) { // restart from 100000
     self.msgid = 0;

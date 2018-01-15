@@ -21,15 +21,16 @@
           <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
           </div> -->
+          <div class="float-clear"></div>
           <el-input
+            id="result-text"
             class="position-absolute"
-            style="width:100%;bottom:40px;"
+            style="width:100%;bottom:40px;left:0px;"
             type="textarea"
             :rows="5"
             v-model="model.localProjTree.runningCmdResult">
           </el-input>
-          <div class="float-clear"></div>
-          <ResultRun class="result-frame position-absolute" style="width:100%"></ResultRun>
+          <ResultRun class="result-frame position-absolute" style="width:100%;"></ResultRun>
         </div>
       </div>
     </div>
@@ -59,6 +60,16 @@ export default {
   mounted() {
     // let totalFrame = document.getElementById("total-frame");
     // totalFrame.style.height = `${screen.height - 400}px`;
+    const curFile = GlobalUtil.model.localProjTree.curFile;
+    if (curFile !== null && curFile !== undefined && curFile.uuid != undefined) {
+      // const editors = document.getElementsByName("code-editor");
+      // console.log(`editor value =  cur ${curFile.uuid}`);
+      // for (let i = 0; i < editors.length; i += 1) {
+      //   const editor = editors[i];
+      //   editor.style.display = 'none';
+      // }
+      GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+    }
     window.addEventListener('resize', GlobalUtil.model.localProjTree.onwinresize, false);
     // self.onwinresize
     GlobalUtil.model.localProjTree.onwinresize();
@@ -139,6 +150,7 @@ a {
   /*position: absolute;*/
   background-color:#e9e6d3;
   /*position:absolute;*/
+  left:0px;
   bottom:0px;
   padding:0px;
   margin:0px;

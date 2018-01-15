@@ -77,6 +77,9 @@ div, span, button, textarea {
 .over-hiden {
   overflow: scroll;
 }
+.display-none {
+  display: none;
+}
 .position-absolute {
   position: absolute;
 }

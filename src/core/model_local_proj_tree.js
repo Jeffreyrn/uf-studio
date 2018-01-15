@@ -298,24 +298,34 @@ self.setSelectedUI = (uuid) => {
       }
     }
   }
+  const curFile = self.curFile;
+  if (curFile === null) {
+    return;
+  }
   setTimeout(() => {
     // const curFile = GlobalUtil.model.localProjTree.curFile;
-    const curFile = self.curFile;
-    if (curFile === null) {
-      return;
-    }
+    let selectedEditor = null;
     const editors = document.getElementsByName("code-editor");
     console.log(`editor value =  cur ${curFile.uuid}`);
     for (let i = 0; i < editors.length; i += 1) {
       const editor = editors[i];
+      editor.style.display = 'none';
+    }
+    for (let i = 0; i < editors.length; i += 1) {
+      const editor = editors[i];
       console.log(`editor value = ${editor.getAttribute("value")}`);
       const aUUID = editor.getAttribute("value");
+      editor.style.display = 'none';
       if (aUUID === curFile.uuid) {
-        editor.style.display = 'block';
+        // editor.style.display = 'block';
+        selectedEditor = editor;
       }
-      else {
-        editor.style.display = 'none';
-      }
+      // else {
+      //   editor.style.display = 'none';
+      // }
+    }
+    if (selectedEditor !== null) {
+      selectedEditor.style.display = 'block';
     }
   });
 };
@@ -333,8 +343,9 @@ self.onwinresize = () => {
   const totalFrame = document.getElementById("total-frame");
   const totalFrameWidth = document.body.clientWidth - 20;
   const totalFrameHeight = document.body.clientHeight - 120;
+  const leftFrameWidth = 200
   totalFrame.style.width = `${totalFrameWidth}px`;
-  rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+  rightFrame.style.width = `${totalFrameWidth - leftFrameWidth - 2}px`;
   totalFrame.style.height = `${totalFrameHeight}px`;
   const editors = GlobalUtil.model.localProjTree.editors;
   for (const key in editors) {
@@ -343,7 +354,7 @@ self.onwinresize = () => {
       editor.setSize('auto', `${totalFrameHeight - 200}px`);
     }
   }
-  console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
+  // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 
 let indexCounter = 0;
@@ -601,6 +612,8 @@ self.remoteCmdResult2Local = (dict) => {
   if (programID !== undefined) {
     GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
   }
+  const show = document.getElementById("result-text");
+  show.scrollTop = show.scrollHeight;
   console.log(`runPipCommand dict = ${stdout}, programID = ${programID}`);
 };
 

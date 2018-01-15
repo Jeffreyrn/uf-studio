@@ -1,5 +1,5 @@
 <template>
-  <div name="code-editor" :value="data.uuid" class="float-left;width:100%;">
+  <div name="code-editor" :value="data.uuid" class="float-left" style="width:100%;">
     <!-- <input v-model="example0"/> -->
     <!-- v-if="data.uuid===model.localProjTree.curFile.uuid" -->
     <!-- <div style="position:absolute;top:100px;">这家伙很懒,什么文件也没有打开</div> -->
