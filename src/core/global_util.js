@@ -8,8 +8,8 @@ import CommandsTeachSocket from './commands_teach_socket';
 // import CommandsHttp from './commands_http';
 
 const args = {
-  host: '192.168.1.166',
-  // host: '192.168.1.67',
+  // host: '192.168.1.166',
+  host: '192.168.1.67',
   port: '18333',
 };
 

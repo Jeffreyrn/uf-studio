@@ -15,10 +15,11 @@
         </div>
         <div class="float-clear"></div>
         <div class="float-left" style="width:100%">
-          <CodeEditor></CodeEditor>
+          <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
+            <CodeEditor :data='data'></CodeEditor>
+          </template>
           <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
-
           </div> -->
           <el-input
             class="position-absolute"
@@ -58,31 +59,24 @@ export default {
   mounted() {
     // let totalFrame = document.getElementById("total-frame");
     // totalFrame.style.height = `${screen.height - 400}px`;
-    window.addEventListener('resize', this.onwinresize, false);
-    this.onwinresize();
+    window.addEventListener('resize', GlobalUtil.model.localProjTree.onwinresize, false);
+    // self.onwinresize
+    GlobalUtil.model.localProjTree.onwinresize();
     CommandsEditorSocket.listProjs((dict) => {
 
     });
+    // const editors = document.getElementsByName("code-editor");
+    // for (let i = 0; i < editors.length; i += 1) {
+    //   const editor = editors[i];
+    //   console.log(`editor value = ${JSON.stringify(editor)}`);
+    // }
+    // console.log(`rightFrame value 1`);
+    // const rightFrame = document.getElementById("right-frame");
+    // console.log(`rightFrame value = ${rightFrame.innerHTML}`);
+    // console.log(`rightFrame value 2`);
   },
   methods: {
-    onwinresize() {
-      // console.log(`global window width: ${document.body.clientWidth}, height: ${document.body.clientHeight}`);
-      // let store = self.store;
-      this.clientWidth = document.body.clientWidth;
-      this.clientHeight = document.body.clientHeight;
-      // console.log(`2 global window width: ${this.clientWidth}, height: ${this.clientHeight}`);
-      // self.store = store;
-      const leftFrame = document.getElementById("left-frame");
-      // leftFrame.style.width = `${leftFrameWidth}px`;
-      const rightFrame = document.getElementById("right-frame");
-      const totalFrame = document.getElementById("total-frame");
-      const totalFrameWidth = this.clientWidth - 20;
-      const totalFrameHeight = this.clientHeight - 120;
-      totalFrame.style.width = `${totalFrameWidth}px`;
-      rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
-      totalFrame.style.height = `${totalFrameHeight}px`;
-      GlobalUtil.model.localProjTree.editor.setSize('auto', `${totalFrameHeight - 200}px`);
-    },
+
   },
   beforeDestroy() {
   },

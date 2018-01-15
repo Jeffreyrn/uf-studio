@@ -7,6 +7,7 @@ const path = require('path')
 const LocalProjTree = {};
 const self = LocalProjTree;
 
+self.editors = {};
 //
 self.runningCmdProgramID = '';
 self.runningCmdResult = '';
@@ -279,6 +280,70 @@ self.setSelectedUUID = (uuid) => {
       }
     }
   }
+  // ui
+  self.setSelectedUI(uuid);
+};
+
+self.setSelectedUI = (uuid) => {
+  const file = GlobalUtil.model.localProjTree.getFile(uuid);
+  if (file !== null) {
+    const nodes = document.getElementsByClassName('el-tree-node__label');
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      if (file.name === node.innerHTML) {
+        node.style.color = 'blue';
+      }
+      else {
+        node.style.color = 'gray';
+      }
+    }
+  }
+  setTimeout(() => {
+    // const curFile = GlobalUtil.model.localProjTree.curFile;
+    const curFile = self.curFile;
+    if (curFile === null) {
+      return;
+    }
+    const editors = document.getElementsByName("code-editor");
+    console.log(`editor value =  cur ${curFile.uuid}`);
+    for (let i = 0; i < editors.length; i += 1) {
+      const editor = editors[i];
+      console.log(`editor value = ${editor.getAttribute("value")}`);
+      const aUUID = editor.getAttribute("value");
+      if (aUUID === curFile.uuid) {
+        editor.style.display = 'block';
+      }
+      else {
+        editor.style.display = 'none';
+      }
+    }
+  });
+};
+
+self.onwinresize = () => {
+  // console.log(`global window width: ${document.body.clientWidth}, height: ${document.body.clientHeight}`);
+  // let store = self.store;
+  // this.clientWidth = document.body.clientWidth;
+  // this.clientHeight = document.body.clientHeight;
+  // console.log(`2 global window width: ${this.clientWidth}, height: ${this.clientHeight}`);
+  // self.store = store;
+  const leftFrame = document.getElementById("left-frame");
+  // leftFrame.style.width = `${leftFrameWidth}px`;
+  const rightFrame = document.getElementById("right-frame");
+  const totalFrame = document.getElementById("total-frame");
+  const totalFrameWidth = document.body.clientWidth - 20;
+  const totalFrameHeight = document.body.clientHeight - 120;
+  totalFrame.style.width = `${totalFrameWidth}px`;
+  rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+  totalFrame.style.height = `${totalFrameHeight}px`;
+  const editors = GlobalUtil.model.localProjTree.editors;
+  for (const key in editors) {
+    const editor = editors[key];
+    if (editor !== null && editor !== undefined) {
+      editor.setSize('auto', `${totalFrameHeight - 200}px`);
+    }
+  }
+  console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 
 let indexCounter = 0;

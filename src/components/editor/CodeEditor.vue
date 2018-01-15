@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <div style="position:absolute;top:100px;">这家伙很懒,什么文件也没有打开</div>
-    <div class="top-path" style="">{{ model.localProjTree.curFilePath }}</div>
+  <div name="code-editor" :value="data.uuid" class="float-left;width:100%;">
+    <!-- <input v-model="example0"/> -->
+    <!-- v-if="data.uuid===model.localProjTree.curFile.uuid" -->
+    <!-- <div style="position:absolute;top:100px;">这家伙很懒,什么文件也没有打开</div> -->
+    <!-- <div class="top-path" style="">this:{{ data.uuid }}, cur:{{ model.localProjTree.curFile.uuid }}</div> -->
+    <div class="top-path" style="width:100%">{{ data.uuid }}</div>
+          <!-- v-model="model.localProjTree.curSelectedContent" -->
     <codemirror
+      v-model="inputText"
       v-bind:class="classObject"
+      style="width:100%"
       id="codemirror-id"
-      v-model="model.localProjTree.curSelectedContent"
       :options="editorOption"
       ref="myEditor"
       @input="onEditorCodeChange">
     </codemirror>
     <div class="float-clear"></div>
-
   </div>
 </template>
 
@@ -35,9 +39,11 @@ import 'codemirror/addon/display/fullscreen.css';
 import PythonHint from '../../assets/lib/python-hint';
 
 export default {
+  props: ['data'],
   data() {
     return {
       // code: 'def as #123',
+      inputText: '',
       model: GlobalUtil.model,
       complete_prefix: '',
       uneditorOption: {
@@ -108,29 +114,44 @@ export default {
     };
   },
   mounted() {
+    console.log(`init uuid = ${this.data.uuid}`);
     CodeMirror.registerHelper('hintWords', 'python', PythonHint);
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
     const html = document.getElementById("codemirror-id").innerHTML;
-    GlobalUtil.model.localProjTree.editor = this.editor;
-    // GlobalUtil.model.localProjTree.editor.setSize('auto', '100px');
+    GlobalUtil.model.localProjTree.editors[this.data.uuid] = this.editor;
+    // GlobalUtil.model.localProjTree.editors[this.data.uuid].setSize('auto', `${document.body.clientHeight - 120 - 200}px`);
+    GlobalUtil.model.localProjTree.onwinresize();
+    const self = this;
+    CommandsEditorSocket.getFile(this.data.uuid, (dict) => {
+      let content = dict.data;
+      if (content === null || content === undefined) {
+        content = '';
+      }
+      self.inputText = content;
+      // self.curFile.remoteContent = content;
+      // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
+      //   // self.curFile.localContent === content;
+      //   self.setSelectedContent(file.uuid, content);
+      // }
+    });
   },
   methods: {
     onEditorCodeChange(newCode) {
       console.log('this is new code', newCode);
       // GlobalUtil.model.localProjTree.curFile.content = newCode;
-      const curFile = GlobalUtil.model.localProjTree.curFile;
-      GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);
-      GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
-      // const curFile = this.getCurFile();
-      if (curFile === null) {
-        return;
-      }
-      const uuid = curFile.uuid;
-      const text = curFile.localContent;
-      CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
+      // const curFile = GlobalUtil.model.localProjTree.curFile;
+      // GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);
+      // GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
+      // // const curFile = this.getCurFile();
+      // if (curFile === null) {
+      //   return;
+      // }
+      // const uuid = curFile.uuid;
+      // const text = curFile.localContent;
+      CommandsEditorSocket.saveOrUpdateFile(this.data.uuid, newCode, (dict) => {
         if (dict.data === 'success') {
-          curFile.remoteContent = text;
+          // curFile.remoteContent = text;
           GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
         }
         console.log(`update content success`);
@@ -140,6 +161,9 @@ export default {
   beforeDestroy() {
   },
   watch: {
+    example0(curVal, oldVal) {
+      console.log(curVal, oldVal);
+    },
   },
   computed: {
     editor() {
@@ -152,6 +176,12 @@ export default {
         'opacity1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
       }
     },
+    classObject1: (uuid) => {
+      return {
+        'width0': uuid !== model.localProjTree.curFile.uuid,
+        'width1': uuid === model.localProjTree.curFile.uuid,
+      }
+    }
   },
   components: {
     codemirror,
@@ -160,6 +190,12 @@ export default {
 </script>
 
 <style scoped>
+.width0 {
+  width: 0px;
+}
+.width1 {
+  width: 100%;
+}
 .opacity0 {
   opacity: 0.0;
 }

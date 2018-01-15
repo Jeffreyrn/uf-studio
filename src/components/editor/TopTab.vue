@@ -2,7 +2,7 @@
   <div class="float-left top-tab" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
       <div class="float-left top-tab-item" @click="onselect()">
-        <div v-if="data.localContent !== data.remoteContent" class="float-left">*</div>
+        <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
         <div v-if="data.uuid !== model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
         <div v-if="data.uuid === model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color">{{ data.name }}</div>
       </div>
@@ -34,6 +34,8 @@ export default {
       const uuid = this.data.uuid;
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
       console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
+      console.log(`folder uuid curSelectedUUID = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
+      GlobalUtil.model.localProjTree = GlobalUtil.model.localProjTree;
     },
     close() {
       const uuid = this.data.uuid;
