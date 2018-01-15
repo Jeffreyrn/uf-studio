@@ -81,6 +81,9 @@ self.onmessage = (evt) => {
   let dict = JSON.parse(evt.data);
   dict = dict || {};
   const callback = self.penddingCmds[dict.id];
+  const endTime2 = new Date().getTime();
+  const diff = endTime2 - self.startTime;
+  self.diff = `time diff = ${diff} ms`;
   if (dict.type === 'beart') {
     if (callback) {
       callback(dict);
@@ -95,9 +98,6 @@ self.onmessage = (evt) => {
   }
   if (callback) {
     // console.log(`send response = ${JSON.stringify(dict)}`);
-    const endTime2 = new Date().getTime();
-    const diff = endTime2 - self.startTime;
-    self.diff = `time diff = ${diff} ms`;
     callback(dict);
   }
 };

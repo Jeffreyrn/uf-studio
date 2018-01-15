@@ -18,8 +18,8 @@
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
         <div style="width:81100px;">
           <template v-for='index in showArr'>
-            <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;" @click='onSelect($event, index)'>
-              <!-- button -->
+            <ListProjCell :index='index' :file='file'></ListProjCell>
+            <!-- <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;" @click='onSelect($event, index)'>
               <div style="width:40px;height:20px;background-color:yellow;">
                 <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
                   {{ parseInt(index / 10) }}.0s
@@ -34,8 +34,7 @@
                 </div>
                 <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
               </div>
-              <!-- button end -->
-            </div>
+            </div> -->
           </template>
         </div>
       </div>
@@ -48,6 +47,7 @@
 
 import swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
+import ListProjCell from './ListProjCell';
 
 export default {
   data() {
@@ -161,7 +161,7 @@ export default {
       }
     },
     checkscroll() {
-      // console.log(`check scroll = ${document.getElementById("scroll-timer").scrollLeft}`);
+      console.log(`check scroll = ${document.getElementById("scroll-timer").scrollLeft}`);
     },
     addRecord() {
       const dateStr = GlobalUtil.getTimeString();
@@ -172,25 +172,13 @@ export default {
       });
     },
     onSelect(e, index) {
-      const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
-      if (point === null || point === undefined) {
-        console.log(`point null null null`);
-        return;
-      }
-      GlobalUtil.model.localTeach.curSelectedIndex = index;
-      console.log(`onSelect = ${index}, point = ${JSON.stringify(point)}`);
-      GlobalUtil.model.localTeach.curPoint.a0 = point[0];
-      GlobalUtil.model.localTeach.curPoint.a1 = point[1];
-      GlobalUtil.model.localTeach.curPoint.a2 = point[2];
-      GlobalUtil.model.localTeach.curPoint.a3 = point[3];
-      GlobalUtil.model.localTeach.curPoint.a4 = point[4];
-      GlobalUtil.model.localTeach.curPoint.a5 = point[5];
-      GlobalUtil.model.localTeach.curPoint.a6 = point[6];
+      GlobalUtil.model.localTeach.onSelect(e, index);
     },
   },
   beforeDestroy() {
   },
   components: {
+    ListProjCell,
   },
   computed: {
     classObject: () => {

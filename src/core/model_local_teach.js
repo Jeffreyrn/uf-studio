@@ -145,6 +145,23 @@ self.remoteProjs2Local = (dict) => {
   self.curPro2Tree();
 };
 
+self.onSelect = (e, index) => {
+  const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
+  if (point === null || point === undefined) {
+    console.log(`point null null null`);
+    return;
+  }
+  GlobalUtil.model.localTeach.curSelectedIndex = index;
+  console.log(`onSelect = ${index}, point = ${JSON.stringify(point)}`);
+  GlobalUtil.model.localTeach.curPoint.a0 = point[0];
+  GlobalUtil.model.localTeach.curPoint.a1 = point[1];
+  GlobalUtil.model.localTeach.curPoint.a2 = point[2];
+  GlobalUtil.model.localTeach.curPoint.a3 = point[3];
+  GlobalUtil.model.localTeach.curPoint.a4 = point[4];
+  GlobalUtil.model.localTeach.curPoint.a5 = point[5];
+  GlobalUtil.model.localTeach.curPoint.a6 = point[6];
+};
+
 self.curProTreeDatas = [];
 self.curPro2Tree = () => {
   let tempDatas = [];
