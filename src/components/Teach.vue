@@ -25,6 +25,8 @@
           </div>
           <!-- chart end -->
 
+          <el-button @click='addRecord()'>addRecord</el-button>
+
           <!-- scroll -->
           <ListProj></ListProj>
           <!-- scroll end -->
@@ -101,6 +103,14 @@ export default {
     });
   },
   methods: {
+    addRecord() {
+      const dateStr = GlobalUtil.getTimeString();
+      CommandsTeachSocket.createFile(dateStr, (dict) => {
+        console.log(`dict = ${JSON.stringify(dict)}`);
+        const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
+        GlobalUtil.model.localTeach.curProj = proj;
+      });
+    },
     add() {
       console.log(`add add add`);
       this.dialogVisible = false;

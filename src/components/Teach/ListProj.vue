@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <el-button @click='addRecord()'>addRecord</el-button>
     <div class="float-clear"></div>
     <template v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
       <div style="background-color:red;height:2px;width:1000px;"></div>
@@ -145,15 +144,8 @@ export default {
       }
     },
     checkscroll() {
-      console.log(`check scroll = ${document.getElementById("scroll-timer").scrollLeft}`);
-    },
-    addRecord() {
-      const dateStr = GlobalUtil.getTimeString();
-      CommandsTeachSocket.createFile(dateStr, (dict) => {
-        console.log(`dict = ${JSON.stringify(dict)}`);
-        const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
-        GlobalUtil.model.localTeach.curProj = proj;
-      });
+      const scrollLeft = document.getElementById("scroll-timer").scrollLeft;
+      console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 40)}`);
     },
     onSelect(e, index) {
       GlobalUtil.model.localTeach.onSelect(e, index);
