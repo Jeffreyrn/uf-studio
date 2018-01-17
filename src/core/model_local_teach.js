@@ -26,6 +26,8 @@ self.setFileData = (uuid, datas) => {
 
 };
 
+self.lastFileData = [];
+
 self.getFileData = (uuid, index) => {
   return self.fileDatas[uuid][index];
 };

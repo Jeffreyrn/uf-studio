@@ -9,6 +9,7 @@
         <el-button style="display:none;" id="save-id" value='save' @click='onClick($event, file.uuid)'>Save</el-button>
         <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button>
         <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
+        <el-button v-if="model.localTeach.isContinus===false" value='cut' @click='onClick($event, file.uuid)'>Cut</el-button>
         <el-button value='stop' @click='onClick($event, file.uuid)'>Stop</el-button>
         <!-- <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button> -->
         <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span>
@@ -69,6 +70,18 @@ export default {
       console.log(`attr = ${attr}, uuid = ${uuid}`);
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(GlobalUtil.model.localTeach.curProj, uuid);
       switch (attr) {
+        case 'cut':
+          {
+            const lastData = GlobalUtil.model.localTeach.lastData;
+            GlobalUtil.model.localTeach.pushFileData(uuid, lastData);
+            let tempArr = [];
+            for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+              tempArr.push(i);
+            }
+            GlobalUtil.model.localTeach.showArr = tempArr;
+            this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
+            break;
+          }
         case 'save':
           {
             CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
@@ -97,8 +110,16 @@ export default {
             GlobalUtil.model.localTeach.curDuration = 0;
             CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
               console.log(`SetBeart true = dict = ${JSON.stringify(dict)}`);
+              console.log(`GlobalUtil.model.localTeach.curDuration = ${GlobalUtil.model.localTeach.curDuration}`);
               const curFileDatas = GlobalUtil.model.localTeach.fileDatas[uuid];
               // this.scrollTo(GlobalUtil.model.localTeach.curDuration);
+              // test data
+              const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+              GlobalUtil.model.localTeach.lastFileData = testData;
+              if (false == GlobalUtil.model.localTeach.isContinus) {
+                GlobalUtil.model.localTeach.curDuration -= -1;
+                return;
+              }
               this.scrollTo(curFileDatas.length);
               if (curFileDatas.length >= 1800) {
                 // GlobalUtil.model.localTeach.curDuration = 1800;
@@ -113,8 +134,6 @@ export default {
                 // test data
                 const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
                 GlobalUtil.model.localTeach.pushFileData(uuid, testData);
-                // GlobalUtil.model.localTeach.fileDatas = GlobalUtil.model.localTeach.fileDatas;
-                // this.reload();
                 let tempArr = [];
                 for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
                   tempArr.push(i);

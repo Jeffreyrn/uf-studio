@@ -287,7 +287,6 @@ export default {
         reverseButtons: true,
         width: '300px',
         preConfirm: text => new Promise((resolve, reject) => {
-
           resolve();
         }),
       }).then((text) => {

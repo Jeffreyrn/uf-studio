@@ -26,7 +26,8 @@
           </div>
           <!-- chart end -->
 
-          <el-button @click='addContinusRecord()'>addContinusRecord</el-button>
+          <el-button @click='addRecord(true)'>addContinusRecord</el-button>
+          <el-button @click='addRecord(false)'>addDiscontinusRecord</el-button>
 
           <!-- scroll -->
           <ListProj></ListProj>
@@ -108,9 +109,13 @@ export default {
     });
   },
   methods: {
-    addContinusRecord() {
+    addDiscontinusRecord() {
+
+    },
+    addRecord(isContinus) {
       const dateStr = GlobalUtil.getTimeString();
       let createdUUID = null;
+      GlobalUtil.model.localTeach.isContinus = isContinus;
       CommandsTeachSocket.createFile(dateStr, (dict) => {
         createdUUID = dict.uuid;
       }, (dict) => {
@@ -118,9 +123,8 @@ export default {
         const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
         GlobalUtil.model.localTeach.curProj = proj;
         GlobalUtil.model.localTeach.curEditingFileUUID = createdUUID;
-        let tempArr = [];
         setTimeout(() => {
-          GlobalUtil.model.localTeach.showArr = tempArr;
+          GlobalUtil.model.localTeach.showArr = [];
           const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, createdUUID);
           GlobalUtil.model.localTeach.setSelectedTreeItem(file);
           document.getElementById("start-id").click();
