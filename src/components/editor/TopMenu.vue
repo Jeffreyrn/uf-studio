@@ -291,7 +291,10 @@ export default {
           resolve();
         }),
       }).then((text) => {
-        GlobalUtil.model.localProjTree.delProj(row.uuid);
+        // GlobalUtil.model.localProjTree.delProj(row.uuid);
+        CommandsEditorSocket.delProj(row.uuid, (dict) => {
+          console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
+        });
       });
     },
   },

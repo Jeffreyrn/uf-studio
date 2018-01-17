@@ -7,6 +7,7 @@
       <span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>
 
       <el-button value='new' @click='newProj()'>New</el-button>
+      <el-button value='new' @click='delProj()'>Delete</el-button>
       <span> {{ socketCom.diff }} </span>
             <!-- :default-expanded-keys="model.localTeach.curProjExpandedKeys" -->
       <div id="total-teach-frame" class="total-frame position-absolute">
@@ -25,7 +26,7 @@
           </div>
           <!-- chart end -->
 
-          <el-button @click='addRecord()'>addRecord</el-button>
+          <el-button @click='addContinusRecord()'>addContinusRecord</el-button>
 
           <!-- scroll -->
           <ListProj></ListProj>
@@ -57,6 +58,9 @@
     </div>
 </template>
 <script>
+
+import swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.css';
 
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
@@ -104,7 +108,7 @@ export default {
     });
   },
   methods: {
-    addRecord() {
+    addContinusRecord() {
       const dateStr = GlobalUtil.getTimeString();
       let createdUUID = null;
       CommandsTeachSocket.createFile(dateStr, (dict) => {
@@ -121,6 +125,26 @@ export default {
           GlobalUtil.model.localTeach.setSelectedTreeItem(file);
           document.getElementById("start-id").click();
         }, 10);
+      });
+    },
+    delProj() {
+      const curProj = GlobalUtil.model.localTeach.curProj;
+      swal({
+        text: `Delete ${curProj.name}?`,
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'CANCEL',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: false,
+        reverseButtons: true,
+        width: '300px',
+        preConfirm: text => new Promise((resolve, reject) => {
+          resolve();
+        }),
+      }).then((text) => {
+        CommandsTeachSocket.delProj(curProj.uuid, (dict) => {
+          console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+        });
       });
     },
     add() {

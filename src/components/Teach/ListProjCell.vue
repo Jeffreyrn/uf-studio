@@ -6,10 +6,7 @@
         {{ parseInt(index / 10) }}.0s
       </div>
       <div v-if="index % 10 !== 0">
-        <div class="float-left" style="background-color:lightgreen" v-if="index < model.localTeach.fileDatas[file.uuid].length">
-          .{{ index % 10 }}
-        </div>
-        <div class="float-left" style="" v-if="index >= model.localTeach.fileDatas[file.uuid].length">
+        <div class="float-left" v-if="index < model.localTeach.fileDatas[file.uuid].length">
           .{{ index % 10 }}
         </div>
       </div>

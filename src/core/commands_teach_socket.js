@@ -57,6 +57,21 @@ self.createProj = (name) => {
   });
 };
 
+self.delProj = (proId, callback) => {
+  let filePath = proId; //path.join(self.ROOT_DIR, name);
+  console.log(`filePath = ${filePath}`);
+  let params = {
+    data: {
+      "userId": self.userId, // 默认是test，用来区分不同用户
+      "root": filePath, // 文件夹的父目录，必须
+      "file": '', // 文件夹名称, 可省略
+    }
+  };
+  self.sendCmd(self.TEACH_ID_DELETE_DIR, params, (dict) => {
+    self.listProjs(callback);
+  });
+};
+
 self.createFile = (name, callback1, callback2) => {
   let curProj = self.model.localTeach.curProj;
   if (curProj === null || curProj === undefined || curProj === {}) {
