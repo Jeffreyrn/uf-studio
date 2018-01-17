@@ -5,6 +5,7 @@ import Control from '@/components/Control';
 import Editor from '@/components/Editor';
 import Paint from '@/components/Paint';
 import Emulator from '@/components/Emulator';
+import Blockly from '@/components/Blockly';
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/emulator',
       name: 'Emulator',
       component: Emulator,
+    },
+    {
+      path: '/blockly',
+      name: 'Blockly',
+      component: Blockly,
     },
   ],
 });
