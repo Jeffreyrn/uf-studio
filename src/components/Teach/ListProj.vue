@@ -9,14 +9,15 @@
         <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
         <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
         <el-button value='stop' @click='onClick($event)'>Stop</el-button>
-        <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button>
+        <!-- <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button> -->
         <el-button value='save' @click='onClick($event, file.uuid)'>Save</el-button>
         <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span>
       </div>
       <!-- scroll timer  -->
-      <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
+      <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;height:80px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
         <div style="width:81100px;">
-          <template v-for='index in showArr'>
+          <!-- <template v-for='(data,index) in model.localTeach.fileDatas[file.uuid]'> -->
+          <template v-for='index in model.localTeach.showArr'>
             <ListProjCell :index='index' :file='file'></ListProjCell>
           </template>
         </div>
@@ -37,14 +38,14 @@ export default {
     return {
       model: GlobalUtil.model,
       // curSelectedIndex: 0,
-      showArr: [],
+      // showArr: [],
     };
   },
   mounted() {
-    this.showArr = [];
-    for (let i = GlobalUtil.model.localTeach.msMin; i <= GlobalUtil.model.localTeach.msMax; i += 1) {
-      this.showArr.push(i);
-    }
+    // this.showArr = [];
+    // for (let i = GlobalUtil.model.localTeach.msMin; i <= GlobalUtil.model.localTeach.msMax; i += 1) {
+    //   this.showArr.push(i);
+    // }
     // GlobalUtil.model.localTeach.chartOption.xAxis.data = this.showArr;
   },
   methods: {
@@ -89,7 +90,7 @@ export default {
           }
         case 'start':
           {
-            self.curEditingFileUUID = uuid;
+            GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.curDuration = 0;
             CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
               console.log(`SetBeart true = dict = ${JSON.stringify(dict)}`);
@@ -106,6 +107,13 @@ export default {
                 // test data
                 const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
                 GlobalUtil.model.localTeach.pushFileData(uuid, testData);
+                // GlobalUtil.model.localTeach.fileDatas = GlobalUtil.model.localTeach.fileDatas;
+                // this.reload();
+                let tempArr = [];
+                for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+                  tempArr.push(i);
+                }
+                GlobalUtil.model.localTeach.showArr = tempArr;
                 this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
               }
               if (GlobalUtil.model.localTeach.curDuration % 100 === 0) {

@@ -167,16 +167,22 @@ export default {
             node.style.color = 'gray';
           }
         }
-        CommandsTeachSocket.getFile(file.uuid, (dict) => {
+        CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket.getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
-            if (dict.data === "" || dict.data === undefined || dict.data === null) {
-              GlobalUtil.model.localTeach.fileDatas[file.uuid] = [];
+            const data = dict.data;
+            if (data === "" || data === undefined || data === null) {
+              GlobalUtil.model.localTeach.fileDatas[uuid] = [];
             }
             else {
-              GlobalUtil.model.localTeach.fileDatas[file.uuid] = JSON.parse(dict.data);
+              GlobalUtil.model.localTeach.fileDatas[uuid] = JSON.parse(data);
             }
-            GlobalUtil.model.localTeach.curEditingFileUUID = file.uuid;
+            GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+            let tempArr = [];
+            for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+              tempArr.push(i);
+            }
+            GlobalUtil.model.localTeach.showArr = tempArr;
           }
         });
       }

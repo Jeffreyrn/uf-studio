@@ -4,6 +4,7 @@ const path = require('path')
 const LocalTeach = {};
 const self = LocalTeach;
 
+self.showArr = [];
 self.curProjList = [];
 self.curProj = {};
 self.curProjExpandedKeys = [];
@@ -19,6 +20,10 @@ self.pushFileData = (uuid, datas) => {
     return;
   }
   self.fileDatas[uuid].push(datas);
+};
+
+self.setFileData = (uuid, datas) => {
+
 };
 
 self.getFileData = (uuid, index) => {
