@@ -57,7 +57,7 @@ self.createProj = (name) => {
   });
 };
 
-self.createFile = (name, callback) => {
+self.createFile = (name, callback1, callback2) => {
   let curProj = self.model.localTeach.curProj;
   if (curProj === null || curProj === undefined || curProj === {}) {
     return;
@@ -72,7 +72,12 @@ self.createFile = (name, callback) => {
     }
   };
   self.sendCmd(self.TEACH_ID_CREATE_FILE, params, (dict) => {
-    self.listProjs(callback);
+    dict.uuid = filePath;
+    // console.log(`TEACH_ID_CREATE_FILE dict = ${JSON.stringify(dict)}`);
+    if (callback1) {
+      callback1(dict);
+    }
+    self.listProjs(callback2);
   });
 };
 

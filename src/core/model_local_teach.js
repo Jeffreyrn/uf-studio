@@ -39,6 +39,19 @@ self.PROJ_TREE_TYPE = {
   FILE: 'file',
 };
 
+self.setSelectedTreeItem = (file) => {
+  const nodes = document.getElementsByClassName('el-tree-node__label');
+  for (let i = 0; i < nodes.length; i += 1) {
+    const node = nodes[i];
+    if (file !== null && file.name === node.innerHTML) {
+      node.style.color = 'blue';
+    }
+    else {
+      node.style.color = 'gray';
+    }
+  }
+};
+
 self.createFile = (uuid, superid, proId, type, name, content) => {
   const file = {
     // index: indexCounter += 1,

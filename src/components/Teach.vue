@@ -92,11 +92,12 @@ export default {
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
 
-    const nodes = document.getElementsByClassName('el-tree-node__label');
-    for (let i = 0; i < nodes.length; i += 1) {
-      const node = nodes[i];
-      node.style.color = 'gray';
-    }
+    GlobalUtil.model.localTeach.setSelectedTreeItem(null);
+    // const nodes = document.getElementsByClassName('el-tree-node__label');
+    // for (let i = 0; i < nodes.length; i += 1) {
+    //   const node = nodes[i];
+    //   node.style.color = 'gray';
+    // }
 
     CommandsTeachSocket.listProjs((dict) => {
 
@@ -105,10 +106,21 @@ export default {
   methods: {
     addRecord() {
       const dateStr = GlobalUtil.getTimeString();
+      let createdUUID = null;
       CommandsTeachSocket.createFile(dateStr, (dict) => {
+        createdUUID = dict.uuid;
+      }, (dict) => {
         console.log(`dict = ${JSON.stringify(dict)}`);
         const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
         GlobalUtil.model.localTeach.curProj = proj;
+        GlobalUtil.model.localTeach.curEditingFileUUID = createdUUID;
+        let tempArr = [];
+        setTimeout(() => {
+          GlobalUtil.model.localTeach.showArr = tempArr;
+          const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, createdUUID);
+          GlobalUtil.model.localTeach.setSelectedTreeItem(file);
+          document.getElementById("start-id").click();
+        }, 10);
       });
     },
     add() {
@@ -119,9 +131,9 @@ export default {
       if (this.folderOrFile === 'proj') {
         CommandsTeachSocket.createProj(text);
       }
-      if (this.folderOrFile === 'file') {
-        CommandsTeachSocket.createFile(text);
-      }
+      // if (this.folderOrFile === 'file') {
+      //   CommandsTeachSocket.createFile(text);
+      // }
     },
     newProj() {
       this.folderOrFile = 'proj';
@@ -157,16 +169,17 @@ export default {
       console.log(`curFile file = ${JSON.stringify(file)}`);
       // el-tree-node__label
       if (file !== null && file !== undefined) {
-        const nodes = document.getElementsByClassName('el-tree-node__label');
-        for (let i = 0; i < nodes.length; i += 1) {
-          const node = nodes[i];
-          if (file.name === node.innerHTML) {
-            node.style.color = 'blue';
-          }
-          else {
-            node.style.color = 'gray';
-          }
-        }
+        GlobalUtil.model.localTeach.setSelectedTreeItem(file);
+        // const nodes = document.getElementsByClassName('el-tree-node__label');
+        // for (let i = 0; i < nodes.length; i += 1) {
+        //   const node = nodes[i];
+        //   if (file.name === node.innerHTML) {
+        //     node.style.color = 'blue';
+        //   }
+        //   else {
+        //     node.style.color = 'gray';
+        //   }
+        // }
         CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket.getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {

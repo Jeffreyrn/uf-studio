@@ -5,12 +5,12 @@
       <div style="background-color:red;height:2px;width:1000px;"></div>
       <div>{{ index }} -- {{ file.uuid }}</div>
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
+        <el-button style="display:none;" id="start-id" value='start' @click='onClick($event, file.uuid)'>Start</el-button>
+        <el-button style="display:none;" id="save-id" value='save' @click='onClick($event, file.uuid)'>Save</el-button>
         <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button>
-        <el-button value='start' @click='onClick($event, file.uuid)'>Start</el-button>
         <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
-        <el-button value='stop' @click='onClick($event)'>Stop</el-button>
+        <el-button value='stop' @click='onClick($event, file.uuid)'>Stop</el-button>
         <!-- <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button> -->
-        <el-button value='save' @click='onClick($event, file.uuid)'>Save</el-button>
         <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span>
       </div>
       <!-- scroll timer  -->
@@ -78,14 +78,17 @@ export default {
           }
         case 'stop':
           {
+            CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
+              console.log(`CommandsTeachSocket.saveOrUpdateFile = ${JSON.stringify(dict)}`);
+            });
             CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
               console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
             });
             // GlobalUtil.model.localTeach.curDuration = 0;
             // clearTimeout(t);
             // t = null;
-            this.sentCounter = 0;
-            this.recCounter = 0;
+            // this.sentCounter = 0;
+            // this.recCounter = 0;
             break;
           }
         case 'start':
@@ -101,6 +104,9 @@ export default {
                 // GlobalUtil.model.localTeach.curDuration = 1800;
                 CommandsTeachSocket.debugSetBeart(false, (dict) => {
                   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+                  CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
+                    console.log(`CommandsTeachSocket.saveOrUpdateFile = ${JSON.stringify(dict)}`);
+                  });
                 });
               }
               else {
