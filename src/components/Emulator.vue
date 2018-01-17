@@ -131,7 +131,7 @@ export default {
     });
     console.log(materialList);
     const scene = new THREE.Scene();
-    // this.three.scene = scene;
+    console.log(this.three.scene, scene);
     scene.background = new THREE.Color(0xc0c0c0);
     const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
     // camera.position.z = 8;
@@ -227,7 +227,9 @@ export default {
     window.addEventListener('resize', onWindowResize, false);
   },
   beforeDestroy() {
-    // this.three.scene.remove();
+    if (this.three.scene) {
+      this.three.scene.remove();
+    }
     // this.three.scene.remove(this.three.groups[0]);
     // this.three.groups.forEach((group) => {
     //   group.dispose();
