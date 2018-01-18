@@ -209,7 +209,7 @@ export default {
         //   }
         // }
         CommandsTeachSocket.getFile(uuid, (dict) => {
-          // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
+          console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             let data = dict.data;
             if (data === "" || data === undefined || data === null) {
@@ -217,8 +217,13 @@ export default {
             }
             else {
               data = JSON.parse(data);
-              data = data.points;
-              GlobalUtil.model.localTeach.fileDatas[uuid] = data;
+              const isContinus = data.type === 'continus';
+              const points = data.points;
+              const type = data.tpye;
+              file.isContinus = isContinus;
+              GlobalUtil.model.localTeach.isContinus = isContinus;
+              console.log(`isContinus = ${isContinus}, data.type = ${type}`);
+              GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             let tempArr = [];

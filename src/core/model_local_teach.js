@@ -11,6 +11,8 @@ self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
 self.curEditingFileUUID = '';
 self.fileDatas = {};
+self.lastFileData = [];
+self.isContinus = false;
 self.pushFileData = (uuid, datas) => {
   let dict = self.fileDatas[uuid];
   if (dict === null || dict === undefined) {
@@ -25,8 +27,6 @@ self.pushFileData = (uuid, datas) => {
 self.setFileData = (uuid, datas) => {
 
 };
-
-self.lastFileData = [];
 
 self.getFileData = (uuid, index) => {
   return self.fileDatas[uuid][index];
