@@ -34,11 +34,11 @@
       <!-- <el-button class="top-btn" @click="saveFile()">
         Save
       </el-button> -->
-      <el-button class="top-btn" @click="run()">
-        Run
-      </el-button>
-      <el-button class="top-btn" @click="stop()">
+      <el-button class="top-btn float-right" @click="stop()">
         Stop
+      </el-button>
+      <el-button class="top-btn float-right" @click="run()">
+        Run
       </el-button>
       <!-- width: {{ clientWidth }} : {{ clientHeight }} -->
       <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
