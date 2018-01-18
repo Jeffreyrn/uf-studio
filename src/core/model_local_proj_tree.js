@@ -221,6 +221,9 @@ self.removeOpenTab = (fileId) => {
     }
   }
   self.curOpenedFilesList = proTabsList;
+  if (self.curOpenedFilesList.length === 0) {
+    self.setSelectedUI(null);
+  }
 };
 // self.addOpenFile = (uuid) => {
 //   const file = self.getFile(uuid);
@@ -287,16 +290,17 @@ self.setSelectedUUID = (uuid) => {
 
 self.setSelectedUI = (uuid) => {
   const file = GlobalUtil.model.localProjTree.getFile(uuid);
-  if (file !== null) {
-    const nodes = document.getElementsByClassName('el-tree-node__label');
-    for (let i = 0; i < nodes.length; i += 1) {
-      const node = nodes[i];
-      if (file.name === node.innerHTML) {
-        node.style.color = 'blue';
-      }
-      else {
-        node.style.color = 'gray';
-      }
+  const nodes = document.getElementsByClassName('el-tree-node__label');
+  for (let i = 0; i < nodes.length; i += 1) {
+    const node = nodes[i];
+    if (file === null) {
+      node.style.color = 'gray';
+    }
+    else if (file.name === node.innerHTML) {
+      node.style.color = 'blue';
+    }
+    else {
+      node.style.color = 'gray';
     }
   }
   const curFile = self.curFile;
