@@ -209,14 +209,16 @@ export default {
         //   }
         // }
         CommandsTeachSocket.getFile(uuid, (dict) => {
-          // console.log(`CommandsTeachSocket.getFile dict = ${JSON.stringify(dict)}`);
+          // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
-            const data = dict.data;
+            let data = dict.data;
             if (data === "" || data === undefined || data === null) {
               GlobalUtil.model.localTeach.fileDatas[uuid] = [];
             }
             else {
-              GlobalUtil.model.localTeach.fileDatas[uuid] = JSON.parse(data);
+              data = JSON.parse(data);
+              data = data.points;
+              GlobalUtil.model.localTeach.fileDatas[uuid] = data;
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             let tempArr = [];

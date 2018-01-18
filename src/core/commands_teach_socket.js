@@ -112,11 +112,17 @@ self.delFiles = (uuid, callback) => {
   });
 };
 
-self.saveOrUpdateFile = (uuid, callback) => {
+self.saveOrUpdateFile = (uuid, isContinus, callback) => {
   // text = 'test test';
   let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
+
   // return;
-  const text = JSON.stringify(self.model.localTeach.fileDatas[uuid]);
+  const textDict = {
+    type: isContinus === true ? 'continus' : 'discontinuous',
+    points: self.model.localTeach.fileDatas[uuid],
+  };
+  const text = JSON.stringify(textDict);
+  //JSON.stringify(self.model.localTeach.fileDatas[uuid]);
   // console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
   let params = {
     data: {

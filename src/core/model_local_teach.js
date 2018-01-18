@@ -439,7 +439,15 @@ for (let i = 1; i < self.msMax; i += 1) {
 }
 
 self.getTestData = (index) => {
-  return [self.testData.ch0[index], self.testData.ch1[index], self.testData.ch2[index], self.testData.ch2[index], self.testData.ch3[index], self.testData.ch4[index], self.testData.ch5[index], self.testData.ch6[index]]
+  return [
+    self.testData.ch0[index],
+    self.testData.ch1[index],
+    self.testData.ch2[index],
+    self.testData.ch3[index],
+    self.testData.ch4[index],
+    self.testData.ch5[index],
+    self.testData.ch6[index]
+  ];
 };
 
 // end of chart option

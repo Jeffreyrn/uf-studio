@@ -72,8 +72,9 @@ export default {
       switch (attr) {
         case 'cut':
           {
-            const lastData = GlobalUtil.model.localTeach.lastData;
-            GlobalUtil.model.localTeach.pushFileData(uuid, lastData);
+            const lastFileData = GlobalUtil.model.localTeach.lastFileData;
+            console.log(`cut last data = ${lastFileData}`);
+            GlobalUtil.model.localTeach.pushFileData(uuid, lastFileData);
             let tempArr = [];
             for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
               tempArr.push(i);
@@ -84,15 +85,15 @@ export default {
           }
         case 'save':
           {
-            CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
-              // console.log(`CommandsTeachSocket.saveOrUpdateFile = ${JSON.stringify(dict)}`);
+            CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
+              // console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
             });
             break;
           }
         case 'stop':
           {
-            CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
-              console.log(`CommandsTeachSocket.saveOrUpdateFile = ${JSON.stringify(dict)}`);
+            CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
+              console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
             });
             CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
               console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
@@ -125,8 +126,8 @@ export default {
                 // GlobalUtil.model.localTeach.curDuration = 1800;
                 CommandsTeachSocket.debugSetBeart(false, (dict) => {
                   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-                  CommandsTeachSocket.saveOrUpdateFile(uuid, (dict) => {
-                    console.log(`CommandsTeachSocket.saveOrUpdateFile = ${JSON.stringify(dict)}`);
+                  CommandsTeachSocket.saveOrUpdateFile(uuid, true, (dict) => {
+                    console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
                   });
                 });
               }
