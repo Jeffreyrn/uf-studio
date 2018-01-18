@@ -331,21 +331,16 @@ self.setSelectedUI = (uuid) => {
 };
 
 self.onwinresize = () => {
-  // console.log(`global window width: ${document.body.clientWidth}, height: ${document.body.clientHeight}`);
-  // let store = self.store;
-  // this.clientWidth = document.body.clientWidth;
-  // this.clientHeight = document.body.clientHeight;
-  // console.log(`2 global window width: ${this.clientWidth}, height: ${this.clientHeight}`);
-  // self.store = store;
   const leftFrame = document.getElementById("left-frame");
   // leftFrame.style.width = `${leftFrameWidth}px`;
   const rightFrame = document.getElementById("right-frame");
   const totalFrame = document.getElementById("total-frame");
   const totalFrameWidth = document.body.clientWidth - 20;
   const totalFrameHeight = document.body.clientHeight - 120;
-  const leftFrameWidth = 200
+  const leftFrameWidth = 200;
+  const rightFrameWidth = totalFrameWidth - leftFrameWidth - 2;
   totalFrame.style.width = `${totalFrameWidth}px`;
-  rightFrame.style.width = `${totalFrameWidth - leftFrameWidth - 2}px`;
+  rightFrame.style.width = `${rightFrameWidth}px`;
   totalFrame.style.height = `${totalFrameHeight}px`;
   const editors = GlobalUtil.model.localProjTree.editors;
   for (const key in editors) {
@@ -354,6 +349,7 @@ self.onwinresize = () => {
       editor.setSize('auto', `${totalFrameHeight - 200}px`);
     }
   }
+  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 150}px`;
   // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 

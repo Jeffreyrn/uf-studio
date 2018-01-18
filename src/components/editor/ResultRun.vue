@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-input v-model="input" placeholder="pip install" style="width:500px;"></el-input>
-    <el-button @click="runCmd()">Run</el-button>
-    <el-button @click="clearText()">Clear</el-button>
+    <el-input class="float-left" id="pip-install-input-id" v-model="input" placeholder="pip install" style="width:500px;"></el-input>
+    <el-button class="float-right" @click="clearText()">Clear</el-button>
+    <el-button class="float-right" @click="runCmd()">Run</el-button>
   </div>
 </template>
 
