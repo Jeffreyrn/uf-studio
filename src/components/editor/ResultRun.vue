@@ -2,6 +2,7 @@
   <div>
     <el-input v-model="input" placeholder="pip install" style="width:500px;"></el-input>
     <el-button @click="runCmd()">Run</el-button>
+    <el-button @click="clearText()">Clear</el-button>
   </div>
 </template>
 
@@ -16,6 +17,9 @@ export default {
   mounted() {
   },
   methods: {
+    clearText() {
+      GlobalUtil.model.localProjTree.runningCmdResult = '';
+    },
     runCmd() {
       console.log(`run run`);
       if (this.input === null || this.input === undefined || this.input === '') {

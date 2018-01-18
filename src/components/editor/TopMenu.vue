@@ -7,15 +7,15 @@
       <form id='f_form_out' v-show='false'>
         <input id='f_output' type='path' @change="didOutput()"/>
       </form>
-      <el-button class="top-btn" @click="newProj()">
+      <!-- <el-button class="top-btn" @click="newProj()">
         New
-      </el-button>
+      </el-button> -->
       <!-- <el-button class="top-btn" @click="importPro()">
         Import
       </el-button> -->
-      <el-button class="top-btn" @click="exportPro()">
+      <!-- <el-button class="top-btn" @click="exportPro()">
         Export
-      </el-button>
+      </el-button> -->
       <el-button class="top-btn" @click="allProjs()">
         Projs
       </el-button>
@@ -31,9 +31,9 @@
       <el-button class="top-btn" @click="delFile()">
         Delete
       </el-button>
-      <el-button class="top-btn" @click="saveFile()">
+      <!-- <el-button class="top-btn" @click="saveFile()">
         Save
-      </el-button>
+      </el-button> -->
       <el-button class="top-btn" @click="run()">
         Run
       </el-button>
@@ -59,6 +59,9 @@
       <el-dialog
         title="Select a project"
         :visible.sync="projSelectDialog">
+        <el-button class="top-btn" @click="newProj()">
+          New
+        </el-button>
         <el-table
           border
           width="800px"
