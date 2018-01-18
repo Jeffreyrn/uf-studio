@@ -21,10 +21,6 @@
           </el-tree>
         </div>
         <div id="right-teach-frame" class="right-frame position-absolute">
-          <!-- chart begin -->
-          <div class="chart" id="echart-main-2">
-          </div>
-          <!-- chart end -->
 
           <el-button @click='addRecord(true)'>addContinusRecord</el-button>
           <el-button @click='addRecord(false)'>addDiscontinusRecord</el-button>
@@ -32,6 +28,11 @@
           <!-- scroll -->
           <ListProj></ListProj>
           <!-- scroll end -->
+
+          <!-- chart begin -->
+          <div class="chart" id="echart-main-2">
+          </div>
+          <!-- chart end -->
 
           <div class="float-clear"></div>
         </div>
@@ -196,19 +197,17 @@ export default {
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
       console.log(`curFile file = ${JSON.stringify(file)}`);
+
+      //
+      const myChart = window.myChart;
+      GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
+      const option = GlobalUtil.model.localTeach.chartOption;
+      myChart.setOption(option, true);
+
+      //
       // el-tree-node__label
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
-        // const nodes = document.getElementsByClassName('el-tree-node__label');
-        // for (let i = 0; i < nodes.length; i += 1) {
-        //   const node = nodes[i];
-        //   if (file.name === node.innerHTML) {
-        //     node.style.color = 'blue';
-        //   }
-        //   else {
-        //     node.style.color = 'gray';
-        //   }
-        // }
         CommandsTeachSocket.getFile(uuid, (dict) => {
           console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
@@ -285,10 +284,11 @@ export default {
 }
 
 .chart {
+  margin-top: 50px;
   margin-left: 50px;
   background-color: white;
   width: 1000px;
-  height: 300px;
+  height: 200px;
 }
 .total-frame {
   /*background-color:gray;*/
