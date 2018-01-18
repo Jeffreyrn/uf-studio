@@ -116,6 +116,7 @@ export default {
       const dateStr = GlobalUtil.getTimeString();
       let createdUUID = null;
       GlobalUtil.model.localTeach.isContinus = isContinus;
+      GlobalUtil.model.localTeach.isEditingPoints = true;
       CommandsTeachSocket.createFile(dateStr, (dict) => {
         createdUUID = dict.uuid;
       }, (dict) => {
@@ -221,6 +222,7 @@ export default {
               const points = data.points;
               const type = data.tpye;
               file.isContinus = isContinus;
+              file.storeType = data.type;
               GlobalUtil.model.localTeach.isContinus = isContinus;
               console.log(`isContinus = ${isContinus}, data.type = ${type}`);
               GlobalUtil.model.localTeach.fileDatas[uuid] = points;

@@ -24,6 +24,7 @@ self.curSelectedFileUUIDs = {};
 self.curSelectedFileUUID = '';
 self.curProjList = [];
 self.isResultFrameDisplay = false;
+self.isEditingPoints = false;
 
 // self.getProjsFromArm((dict) => {
 //   self.curProjList = dict;
