@@ -220,7 +220,6 @@ export default {
               const isContinus = data.type === 'continus';
               const points = data.points;
               const type = data.tpye;
-              file.isContinus = isContinus;
               file.storeType = data.type;
               GlobalUtil.model.localTeach.isContinus = isContinus;
               console.log(`isContinus = ${isContinus}, data.type = ${type}`);
