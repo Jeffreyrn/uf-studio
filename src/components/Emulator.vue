@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="hello" id="emulator-container">
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j}}:{{state.joint[j]}}</span>
@@ -152,7 +152,7 @@ export default {
     controls.enableZoom = true;
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    document.getElementById('emulator-container').appendChild(renderer.domElement);
     // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
     const joints = [];
     const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
@@ -231,9 +231,9 @@ export default {
       this.three.scene.remove();
     }
     // this.three.scene.remove(this.three.groups[0]);
-    // this.three.groups.forEach((group) => {
-    //   group.dispose();
-    // });
+    this.three.groups.forEach((group) => {
+      group.dispose();
+    });
   },
   methods: {
     changeJoint(value) {
