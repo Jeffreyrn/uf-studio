@@ -23,6 +23,7 @@ self.curSelectedUUID = '';
 self.curSelectedFileUUIDs = {};
 self.curSelectedFileUUID = '';
 self.curProjList = [];
+self.isResultFrameDisplay = false;
 
 // self.getProjsFromArm((dict) => {
 //   self.curProjList = dict;
@@ -346,7 +347,9 @@ self.onwinresize = () => {
   for (const key in editors) {
     const editor = editors[key];
     if (editor !== null && editor !== undefined) {
-      editor.setSize('auto', `${totalFrameHeight - 200}px`);
+      // editor.setSize('auto', `${totalFrameHeight - 200}px`);
+      const editorHeight = GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 200 : totalFrameHeight - 80;
+      editor.setSize('auto', `${editorHeight}px`);
     }
   }
   document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 150}px`;

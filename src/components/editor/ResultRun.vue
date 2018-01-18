@@ -25,6 +25,9 @@ export default {
       if (this.input === null || this.input === undefined || this.input === '') {
         return;
       }
+      GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
+      // GlobalUtil.model.localProjTree.runningCmdResult = "";
+      GlobalUtil.model.localProjTree.onwinresize();
       CommandsEditorSocket.stopPythonScript((dict) => {
         console.log(`has stopPythonScript = ${JSON.stringify(dict)}`);
         // GlobalUtil.model.localProjTree.runningCmdResult = "";

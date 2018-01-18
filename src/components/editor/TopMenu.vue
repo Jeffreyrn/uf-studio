@@ -110,6 +110,8 @@ export default {
         return;
       }
       GlobalUtil.model.localProjTree.runningCmdResult = '';
+      GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
+      GlobalUtil.model.localProjTree.onwinresize();
       CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
         GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
       });

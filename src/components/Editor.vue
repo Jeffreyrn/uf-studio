@@ -21,18 +21,18 @@
           <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
           </div> -->
-          <div class="float-clear"></div>
-          <el-input
-            id="result-text"
-            class="position-absolute"
-            style="width:100%;bottom:40px;left:0px;"
-            type="textarea"
-            :rows="5"
-            v-model="model.localProjTree.runningCmdResult">
-          </el-input>
-          <ResultRun class="result-frame position-absolute" style="width:100%;"></ResultRun>
-        </div>
+          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:40px;left:0px;">
+            <el-input
+              id="result-text"
+              type="textarea"
+              :rows="5"
+              v-model="model.localProjTree.runningCmdResult">
+            </el-input>
+            <div class="position-absolute" style="top:0px;right:0px;width:50px;height:30px;text-align:center;background-color:yellow;line-height:30px;cursor:pointer;" @click="onCloseResult()">X</div>
+          </div>
       </div>
+      <ResultRun class="result-frame position-absolute" style="width:100%;"></ResultRun>
+    </div>
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
   </div>
@@ -87,7 +87,10 @@ export default {
     // console.log(`rightFrame value 2`);
   },
   methods: {
-
+    onCloseResult() {
+      GlobalUtil.model.localProjTree.isResultFrameDisplay = false;
+      GlobalUtil.model.localProjTree.onwinresize();
+    },
   },
   beforeDestroy() {
   },
