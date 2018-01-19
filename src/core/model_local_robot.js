@@ -89,7 +89,9 @@ const robot = {
       GlobalUtil.socketCom.msgid = 0;
     }
     // robot.message.id += 1;
-    data.id = `${robot.message.id}`;
+    // data.id = `${robot.message.id}`;
+    GlobalUtil.socketCom.msgid += 1;
+    data.id = `${GlobalUtil.socketCom.msgid}`;
     // robot.info.socket.send(JSON.stringify(data));
     GlobalUtil.socketCom.socket_info.socket.send(JSON.stringify(data));
     // return robot.message.id;
