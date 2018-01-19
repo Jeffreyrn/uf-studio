@@ -623,11 +623,9 @@ self.remoteCmdResult2Local = (dict) => {
   show.scrollTop = show.scrollHeight;
   console.log(`runPipCommand dict = ${stdout}, programID = ${programID}`);
   if (dict.code === 1111) {
-    // TODO
     CommandsEditorSocket.stopPythonScript(() => {
 
     })
-    return;
   }
 };
 
