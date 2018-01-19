@@ -84,14 +84,16 @@ const robot = {
     progress: 0,
   },
   sendMessageSync: (data) => {
-    if (robot.message.id > 10000) {
-      robot.message.id = 0;
+    if (GlobalUtil.socketCom.msgid > 10000) {
+      // robot.message.id = 0;
+      GlobalUtil.socketCom.msgid = 0;
     }
-    robot.message.id += 1;
+    // robot.message.id += 1;
     data.id = `${robot.message.id}`;
     // robot.info.socket.send(JSON.stringify(data));
     GlobalUtil.socketCom.socket_info.socket.send(JSON.stringify(data));
-    return robot.message.id;
+    // return robot.message.id;
+    return GlobalUtil.socketCom.msgid;
   },
   setSpeed: (value) => {
     robot.info.speed = (value < 0) ? 20 : value;
