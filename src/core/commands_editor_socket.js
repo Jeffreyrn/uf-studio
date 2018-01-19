@@ -45,6 +45,7 @@ self.runPythonScript = (uuid, callback) => {
     }
   };
   self.sendCmd(self.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
+    GlobalUtil.model.localProjTree.isCmdRunning = true;
     if (callback) {
       callback(dict);
     }
@@ -59,6 +60,7 @@ self.stopPythonScript = (callback) => {
     }
   };
   self.sendCmd(self.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
+    GlobalUtil.model.localProjTree.isCmdRunning = false;
     if (callback) {
       callback(dict);
     }
@@ -73,6 +75,7 @@ self.runPipCommand = (command, options, callback) => {
     }
   };
   self.sendCmd(self.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
+    GlobalUtil.model.localProjTree.isCmdRunning = true;
     if (callback) {
       callback(dict);
     }

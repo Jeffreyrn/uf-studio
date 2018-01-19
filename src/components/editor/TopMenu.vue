@@ -37,9 +37,16 @@
       <el-button class="top-btn float-right" @click="stop()">
         Stop
       </el-button>
-      <el-button class="top-btn float-right" @click="run()">
-        Run
-      </el-button>
+      <span v-if="model.localProjTree.isCmdRunning===true">
+        <el-button class="top-btn float-right" @click="run()" disabled>
+          Run
+        </el-button>
+      </span>
+      <span v-if="model.localProjTree.isCmdRunning===false">
+        <el-button class="top-btn float-right" @click="run()">
+          Run
+        </el-button>
+      </span>
       <!-- width: {{ clientWidth }} : {{ clientHeight }} -->
       <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
 
@@ -107,11 +114,14 @@ export default {
       if (curFile === null) {
         return;
       }
-      GlobalUtil.model.localProjTree.runningCmdResult = '';
       GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
       GlobalUtil.model.localProjTree.onwinresize();
-      CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
-        GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+      CommandsEditorSocket.stopPythonScript(() => {
+        GlobalUtil.model.localProjTree.runningCmdResult = '';
+        CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
+          // GlobalUtil.model.localProjTree.isCmdRunning = true;
+          GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+        });
       });
     },
     stop() {

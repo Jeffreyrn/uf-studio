@@ -603,12 +603,15 @@ self.getFileInfo = (uuid) => {
 //   });
 // };
 
+
+self.isCmdRunning = false;
 self.remoteCmdResult2Local = (dict) => {
   let stdout = dict.data.stdout;
   const programID = dict.data.program_id;
   if (stdout === undefined && programID === undefined) {
     stdout = dict.data;
   }
+
   if (stdout !== undefined) {
     GlobalUtil.model.localProjTree.runningCmdResult += stdout + "\n";
     // GlobalUtil.model.localProjTree.runningCmdResult = stdout;
@@ -619,6 +622,11 @@ self.remoteCmdResult2Local = (dict) => {
   const show = document.getElementById("result-text");
   show.scrollTop = show.scrollHeight;
   console.log(`runPipCommand dict = ${stdout}, programID = ${programID}`);
+  if (dict.code === 1111) {
+    CommandsEditorSocket.stopPythonScript(() => {
+
+    })
+  }
 };
 
 self.remoteProjs2Local = (dict) => {
