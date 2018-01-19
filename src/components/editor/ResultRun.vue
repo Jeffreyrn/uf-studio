@@ -2,7 +2,16 @@
   <div>
     <el-input class="float-left" id="pip-install-input-id" v-model="input" placeholder="pip install" style="width:500px;"></el-input>
     <el-button class="float-right" @click="clearText()">Clear</el-button>
-    <el-button class="float-right" @click="runCmd()">Run</el-button>
+    <span v-if="model.localProjTree.isCmdRunning===true">
+      <el-button class="float-right" @click="runCmd()" disabled>
+        Run
+      </el-button>
+    </span>
+    <span v-if="model.localProjTree.isCmdRunning===false">
+      <el-button class="float-right" @click="runCmd()">
+        Run
+      </el-button>
+    </span>
   </div>
 </template>
 
@@ -30,8 +39,9 @@ export default {
       GlobalUtil.model.localProjTree.onwinresize();
       CommandsEditorSocket.stopPythonScript((dict) => {
         console.log(`has stopPythonScript = ${JSON.stringify(dict)}`);
-        // GlobalUtil.model.localProjTree.runningCmdResult = "";
+        GlobalUtil.model.localProjTree.runningCmdResult = "";
         CommandsEditorSocket.runPipCommand(this.input, [], (dict) => {
+          // GlobalUtil.model.localProjTree.isCmdRunning = true;
           // GlobalUtil.model.localProjTree.runningCmdResult = "";
           GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
         });
