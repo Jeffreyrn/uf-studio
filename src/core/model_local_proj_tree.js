@@ -257,6 +257,7 @@ self.setSelectedUUID = (uuid) => {
     // self.curSelectedFileUUID = '';
     self.setCurSelectedFileUUIDs(uuid);
     self.curSelectedFolderUUID = '';
+    // self.setSelectedUI(uuid);
     return;
   }
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -290,12 +291,19 @@ self.setSelectedUUID = (uuid) => {
 };
 
 self.setSelectedUI = (uuid) => {
-  const file = GlobalUtil.model.localProjTree.getFile(uuid);
+  const file = GlobalUtil.model.localProjTree.getFileInfo(uuid);
+  console.log(`setSelectedUI file type uuid = ${uuid}, file = ${file}`);
+  if (file) {
+    console.log(`setSelectedUI file type = ${file.type}`);
+  }
   const nodes = document.getElementsByClassName('el-tree-node__label');
   for (let i = 0; i < nodes.length; i += 1) {
     const node = nodes[i];
     if (file === null) {
       node.style.color = 'gray';
+    }
+    else if (file.type !== 'file') {
+      return;
     }
     else if (file.name === node.innerHTML) {
       node.style.color = 'blue';
