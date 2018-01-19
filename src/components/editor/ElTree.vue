@@ -12,8 +12,6 @@
 
 <script>
 
-import swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.css';
 import ELTreeNode from './ELTreeNode';
 
 export default {

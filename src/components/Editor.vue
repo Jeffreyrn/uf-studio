@@ -38,6 +38,7 @@
   </div>
 </template>
 <script>
+import GlobalUtil from '../core/global_util';
 import TopMenu from './editor/TopMenu';
 // import ProjTree from './editor/ProjTree';
 import ElTree from './editor/ElTree';
@@ -61,7 +62,7 @@ export default {
     // let totalFrame = document.getElementById("total-frame");
     // totalFrame.style.height = `${screen.height - 400}px`;
     const curFile = GlobalUtil.model.localProjTree.curFile;
-    if (curFile !== null && curFile !== undefined && curFile.uuid != undefined) {
+    if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
       // const editors = document.getElementsByName("code-editor");
       // console.log(`editor value =  cur ${curFile.uuid}`);
       // for (let i = 0; i < editors.length; i += 1) {

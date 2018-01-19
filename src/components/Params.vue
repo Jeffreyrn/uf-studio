@@ -36,7 +36,7 @@
     </div>
 </template>
 <script>
-// import GlobalUtil from '../core/global_util';
+import GlobalUtil from '../core/global_util';
 import Page01 from './params/Page01';
 import Page02 from './params/Page02';
 import Page03 from './params/Page03';

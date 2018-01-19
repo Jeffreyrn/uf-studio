@@ -5,3 +5,11 @@
 /test/unit/coverage/
 /src/assets/lib-external/*
 /src/assets/lib/*
+/src/core/*
+/src/lib/*
+/src/components/editor/
+/src/components/params/
+/src/components/Teach/
+/src/components/Teach.vue
+/src/components/Params.vue
+/src/components/Editor.vue

@@ -32,9 +32,6 @@
   </div>
 </template>
 <script>
-
-import swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.css';
 import ListProjCell from './ListProjCell';
 
 export default {
@@ -158,23 +155,18 @@ export default {
           }
         case 'delete':
           {
-            swal({
-              text: `Delete ${file.name}?`,
-              showCancelButton: true,
+            this.$confirm(`Delete ${file.name}?`, {
               confirmButtonText: 'OK',
               cancelButtonText: 'CANCEL',
-              showLoaderOnConfirm: true,
-              allowOutsideClick: false,
-              reverseButtons: true,
-              width: '300px',
-              preConfirm: text => new Promise((resolve, reject) => {
-                resolve();
-              }),
-            }).then((text) => {
+              type: 'info',
+              showClose: false,
+              closeOnClickModal: false,
+            }).then(() => {
               CommandsTeachSocket.delFiles(uuid, (dict) => {
                 const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
                 GlobalUtil.model.localTeach.curProj = proj;
               });
+            }).catch(() => {
             });
             break;
           }

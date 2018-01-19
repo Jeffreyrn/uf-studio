@@ -86,8 +86,6 @@
 
 <script>
 
-import swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.css';
 
 export default {
   data() {
@@ -178,22 +176,15 @@ export default {
       if (curFile === null) {
         return;
       }
-      swal({
-        text: `Delete ${curFile.name}?`,
-        showCancelButton: true,
+      this.$confirm(`Delete ${curFile.name}?`, {
         confirmButtonText: 'OK',
         cancelButtonText: 'CANCEL',
-        showLoaderOnConfirm: true,
-        allowOutsideClick: false,
-        reverseButtons: true,
-        width: '300px',
-        preConfirm: text => new Promise((resolve, reject) => {
-          // GlobalUtil.model.localProjTree.delFiles();
-          CommandsEditorSocket.delFiles(this.getCurFile().uuid);
-          resolve();
-        }),
-      }).then((text) => {
-
+        type: 'info',
+        showClose: false,
+        closeOnClickModal: false,
+      }).then(() => {
+        CommandsEditorSocket.delFiles(this.getCurFile().uuid);
+      }).catch(() => {
       });
     },
     add(file) {
@@ -282,23 +273,17 @@ export default {
     },
     onDelete(row) {
       this.projSelectDialog = false;
-      swal({
-        text: `Delete project?`,
-        showCancelButton: true,
+      this.$confirm(`Delete project?`, {
         confirmButtonText: 'OK',
         cancelButtonText: 'CANCEL',
-        showLoaderOnConfirm: true,
-        allowOutsideClick: false,
-        reverseButtons: true,
-        width: '300px',
-        preConfirm: text => new Promise((resolve, reject) => {
-          resolve();
-        }),
-      }).then((text) => {
-        // GlobalUtil.model.localProjTree.delProj(row.uuid);
+        type: 'info',
+        showClose: false,
+        closeOnClickModal: false,
+      }).then(() => {
         CommandsEditorSocket.delProj(row.uuid, (dict) => {
           console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
         });
+      }).catch(() => {
       });
     },
   },

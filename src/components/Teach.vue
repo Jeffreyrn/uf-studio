@@ -61,9 +61,6 @@
 </template>
 <script>
 
-import swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.css';
-
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
 
@@ -135,22 +132,17 @@ export default {
     },
     delProj() {
       const curProj = GlobalUtil.model.localTeach.curProj;
-      swal({
-        text: `Delete ${curProj.name}?`,
-        showCancelButton: true,
+      this.$confirm(`Delete ${curProj.name}?`, {
         confirmButtonText: 'OK',
         cancelButtonText: 'CANCEL',
-        showLoaderOnConfirm: true,
-        allowOutsideClick: false,
-        reverseButtons: true,
-        width: '300px',
-        preConfirm: text => new Promise((resolve, reject) => {
-          resolve();
-        }),
-      }).then((text) => {
+        type: 'info',
+        showClose: false,
+        closeOnClickModal: false,
+      }).then(() => {
         CommandsTeachSocket.delProj(curProj.uuid, (dict) => {
           console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
         });
+      }).catch(() => {
       });
     },
     add() {

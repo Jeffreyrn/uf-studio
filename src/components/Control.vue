@@ -18,6 +18,8 @@
 </template>
 <script>
 import debounce from 'lodash.debounce';
+import GlobalUtil from '../core/global_util';
+
 // import robot from '../assets/lib/robot';
 const robot = GlobalUtil.model.robot;
 
