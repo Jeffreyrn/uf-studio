@@ -1,1 +1,1 @@
-*.json filter=lfs diff=lfs merge=lfs -text
+[0-9].json filter=lfs diff=lfs merge=lfs -text

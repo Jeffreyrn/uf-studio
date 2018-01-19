@@ -51,7 +51,7 @@ module.exports = {
     'func-names': ["error", "always"],
     'space-before-function-paren': ["error", "never"],
     "no-unused-vars": ["error", { "args": "after-used" }],
-    "max-len": ["error", 128],
+    "max-len": ["error", 512],
     "radix":0,
     "no-underscore-dangle":0,
     "no-return-assign":0

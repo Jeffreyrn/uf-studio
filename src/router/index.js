@@ -6,6 +6,8 @@ import Editor from '@/components/Editor';
 import Paint from '@/components/Paint';
 import Emulator from '@/components/Emulator';
 import Blockly from '@/components/Blockly';
+import Params from '@/components/Params';
+import Teach from '@/components/Teach';
 
 Vue.use(Router);
 
@@ -41,6 +43,16 @@ export default new Router({
       path: '/blockly',
       name: 'Blockly',
       component: Blockly,
+    },
+    {
+      path: '/params',
+      name: 'Params',
+      component: Params,
+    },
+    {
+      path: '/teach',
+      name: 'Teach',
+      component: Teach,
     },
   ],
 });
