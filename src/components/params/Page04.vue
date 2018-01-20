@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-console.log('Rounter = 04');
+// console.log('Rounter = 04');
 
 export default {
   data() {

@@ -208,7 +208,7 @@
 
 </template>
 <script>
-console.log('Rounter = 02');
+// console.log('Rounter = 02');
 // echarts
 const echarts = require('echarts');
 // require('echarts/chart/pie');

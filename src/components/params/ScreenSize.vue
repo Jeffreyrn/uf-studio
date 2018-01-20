@@ -43,7 +43,7 @@
     </div>
 </template>
 <script>
-console.log('Rounter = Screen');
+// console.log('Rounter = Screen');
 
 // var html = document.getElementById("index-page");
 // console.log("html = " + html.innerHTML);

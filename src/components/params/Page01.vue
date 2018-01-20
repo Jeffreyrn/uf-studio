@@ -73,7 +73,7 @@
     </div>
 </template>
 <script>
-console.log('Rounter = 01');
+// console.log('Rounter = 01');
 
 // import myPicker from 'my-picker'
 // import Index from './components/Index.vue'
