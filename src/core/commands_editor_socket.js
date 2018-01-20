@@ -36,7 +36,7 @@ self.sendCmd = (cmdId, data, callback) => {
 self.userId = "test";
 
 self.runPythonScript = (uuid, callback) => {
-  let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
   let params = {
     data: {
       "path": filePath, // 要执行的python文件路径, /python/prj1/test.py
@@ -196,7 +196,7 @@ self.createFile = (name) => {
 
 self.saveOrUpdateFile = (uuid, text, callback) => {
   // text = 'test test';
-  let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
   // return;
   let params = {
@@ -216,7 +216,7 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
 };
 
 self.getFile = (uuid, callback) => {
-  let filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`getFile filePath = ${filePath}`);
   // return;
   let params = {
@@ -237,7 +237,7 @@ self.getFile = (uuid, callback) => {
 
 self.delFiles = (uuid) => {
   // return;
-  const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  const filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`filePath = ${filePath}`);
   let params = {
     data: {
@@ -262,7 +262,7 @@ self.delFiles = (uuid) => {
 };
 
 self.renameFile = (uuid, name) => {
-  const filePath = self.model.localProjTree.getThisFileFullPath(uuid);
+  const filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
   const file = self.model.localProjTree.getFileInfo(uuid);
   const fatherDir = path.dirname(filePath);
   const basename = path.basename(filePath);
@@ -282,9 +282,7 @@ self.renameFile = (uuid, name) => {
       // file.uuid = path.join(newFilePath);
       // file.name = newname;
       // self.model.localProjTree.curPro2Tree();
-
     });
-
     // const file = self.getFile(fileId);
   });
 };

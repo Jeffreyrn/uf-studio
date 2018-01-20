@@ -36,7 +36,7 @@ self.curFilePath = ''
 
 self.getThisFileFullPath = (uuid) => {
   let file = self.getFileInfo(uuid);
-  console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
+  // console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
   if (file === null || file === undefined) {
     // self.curFilePath = `/${self.curProj.name}`;
     return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
@@ -390,7 +390,7 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
 
 self.getSelectedFileFolder = () => {
   let curSelectedUUID = self.curSelectedUUID;
-  let filePath = self.getThisFileFullPath(curSelectedUUID);
+  let filePath = uuid; //self.getThisFileFullPath(curSelectedUUID);
   console.log(`getSelectedFileFolder path = ${filePath}`);
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
