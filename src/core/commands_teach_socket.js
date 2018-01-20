@@ -142,7 +142,7 @@ self.saveOrUpdateFile = (uuid, isContinus, callback) => {
 
 self.getFile = (uuid, callback) => {
   let filePath = uuid;
-  console.log(`getFile filePath = ${filePath}`);
+  // console.log(`getFile filePath = ${filePath}`);
   // return;
   let params = {
     data: {

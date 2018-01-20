@@ -217,7 +217,7 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
 
 self.getFile = (uuid, callback) => {
   let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
-  console.log(`getFile filePath = ${filePath}`);
+  // console.log(`getFile filePath = ${filePath}`);
   // return;
   let params = {
     data: {
@@ -227,7 +227,7 @@ self.getFile = (uuid, callback) => {
     }
   };
   self.sendCmd(self.FILE_ID_GET_FILE, params, (dict) => {
-    console.log(`get file = ${JSON.stringify(dict)}`);
+    // console.log(`get file = ${JSON.stringify(dict)}`);
     if (callback) {
       callback(dict);
     }
