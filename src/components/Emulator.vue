@@ -3,9 +3,15 @@
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j}}:{{state.joint[j]}}</span>
-        <el-slider v-model="state.joint[j]" :max="config.jointMax" :min="config.jointMin"></el-slider>
+        <el-slider v-model="state.joint[j]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
-      <div class="block">{{ msg }}-debug</div>
+      <div class="block">{{ msg }}-{{robotJointsAngle}}-{{testtest}}-debug</div>
+      <div v-for="s in robotJointsAngle" v-text="s" :key="s"></div>
+      step<input v-model="config.step"/>>
+      <el-radio-group v-model="state.online">
+        <el-radio-button :label="true">online</el-radio-button>
+        <el-radio-button :label="false">offline</el-radio-button>
+      </el-radio-group>
       <div class="block">
         <el-select v-model="select" placeholder="Select" @change="changeJoint">
           <el-option
@@ -20,27 +26,27 @@
     <div class="hello-row">
       <div class="block">
         <span class="text">Group-X</span>
-        <el-slider v-model="state.test.x" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+        <el-slider v-model="state.test.x" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Group-Y</span>
-        <el-slider v-model="state.test.y" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+        <el-slider v-model="state.test.y" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Group-Z</span>
-        <el-slider v-model="state.test.z" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+        <el-slider v-model="state.test.z" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Joint-X</span>
-        <el-slider v-model="state.test.jx" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+        <el-slider v-model="state.test.jx" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Joint-Y</span>
-        <el-slider v-model="state.test.jy" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+        <el-slider v-model="state.test.jy" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
       <div class="block">
         <span class="text">Joint-Z</span>
-        <el-slider v-model="state.test.jz" :step="0.1" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+        <el-slider v-model="state.test.jz" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
     </div>
   </div>
@@ -50,6 +56,7 @@
 import * as THREE from 'three';
 // import threeD1 from '../assets/three-d/1.json';
 import OrbitControls from 'three-orbitcontrols';
+import GlobalUtil from '../core/global_util';
 
 const JOINT_POSITION = [
   null,
@@ -85,12 +92,14 @@ export default {
       config: {
         debugMax: 10,
         debugMin: -10,
-        jointMax: 31,
-        jointMin: -31,
+        jointMax: 180,
+        jointMin: -180,
+        step: 0.01,
       },
       options: [0, 1, 2, 3, 4, 5, 6, 7],
       select: 5,
       state: {
+        online: false,
         joint: {
           1: 0,
           2: 0,
@@ -178,13 +187,18 @@ export default {
       requestAnimationFrame(animate);
       controls.update();
       renderer.render(scene, camera);
-      groups[0].rotation.y = (0.1 * this.state.joint[1]);
-      groups[1].rotation.z = (0.1 * this.state.joint[2]);
-      groups[2].rotation.y = (0.1 * this.state.joint[3]);
-      groups[3].rotation.z = (0.1 * this.state.joint[4]);
-      groups[4].rotation.x = (0.1 * this.state.joint[5]);
-      groups[5].rotation.z = (0.1 * this.state.joint[6]);
-      joints[7].rotation.y = (0.1 * this.state.joint[7]);
+      // if (this.state.online) {
+      //   for (let i = 0; i < 7; i += 1) {
+      //     this.$set(this.state.joint, i, GlobalUtil.model.robot.info.axis[i]);
+      //   }
+      // }
+      groups[0].rotation.y = this.valueToRotation(this.state.joint[1]);
+      groups[1].rotation.z = this.valueToRotation(this.state.joint[2]);
+      groups[2].rotation.y = this.valueToRotation(this.state.joint[3]);
+      groups[3].rotation.z = this.valueToRotation(this.state.joint[4]);
+      groups[4].rotation.x = this.valueToRotation(this.state.joint[5]);
+      groups[5].rotation.z = this.valueToRotation(this.state.joint[6]);
+      joints[7].rotation.y = this.valueToRotation(this.state.joint[7]);
       groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
       if (joints[this.select + 1]) {
         joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
@@ -243,6 +257,25 @@ export default {
       this.state.test.x = GROUP_POSITION[value][0];
       this.state.test.y = GROUP_POSITION[value][1];
       this.state.test.z = GROUP_POSITION[value][2];
+    },
+    valueToRotation(value) {
+      return (value * Math.PI) / 180;
+    },
+  },
+  watch: {
+    // robotJointsAngle() {
+    //   this.$set(this.robotJointsAngle, 0, this.robotJointsAngle[0]);
+    // },
+  },
+  computed: {
+    robotJointsAngle() {
+      if (GlobalUtil.model.robot.info.axis[0]) {
+        return GlobalUtil.model.robot.info.axis[0];
+      }
+      return 'none';
+    },
+    testtest() {
+      return Date.now();
     },
   },
 };

@@ -8,10 +8,16 @@ const robot = {
     robotVersion: null,
     coreVersion: null,
     position: {
-      x: 0,
-      y: 0,
-      z: 0,
+      x: null,
+      y: null,
+      z: null,
     },
+    orientation: {
+      roll: null,
+      yaw: null,
+      pitch: null,
+    },
+    axis: [],
     socket: null,
     error: null,
     speed: 50,
@@ -195,6 +201,22 @@ robot.onmessage = (evt) => {
       }
       else {
         robot.info.connected = true;
+      }
+
+      if (data.xarm_tcp_pose) {
+        console.log('find posi ori');
+        console.table(data.xarm_tcp_pose);
+        const pose = data.xarm_tcp_pose;
+        robot.info.position.x = Number(pose[0]);
+        robot.info.position.y = Number(pose[1]);
+        robot.info.position.z = Number(pose[2]);
+        robot.info.orientation.roll = Number(pose[3]);
+        robot.info.orientation.yaw = Number(pose[4]);
+        robot.info.orientation.pitch = Number(pose[5]);
+      }
+      if (data.xarm_joint_pose) {
+        console.table(data.xarm_joint_pose);
+        robot.info.axis = data.xarm_joint_pose;
       }
     }
   }
