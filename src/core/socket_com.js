@@ -29,17 +29,17 @@ self.init_socket = (args) => {
 };
 
 self.init_onopen = (onopen) => {
-  console.log('init onpoen');
+  // console.log('init onpoen');
   self.socket_info.socket.onopen = onopen;
 };
 
 self.init_onclose = (onclose) => {
-  console.log('init onclose');
+  // console.log('init onclose');
   self.socket_info.socket.onclose = onclose;
 };
 
 self.init_onmessage = (onmessage) => {
-  console.log('init onmessage');
+  // console.log('init onmessage');
   self.socket_info.socket.onmessage = onmessage;
 };
 
@@ -53,7 +53,7 @@ self.penddingCmds = {};
 self.send_msg = (msg, callback) => {
   const self = SocketCom;
   if (self.socket_info.socket.readyState !== ReconnectingWebSocket.OPEN) {
-    console.log(`self.socket_info.socket.readyState is not open`);
+    // console.log(`self.socket_info.socket.readyState is not open`);
     return -1;
   }
   self.startTime = new Date().getTime();

@@ -111,7 +111,7 @@ self.socketCom.close = () => {
 self.socketCom.open = () => {
   self.socketCom.init_socket(args);
   self.socketCom.init_onopen((evt) => {
-    console.log('onopen onopen onopen');
+    // console.log('onopen onopen onopen');
     self.model.localDeviceStatus.socket_connected = true;
     self.model.localDeviceStatus.xarm_connected = true;
     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
@@ -129,14 +129,14 @@ self.socketCom.open = () => {
     self.model.localDeviceStatus.socket_connected = false;
     self.model.localDeviceStatus.xarm_connected = false;
     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-    console.log('onclose onclose onclose');
+    // console.log('onclose onclose onclose');
   });
   self.socketCom.init_onerror((evt) => {
     self.model.localDeviceStatus.socket_connected = false;
     self.model.localDeviceStatus.xarm_connected = false;
     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
     const temp_msg = JSON.parse(evt.data);
-    console.log(`onerror onerror onerror = ${evt.data}`);
+    // console.log(`onerror onerror onerror = ${evt.data}`);
   });
   self.socketCom.init_onmessage((evt) => {
     const temp_msg = JSON.parse(evt.data);

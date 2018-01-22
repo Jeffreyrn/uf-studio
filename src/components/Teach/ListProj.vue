@@ -174,8 +174,8 @@ export default {
       }
     },
     checkscroll() {
-      const scrollLeft = document.getElementById("scroll-timer").scrollLeft;
-      console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 40)}`);
+      // const scrollLeft = document.getElementById("scroll-timer").scrollLeft;
+      // console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 40)}`);
     },
     onSelect(e, index) {
       GlobalUtil.model.localTeach.onSelect(e, index);
