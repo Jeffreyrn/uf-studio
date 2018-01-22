@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import GlobalUtil from '../core/global_util';
+// import GlobalUtil from '../core/global_util';
 import TopMenu from './editor/TopMenu';
 // import ProjTree from './editor/ProjTree';
 import ElTree from './editor/ElTree';

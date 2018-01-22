@@ -201,7 +201,7 @@ export default {
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
-          console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
+          // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             let data = dict.data;
             if (data === "" || data === undefined || data === null) {
