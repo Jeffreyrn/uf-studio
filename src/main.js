@@ -6,6 +6,7 @@ import VueI18n from 'vue-i18n';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App';
 import router from './router';
+import store from './store';
 // import robot from './assets/lib/robot';
 import './assets/css/global.css';
 // import GlobalUtil from './core/global_util';
@@ -28,6 +29,7 @@ new Vue({
   i18n,
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
 });

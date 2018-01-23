@@ -16,6 +16,7 @@
 export default {
   name: 'app',
   mounted() {
+    this.$store.dispatch('openWebsocket');
   },
 };
 </script>

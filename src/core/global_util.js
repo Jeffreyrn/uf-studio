@@ -150,8 +150,7 @@ self.socketCom.open = () => {
     }
   });
 };
-
-self.socketCom.open();
+// self.socketCom.open();
 
 self.getUrlParam = (lan) => {
   const reg = new RegExp('(^|&)' + lan + '=([^&]*)(&|$)', 'i');

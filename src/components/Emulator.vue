@@ -2,11 +2,13 @@
   <div class="hello" id="emulator-container">
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
-        <span class="text">J{{j}}:{{state.joint[j]}}</span>
-        <el-slider v-model="state.joint[j]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+        <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
+        <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
-      <div class="block">{{ msg }}-{{robotJointsAngle}}-{{testtest}}-debug</div>
-      <div v-for="s in robotJointsAngle" v-text="s" :key="s"></div>
+      <ul>
+        <li v-for="j in joints" :key="j">{{j}}</li>
+      </ul>
+      <div class="block">{{ msg }}-{{testtest}}-debug-{{test}}</div>
       step<input v-model="config.step"/>>
       <el-radio-group v-model="state.online">
         <el-radio-button :label="true">online</el-radio-button>
@@ -54,9 +56,7 @@
 
 <script>
 import * as THREE from 'three';
-// import threeD1 from '../assets/three-d/1.json';
 import OrbitControls from 'three-orbitcontrols';
-import GlobalUtil from '../core/global_util';
 
 const JOINT_POSITION = [
   null,
@@ -75,20 +75,11 @@ const GROUP_POSITION = [
   [0.45, 0.86, 0.02],
   [-4.17, 0, -0.05],
 ];
-const MODEL_DIR = '../src/assets/three-d/';
-const JOINT_MODEL_SRC = [
-  `${MODEL_DIR}1.json`,
-  `${MODEL_DIR}2.json`,
-  `${MODEL_DIR}3.json`,
-  `${MODEL_DIR}4.json`,
-  `${MODEL_DIR}5.json`,
-  `${MODEL_DIR}6.json`,
-  `${MODEL_DIR}7.json`,
-];
 export default {
   name: 'HelloWorld',
   data() {
     return {
+      test: null,
       config: {
         debugMax: 10,
         debugMin: -10,
@@ -127,129 +118,144 @@ export default {
     };
   },
   mounted() {
-    const loading = this.$loading({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)',
-    });
-    const RAINBOW_COLOR_LIST = [0x4B0082, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x9400D3];
-    const materialList = [];
-    RAINBOW_COLOR_LIST.forEach((hex) => {
-      materialList.push(new THREE.MeshPhongMaterial({ color: hex }));
-    });
-    console.log(materialList);
-    const scene = new THREE.Scene();
-    console.log(this.three.scene, scene);
-    scene.background = new THREE.Color(0xc0c0c0);
-    const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
-    // camera.position.z = 8;
-    // camera.up = new THREE.Vector3(-1, -1, -1);
-    camera.position.set(5, 8, 5); // camera position
-    camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
-    const light = new THREE.PointLight(0xffffff, 1, 100); // light
-    light.position.set(7, 10, 7);
-    const lightBottom = new THREE.PointLight(0xffffff, 1, 100); // light
-    lightBottom.position.set(-7, 0, -7);
-    scene.add(lightBottom);
-    scene.add(light);
-    // camera.position.set(25, 25, 25);
-    const renderer = new THREE.WebGLRenderer();
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.enableZoom = true;
-    controls.update();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('emulator-container').appendChild(renderer.domElement);
-    // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
-    const joints = [];
-    const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-    joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
-    const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
-    joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
-    scene.add(joints[0]);
-    const loader = new THREE.JSONLoader();
-    loader.load(JOINT_MODEL_SRC[0], (geometry) => {
-      const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-        vertexColors: THREE.FaceColors,
-        morphTargets: true,
-      }));
-      scene.add(mesh);
-    });
-    const groups = [];
-    // this.three.groups = groups;
-    for (let i = 0; i < 7; i += 1) {
-      groups[i] = new THREE.Group();
-    }
-    groups[6].add(joints[7]);
-    const animate = () => {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-      // if (this.state.online) {
-      //   for (let i = 0; i < 7; i += 1) {
-      //     this.$set(this.state.joint, i, GlobalUtil.model.robot.info.axis[i]);
-      //   }
-      // }
-      groups[0].rotation.y = this.valueToRotation(this.state.joint[1]);
-      groups[1].rotation.z = this.valueToRotation(this.state.joint[2]);
-      groups[2].rotation.y = this.valueToRotation(this.state.joint[3]);
-      groups[3].rotation.z = this.valueToRotation(this.state.joint[4]);
-      groups[4].rotation.x = this.valueToRotation(this.state.joint[5]);
-      groups[5].rotation.z = this.valueToRotation(this.state.joint[6]);
-      joints[7].rotation.y = this.valueToRotation(this.state.joint[7]);
-      groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
-      if (joints[this.select + 1]) {
-        joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
-      }
-    };
-    function loadModel(index) { // model index: 1-6
-      if (index < 7) {
-        loader.load(JOINT_MODEL_SRC[index], (geometry) => {
-          console.log(index, 'model loaded:');
-          joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
-          joints[index].position.set(...JOINT_POSITION[index]);
-          groups[index - 1].add(joints[index], groups[index]);
-          groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
-          loadModel(index + 1); // load next model
-        });
-      }
-      else {
-        console.log('loading all');
-        scene.add(groups[0]);
-        animate();
-        loading.close(); // hide loading overlay
-      }
-    }
-    loadModel(1);
-    const gridplaneSize = 20;
-    const gridstep = 10;
-    // const gridcolor = 0xCCCCCC;
-    const gridHelper_xy = new THREE.GridHelper(gridplaneSize / 2, gridstep);
-    gridHelper_xy.position.set(0, 0, 0);
-    // gridHelper_xy.setColors(new THREE.Color(gridcolor), new THREE.Color(gridcolor));
-    scene.add(gridHelper_xy);
-    const axisHelper = new THREE.AxesHelper(5);
-    scene.add(axisHelper);
-    this.changeJoint(this.select);
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-    window.addEventListener('resize', onWindowResize, false);
+    // this.createRobotModel();
   },
   beforeDestroy() {
     if (this.three.scene) {
       this.three.scene.remove();
     }
     // this.three.scene.remove(this.three.groups[0]);
-    this.three.groups.forEach((group) => {
-      group.dispose();
-    });
+    if (this.three.groups) {
+      this.three.groups.forEach((group) => {
+        group.dispose();
+      });
+    }
   },
   methods: {
+    createRobotModel() {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      const RAINBOW_COLOR_LIST = [0x4B0082, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x9400D3];
+      const MODEL_DIR = '../src/assets/three-d/';
+      const JOINT_MODEL_SRC = [
+        `${MODEL_DIR}1.json`,
+        `${MODEL_DIR}2.json`,
+        `${MODEL_DIR}3.json`,
+        `${MODEL_DIR}4.json`,
+        `${MODEL_DIR}5.json`,
+        `${MODEL_DIR}6.json`,
+        `${MODEL_DIR}7.json`,
+      ];
+      const materialList = [];
+      RAINBOW_COLOR_LIST.forEach((hex) => {
+        materialList.push(new THREE.MeshPhongMaterial({ color: hex }));
+      });
+      console.log(materialList);
+      const scene = new THREE.Scene();
+      console.log(this.three.scene, scene);
+      scene.background = new THREE.Color(0xc0c0c0);
+      const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
+      // camera.position.z = 8;
+      // camera.up = new THREE.Vector3(-1, -1, -1);
+      camera.position.set(5, 8, 5); // camera position
+      camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
+      const light = new THREE.PointLight(0xffffff, 1, 100); // light
+      light.position.set(7, 10, 7);
+      const lightBottom = new THREE.PointLight(0xffffff, 1, 100); // light
+      lightBottom.position.set(-7, 0, -7);
+      scene.add(lightBottom);
+      scene.add(light);
+      // camera.position.set(25, 25, 25);
+      const renderer = new THREE.WebGLRenderer();
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.25;
+      controls.enableZoom = true;
+      controls.update();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.getElementById('emulator-container').appendChild(renderer.domElement);
+      // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
+      const joints = [];
+      const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
+      joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
+      const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
+      joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      scene.add(joints[0]);
+      const loader = new THREE.JSONLoader();
+      loader.load(JOINT_MODEL_SRC[0], (geometry) => {
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+          vertexColors: THREE.FaceColors,
+          morphTargets: true,
+        }));
+        scene.add(mesh);
+      });
+      const groups = [];
+      // this.three.groups = groups;
+      for (let i = 0; i < 7; i += 1) {
+        groups[i] = new THREE.Group();
+      }
+      groups[6].add(joints[7]);
+      const animate = () => {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+        // if (this.state.online) {
+        //   for (let i = 0; i < 7; i += 1) {
+        //     this.$set(this.state.joint, i, GlobalUtil.model.robot.info.axis[i]);
+        //   }
+        // }
+        groups[0].rotation.y = this.valueToRotation(this.state.joint[1]);
+        groups[1].rotation.z = this.valueToRotation(this.state.joint[2]);
+        groups[2].rotation.y = this.valueToRotation(this.state.joint[3]);
+        groups[3].rotation.z = this.valueToRotation(this.state.joint[4]);
+        groups[4].rotation.x = this.valueToRotation(this.state.joint[5]);
+        groups[5].rotation.z = this.valueToRotation(this.state.joint[6]);
+        joints[7].rotation.y = this.valueToRotation(this.state.joint[7]);
+        groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
+        if (joints[this.select + 1]) {
+          joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+        }
+      };
+      function loadModel(index) { // model index: 1-6
+        if (index < 7) {
+          loader.load(JOINT_MODEL_SRC[index], (geometry) => {
+            console.log(index, 'model loaded:');
+            joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
+            joints[index].position.set(...JOINT_POSITION[index]);
+            groups[index - 1].add(joints[index], groups[index]);
+            groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
+            loadModel(index + 1); // load next model
+          });
+        }
+        else {
+          console.log('loading all');
+          scene.add(groups[0]);
+          animate();
+          loading.close(); // hide loading overlay
+        }
+      }
+      loadModel(1);
+      const gridplaneSize = 20;
+      const gridstep = 10;
+      // const gridcolor = 0xCCCCCC;
+      const gridHelper_xy = new THREE.GridHelper(gridplaneSize / 2, gridstep);
+      gridHelper_xy.position.set(0, 0, 0);
+      // gridHelper_xy.setColors(new THREE.Color(gridcolor), new THREE.Color(gridcolor));
+      scene.add(gridHelper_xy);
+      const axisHelper = new THREE.AxesHelper(5);
+      scene.add(axisHelper);
+      this.changeJoint(this.select);
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener('resize', onWindowResize, false);
+    },
     changeJoint(value) {
       this.state.test.jx = JOINT_POSITION[value + 1][0];
       this.state.test.jy = JOINT_POSITION[value + 1][1];
@@ -263,19 +269,34 @@ export default {
     },
   },
   watch: {
+    // joints(newValue) {
+    //   console.log('watch posi print:');
+    //   console.table(newValue);
+    // },
     // robotJointsAngle() {
     //   this.$set(this.robotJointsAngle, 0, this.robotJointsAngle[0]);
     // },
   },
   computed: {
-    robotJointsAngle() {
-      if (GlobalUtil.model.robot.info.axis[0]) {
-        return GlobalUtil.model.robot.info.axis[0];
-      }
-      return 'none';
+    joints: {
+      get() {
+        const arr = this.$store.state.robot.info.axis;
+        if (arr) {
+          console.log('arr posi print:');
+          console.table(arr);
+          this.test = arr[1];
+          return arr;
+        }
+        return [];
+      },
+      set(value) {
+        console.log('SLIDE posi print:');
+        console.table(value);
+        this.$store.commit('ROBOT_MOVE_JOINT', value);
+      },
     },
     testtest() {
-      return Date.now();
+      return this.$store.state.robot.info.test;
     },
   },
 };
