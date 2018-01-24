@@ -25,6 +25,7 @@ const state = {
     socket: null,
     speed: 50,
     acceleration: 50,
+    online: false,
   },
   status: {
     warning: null,
@@ -50,6 +51,9 @@ const actions = {
   },
 };
 const mutations = {
+  test(state, data) {
+    state.info.test = data;
+  },
   [types.GET_ROBOT_STATUS](state, data) {
     const end = data.xarm_tcp_pose;
     const joint = data.xarm_joint_pose;
@@ -66,7 +70,7 @@ const mutations = {
     }
     if (joint && (joint.length > 0)) {
       // console.table(joint);
-      state.info.axis = joint.slice();
+      state.info.axis = joint.map(num => Number(num).toFixed(2)).slice(); // .slice()
       state.info.test = joint[1];
     }
     state.status.warning = data.xarm_warn_code;
@@ -105,7 +109,7 @@ const mutations = {
   },
   [types.ROBOT_MOVE_LINE](state, data) {
     if (data.position !== undefined) {
-      Object.assign(state.info.position, data.position);
+      Object.assign(state.info.position, data.position.map(num => num.toFixed(2)));
     }
     if (data.orientation !== undefined) {
       Object.assign(state.info.orientation, data.orientation);
@@ -116,11 +120,16 @@ const mutations = {
     }
   },
   [types.ROBOT_MOVE_JOINT](state, data) {
-    data.forEach((value, index) => {
-      state.info.axis[index] = value;
-    });
+    state.info.axis = data.slice();
     console.log('set joint:', data);
     if (data.online) {
+      SocketCom.socket_info.socket.send();
+    }
+  },
+  [types.MOVE_ONE_JOINT](state, data) {
+    state.info.axis[data.index] = Number(data.value).toFixed(2);
+    console.log('set one joint:', data);
+    if (state.info.online) {
       SocketCom.socket_info.socket.send();
     }
   },

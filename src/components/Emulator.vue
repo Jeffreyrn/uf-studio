@@ -6,9 +6,9 @@
         <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
       <ul>
-        <li v-for="j in joints" :key="j">{{j}}</li>
+        <li v-for="j in 7" :key="j">{{joints[j-1]}}</li>
       </ul>
-      <div class="block">{{ msg }}-{{testtest}}-debug-{{test}}</div>
+      <div class="block">{{ msg }}-debugTest-{{joints}}</div>
       step<input v-model="config.step"/>>
       <el-radio-group v-model="state.online">
         <el-radio-button :label="true">online</el-radio-button>
@@ -76,10 +76,11 @@ const GROUP_POSITION = [
   [-4.17, 0, -0.05],
 ];
 export default {
-  name: 'HelloWorld',
+  name: 'Emulator',
   data() {
     return {
       test: null,
+      testtest: [],
       config: {
         debugMax: 10,
         debugMin: -10,
@@ -91,15 +92,15 @@ export default {
       select: 5,
       state: {
         online: false,
-        joint: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0,
-          6: 0,
-          7: 0,
-        },
+        // joint: {
+        //   1: 0,
+        //   2: 0,
+        //   3: 0,
+        //   4: 0,
+        //   5: 0,
+        //   6: 0,
+        //   7: 0,
+        // },
         rott: 5,
         test: {
           x: 0,
@@ -269,10 +270,10 @@ export default {
     },
   },
   watch: {
-    // joints(newValue) {
-    //   console.log('watch posi print:');
-    //   console.table(newValue);
-    // },
+    joints(newValue) {
+      console.log('watch posi print:');
+      console.table(newValue);
+    },
     // robotJointsAngle() {
     //   this.$set(this.robotJointsAngle, 0, this.robotJointsAngle[0]);
     // },
@@ -280,24 +281,31 @@ export default {
   computed: {
     joints: {
       get() {
-        const arr = this.$store.state.robot.info.axis;
-        if (arr) {
-          console.log('arr posi print:');
-          console.table(arr);
-          this.test = arr[1];
-          return arr;
+        const arr = this.$store.getters.joints;
+        console.log('get ax', arr);
+        if (arr && (arr.length > 0)) {
+          const values = arr.map(str => Number(str));
+          console.log('arr posi print:', values.length);
+          console.table(values);
+          this.test = values[1];
+          return values.slice();
         }
-        return [];
+        return [0, 0, 0, 0, 0, 0, 0];
       },
       set(value) {
-        console.log('SLIDE posi print:');
+        console.log('SET');
         console.table(value);
-        this.$store.commit('ROBOT_MOVE_JOINT', value);
+        this.$store.commit('ROBOT_MOVE_JOINT', value.map(str => Number(str)));
       },
     },
-    testtest() {
-      return this.$store.state.robot.info.test;
-    },
+    // testtest: {
+    //   get() {
+    //     return this.$store.state.robot.info.test;
+    //   },
+    //   set(value) {
+    //     this.$store.commit('test', value);
+    //   },
+    // },
   },
 };
 </script>

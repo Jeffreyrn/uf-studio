@@ -10,6 +10,14 @@ const socketInfo = {
   port: '18333',
 };
 export const openWebsocket = ({ commit }) => {
+  // let i = 0;
+  // const ti = setInterval(() => {
+  //   commit('ROBOT_MOVE_JOINT', [i, i + 1, i + 2, i + 3, i + 4, i + 5, i + 6]);
+  //   i += 1;
+  //   if (i > 170) {
+  //     clearInterval(ti);
+  //   }
+  // }, 2000);
   SocketCom.init_socket(socketInfo);
   SocketCom.init_onopen(() => {
     console.log('onopen onopen onopen');
