@@ -1,16 +1,21 @@
 <template>
-  <div class="hello" id="emulator-container">
+  <div class="hello">
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
         <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
+      <div class="block" v-for="j in 7" :key="j">
+        <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
+        <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+      </div>
+      <div id="emulator-container"></div>
       <ul>
         <li v-for="j in 7" :key="j">{{joints[j-1]}}</li>
       </ul>
       <div class="block">{{ msg }}-debugTest-{{joints}}</div>
       step<input v-model="config.step"/>>
-      <el-radio-group v-model="state.online">
+      <el-radio-group v-model="state.online" @change="setOnline">
         <el-radio-button :label="true">online</el-radio-button>
         <el-radio-button :label="false">offline</el-radio-button>
       </el-radio-group>
@@ -50,6 +55,8 @@
         <span class="text">Joint-Z</span>
         <el-slider v-model="state.test.jz" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
+      speed<el-slider v-model="state.speed" @change="setSpeed" :max="100" :min="config.debugMin" show-input></el-slider>
+      accerleration<el-slider v-model="state.acceleration" @change="setAcceleration" :max="100" :min="config.debugMin" show-input></el-slider>
     </div>
   </div>
 </template>
@@ -57,6 +64,7 @@
 <script>
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
+import * as types from '../store/mutation-types';
 
 const JOINT_POSITION = [
   null,
@@ -91,16 +99,18 @@ export default {
       options: [0, 1, 2, 3, 4, 5, 6, 7],
       select: 5,
       state: {
+        speed: 50,
+        acceleration: 50,
         online: false,
-        // joint: {
-        //   1: 0,
-        //   2: 0,
-        //   3: 0,
-        //   4: 0,
-        //   5: 0,
-        //   6: 0,
-        //   7: 0,
-        // },
+        joint: {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
+        },
         rott: 5,
         test: {
           x: 0,
@@ -119,7 +129,7 @@ export default {
     };
   },
   mounted() {
-    // this.createRobotModel();
+    this.createRobotModel();
   },
   beforeDestroy() {
     if (this.three.scene) {
@@ -268,6 +278,22 @@ export default {
     valueToRotation(value) {
       return (value * Math.PI) / 180;
     },
+    setSpeed(value) {
+      this.setRobotState('speed', value);
+    },
+    setAcceleration(value) {
+      this.setRobotState('acceleration', value);
+    },
+    setOnline(value) {
+      this.setRobotState('online', value);
+    },
+    setRobotState(index, value) {
+      const data = {
+        index,
+        value,
+      };
+      this.$store.commit(types.SET_ROBOT_STATE, data);
+    },
   },
   watch: {
     joints(newValue) {
@@ -295,7 +321,7 @@ export default {
       set(value) {
         console.log('SET');
         console.table(value);
-        this.$store.commit('ROBOT_MOVE_JOINT', value.map(str => Number(str)));
+        this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
       },
     },
     // testtest: {

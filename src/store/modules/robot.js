@@ -115,16 +115,19 @@ const mutations = {
       Object.assign(state.info.orientation, data.orientation);
     }
     console.log('set position:', data);
-    if (data.online) {
+    if (state.info.online) {
       SocketCom.socket_info.socket.send();
     }
   },
   [types.ROBOT_MOVE_JOINT](state, data) {
     state.info.axis = data.slice();
     console.log('set joint:', data);
-    if (data.online) {
+    if (state.info.online) {
       SocketCom.socket_info.socket.send();
     }
+  },
+  [types.SET_ROBOT_STATE](state, data) {
+    state.info[data.index] = data.value;
   },
   [types.MOVE_ONE_JOINT](state, data) {
     state.info.axis[data.index] = Number(data.value).toFixed(2);
