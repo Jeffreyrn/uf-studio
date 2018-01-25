@@ -26,10 +26,10 @@ export const openWebsocket = ({ commit }) => {
     GlobalUtil.model.localDeviceStatus.socket_connected = true;
     GlobalUtil.model.localDeviceStatus.xarm_connected = true;
     GlobalUtil.model.robot.info.connected = GlobalUtil.model.localDeviceStatus.xarm_connected;
-    CommandsEditorSocket.listProjs((dict) => {
+    window.CommandsEditorSocket.listProjs((dict) => {
       console.log(dict);
     });
-    CommandsTeachSocket.listProjs((dict) => {
+    window.CommandsTeachSocket.listProjs((dict) => {
       console.log(dict);
     });
   });

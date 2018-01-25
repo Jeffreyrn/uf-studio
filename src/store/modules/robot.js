@@ -116,14 +116,14 @@ const mutations = {
     }
     console.log('set position:', data);
     if (state.info.online) {
-      GlobalUtil.socketCom.socket_info.socket.send();
+      window.GlobalUtil.socketCom.socket_info.socket.send();
     }
   },
   [types.ROBOT_MOVE_JOINT](state, data) {
     state.info.axis = data.slice();
     console.log('set joint:', data);
     if (state.info.online) {
-      GlobalUtil.socketCom.socket_info.socket.send();
+      window.GlobalUtil.socketCom.socket_info.socket.send();
     }
   },
   [types.SET_ROBOT_STATE](state, data) {
@@ -133,7 +133,7 @@ const mutations = {
     state.info.axis[data.index] = Number(data.value).toFixed(2);
     console.log('set one joint:', data);
     if (state.info.online) {
-      GlobalUtil.socketCom.socket_info.socket.send();
+      window.GlobalUtil.socketCom.socket_info.socket.send();
     }
   },
 };

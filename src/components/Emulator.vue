@@ -3,7 +3,7 @@
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
-        <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+        <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
       </div>
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
@@ -103,13 +103,13 @@ export default {
         acceleration: 50,
         online: false,
         joint: {
+          0: 0,
           1: 0,
           2: 0,
           3: 0,
           4: 0,
           5: 0,
           6: 0,
-          7: 0,
         },
         rott: 5,
         test: {
@@ -219,13 +219,14 @@ export default {
         //     this.$set(this.state.joint, i, GlobalUtil.model.robot.info.axis[i]);
         //   }
         // }
-        groups[0].rotation.y = this.valueToRotation(this.state.joint[1]);
-        groups[1].rotation.z = this.valueToRotation(this.state.joint[2]);
-        groups[2].rotation.y = this.valueToRotation(this.state.joint[3]);
-        groups[3].rotation.z = this.valueToRotation(this.state.joint[4]);
-        groups[4].rotation.x = this.valueToRotation(this.state.joint[5]);
-        groups[5].rotation.z = this.valueToRotation(this.state.joint[6]);
-        joints[7].rotation.y = this.valueToRotation(this.state.joint[7]);
+        const angles = this.state.online ? this.joints : this.state.joint;
+        groups[0].rotation.y = this.valueToRotation(angles[0]);
+        groups[1].rotation.z = this.valueToRotation(angles[1]);
+        groups[2].rotation.y = this.valueToRotation(angles[2]);
+        groups[3].rotation.z = this.valueToRotation(angles[3]);
+        groups[4].rotation.x = this.valueToRotation(angles[4]);
+        groups[5].rotation.z = this.valueToRotation(angles[5]);
+        joints[7].rotation.y = this.valueToRotation(angles[6]);
         groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         if (joints[this.select + 1]) {
           joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
@@ -296,7 +297,7 @@ export default {
     },
   },
   watch: {
-    joints(newValue) {
+    'state.joints': (newValue) => {
       console.log('watch posi print:');
       console.table(newValue);
     },
@@ -321,7 +322,7 @@ export default {
       set(value) {
         console.log('SET');
         console.table(value);
-        this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
+        // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
       },
     },
     // testtest: {
