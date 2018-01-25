@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     onEditorCodeChange(newCode) {
-      console.log('this is new code', newCode);
+      // console.log('this is new code', newCode);
       // GlobalUtil.model.localProjTree.curFile.content = newCode;
       // const curFile = GlobalUtil.model.localProjTree.curFile;
       // GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);

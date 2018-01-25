@@ -114,7 +114,7 @@ self.delFiles = (uuid, callback) => {
 
 self.saveOrUpdateFile = (uuid, isContinus, callback) => {
   // text = 'test test';
-  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
+  let filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
 
   // return;
   const textDict = {
@@ -142,7 +142,7 @@ self.saveOrUpdateFile = (uuid, isContinus, callback) => {
 
 self.getFile = (uuid, callback) => {
   let filePath = uuid;
-  console.log(`getFile filePath = ${filePath}`);
+  // console.log(`getFile filePath = ${filePath}`);
   // return;
   let params = {
     data: {

@@ -188,7 +188,7 @@ export default {
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
-      console.log(`curFile file = ${JSON.stringify(file)}`);
+      // console.log(`curFile file = ${JSON.stringify(file)}`);
 
       //
       const myChart = window.myChart;
@@ -201,7 +201,7 @@ export default {
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
-          console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
+          // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             let data = dict.data;
             if (data === "" || data === undefined || data === null) {
@@ -214,7 +214,7 @@ export default {
               const type = data.tpye;
               file.storeType = data.type;
               GlobalUtil.model.localTeach.isContinus = isContinus;
-              console.log(`isContinus = ${isContinus}, data.type = ${type}`);
+              // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
               GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;

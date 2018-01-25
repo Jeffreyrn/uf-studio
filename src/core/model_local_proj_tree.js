@@ -36,7 +36,7 @@ self.curFilePath = ''
 
 self.getThisFileFullPath = (uuid) => {
   let file = self.getFileInfo(uuid);
-  console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
+  // console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
   if (file === null || file === undefined) {
     // self.curFilePath = `/${self.curProj.name}`;
     return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
@@ -257,6 +257,7 @@ self.setSelectedUUID = (uuid) => {
     // self.curSelectedFileUUID = '';
     self.setCurSelectedFileUUIDs(uuid);
     self.curSelectedFolderUUID = '';
+    // self.setSelectedUI(uuid);
     return;
   }
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -290,12 +291,19 @@ self.setSelectedUUID = (uuid) => {
 };
 
 self.setSelectedUI = (uuid) => {
-  const file = GlobalUtil.model.localProjTree.getFile(uuid);
+  const file = GlobalUtil.model.localProjTree.getFileInfo(uuid);
+  // console.log(`setSelectedUI file type uuid = ${uuid}, file = ${file}`);
+  // if (file) {
+  //   console.log(`setSelectedUI file type = ${file.type}`);
+  // }
   const nodes = document.getElementsByClassName('el-tree-node__label');
   for (let i = 0; i < nodes.length; i += 1) {
     const node = nodes[i];
     if (file === null) {
       node.style.color = 'gray';
+    }
+    else if (file.type !== 'file') {
+      return;
     }
     else if (file.name === node.innerHTML) {
       node.style.color = 'blue';
@@ -312,14 +320,14 @@ self.setSelectedUI = (uuid) => {
     // const curFile = GlobalUtil.model.localProjTree.curFile;
     let selectedEditor = null;
     const editors = document.getElementsByName("code-editor");
-    console.log(`editor value =  cur ${curFile.uuid}`);
+    // console.log(`editor value =  cur ${curFile.uuid}`);
     for (let i = 0; i < editors.length; i += 1) {
       const editor = editors[i];
       editor.style.display = 'none';
     }
     for (let i = 0; i < editors.length; i += 1) {
       const editor = editors[i];
-      console.log(`editor value = ${editor.getAttribute("value")}`);
+      // console.log(`editor value = ${editor.getAttribute("value")}`);
       const aUUID = editor.getAttribute("value");
       editor.style.display = 'none';
       if (aUUID === curFile.uuid) {
@@ -382,7 +390,7 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
 
 self.getSelectedFileFolder = () => {
   let curSelectedUUID = self.curSelectedUUID;
-  let filePath = self.getThisFileFullPath(curSelectedUUID);
+  let filePath = uuid; //self.getThisFileFullPath(curSelectedUUID);
   console.log(`getSelectedFileFolder path = ${filePath}`);
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
@@ -509,7 +517,7 @@ self.changeProj = (uuid) => {
 self.curProjExpandedKeys = [];
 // self.curProjExpandedKeys.push(self.curProj.uuid);
 self.curProjAddOrRemoveExpandedKeys = (uuid) => {
-  console.log(`curProjAddOrRemoveExpandedKeys`);
+  // console.log(`curProjAddOrRemoveExpandedKeys`);
   const isFile = self.isFile(uuid);
   let isExist = false;
   if (isFile === false) {
@@ -524,7 +532,7 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   if (isExist === false && isFile === false) {
     self.curProjExpandedKeys.push(uuid);
   }
-  console.log(`curProjAddOrRemoveExpandedKeys count = ${JSON.stringify(self.curProjExpandedKeys)}`);
+  // console.log(`curProjAddOrRemoveExpandedKeys count = ${JSON.stringify(self.curProjExpandedKeys)}`);
 };
 self.findFolder = (tmpArr, superid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {

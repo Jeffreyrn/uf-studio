@@ -90,14 +90,18 @@ const robot = {
     progress: 0,
   },
   sendMessageSync: (data) => {
-    if (robot.message.id > 10000) {
-      robot.message.id = 0;
+    if (GlobalUtil.socketCom.msgid > 10000) {
+      // robot.message.id = 0;
+      GlobalUtil.socketCom.msgid = 0;
     }
-    robot.message.id += 1;
-    data.id = `${robot.message.id}`;
+    // robot.message.id += 1;
+    // data.id = `${robot.message.id}`;
+    GlobalUtil.socketCom.msgid += 1;
+    data.id = `${GlobalUtil.socketCom.msgid}`;
     // robot.info.socket.send(JSON.stringify(data));
     GlobalUtil.socketCom.socket_info.socket.send(JSON.stringify(data));
-    return robot.message.id;
+    // return robot.message.id;
+    return GlobalUtil.socketCom.msgid;
   },
   setSpeed: (value) => {
     robot.info.speed = (value < 0) ? 20 : value;
@@ -167,7 +171,7 @@ const robot = {
 robot.onmessage = (evt) => {
   const temp_msg = JSON.parse(evt.data);
   const data = temp_msg.data;
-  console.log('onmessage', temp_msg);
+  // console.log('onmessage', temp_msg);
   if (temp_msg.type === 'broadcast') {
     if (robot.broadcast_message_process[temp_msg.cmd]) {
       robot.broadcast_message_process[temp_msg.cmd](temp_msg.data);
@@ -175,14 +179,14 @@ robot.onmessage = (evt) => {
   }
   else if (temp_msg.type === 'report') {
     if (temp_msg.cmd === 'devices_info_report') {
-      console.log('device info broadcast:', data);
+      // console.log('device info broadcast:', data);
       robot.info.port = data.xarm_port_name;
       robot.info.serialNumber = data.xarm_port_serial_number;
       robot.info.robotVersion = data.xarm_version;
       robot.info.coreVersion = data.core_version;
     }
     else if (temp_msg.cmd === 'devices_status_report') {
-      console.log('device status broadcast:', data);
+      // console.log('device status broadcast:', data);
       if (data.xarm_error_code > 2) {
         const errorList = {
           1: 'UX2_ERR_CODE',

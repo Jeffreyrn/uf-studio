@@ -45,7 +45,7 @@ import Page05 from './params/Page05';
 import Page06 from './params/Page06';
 import ScreenSize from './params/ScreenSize';
 
-console.log('Rounter = Index');
+// console.log('Rounter = Index');
 
 require('../assets/css/reseet.css');
 require('../assets/css/common.css');
@@ -61,11 +61,11 @@ GlobalUtil.store.lan = r;
 // console.log('conf = ' + conf);
 
 const min_width = GlobalUtil.getMinWidth();
-console.log(`min_width = ${min_width}`);
+// console.log(`min_width = ${min_width}`);
 
 //
 GlobalUtil.autoSizeScale = min_width / 375.0;
-console.log(`main GlobalUtil getUrlParam = ${r}`);
+// console.log(`main GlobalUtil getUrlParam = ${r}`);
 
 export default {
   data() {

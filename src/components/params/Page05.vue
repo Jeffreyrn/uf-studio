@@ -7,7 +7,7 @@
 
 </template>
 <script>
-console.log('Rounter = 05');
+// console.log('Rounter = 05');
 
 export default {
   data() {

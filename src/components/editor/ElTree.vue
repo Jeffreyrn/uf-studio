@@ -34,14 +34,14 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data.__ob__);
+      // console.log(data.__ob__);
       const treeRoot = document.getElementById('left-frame');
-      console.log(`treeRoot = ${treeRoot.innerHTML}`);
+      // console.log(`treeRoot = ${treeRoot.innerHTML}`);
       const uuid = data.uuid;
-      console.log(`data uuid = ${uuid}`);
+      // console.log(`data uuid = ${uuid}`);
 
       const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
-      console.log(`isFile = ${isFile}`);
+      // console.log(`isFile = ${isFile}`);
 
       GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
 
