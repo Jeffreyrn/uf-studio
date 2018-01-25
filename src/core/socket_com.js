@@ -52,6 +52,9 @@ self.response = '';
 self.penddingCmds = {};
 self.send_msg = (msg, callback) => {
   const self = SocketCom;
+  if (self.socket_info.socket === null || self.socket_info.socket === undefined) {
+    return -1;
+  }
   if (self.socket_info.socket.readyState !== ReconnectingWebSocket.OPEN) {
     // console.log(`self.socket_info.socket.readyState is not open`);
     return -1;

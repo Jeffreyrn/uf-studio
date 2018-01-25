@@ -104,52 +104,52 @@ self.pad = (num, n) => {
    return num;
 };
 
-self.socketCom.close = () => {
-  self.socketCom.socket_info.socket.close();
-};
+// self.socketCom.close = () => {
+//   self.socketCom.socket_info.socket.close();
+// };
 
-self.socketCom.open = () => {
-  self.socketCom.init_socket(args);
-  self.socketCom.init_onopen((evt) => {
-    // console.log('onopen onopen onopen');
-    self.model.localDeviceStatus.socket_connected = true;
-    self.model.localDeviceStatus.xarm_connected = true;
-    self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-    // GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
-    //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
-    // });
-    CommandsEditorSocket.listProjs((dict) => {
+// self.socketCom.open = () => {
+//   self.socketCom.init_socket(args);
+//   self.socketCom.init_onopen((evt) => {
+//     // console.log('onopen onopen onopen');
+//     self.model.localDeviceStatus.socket_connected = true;
+//     self.model.localDeviceStatus.xarm_connected = true;
+//     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
+//     // GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
+//     //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
+//     // });
+//     CommandsEditorSocket.listProjs((dict) => {
 
-    });
-    CommandsTeachSocket.listProjs((dict) => {
+//     });
+//     CommandsTeachSocket.listProjs((dict) => {
 
-    });
-  });
-  self.socketCom.init_onclose((evt) => {
-    self.model.localDeviceStatus.socket_connected = false;
-    self.model.localDeviceStatus.xarm_connected = false;
-    self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-    // console.log('onclose onclose onclose');
-  });
-  self.socketCom.init_onerror((evt) => {
-    self.model.localDeviceStatus.socket_connected = false;
-    self.model.localDeviceStatus.xarm_connected = false;
-    self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-    const temp_msg = JSON.parse(evt.data);
-    // console.log(`onerror onerror onerror = ${evt.data}`);
-  });
-  self.socketCom.init_onmessage((evt) => {
-    const temp_msg = JSON.parse(evt.data);
-    self.model.localDeviceInfo.onmessage(evt);
-    self.model.localDeviceStatus.onmessage(evt);
-    self.model.localParamsSetting.onmessage(evt);
-    self.socketCom.onmessage(evt);
-    self.model.robot.onmessage(evt);
-    if (temp_msg.type === 'response') {
-      self.socketCom.response = evt.data;
-    }
-  });
-};
+//     });
+//   });
+//   self.socketCom.init_onclose((evt) => {
+//     self.model.localDeviceStatus.socket_connected = false;
+//     self.model.localDeviceStatus.xarm_connected = false;
+//     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
+//     // console.log('onclose onclose onclose');
+//   });
+//   self.socketCom.init_onerror((evt) => {
+//     self.model.localDeviceStatus.socket_connected = false;
+//     self.model.localDeviceStatus.xarm_connected = false;
+//     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
+//     const temp_msg = JSON.parse(evt.data);
+//     // console.log(`onerror onerror onerror = ${evt.data}`);
+//   });
+//   self.socketCom.init_onmessage((evt) => {
+//     const temp_msg = JSON.parse(evt.data);
+//     self.model.localDeviceInfo.onmessage(evt);
+//     self.model.localDeviceStatus.onmessage(evt);
+//     self.model.localParamsSetting.onmessage(evt);
+//     self.socketCom.onmessage(evt);
+//     self.model.robot.onmessage(evt);
+//     if (temp_msg.type === 'response') {
+//       self.socketCom.response = evt.data;
+//     }
+//   });
+// };
 // self.socketCom.open();
 
 self.getUrlParam = (lan) => {

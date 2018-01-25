@@ -178,9 +178,13 @@ export default {
       const totalFrame = document.getElementById("total-teach-frame");
       const totalFrameWidth = this.clientWidth - 20;
       const totalFrameHeight = this.clientHeight - 120;
-      totalFrame.style.width = `${totalFrameWidth}px`;
-      totalFrame.style.height = `${totalFrameHeight}px`;
-      rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      if (totalFrame !== null && totalFrame !== undefined) {
+        totalFrame.style.width = `${totalFrameWidth}px`;
+        totalFrame.style.height = `${totalFrameHeight}px`;
+      }
+      if (rightFrame !== null && rightFrame !== undefined) {
+        rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      }
       // console.log(`totalFrameHeight = ${totalFrameHeight}, totalFrameHeight = ${totalFrame.style.height}, rightFrameWidth = ${rightFrame.style.width}`);
     },
     handleNodeClick(data) {
