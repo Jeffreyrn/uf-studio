@@ -390,7 +390,7 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
 
 self.getSelectedFileFolder = () => {
   let curSelectedUUID = self.curSelectedUUID;
-  let filePath = uuid; //self.getThisFileFullPath(curSelectedUUID);
+  let filePath = self.getThisFileFullPath(curSelectedUUID);
   console.log(`getSelectedFileFolder path = ${filePath}`);
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {

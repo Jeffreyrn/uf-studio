@@ -169,9 +169,11 @@ self.renameProj = (name) => {
 };
 
 self.createFile = (name) => {
+  console.log(`createFile 3 file 1`);
   let filePath = self.model.localProjTree.getSelectedFileFolder();
+  console.log(`createFile 3 file 2`);
   filePath = path.join(filePath, name);
-  // console.log(`createFile file = ${filePath}`);
+  console.log(`createFile 3 file 3 = ${filePath}`);
   const isProjFile = name.indexOf('.') > 0;
   let params = {
     data: {
