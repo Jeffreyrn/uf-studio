@@ -1,6 +1,7 @@
 
 import LocalProjTreeDatas from './model_local_proj_tree_datas';
 import Base64 from '../lib/Base64';
+import { log } from 'util';
 const uuidv4 = require('uuid/v4');
 const path = require('path')
 
@@ -684,12 +685,14 @@ self.remoteProjs2Local = (dict) => {
   let filesDict = {};
   // console.log(`datas = ${datas}`);
   for (let i = 0; i < datas.length; i += 1) {
-    const data = datas[i];
-    if (path.basename(data).indexOf('.') === 0) {
+    const aFileRecord = datas[i];
+    // console.log(`aFileRecord = ${aFileRecord}`);
+    const filepath = aFileRecord.path;
+    if (path.basename(filepath).indexOf('.') === 0) {
       continue;
     }
     // check which project
-    const projName = data.replace(CommandsEditorSocket.ROOT_DIR + "/", "").split("/")[0];
+    const projName = filepath.replace(CommandsEditorSocket.ROOT_DIR + "/", "").split("/")[0];
     const projPath = path.join(CommandsEditorSocket.ROOT_DIR, projName);
     let curProj = null;
     for (let i = 0; i < projs.length; i += 1) {
@@ -706,10 +709,10 @@ self.remoteProjs2Local = (dict) => {
       curProj.superid = '';
       projs.push(curProj);
     }
-    // console.log(`projName 2 = ${projName}, data = ${data}`);
+    // console.log(`projName 2 = ${projName}, filepath = ${filepath}`);
     // check and create folder
-    // const isProFile = path.basename(data).indexOf('.') > 0;
-    let tempPath = data;
+    // const isProFile = path.basename(filepath).indexOf('.') > 0;
+    let tempPath = filepath;
     while (tempPath !== projPath && tempPath !== CommandsEditorSocket.ROOT_DIR) {
       // console.log(`filename = ${tempPath}`);
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;

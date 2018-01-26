@@ -112,12 +112,13 @@ self.remoteProjs2Local = (dict) => {
   // console.log(`datas = ${datas}`);
   self.curProjExpandedKeys = [];
   for (let i = 0; i < datas.length; i += 1) {
-    const data = datas[i];
-    if (path.basename(data).indexOf('.') === 0) {
+    const aFileRecord = datas[i];
+    const filepath = aFileRecord.path;
+    if (path.basename(filepath).indexOf('.') === 0) {
       continue;
     }
     // check which project
-    const projName = data.replace(CommandsTeachSocket.ROOT_DIR + "/", "").split("/")[0];
+    const projName = filepath.replace(CommandsTeachSocket.ROOT_DIR + "/", "").split("/")[0];
     const projPath = path.join(CommandsTeachSocket.ROOT_DIR, projName);
     self.curProjExpandedKeys.push(projPath);
     let curProj = null;
@@ -134,7 +135,7 @@ self.remoteProjs2Local = (dict) => {
       curProj.files = [];
       projs.push(curProj);
     }
-    let tempPath = data;
+    let tempPath = filepath;
     while (tempPath !== projPath && tempPath !== CommandsTeachSocket.ROOT_DIR) {
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
       filesDict[tempPath] = ''; // tempPath; //
