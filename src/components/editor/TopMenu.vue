@@ -16,6 +16,12 @@
       <!-- <el-button class="top-btn" @click="exportPro()">
         Export
       </el-button> -->
+      <div>
+        <router-link :to="{ name: 'Home'}">
+          <el-button >Home</el-button>
+        </router-link>
+        <span>IDE</span>
+      </div>
       <el-button class="top-btn" @click="allProjs()">
         Projs
       </el-button>
