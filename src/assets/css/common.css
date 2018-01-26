@@ -1,5 +1,4 @@
 
-/*
 @font-face{
   font-family:'Gotham-Bold';
   src: url('../fonts/Gotham-Bold_0.otf');
@@ -8,6 +7,10 @@
   font-family:'Gotham-Book';
   src: url('../fonts/Hiragino_gb_W3.ttf');
   unicode-range: U+4E00-9FFF;
+}
+@font-face{
+  font-family:'Gotham-Black';
+  src: url('../fonts/Gotham-Black_0.otf');
 }
 @font-face{
   font-family:'Gotham-Book';
@@ -33,15 +36,10 @@
   font-family: 'kan-ti';
   src: url('../fonts/kanti.ttf');
 }
-@font-face {
-  font-family: 'gotham-medium';
-  src: url('../fonts/gotham-medium.otf');
-}
-*/
-
-.app-container {
-  /*position: absolute;*/
-}
+/*@font-face {*/
+  /*font-family: 'gotham-medium';*/
+  /*src: url('../fonts/gotham-medium.otf');*/
+/*}*/
 
 .limitWH {
   position: absolute;
@@ -51,20 +49,9 @@
   // height: 375px;
   overflow:scroll;
 }
-.textarea-style {
-  width: 350px;
-  height: 80px;
-}
 .page-01-bg {
   background-color: #e9e6d3;
 }
-
-div, span, button, textarea {
-  /*font-size: 12px;*/
-  /*font-family: Gotham-Medium;*/
-  /*color: gray;*/
-}
-
 .float-clear {
   clear: both;
 }
@@ -83,9 +70,59 @@ div, span, button, textarea {
 .position-absolute {
   position: absolute;
 }
+.col2{
+  width: 50%;
+}
+.col3{
+  width: 33.33%;
+}
+.col4{
+  width: 25%;
+}
+.col6{
+  width: 16.66%;
+}
+.textarea-style {
+  width: 350px;
+  height: 80px;
+}
+/**  common shadow  **/
+.com-box-shadow {
+  box-shadow: 0 0 8px 0 rgba(192,192,192,0.50);
+  border-radius: 20px;
+}
+/**  common gradual  **/
+.com-gradual-middle {
+  background: -webkit-radial-gradient(#FFF,#E7E7E7); /* Safari 5.1 - 6.0 */
+  background: -o-radial-gradient(#FFF,#E7E7E7); /* Opera 11.6 - 12.0 */
+  background: -moz-radial-gradient(#FFF,#E7E7E7); /* Firefox 3.6 - 15 */
+  background: radial-gradient(#FFF,#E7E7E7); /* 标准的语法（必须放在最后） */
+}
+/**  common font  **/
+.com-text-center{
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.com-font-blod {
+  font-family: Gotham-Black;
+  font-size: 1.4rem;
+  color: #444444;
+  letter-spacing: -1px;
+}
+/**  img a  **/
+.com-block {
+  display: block;
+}
 
-/*span {
-  font-size: 12px;
-  font-family: Gotham-Medium;
-  color: gray;
-}*/
+/**  padding  **/
+.com-padding-right-110px {
+  padding-right: 110px;
+}
+
+.com-min-width {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+
