@@ -5,13 +5,14 @@
         <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
         <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
       </div>
-      <xarm-model :control="state.joint"></xarm-model>
-      <div class="block">{{ msg }}-debugTest</div>
-      step<input v-model="config.step"/>>
       <el-radio-group v-model="state.online" @change="setOnline">
         <el-radio-button :label="true">online</el-radio-button>
         <el-radio-button :label="false">offline</el-radio-button>
       </el-radio-group>
+      <keep-alive><xarm-model :control="state.joint"></xarm-model></keep-alive>
+      <div class="block">{{ msg }}-debugTest</div>
+      step<input v-model="config.step"/>>
+      
     </div>
   </div>
 </template>

@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <!-- <div>
+    <div>
       <router-link :to="{ name: 'Home'}">
         <el-button >Home</el-button>
       </router-link>
-    </div> -->
+    </div>
     <div class="main-container">
       <router-view/>
     </div>

@@ -1,3 +1,4 @@
+<!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> -->
 <template>
   <div class="hello">
     <div class="hello-row">
