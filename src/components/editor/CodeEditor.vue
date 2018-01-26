@@ -114,7 +114,11 @@ export default {
     };
   },
   mounted() {
+    const self = this;
     console.log(`init uuid = ${this.data.uuid}`);
+    GlobalUtil.model.localProjTree.allCodeEditorVue[this.data.uuid] = this;//.inputText;
+    // const file = GlobalUtil.model.localProjTree.getFile(this.data.uuid);
+    // this.inputText = file.content;
     CodeMirror.registerHelper('hintWords', 'python', PythonHint);
     console.log('this is current editor object', this.editor);
     this.editor.foldCode(CodeMirror.Pos(13, 0));
@@ -122,19 +126,19 @@ export default {
     GlobalUtil.model.localProjTree.editors[this.data.uuid] = this.editor;
     // GlobalUtil.model.localProjTree.editors[this.data.uuid].setSize('auto', `${document.body.clientHeight - 120 - 200}px`);
     GlobalUtil.model.localProjTree.onwinresize();
-    const self = this;
-    CommandsEditorSocket.getFile(this.data.uuid, (dict) => {
-      let content = dict.data;
-      if (content === null || content === undefined) {
-        content = '';
-      }
-      self.inputText = content;
-      // self.curFile.remoteContent = content;
-      // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
-      //   // self.curFile.localContent === content;
-      //   self.setSelectedContent(file.uuid, content);
-      // }
-    });
+    
+    // CommandsEditorSocket.getFile(this.data.uuid, (dict) => {
+    //   let content = dict.data;
+    //   if (content === null || content === undefined) {
+    //     content = '';
+    //   }
+    //   self.inputText = content;
+    //   // self.curFile.remoteContent = content;
+    //   // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
+    //   //   // self.curFile.localContent === content;
+    //   //   self.setSelectedContent(file.uuid, content);
+    //   // }
+    // });
   },
   methods: {
     onEditorCodeChange(newCode) {

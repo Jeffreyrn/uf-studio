@@ -34,61 +34,61 @@ self.isEditingPoints = false;
 self.curProj = {};
 self.curFilePath = ''
 
-self.getThisFileFullPath = (uuid) => {
-  let file = self.getFileInfo(uuid);
-  // console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
-  if (file === null || file === undefined) {
-    // self.curFilePath = `/${self.curProj.name}`;
-    return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
-  }
-  let proj = null;
-  for (let i = 0; i < self.curProjList.length; i += 1) {
-    const pro = self.curProjList[i];
-    if (pro.uuid === file.proId) {
-      proj = pro;
-      break;
-    }
-  }
-  // console.log(`getThisFileFullPath proj = ${JSON.stringify(proj)}`);
-  const projPath = path.join(CommandsEditorSocket.ROOT_DIR, proj.name);
-  let filename = file.name;
-  while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
-    const superid = file.superid;
-    file = self.getFileInfo(superid);
-    if (file !== null && file !== undefined) {
-      filename = path.join(`${file.name}`, filename);
-    }
-    else {
-      break;
-    }
-  }
-  const fullPath = path.join(projPath, filename);
-  console.log(`fullPath = ${fullPath}`);
-  return fullPath;
-};
+// self.getThisFileFullPath = (uuid) => {
+//   let file = self.getFileInfo(uuid);
+//   // console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
+//   if (file === null || file === undefined) {
+//     // self.curFilePath = `/${self.curProj.name}`;
+//     return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
+//   }
+//   let proj = null;
+//   for (let i = 0; i < self.curProjList.length; i += 1) {
+//     const pro = self.curProjList[i];
+//     if (pro.uuid === file.proId) {
+//       proj = pro;
+//       break;
+//     }
+//   }
+//   // console.log(`getThisFileFullPath proj = ${JSON.stringify(proj)}`);
+//   const projPath = path.join(CommandsEditorSocket.ROOT_DIR, proj.name);
+//   let filename = file.name;
+//   while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
+//     const superid = file.superid;
+//     file = self.getFileInfo(superid);
+//     if (file !== null && file !== undefined) {
+//       filename = path.join(`${file.name}`, filename);
+//     }
+//     else {
+//       break;
+//     }
+//   }
+//   const fullPath = path.join(projPath, filename);
+//   console.log(`fullPath = ${fullPath}`);
+//   return fullPath;
+// };
 
-self.getCurFilePath = () => {
-  const curUUID = self.curSelectedFileUUID;
-  let file = self.getFileInfo(curUUID);
-  if (file === null || file === undefined) {
-    self.curFilePath = `/${self.curProj.name}`;
-    return;
-  }
-  let filename = file.name;
-  while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
-    const superid = file.superid;
-    file = self.getFileInfo(superid);
-    if (file !== null && file !== undefined) {
-      filename = path.join(`${file.name}`, filename);
-    }
-    else {
-      break;
-    }
-  }
-  filename = path.join(`/${self.curProj.name}`, filename);
-  // filename = filename.replace("/", "/ ");
-  self.curFilePath = filename;
-};
+// self.getCurFilePath = () => {
+//   const curUUID = self.curSelectedFileUUID;
+//   let file = self.getFileInfo(curUUID);
+//   if (file === null || file === undefined) {
+//     self.curFilePath = `/${self.curProj.name}`;
+//     return;
+//   }
+//   let filename = file.name;
+//   while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
+//     const superid = file.superid;
+//     file = self.getFileInfo(superid);
+//     if (file !== null && file !== undefined) {
+//       filename = path.join(`${file.name}`, filename);
+//     }
+//     else {
+//       break;
+//     }
+//   }
+//   filename = path.join(`/${self.curProj.name}`, filename);
+//   // filename = filename.replace("/", "/ ");
+//   self.curFilePath = filename;
+// };
 // self.getCurFilePath();
 self.hasOpenFileInCurPro = false;
 self.getCurSelectedFileUUIDs = () => {
@@ -102,7 +102,7 @@ self.getCurSelectedFileUUIDs = () => {
   const curUUID = self.curSelectedFileUUIDs[proId];
   self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined && curUUID !== '';
   // console.log(`self.hasOpenFileInCurPro = ${self.hasOpenFileInCurPro}, curUUID = ${curUUID}`);
-  self.getCurFilePath();
+  // self.getCurFilePath();
   return self.curSelectedFileUUID;
 };
 self.uuids2Files = (uuids) => {
@@ -127,7 +127,8 @@ self.setCurSelectedFileUUIDs = (uuid) => {
 };
 self.curSelectedFolderUUID = '';
 self.curSelectedContents = {};
-self.curSelectedContent = '';
+self.allCodeEditorVue = {};
+// self.curSelectedContent = '';
 // self.getSelectedContent = (uuid) => {
 //   if (curSelectedContents[uuid] === null || curSelectedContents[uuid] === undefined) {
 //     curSelectedContents[uuid] = '';
@@ -136,12 +137,15 @@ self.curSelectedContent = '';
 //   return curSelectedContents[uuid];
 // };
 self.setSelectedContent = (uuid, content) => {
-
-  self.curSelectedContent = content;
+  // self.curSelectedContent = content;
   self.curSelectedContents[uuid] = content;
+  self.allCodeEditorVue[uuid].inputText = content;
+  console.log(`self.allCodeEditorVue[uuid].inputText = ${self.allCodeEditorVue[uuid]}`);
+  // self.allCodeEditorVue[uuid] = content
   const curFile = self.getFile(uuid);
   curFile.localContent = content;
 };
+
 self.curOpenedFilesList = [];
 self.curOpenedTabs = {};
 self.addOpenTab = (fileId) => {
@@ -260,37 +264,68 @@ self.setSelectedUUID = (uuid) => {
     // self.setSelectedUI(uuid);
     return;
   }
-  for (let i = 0; i < self.curProj.files.length; i += 1) {
-    const file = self.curProj.files[i];
-    if (file.uuid === uuid) {
-      if (file.type === self.PROJ_TREE_TYPE.FILE) {
-        self.setSelectedContent(file.uuid, file.localContent);
-        self.setCurSelectedFileUUIDs(uuid);
-        self.curSelectedFolderUUID = '';
-        self.curFile = file;
-        console.log(`selected = ${file.name}`);
-        CommandsEditorSocket.getFile(file.uuid, (dict) => {
-          let content = dict.data;
-          if (content === null || content === undefined) {
-            content = '';
-          }
-          self.curFile.remoteContent = content;
-          if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
-            // self.curFile.localContent === content;
-            self.setSelectedContent(file.uuid, content);
-          }
-        });
-      }
-      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-        self.curSelectedFolderUUID = uuid;
-      }
-    }
+  // 
+  const file = self.getFileInfo(uuid);
+  if (file === null) {
+    return;
   }
-  // ui
+  if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+    self.curSelectedFolderUUID = uuid;
+    return;
+  }
+  self.curSelectedFolderUUID = '';
+  self.curFile = file;
+  self.setCurSelectedFileUUIDs(uuid);
+  CommandsEditorSocket.getFile(file.uuid, (dict) => {
+    let content = dict.data;
+    if (content === null || content === undefined) {
+      content = '';
+    }
+    self.curFile.remoteContent = content;
+    self.setSelectedContent(file.uuid, content);
+    // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
+    //   // self.curFile.localContent === content;
+    //   self.setSelectedContent(file.uuid, '');
+    // }
+    // else {
+    //   self.setSelectedContent(file.uuid, content);
+    // }
+  });
   self.setSelectedUI(uuid);
+
+  // for (let i = 0; i < self.curProj.files.length; i += 1) {
+  //   const file = self.curProj.files[i];
+  //   if (file.uuid === uuid) {
+  //     if (file.type === self.PROJ_TREE_TYPE.FILE) {
+  //       // self.setSelectedContent(file.uuid, file.localContent);
+  //       self.setCurSelectedFileUUIDs(uuid);
+  //       self.curSelectedFolderUUID = '';
+  //       self.curFile = file;
+  //       console.log(`selected = ${file.name}`);
+  //       CommandsEditorSocket.getFile(file.uuid, (dict) => {
+  //         let content = dict.data;
+  //         if (content === null || content === undefined) {
+  //           content = '';
+  //         }
+  //         self.curFile.remoteContent = content;
+  //         if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
+  //           // self.curFile.localContent === content;
+  //           self.setSelectedContent(file.uuid, content);
+  //         }
+  //       });
+  //     }
+  //     if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+  //       self.curSelectedFolderUUID = uuid;
+  //     }
+  //   }
+  // }
+
+  // ui
+  
 };
 
 self.setSelectedUI = (uuid) => {
+  console.log(`setSelectedUI 2 file uuid = ${uuid}`);
   const file = GlobalUtil.model.localProjTree.getFileInfo(uuid);
   // console.log(`setSelectedUI file type uuid = ${uuid}, file = ${file}`);
   // if (file) {
@@ -321,26 +356,28 @@ self.setSelectedUI = (uuid) => {
     let selectedEditor = null;
     const editors = document.getElementsByName("code-editor");
     // console.log(`editor value =  cur ${curFile.uuid}`);
-    for (let i = 0; i < editors.length; i += 1) {
-      const editor = editors[i];
-      editor.style.display = 'none';
-    }
+    // for (let i = 0; i < editors.length; i += 1) {
+    //   const editor = editors[i];
+    //   editor.style.display = 'none';
+    // }
     for (let i = 0; i < editors.length; i += 1) {
       const editor = editors[i];
       // console.log(`editor value = ${editor.getAttribute("value")}`);
       const aUUID = editor.getAttribute("value");
-      editor.style.display = 'none';
+      // editor.style.display = 'none';
       if (aUUID === curFile.uuid) {
+        editor.style.opacity = '1.0';
         // editor.style.display = 'block';
-        selectedEditor = editor;
+        // selectedEditor = editor;
       }
-      // else {
-      //   editor.style.display = 'none';
-      // }
+      else {
+        // editor.style.display = 'none';
+        editor.style.opacity = '0.0';
+      }
     }
-    if (selectedEditor !== null) {
-      selectedEditor.style.display = 'block';
-    }
+    // if (selectedEditor !== null) {
+    //   selectedEditor.style.display = 'block';
+    // }
   });
 };
 
@@ -390,7 +427,7 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
 
 self.getSelectedFileFolder = () => {
   let curSelectedUUID = self.curSelectedUUID;
-  let filePath = self.getThisFileFullPath(curSelectedUUID);
+  let filePath = curSelectedUUID; //self.getThisFileFullPath(curSelectedUUID);
   console.log(`getSelectedFileFolder path = ${filePath}`);
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
@@ -509,7 +546,7 @@ self.changeProj = (uuid) => {
   }
   const openList = self.curOpenedTabs[uuid];
   self.getCurSelectedFileUUIDs();
-  self.getCurFilePath();
+  // self.getCurFilePath();
   self.curOpenedFilesList = openList;
   self.curPro2Tree();
 };
@@ -689,7 +726,7 @@ self.remoteProjs2Local = (dict) => {
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
-        const content = self.curSelectedContent[uuid];
+        // const content = self.curSelectedContent[uuid];
 
         // file.proId = curProj.uuid;
 
