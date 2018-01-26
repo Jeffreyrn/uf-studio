@@ -54,6 +54,7 @@ module.exports = {
     "max-len": ["error", 512],
     "radix":0,
     "no-underscore-dangle":0,
-    "no-return-assign":0
+    "no-return-assign":0,
+    "linebreak-style":0,
   }
 }
