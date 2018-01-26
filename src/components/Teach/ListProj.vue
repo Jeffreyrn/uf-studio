@@ -144,10 +144,10 @@ export default {
                 this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
               }
               if (GlobalUtil.model.localTeach.curDuration % 100 === 0) {
-                const myChart = window.myChart;
-                GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
-                const option = GlobalUtil.model.localTeach.chartOption;
-                myChart.setOption(option, true);
+                // const myChart = window.myChart;
+                // GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
+                // const option = GlobalUtil.model.localTeach.chartOption;
+                // myChart.setOption(option, true);
               }
               GlobalUtil.model.localTeach.curDuration -= -1;
             });

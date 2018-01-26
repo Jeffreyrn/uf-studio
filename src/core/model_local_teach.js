@@ -174,13 +174,13 @@ self.onSelect = (e, index) => {
   }
   GlobalUtil.model.localTeach.curSelectedIndex = index;
   console.log(`onSelect = ${index}, point = ${JSON.stringify(point)}`);
-  GlobalUtil.model.localTeach.curPoint.a0 = point[0];
-  GlobalUtil.model.localTeach.curPoint.a1 = point[1];
-  GlobalUtil.model.localTeach.curPoint.a2 = point[2];
-  GlobalUtil.model.localTeach.curPoint.a3 = point[3];
-  GlobalUtil.model.localTeach.curPoint.a4 = point[4];
-  GlobalUtil.model.localTeach.curPoint.a5 = point[5];
-  GlobalUtil.model.localTeach.curPoint.a6 = point[6];
+  GlobalUtil.model.localTeach.curPoint = point;
+  // GlobalUtil.model.localTeach.curPoint.a1 = point[1];
+  // GlobalUtil.model.localTeach.curPoint.a2 = point[2];
+  // GlobalUtil.model.localTeach.curPoint.a3 = point[3];
+  // GlobalUtil.model.localTeach.curPoint.a4 = point[4];
+  // GlobalUtil.model.localTeach.curPoint.a5 = point[5];
+  // GlobalUtil.model.localTeach.curPoint.a6 = point[6];
 };
 
 self.curProTreeDatas = [];
@@ -204,15 +204,25 @@ self.curPro2Tree = () => {
   self.curProTreeDatas = tempDatas;
 };
 
-self.curPoint = {
-  a0: 360,
-  a1: 360,
-  a2: 360,
-  a3: 360,
-  a4: 360,
-  a5: 360,
-  a6: 360,
-};
+// self.curPoint = {
+//   a0: 360,
+//   a1: 360,
+//   a2: 360,
+//   a3: 360,
+//   a4: 360,
+//   a5: 360,
+//   a6: 360,
+// };
+
+self.curPoint = [
+  360,
+  360,
+  360,
+  360,
+  360,
+  360,
+  360,
+];
 
 self.curDuration = 0;
 self.msMin = 0;

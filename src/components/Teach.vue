@@ -6,10 +6,13 @@
 
       <span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>
 
+      <router-link :to="{ name: 'Home'}">
+        <el-button >Home</el-button>
+      </router-link>
       <el-button value='new' @click='newProj()'>New</el-button>
       <el-button value='new' @click='delProj()'>Delete</el-button>
-      <span> {{ socketCom.diff }} </span>
-            <!-- :default-expanded-keys="model.localTeach.curProjExpandedKeys" -->
+      <!-- <span> {{ socketCom.diff }} </span> -->
+      <!-- :default-expanded-keys="model.localTeach.curProjExpandedKeys" -->
       <div id="total-teach-frame" class="total-frame position-absolute">
         <div id="left-teach-frame" class="left-frame position-absolute">
           <el-tree
@@ -30,8 +33,8 @@
           <!-- scroll end -->
 
           <!-- chart begin -->
-          <div class="chart" id="echart-main-2">
-          </div>
+          <!-- <div class="chart" id="echart-main-2">
+          </div> -->
           <!-- chart end -->
 
           <div class="float-clear"></div>
@@ -41,6 +44,10 @@
       <!-- One setting -->
       <OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>
       <!-- One setting end -->
+
+      <!-- <div style="position:absolute;width:left:200px;top:200px;200px;height:200px;">
+        <xarm-model :control="model.localTeach.curPoint"></xarm-model>
+      </div> -->
 
       <!-- dialog -->
       <el-dialog
@@ -63,6 +70,7 @@
 
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
+import XarmModel from './common/XarmModel';
 
 const echarts = require('echarts');
 let t;
@@ -86,11 +94,11 @@ export default {
     };
   },
   mounted() {
-    const dom = document.getElementById('echart-main-2');
-    const myChart = echarts.init(dom);
-    window.myChart = myChart;
-    const option = GlobalUtil.model.localTeach.chartOption;
-    myChart.setOption(option, true);
+    // const dom = document.getElementById('echart-main-2');
+    // const myChart = echarts.init(dom);
+    // window.myChart = myChart;
+    // const option = GlobalUtil.model.localTeach.chartOption;
+    // myChart.setOption(option, true);
 
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
@@ -103,12 +111,10 @@ export default {
     // }
 
     CommandsTeachSocket.listProjs((dict) => {
-
     });
   },
   methods: {
     addDiscontinusRecord() {
-
     },
     addRecord(isContinus) {
       const dateStr = GlobalUtil.getTimeString();
@@ -195,10 +201,10 @@ export default {
       // console.log(`curFile file = ${JSON.stringify(file)}`);
 
       //
-      const myChart = window.myChart;
-      GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
-      const option = GlobalUtil.model.localTeach.chartOption;
-      myChart.setOption(option, true);
+      // const myChart = window.myChart;
+      // GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
+      // const option = GlobalUtil.model.localTeach.chartOption;
+      // myChart.setOption(option, true);
 
       //
       // el-tree-node__label
@@ -251,6 +257,7 @@ export default {
   components: {
     OnePointSetting,
     ListProj,
+    XarmModel,
   },
   computed: {
   },
