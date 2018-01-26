@@ -682,10 +682,12 @@ self.remoteProjs2Local = (dict) => {
   }
   const projs = [];
   const datas = dict.data;
-  let filesDict = {};
+  const filesDict = {};
   // console.log(`datas = ${datas}`);
+  const projDates = {};
   for (let i = 0; i < datas.length; i += 1) {
     const aFileRecord = datas[i];
+    const ctime = aFileRecord.ctime;
     // console.log(`aFileRecord = ${aFileRecord}`);
     const filepath = aFileRecord.path;
     if (path.basename(filepath).indexOf('.') === 0) {
@@ -694,6 +696,9 @@ self.remoteProjs2Local = (dict) => {
     // check which project
     const projName = filepath.replace(CommandsEditorSocket.ROOT_DIR + "/", "").split("/")[0];
     const projPath = path.join(CommandsEditorSocket.ROOT_DIR, projName);
+    if (filepath === projPath) {
+      projDates[filepath] = ctime;
+    }
     let curProj = null;
     for (let i = 0; i < projs.length; i += 1) {
       const proj = projs[i];
@@ -704,9 +709,10 @@ self.remoteProjs2Local = (dict) => {
     if (curProj === null) {
       curProj = {};
       curProj.name = projName;
-      curProj.uuid = path.join(CommandsEditorSocket.ROOT_DIR, projName);
+      curProj.uuid = projPath;
       curProj.files = [];
       curProj.superid = '';
+      curProj.ctime = projDates[curProj.uuid];
       projs.push(curProj);
     }
     // console.log(`projName 2 = ${projName}, filepath = ${filepath}`);

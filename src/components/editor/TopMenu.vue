@@ -315,7 +315,7 @@ export default {
         const pro = proList[i];
         const onePro = {
           name: pro.name,
-          time: '2017-12-12 12:12:12',
+          time: pro.ctime, // '2017-12-12 12:12:12',
           state: GlobalUtil.model.localProjTree.curProj.uuid === pro.uuid ? 'Selected' : '',
           uuid: pro.uuid,
         };
