@@ -1,6 +1,6 @@
 <template>
-  <div class="home-wrapper com-text-center">
-    <section style="position: absolute;left: 0; right: 0;top:0;margin: 0 auto;">
+  <div class="home-wrapper com-text-center com-module-wrapper">
+    <section style="position: absolute;left: 0; right: 0;top:0;margin: 0 auto; font-size: 1.2rem;text-align: center;">
       <button class="change-btn" @click="onLink()">
         link/unlink
       </button>
@@ -18,11 +18,11 @@
     <section class="section1-wrapper com-text-center com-gradual-middle">
       <img class="img-block" src="../assets/img/home/img_xarm.png"/>
     </section>
-    <section class="section2-wrapper com-font-blod com-text-center">
+    <section class="section2-wrapper com-font-GB-22 com-text-center">
       <div class="box1-wrapper ">
-        <a class="com-text-center"><img src="../assets/img/home/icon_shopping.svg" />APP STORE</a>
-        <a class="com-text-center"><img src="../assets/img/home/icon_developers.svg" />EDITOR</a>
-        <a class="com-text-center com-border-none"><img src="../assets/img/home/icon_setting.svg" />SETTING</a>
+        <router-link class="com-text-center" :to="{ name: 'AppStore'}"><img src="../assets/img/home/icon_shopping.svg" />APP STORE</router-link>
+        <router-link class="com-text-center" :to="{ name: 'EditHome'}"><img src="../assets/img/home/icon_developers.svg" />EDITOR</router-link>
+        <router-link class="com-text-center" :to="{ name: 'Setting'}"><img src="../assets/img/home/icon_setting.svg" />SETTING</router-link>
       </div>
     </section>
   </div>
@@ -57,42 +57,39 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .home-wrapper {
-  position: relative;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  .section1-wrapper {
-    width: 100%;
-    height: 80%;
-    img {
-      width: 30%;
-      margin:0 auto;
-    }
-  }
-  .section2-wrapper {
-    width: 80%;
-    height: 20%;
-    .box1-wrapper {
+    flex-direction: column;
+    .section1-wrapper {
       width: 100%;
-      display: flex;
-      justify-content: space-around;
-      /*margin: 2rem 0;*/
-      &>a {
-        flex-direction: column;
-        border-right: 1px solid #979797;
+      height: 80%;
+      img {
+        width: 30%;
+        margin:0 auto;
+      }
+    }
+    .section2-wrapper {
+      width: 80%;
+      height: 20%;
+      .box1-wrapper {
         width: 100%;
-        /*padding: .8rem 0;*/
-        cursor: pointer;
-        img {
-          width: 2.2rem;
-          padding-bottom: 2rem;
+        display: flex;
+        justify-content: space-around;
+        /*margin: 2rem 0;*/
+        &>a {
+          flex-direction: column;
+          border-right: 1px solid #979797;
+          width: 100%;
+          color: #444;
+          /*padding: .8rem 0;*/
+          cursor: pointer;
+          img {
+            width: 2.6rem;
+            padding-bottom: 2rem;
+          }
+        }
+        &>a:last-child{
+          border-right: none;
         }
       }
-      &>a:last-child{
-        border-right: none;
-      }
     }
   }
-
-}
 </style>

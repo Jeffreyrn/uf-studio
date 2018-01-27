@@ -8,7 +8,9 @@ import Emulator from '@/components/Emulator';
 import Blockly from '@/components/Blockly';
 import Params from '@/components/Params';
 import Teach from '@/components/Teach';
-
+import EditHome from '@/components/EditHome';
+import Setting from '@/components/Setting';
+import AppStore from '@/components/AppStore';
 Vue.use(Router);
 
 export default new Router({
@@ -18,6 +20,21 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home,
+    },
+    {
+      path: '/EditHome',
+      name: 'EditHome',
+      component: EditHome,
+    },
+    {
+      path: '/setting',
+      name: 'Setting',
+      component: Setting,
+    },
+    {
+      path: '/AppStore',
+      name: 'AppStore',
+      component: AppStore,
     },
     {
       path: '/control',
