@@ -3,7 +3,7 @@
     <!-- button -->
     <div style="width:40px;height:20px;background-color:yellow;">
       <!-- isContinus true -->
-      <div v-if="model.localTeach.isContinus===true">
+      <div v-if="file.isContinus===true">
         <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
           {{ parseInt(index / 10) }}.0s
         </div>
@@ -16,7 +16,7 @@
       <!-- isContinus true end -->
 
       <!-- isContinus false -->
-      <div v-if="model.localTeach.isContinus!==true">
+      <div v-if="file.isContinus!==true">
         <div class="float-left">
           {{ index }}
         </div>

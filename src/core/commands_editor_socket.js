@@ -5,29 +5,30 @@ const merge = require('webpack-merge')
 const CommandsEditorSocket = {};
 const self = CommandsEditorSocket;
 window.CommandsEditorSocket = CommandsEditorSocket;
+
 // xArm cmd
-self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
-self.CMD_ID_GET_TCP_POSE = 'xarm_get_tcp_pose';
-self.CMD_ID_GET_VERSION = 'xarm_get_version';
-self.CMD_ID_GET_STATE = 'xarm_get_state';
+// self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
+// self.CMD_ID_GET_TCP_POSE = 'xarm_get_tcp_pose';
+// self.CMD_ID_GET_VERSION = 'xarm_get_version';
+// self.CMD_ID_GET_STATE = 'xarm_get_state';
 
-// python file cmd
-self.FILE_ID_LIST_DIR = 'list_dir';
-self.FILE_ID_CREATE_DIR = 'create_dir';
-self.FILE_ID_CREATE_FILE = 'create_file';
-self.FILE_ID_DELETE_DIR = 'delete_dir';
-self.FILE_ID_DELETE_FILE = 'delete_file';
-self.FILE_ID_CHANGE_NAME = 'change_name';
-self.FILE_ID_GET_FILE = 'get_file';
+// // python file cmd
+// self.FILE_ID_LIST_DIR = 'list_dir';
+// self.FILE_ID_CREATE_DIR = 'create_dir';
+// self.FILE_ID_CREATE_FILE = 'create_file';
+// self.FILE_ID_DELETE_DIR = 'delete_dir';
+// self.FILE_ID_DELETE_FILE = 'delete_file';
+// self.FILE_ID_CHANGE_NAME = 'change_name';
+// self.FILE_ID_GET_FILE = 'get_file';
 
-self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
-self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
-self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
-self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
+// self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
+// self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
+// self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
+// self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
-self.DEBUG_SET_BEART = 'debug_set_beart';
+// self.DEBUG_SET_BEART = 'debug_set_beart';
 
-self.VERSION = {version: 'xarm7'};
+self.VERSION = GlobalConstant.VERSION;
 
 //
 self.ROOT_DIR = '/python';
@@ -47,7 +48,7 @@ self.runPythonScript = (uuid, callback) => {
       // "script": "", // 要执行的python代码
     }
   };
-  self.sendCmd(self.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
     GlobalUtil.model.localProjTree.isCmdRunning = true;
     if (callback) {
       callback(dict);
@@ -62,7 +63,7 @@ self.stopPythonScript = (callback) => {
       program_id: pID, // 该id在上面两个接口都会有返回, null或者不传代表停止所有的
     }
   };
-  self.sendCmd(self.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
     GlobalUtil.model.localProjTree.isCmdRunning = false;
     if (callback) {
       callback(dict);
@@ -77,7 +78,7 @@ self.runPipCommand = (command, options, callback) => {
       options: options,
     }
   };
-  self.sendCmd(self.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
     GlobalUtil.model.localProjTree.isCmdRunning = true;
     if (callback) {
       callback(dict);
@@ -93,7 +94,7 @@ self.autocompletePython = (source, line, column, callback) => {
       clolumn: column, // 列号
     }
   };
-  self.sendCmd(self.FILE_ID_AUTOCOMPLETE_PYTHON, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_AUTOCOMPLETE_PYTHON, params, (dict) => {
     if (callback) {
       callback(dict);
     }
@@ -108,7 +109,7 @@ self.listProjs = (callback) => {
       type: "detail", // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
     })
   };
-  self.sendCmd(self.FILE_ID_LIST_DIR, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_LIST_DIR, params, (dict) => {
     // console.log(`remoteProjs2Local = ${JSON.stringify(dict)}`);
     self.model.localProjTree.remoteProjs2Local(dict);
     if (callback) {
@@ -126,7 +127,7 @@ self.createProj = (name) => {
       name: '', // 文件夹名称, 可省略
     })
   };
-  self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
     self.listProjs(() => {
       const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
       self.model.localProjTree.changeProj(lastProj.uuid);
@@ -144,7 +145,7 @@ self.delProj = (proId, callback) => {
       file: '', // 文件夹名称, 可省略
     })
   };
-  self.sendCmd(self.FILE_ID_DELETE_DIR, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_DELETE_DIR, params, (dict) => {
     self.listProjs(callback);
   });
 };
@@ -162,7 +163,7 @@ self.renameProj = (name) => {
       new_name: name, // 新文件（夹）名称
     })
   };
-  self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_CHANGE_NAME, params, (dict) => {
     self.model.localProjTree.deleteOpenSonTabs('');
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
@@ -188,12 +189,12 @@ self.createFile = (name) => {
   };
   const proId = self.model.localProjTree.curProj.uuid;
   if (isProjFile === true) {
-    self.sendCmd(self.FILE_ID_CREATE_FILE, params, (dict) => {
+    self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
       self.listProjs();
     });
   }
   else {
-    self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
+    self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
       self.listProjs();
     });
   }
@@ -212,7 +213,7 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
       data: text, // 文件内容
     })
   };
-  self.sendCmd(self.FILE_ID_CREATE_FILE, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
     // self.listProjs(callback);
     if (callback) {
       callback(dict);
@@ -231,7 +232,7 @@ self.getFile = (uuid, callback) => {
       file: '', // 文件夹名称, 可省略
     })
   };
-  self.sendCmd(self.FILE_ID_GET_FILE, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_GET_FILE, params, (dict) => {
     // console.log(`get file = ${JSON.stringify(dict)}`);
     if (callback) {
       callback(dict);
@@ -253,13 +254,13 @@ self.delFiles = (uuid) => {
   };
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
-    self.sendCmd(self.FILE_ID_DELETE_FILE, params, (dict) => {
+    self.sendCmd(GlobalConstant.FILE_ID_DELETE_FILE, params, (dict) => {
       self.model.localProjTree.deleteOpenSonTabs(uuid);
       self.listProjs();
     });
   }
   else {
-    self.sendCmd(self.FILE_ID_DELETE_DIR, params, (dict) => {
+    self.sendCmd(GlobalConstant.FILE_ID_DELETE_DIR, params, (dict) => {
       self.model.localProjTree.deleteOpenSonTabs(uuid);
       self.listProjs();
     });
@@ -281,7 +282,7 @@ self.renameFile = (uuid, name) => {
       new_name: name, // 新文件（夹）名称
     })
   };
-  self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_CHANGE_NAME, params, (dict) => {
     self.model.localProjTree.deleteOpenSonTabs(uuid);
     self.listProjs((dict) => {
       // file.uuid = path.join(newFilePath);

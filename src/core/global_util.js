@@ -1,4 +1,5 @@
 
+import GlobalConstant from './global_constant.js';
 import Model from './model';
 import SocketCom from './socket_com';
 import NativeCom from './native_com';

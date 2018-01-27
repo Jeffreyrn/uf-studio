@@ -50,11 +50,11 @@
       </div> -->
 
       <!-- dialog -->
+      <!-- :before-close="handleClose" -->
       <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
         width="300px"
-        :before-close="handleClose"
         center>
         <el-input v-model="inputText" auto-complete="off"></el-input>
         <span slot="footer" class="dialog-footer">
@@ -223,6 +223,7 @@ export default {
               const points = data.points;
               const type = data.tpye;
               file.storeType = data.type;
+              file.isContinus = isContinus;
               GlobalUtil.model.localTeach.isContinus = isContinus;
               // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
               GlobalUtil.model.localTeach.fileDatas[uuid] = points;
