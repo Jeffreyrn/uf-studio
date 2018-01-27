@@ -52,6 +52,7 @@
 
 <script>
 import * as THREE from 'three';
+import * as THREESTLLoader from 'three-stl-loader';
 import OrbitControls from 'three-orbitcontrols';
 // import * as types from '../../store/mutation-types';
 
@@ -174,15 +175,16 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)',
       });
       const RAINBOW_COLOR_LIST = [0x4B0082, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x9400D3];
-      const MODEL_DIR = '../../src/assets/three-d/';
+      const MODEL_DIR = '../../src/assets/three-stl/';
+      const FILE_FORMAT = '.stl';
       const JOINT_MODEL_SRC = [
-        `${MODEL_DIR}1.json`,
-        `${MODEL_DIR}2.json`,
-        `${MODEL_DIR}3.json`,
-        `${MODEL_DIR}4.json`,
-        `${MODEL_DIR}5.json`,
-        `${MODEL_DIR}6.json`,
-        `${MODEL_DIR}7.json`,
+        `${MODEL_DIR}1${FILE_FORMAT}`,
+        `${MODEL_DIR}2${FILE_FORMAT}`,
+        `${MODEL_DIR}3${FILE_FORMAT}`,
+        `${MODEL_DIR}4${FILE_FORMAT}`,
+        `${MODEL_DIR}5${FILE_FORMAT}`,
+        `${MODEL_DIR}6${FILE_FORMAT}`,
+        `${MODEL_DIR}7${FILE_FORMAT}`,
       ];
       const materialList = [];
       RAINBOW_COLOR_LIST.forEach((hex) => {
@@ -219,7 +221,8 @@ export default {
       const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
       joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
       scene.add(joints[0]);
-      const loader = new THREE.JSONLoader();
+      const STLLoader = new THREESTLLoader(THREE);
+      const loader = new STLLoader();
       loader.load(JOINT_MODEL_SRC[0], (geometry) => {
         const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
           vertexColors: THREE.FaceColors,
