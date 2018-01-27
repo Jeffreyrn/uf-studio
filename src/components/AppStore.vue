@@ -1,0 +1,122 @@
+<template>
+  <div class="appStore-wrapper com-module-wrapper">
+    <div class="com-back-home-wrapper com-text-center">
+      <router-link :to="{name: 'Home'}"><img class="com-icon-back" src="../assets/img/common/icon_back.svg"/></router-link>
+      <span class="com-font-GB-24 com-module-name">APP STORE</span>
+      <img class="com-icon-module" src="../assets/img/appStore/shopping_bag.svg" />
+    </div>
+    <section class="section1-wrapper com-font-GM-20">
+      <div class="tab-wrapper">
+        <div class="tab" v-for="(item,index) in tab" @click="showTabContain(index)">
+          <span class="tab-text" :class="{'active':showApp === index}">{{ item }}</span>
+        </div>
+      </div>
+      <div class="tab-contain-wrapper" v-show="showApp === 'allApp'">
+        <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">Default App
+          <ul>
+            <li v-for="(icon ,index) in item">
+              <!--<a><img :src="icon.img"/><span>{{ icon.name }}</span></a>-->
+            </li>
+          </ul>
+        </div>
+        <div class="tab-contain">Third-Party
+          <ThirdParty></ThirdParty>
+        </div>
+        <div class="tab-contain">My App
+          <MyApp></MyApp>
+        </div>
+      </div>
+      <div class="tab-contain-wrapper" v-show="showApp === 'thirdParty'">
+        <ThirdParty></ThirdParty>
+      </div>
+      <div class="tab-contain-wrapper" v-show="showApp === 'myApp'">
+        <MyApp></MyApp>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+import MyApp from './appStore/MyApp';
+import ThirdParty from './appStore/ThirdParty';
+
+export default {
+  data() {
+    return {
+      showApp: 'allApp',
+      tab: {
+        allApp: 'All Apps',
+        thirdParty: 'Third-Party',
+        myApp: 'My App',
+      },
+      tabContain: {
+        1: {
+          1: {
+            img: require('../assets/img/appStore/shopping_bag.svg'),
+            name: 'uStudio',
+          },
+        },
+      },
+    };
+  },
+  mounted() {
+  },
+  methods: {
+    showTabContain(item) {
+      this.showApp = item;
+    },
+  },
+  components: {
+    MyApp,
+    ThirdParty,
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+  .appStore-wrapper {
+    .section1-wrapper {
+      width: 80%;
+      height: 90%;
+      margin: 0 auto;
+      display: flex;
+      .tab-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        margin-right: 10%;
+        padding-top: 5rem;
+        .tab {
+          height: 100%;
+          cursor: pointer;
+          .active {
+            border-bottom: 2px solid #E27347;
+          }
+        }
+      }
+      .tab-contain-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding-top: 5rem;
+      }
+    }
+  }
+
+</style>
+<style>
+/**common css(AppStore MyApp ThirdParty)**/
+  .appStore-wrapper .tab-contain { height: 100%;}
+  .appStore-wrapper .tab-contain ul li{
+    width: 8rem;
+    height: 8rem;
+    margin: 1.4rem 3.2rem 1.4rem 0;
+    display: inline-block;
+    text-align: center;
+    background: #E2E2E2;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+

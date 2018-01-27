@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>shopping bag-alt</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="xstudio_appstorehome_v1.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-397.000000, -60.000000)">
+        <g id="icon_appstore" transform="translate(397.000000, 60.000000)" fill="#444444">
+            <g id="shopping-bag-alt" transform="translate(5.000000, 3.000000)">
+                <path d="M39,42 L0,42 L4.17857143,8.4 L9.88789285,8.4 C10.569,3.65680001 14.5929643,0 19.5,0 C24.4070357,0 28.4268214,3.65680001 29.1079285,8.4 L34.8214285,8.4 L39,42 Z M19.5,2.80000001 C16.1334643,2.80000001 13.3547143,5.20940003 12.7056429,8.4 L26.29575,8.4 C25.6452857,5.20939999 22.8651429,2.80000001 19.5,2.80000001 Z M6.3834643,11.2 L2.7857143,39.2 L36.2142857,39.2 L32.7321429,11.2 L6.3834643,11.2 Z" id="Shape" stroke="#444444" fill-rule="nonzero"></path>
+                <path d="M14.5,28 C12.5656667,28 11,26.432 11,24.4976667 C11,22.5656667 12.5656667,21 14.5,21 C16.4343333,21 18,22.5656667 18,24.4976667 C18,26.4343334 16.432,28 14.5,28 Z" id="Path"></path>
+                <polygon id="Triangle" transform="translate(21.000000, 22.000000) rotate(-130.000000) translate(-21.000000, -22.000000) " points="21 19 25 25 17 25"></polygon>
+                <rect id="Rectangle-3" transform="translate(23.000000, 29.500000) rotate(20.000000) translate(-23.000000, -29.500000) " x="20" y="26" width="6" height="7"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
