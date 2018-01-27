@@ -9,9 +9,12 @@
         <el-radio-button :label="true">online</el-radio-button>
         <el-radio-button :label="false">offline</el-radio-button>
       </el-radio-group>
-      <keep-alive><xarm-model :control="state.joint"></xarm-model></keep-alive>
+      <el-button @click="movediv">error</el-button>
+      <div id="a"><keep-alive><xarm-model :control="state.joint"></xarm-model></keep-alive></div>
+      <div id="b"></div>
+      
       <div class="block">{{ msg }}-debugTest</div>
-      step<input v-model="config.step"/>>
+      step<input v-model="config.step"/>
       
     </div>
   </div>
@@ -34,8 +37,6 @@ export default {
         jointMin: -180,
         step: 0.01,
       },
-      options: [0, 1, 2, 3, 4, 5, 6, 7],
-      select: 5,
       state: {
         speed: 50,
         acceleration: 50,
@@ -65,6 +66,10 @@ export default {
   mounted() {
   },
   methods: {
+    movediv() {
+      document.getElementById('b').innerHTML = document.getElementById('a').innerHTML;
+      document.getElementById('a').innerHTML = '';
+    },
     setSpeed(value) {
       this.setRobotState('speed', value);
     },
