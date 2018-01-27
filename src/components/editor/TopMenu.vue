@@ -1,99 +1,77 @@
+
 <template>
   <div>
-    <div>
-      <form id='f_form' v-show='false'>
-        <input id='f_input' type='file' @change="didImport()"/>
-      </form>
-      <form id='f_form_out' v-show='false'>
-        <input id='f_output' type='path' @change="didOutput()"/>
-      </form>
-      <!-- <el-button class="top-btn" @click="newProj()">
-        New
-      </el-button> -->
-      <!-- <el-button class="top-btn" @click="importPro()">
-        Import
-      </el-button> -->
-      <!-- <el-button class="top-btn" @click="exportPro()">
-        Export
-      </el-button> -->
-      <div>
-        <router-link :to="{ name: 'Home'}">
-          <el-button >Home</el-button>
-        </router-link>
-        <span>IDE</span>
-      </div>
-      <el-button class="top-btn" @click="allProjs()">
-        Projs
-      </el-button>
-      <el-button class="top-btn" @click="addFolder()">
-        +Folder
-      </el-button>
-      <el-button class="top-btn" @click="addFile()">
-        +File
-      </el-button>
-      <el-button class="top-btn" @click="rename()">
-        Rename
-      </el-button>
-      <el-button class="top-btn" @click="delFile()">
-        Delete
-      </el-button>
-      <!-- <el-button class="top-btn" @click="saveFile()">
-        Save
-      </el-button> -->
-      <el-button class="top-btn float-right" @click="stop()">
-        Stop
-      </el-button>
-      <span v-if="model.localProjTree.isCmdRunning===true">
-        <el-button class="top-btn float-right" @click="run()" disabled>
-          Run
-        </el-button>
-      </span>
-      <span v-if="model.localProjTree.isCmdRunning===false">
-        <el-button class="top-btn float-right" @click="run()">
-          Run
-        </el-button>
-      </span>
-      <!-- width: {{ clientWidth }} : {{ clientHeight }} -->
-      <!-- <span> Selected: root / {{ model.localProjTree.curSelectedFolderUUID }} / {{ model.localProjTree.curSelectedFile.uuid }} </span> -->
-
-      <el-dialog
-        :title="title"
-        :visible.sync="dialogVisible"
-        width="300px"
-        :before-close="handleClose"
-        center>
-        <el-input v-model="inputText" auto-complete="off"></el-input>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible=false">取 消</el-button>
-          <el-button type="primary" @click="add()">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog
-        title="Select a project"
-        :visible.sync="projSelectDialog">
-        <el-button class="top-btn" @click="newProj()">
-          New
-        </el-button>
-        <el-table
-          border
-          width="800px"
-          max-height="250"
-          :row-class-name="tableRowClassName"
-          :data="proListData">
-          <el-table-column property="name" label="pro name" width="200"></el-table-column>
-          <el-table-column property="time" label="date" width="200"></el-table-column>
-          <el-table-column property="state" label="state" width="100"></el-table-column>
-          <el-table-column property="operate" label="Operate" width="150">
-            <template slot-scope="scope">
-              <el-button @click="onSelect(scope.row)" type="text" size="small">Select</el-button>
-              <el-button v-if="model.localProjTree.curProj.uuid!==scope.row.uuid" @click="onDelete(scope.row)" type="text" size="small">Delete</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-dialog>
-
+    <!-- <form id='f_form' v-show='false'>
+      <input id='f_input' type='file' @change="didImport()"/>
+    </form>
+    <form id='f_form_out' v-show='false'>
+      <input id='f_output' type='path' @change="didOutput()"/>
+    </form> -->
+    <!-- <el-button class="top-btn" @click="newProj()">
+      New
+    </el-button> -->
+    <!-- <el-button class="top-btn" @click="importPro()">
+      Import
+    </el-button> -->
+    <!-- <el-button class="top-btn" @click="exportPro()">
+      Export
+    </el-button> -->
+    <!-- <el-button class="top-btn" @click="allProjs()">
+      Projs
+    </el-button> -->
+    <div class="proj-icon float-left" @click="newProj()">
     </div>
+    <div class="folder-icon float-left" @click="addFolder()">
+    </div>
+    <div class="file-icon float-left" @click="addFile()">
+    </div>
+    <div class="rename-icon float-left" @click="rename()">
+    </div>
+    <div class="del-icon float-left" @click="delFile()">
+    </div>
+    <div class="stop-icon float-right" @click="stop()">
+    </div>
+    <span v-if="model.localProjTree.isCmdRunning===false">
+      <div class="run-icon float-right" @click="run()">
+      </div>
+    </span>
+
+    <el-dialog
+      :title="title"
+      :visible.sync="dialogVisible"
+      width="300px"
+      :before-close="handleClose"
+      center>
+      <el-input v-model="inputText" auto-complete="off"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible=false">取 消</el-button>
+        <el-button type="primary" @click="add()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="Select a project"
+      :visible.sync="projSelectDialog">
+      <el-button class="top-btn" @click="newProj()">
+        New
+      </el-button>
+      <el-table
+        border
+        width="800px"
+        max-height="250"
+        :row-class-name="tableRowClassName"
+        :data="proListData">
+        <el-table-column property="name" label="pro name" width="200"></el-table-column>
+        <el-table-column property="time" label="date" width="200"></el-table-column>
+        <el-table-column property="state" label="state" width="100"></el-table-column>
+        <el-table-column property="operate" label="Operate" width="150">
+          <template slot-scope="scope">
+            <el-button @click="onSelect(scope.row)" type="text" size="small">Select</el-button>
+            <el-button v-if="model.localProjTree.curProj.uuid!==scope.row.uuid" @click="onDelete(scope.row)" type="text" size="small">Delete</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -335,6 +313,69 @@ export default {
   height: 20px;*/
   padding: 10px;
 }
+.proj-icon {
+  margin-left: 15px;
+  margin-top: 8px;
+  width: 16px;
+  height: 16px;
+  background-image: url('./../../assets/img/ide/btn_addproject.svg');
+  cursor: pointer;
+}
+
+.folder-icon {
+  margin-left: 25px;
+  margin-top: 10px;
+  width: 16px;
+  height: 16px;
+  background-image: url('./../../assets/img/ide/btn_addfolder.svg');
+  cursor: pointer;
+}
+
+.file-icon {
+  margin-left: 25px;
+  margin-top: 8px;
+  width: 24px;
+  height: 24px;
+  background-image: url('./../../assets/img/ide/btn_addfile.svg');
+  cursor: pointer;
+}
+
+.rename-icon {
+  margin-left: 25px;
+  margin-top: 8px;
+  width: 24px;
+  height: 24px;
+  background-image: url('./../../assets/img/ide/btn_rename.svg');
+  cursor: pointer;
+}
+
+.del-icon {
+  margin-left: 25px;
+  margin-top: 8px;
+  width: 24px;
+  height: 24px;
+  background-image: url('./../../assets/img/ide/btn_trash.svg');
+  cursor: pointer;
+}
+
+.stop-icon {
+  margin-right: 25px;
+  margin-top: 10px;
+  width: 18px;
+  height: 18px;
+  background-image: url('./../../assets/img/ide/icon_stop.svg');
+  cursor: pointer;
+}
+
+.run-icon {
+  margin-right: 25px;
+  margin-top: 8px;
+  width: 18px;
+  height: 18px;
+  background-image: url('./../../assets/img/ide/icon_running.svg');
+  cursor: pointer;
+}
+
 .el-table .warning-row {
   background: oldlace;
 }

@@ -1,6 +1,13 @@
 <template>
-  <div class="main-wrapper" id="editor-wrapper">
-    <TopMenu></TopMenu>
+  <div class="main-wrapper editor-wrapper">
+    <div class="top-style">
+      <router-link :to="{ name: 'Home'}">
+        <!-- <el-button >Home</el-button> -->
+        <div class="back-icon"></div>
+      </router-link>
+      <span class="title-ide">IDE</span>
+    </div>
+    <TopMenu style="position:absolute;width:100%;top:64px;height:36px;background:#313131;"></TopMenu>
     <div class="float-clear"></div>
     <div id="total-frame" class="total-frame position-absolute">
       <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
@@ -117,31 +124,63 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-#editor-wrapper {
-  background: white;
+
+.editor-wrapper {
   text-align: left;
 }
+
 a {
   color: white;
+}
+
+.top-style {
+  position:absolute;
+  height:67px;
+  width:100%;
+  background: #3C3F41;
+}
+
+.back-icon {
+  position: absolute;
+  left: 20px;
+  width: 28px;
+  height: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url('./../assets/img/ide/icon_back.svg');
+}
+
+.title-ide {
+  position: absolute;
+  left: 62px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: Gotham-Bold;
+  font-size: 36px;
+  color: #FFFFFF;
+  letter-spacing: -1px; 
 }
 
 .total-frame {
   /*background-color:gray;*/
   width:100%;
   height:600px;
-  top: 90px;
+  top: 100px;
   left: 10px;
   border:1px solid #96c2f1;
   background:#eff7ff;
   /*top: 200px;
   left: 100px;*/
 }
+
 .left-frame {
   width:200px;
   height: 100%;
   overflow: scroll;
 }
+
 .right-frame {
   left: 200px;
   width:85%;
@@ -150,6 +189,7 @@ a {
   /*background-color:#e9e6d3;*/
   background-color:#f6f6f6;
 }
+
 .result-frame {
   /*position: absolute;*/
   background-color:#e9e6d3;
@@ -159,8 +199,10 @@ a {
   padding:0px;
   margin:0px;
 }
+
 .top-tab-color {
   width: 100%;
   background-color:#e9e6d3;
 }
+
 </style>
