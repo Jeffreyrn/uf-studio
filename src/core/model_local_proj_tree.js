@@ -649,7 +649,6 @@ self.getFileInfo = (uuid) => {
 //   });
 // };
 
-
 self.isCmdRunning = false;
 self.remoteCmdResult2Local = (dict) => {
   let stdout = dict.data.stdout;
@@ -688,6 +687,7 @@ self.remoteProjs2Local = (dict) => {
   for (let i = 0; i < datas.length; i += 1) {
     const aFileRecord = datas[i];
     const ctime = aFileRecord.ctime;
+    const type = aFileRecord.type;
     // console.log(`aFileRecord = ${aFileRecord}`);
     const filepath = aFileRecord.path;
     if (path.basename(filepath).indexOf('.') === 0) {
@@ -730,7 +730,7 @@ self.remoteProjs2Local = (dict) => {
       }
       const name = path.basename(tempPath);
       const superid = superpath; //Base64.btoa(superpath); //
-      const isProFile = path.basename(tempPath).indexOf('.') > 0;
+      const isProFile = type === self.PROJ_TREE_TYPE.FILE; //path.basename(tempPath).indexOf('.') > 0;
       let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {

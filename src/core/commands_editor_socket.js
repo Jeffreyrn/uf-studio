@@ -1,5 +1,6 @@
 
 const path = require('path')
+const merge = require('webpack-merge')
 
 const CommandsEditorSocket = {};
 const self = CommandsEditorSocket;
@@ -26,6 +27,8 @@ self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
 self.DEBUG_SET_BEART = 'debug_set_beart';
 
+self.VERSION = {version: 'xarm7'};
+
 //
 self.ROOT_DIR = '/python';
 
@@ -36,11 +39,11 @@ self.sendCmd = (cmdId, data, callback) => {
 self.userId = "test";
 
 self.runPythonScript = (uuid, callback) => {
-  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
-  let params = {
+  const filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
+  const params = {
     data: {
-      "path": filePath, // 要执行的python文件路径, /python/prj1/test.py
-      "userId": self.userId, // 和path共同存在，用来区分不同用户
+      path: filePath, // 要执行的python文件路径, /python/prj1/test.py
+      userId: self.userId, // 和path共同存在，用来区分不同用户
       // "script": "", // 要执行的python代码
     }
   };
@@ -54,9 +57,9 @@ self.runPythonScript = (uuid, callback) => {
 
 self.stopPythonScript = (callback) => {
   const pID = self.model.localProjTree.runningCmdProgramID;
-  let params = {
+  const params = {
     data: {
-      "program_id": pID, // 该id在上面两个接口都会有返回, null或者不传代表停止所有的
+      program_id: pID, // 该id在上面两个接口都会有返回, null或者不传代表停止所有的
     }
   };
   self.sendCmd(self.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
@@ -68,10 +71,10 @@ self.stopPythonScript = (callback) => {
 };
 
 self.runPipCommand = (command, options, callback) => {
-  let params = {
+  const params = {
     data: {
-      "command": command,
-      "options": options,
+      command: command,
+      options: options,
     }
   };
   self.sendCmd(self.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
@@ -83,11 +86,11 @@ self.runPipCommand = (command, options, callback) => {
 };
 
 self.autocompletePython = (source, line, column, callback) => {
-  let params = {
+  const params = {
     data: {
-      "source": source, // 整个文本内容
-      "line": line, // 行号
-      "clolumn": column, // 列号
+      source: source, // 整个文本内容
+      line: line, // 行号
+      clolumn: column, // 列号
     }
   };
   self.sendCmd(self.FILE_ID_AUTOCOMPLETE_PYTHON, params, (dict) => {
@@ -98,12 +101,12 @@ self.autocompletePython = (source, line, column, callback) => {
 };
 
 self.listProjs = (callback) => {
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": self.ROOT_DIR, // 要获取的目录
-      "type": "detail", // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: self.ROOT_DIR, // 要获取的目录
+      type: "detail", // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
+    })
   };
   self.sendCmd(self.FILE_ID_LIST_DIR, params, (dict) => {
     // console.log(`remoteProjs2Local = ${JSON.stringify(dict)}`);
@@ -116,12 +119,12 @@ self.listProjs = (callback) => {
 
 self.createProj = (name) => {
   let filePath = path.join(self.ROOT_DIR, name);
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": filePath, // 文件夹的父目录，必须
-      "name": '', // 文件夹名称, 可省略
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+      name: '', // 文件夹名称, 可省略
+    })
   };
   self.sendCmd(self.FILE_ID_CREATE_DIR, params, (dict) => {
     self.listProjs(() => {
@@ -134,12 +137,12 @@ self.createProj = (name) => {
 self.delProj = (proId, callback) => {
   let filePath = proId; //path.join(self.ROOT_DIR, name);
   console.log(`filePath = ${filePath}`);
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": filePath, // 文件夹的父目录，必须
-      "file": '', // 文件夹名称, 可省略
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+    })
   };
   self.sendCmd(self.FILE_ID_DELETE_DIR, params, (dict) => {
     self.listProjs(callback);
@@ -151,13 +154,13 @@ self.renameProj = (name) => {
   // const curProjUUID = self.model.localProjTree.curProj.uuid;
   const newProjUUID = path.join(self.ROOT_DIR, name);
   const newname = name;
-  let params = {
-    "data": {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": self.ROOT_DIR, // 文件的父目录，必须
-      "old_name": originName, // 原文件（夹）名称
-      "new_name": name, // 新文件（夹）名称
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: self.ROOT_DIR, // 文件的父目录，必须
+      old_name: originName, // 原文件（夹）名称
+      new_name: name, // 新文件（夹）名称
+    })
   };
   self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
     self.model.localProjTree.deleteOpenSonTabs('');
@@ -175,13 +178,13 @@ self.createFile = (name) => {
   filePath = path.join(filePath, name);
   console.log(`createFile 3 file 3 = ${filePath}`);
   const isProjFile = name.indexOf('.') > 0;
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": filePath, // 文件夹的父目录，必须
-      "file": '', // 文件夹名称, 可省略
-      "data": '', // 文件内容
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+      data: '', // 文件内容
+    })
   };
   const proId = self.model.localProjTree.curProj.uuid;
   if (isProjFile === true) {
@@ -201,13 +204,13 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
   let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
   // return;
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": filePath, // 文件夹的父目录，必须
-      "file": '', // 文件夹名称, 可省略
-      "data": text, // 文件内容
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+      data: text, // 文件内容
+    })
   };
   self.sendCmd(self.FILE_ID_CREATE_FILE, params, (dict) => {
     // self.listProjs(callback);
@@ -221,12 +224,12 @@ self.getFile = (uuid, callback) => {
   let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
   // console.log(`getFile filePath = ${filePath}`);
   // return;
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": filePath, // 文件夹的父目录，必须
-      "file": '', // 文件夹名称, 可省略
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+    })
   };
   self.sendCmd(self.FILE_ID_GET_FILE, params, (dict) => {
     // console.log(`get file = ${JSON.stringify(dict)}`);
@@ -241,12 +244,12 @@ self.delFiles = (uuid) => {
   // return;
   const filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`filePath = ${filePath}`);
-  let params = {
-    data: {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": filePath, // 文件夹的父目录，必须
-      "file": '', // 文件夹名称, 可省略
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+    })
   };
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
@@ -270,13 +273,13 @@ self.renameFile = (uuid, name) => {
   const basename = path.basename(filePath);
   const newname = name;
   const newFilePath = path.join(fatherDir, newname);
-  let params = {
-    "data": {
-      "userId": self.userId, // 默认是test，用来区分不同用户
-      "root": fatherDir, // 文件的父目录，必须
-      "old_name": basename, // 原文件（夹）名称
-      "new_name": name, // 新文件（夹）名称
-    }
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: fatherDir, // 文件的父目录，必须
+      old_name: basename, // 原文件（夹）名称
+      new_name: name, // 新文件（夹）名称
+    })
   };
   self.sendCmd(self.FILE_ID_CHANGE_NAME, params, (dict) => {
     self.model.localProjTree.deleteOpenSonTabs(uuid);
