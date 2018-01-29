@@ -1,18 +1,18 @@
 <template>
   <div class="float-left top-tab" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
+      <div class="float-left tab-left-icon" @click="onselect()"></div>
       <div class="float-left top-tab-item" @click="onselect()">
         <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
         <div v-if="data.uuid !== model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
         <div v-if="data.uuid === model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color">{{ data.name }}</div>
       </div>
-      <div @click="close()" class="float-left tab-cancel">X</div>
+      <div @click="close()" class="float-left tab-cancel"></div>
     </div>
   </div>
 </template>
 
 <script>
-
 
 export default {
   props: ['data'],
@@ -60,25 +60,40 @@ export default {
 <style scoped>
 .top-tab {
   height: 20px;
-  font-size: 10px;
-  line-height:20px;
+  line-height: 20px;
+  font-family: Gotham-Book;
+  font-size: 12px;
+  color: #A5ACB3;
+  letter-spacing: -0.8px;
   /*pointer-events:none;*/
 }
 .tab-cancel {
-  background-color:yellow;
-  width: 20px;
+  /* background-color:yellow; */
+  width: 15px;
   height: 20px;
   text-align:center;
   line-height:20px;
   cursor:pointer;
+  background-image: url('./../../assets/img/ide/icon_close.svg');
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.tab-left-icon {
+  margin-left: 3px;
+  margin-top: 3px;
+  width: 12px;
+  height: 12px;
+  background-image: url('./../../assets/img/ide/language_python.svg');
+  background-size: 12px 12px;
 }
 .top-tab-item {
   height: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .top-tab-item-border {
-  border: solid 1px gray;
+  /* border: solid 1px gray; */
 }
 .top-tab-background-color {
   background-color:pink;

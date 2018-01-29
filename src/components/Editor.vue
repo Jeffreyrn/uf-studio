@@ -190,18 +190,20 @@ a {
   height:600px;
   top: 100px;
   /* left: 10px; */
-  border:1px solid #96c2f1;
-  background:yellow;
+  /* border:1px solid #96c2f1; */
+  /* background:yellow; */
   /*top: 200px;
   left: 100px;*/
 }
 
 .left-frame {
-  width:200px;
+  /* width:200px; */
+  width: 215px;
   height: 100%;
   overflow-y: scroll;
   background: #3C3F41;
-  scrollbar-track-color: #3C3F41;
+  /* scrollbar-track-color: #3C3F41; */
+  SCROLLBAR-TRACK-COLOR: aquamarine;
 }
 
 .right-frame {
@@ -209,6 +211,7 @@ a {
   /* width:90%; */
   /*width:100%;*/
   height: 100%;
+  overflow-y: hidden;
   /*background-color:#e9e6d3;*/
   background: #3C3F41;
 }

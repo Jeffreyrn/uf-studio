@@ -342,10 +342,12 @@ self.setSelectedUI = (uuid) => {
       return;
     }
     else if (file.name === node.innerHTML) {
-      node.style.color = 'blue';
+      // node.style.color = 'blue';
+      node.style.color = '#4F7597';
     }
     else {
-      node.style.color = 'gray';
+      // node.style.color = 'gray';
+      node.style.color = '#A6A6A6';
     }
   }
   const curFile = self.curFile;
@@ -391,7 +393,7 @@ self.onwinresize = () => {
   const totalFrameHeight = document.body.clientHeight - 120;
   const leftFrameWidth = 200;
   const rightFrameWidth = totalFrameWidth - leftFrameWidth;
-  console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
+  // console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
   totalFrame.style.width = `${totalFrameWidth}px`;
   rightFrame.style.width = `${rightFrameWidth}px`;
   totalFrame.style.height = `${totalFrameHeight}px`;
@@ -404,7 +406,7 @@ self.onwinresize = () => {
       editor.setSize('auto', `${editorHeight}px`);
     }
   }
-  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 80}px`;
+  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 70}px`;
   // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 
