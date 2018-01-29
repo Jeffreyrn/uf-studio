@@ -1,7 +1,7 @@
 <!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> -->
 <template>
   <div class="hello">
-    <div class="block">
+    <!-- <div class="block">
       <el-select v-model="select" placeholder="Select" @change="changeJoint">
         <el-option
           v-for="item in options"
@@ -40,7 +40,7 @@
         <span class="text">Scale</span>
         <el-slider v-model="state.test.scale" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
-    </div>
+    </div> -->
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
@@ -68,7 +68,7 @@ const JOINT_POSITION = [
   [42.05, 4.2, 0],
   [0.45, -1.2, -52.8],
   [42, -7.3, -60.7],
-  [7.36, -35.05, -60.7],
+  [7.36, -35.85, -60.7],
 ];
 const GROUP_POSITION = [
   [0.1, 0.04, -0.04],
@@ -76,7 +76,7 @@ const GROUP_POSITION = [
   [-42.35, 0.5, -24],
   [41.51, 5.38, 52.72],
   [-41.4, 6.16, 7.9],
-  [35.47, 27.8, -0.05],
+  [35.47, 27.6, -0.05],
   [0, 0, 0],
 ];
 
@@ -205,13 +205,16 @@ export default {
       const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
       // camera.position.z = 8;
       // camera.up = new THREE.Vector3(-1, -1, -1);
-      camera.position.set(5, 8, 5); // camera position
+      camera.position.set(8, 14, 8); // camera position
       camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
       const light = new THREE.PointLight(0xffffff, 1, 100); // light
-      light.position.set(7, 10, 7);
-      const lightBottom = new THREE.PointLight(0xffffff, 1, 100); // light
-      lightBottom.position.set(-7, 0, -7);
-      scene.add(lightBottom);
+      light.position.set(10, 14, 10);
+      const lightBottomBack = new THREE.PointLight(0xffffff, 1, 100); // light
+      const lightBottomFront = new THREE.PointLight(0xffffff, 1, 100); // light
+      lightBottomBack.position.set(-7, 0, -7);
+      lightBottomFront.position.set(-7, 0, -7);
+      scene.add(lightBottomBack);
+      scene.add(lightBottomFront);
       scene.add(light);
       // camera.position.set(25, 25, 25);
       const renderer = new THREE.WebGLRenderer();
@@ -227,10 +230,7 @@ export default {
       const loader = new STLLoader();
       let base;
       loader.load(JOINT_MODEL_SRC[0], (geometry) => {
-        base = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-          vertexColors: THREE.FaceColors,
-          morphTargets: true,
-        }));
+        base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xcccccc }));
         const position = [7.66, 0.04, -0.86];
         base.position.set(...position);
         this.setDiff(base);
@@ -241,7 +241,7 @@ export default {
       // const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
       // joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
       const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
-      joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      joints[7] = new THREE.Mesh(geometry7, new THREE.MeshPhongMaterial({ color: 0xffffff }));
       // scene.add(joints[0]);
       // this.three.groups = groups;
       for (let i = 0; i < 7; i += 1) {
@@ -265,16 +265,17 @@ export default {
         groups[4].rotation.y = this.valueToRotation(angles[4]);
         groups[5].rotation.x = this.valueToRotation(angles[5]);
         joints[7].rotation.z = this.valueToRotation(angles[6]);
-        if (groups[this.select]) {
-          groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
-        }
         // groups[this.select].rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // base.position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // base.rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // base.scale.set(this.state.test.scale, this.state.test.scale, this.state.test.scale);
-        if (joints[this.select + 1]) {
-          joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
-        }
+
+        // if (groups[this.select]) {
+        //   groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
+        // }
+        // if (joints[this.select + 1]) {
+        //   joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+        // }
       };
       const loadModel = (index) => { // model index: 1-6
         if (index < 7) {
@@ -297,10 +298,10 @@ export default {
         }
       };
       loadModel(1);
-      const gridplaneSize = 20;
-      const gridstep = 10;
+      const gridplaneSize = 10;
+      const gridstep = 20;
       // const gridcolor = 0xCCCCCC;
-      const gridHelper_xy = new THREE.GridHelper(gridplaneSize / 2, gridstep);
+      const gridHelper_xy = new THREE.GridHelper(gridplaneSize, gridstep);
       gridHelper_xy.position.set(0, 0, 0);
       // gridHelper_xy.setColors(new THREE.Color(gridcolor), new THREE.Color(gridcolor));
       scene.add(gridHelper_xy);
