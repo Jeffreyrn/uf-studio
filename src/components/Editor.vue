@@ -33,7 +33,7 @@
               <!-- background-image: url('./../assets/img/ide/icon_close.svg'); -->
               <!-- background-image:url('./../assets/img/ide/icon_btmclose.svg'); -->
               <!-- background:yellow; -->
-              <div class="position-absolute" style="top:0px;right:10px;width:18px;height:18px;background:yellow;cursor:pointer;" @click="onCloseResult()"></div>
+              <div class="position-absolute result-close" @click="onCloseResult()"></div>
             </div>
             <textarea
               id="result-text"
@@ -229,6 +229,19 @@ a {
 .top-tab-color {
   width: 100%;
   background: #313335;
+}
+
+.result-close {
+  top:0px;
+  right:10px;
+  width:26px;
+  height:26px;
+  /* background:yellow; */
+  cursor:pointer;
+  background-image: url('./../assets/img/ide/icon_btmclose.svg');
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 </style>

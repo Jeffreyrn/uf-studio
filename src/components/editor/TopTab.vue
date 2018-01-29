@@ -1,5 +1,5 @@
 <template>
-  <div class="float-left top-tab" name="top-tab" :id="getTabId()">
+  <!-- <div class="float-left top-tab" name="top-tab" :id="getTabId()">
     <div class="float-left top-tab-item-border">
       <div class="float-left tab-left-icon" @click="onselect()"></div>
       <div class="float-left top-tab-item" @click="onselect()">
@@ -9,7 +9,41 @@
       </div>
       <div @click="close()" class="float-left tab-cancel"></div>
     </div>
+  </div> -->
+  <div>
+
+    <!-- un selected -->
+    <div v-if="data.uuid!==model.localProjTree.curSelectedFileUUID" class="">
+      <div class="float-left top-tab" name="top-tab" :id="getTabId()" style="background:transparent;">
+        <div class="float-left top-tab-item-border">
+          <div class="float-left tab-left-icon" @click="onselect()"></div>
+          <div class="float-left top-tab-item" @click="onselect()">
+            <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
+            <div class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
+          </div>
+          <div @click="close()" class="float-left tab-cancel"></div>
+        </div>
+      </div>
+    </div>
+    <!-- un selected end -->
+
+    <!-- selected -->
+    <div v-if="data.uuid===model.localProjTree.curSelectedFileUUID" class="">
+      <div class="float-left top-tab" name="top-tab" :id="getTabId()" style="background:#3F4955;">
+        <div class="float-left top-tab-item-border">
+          <div class="float-left tab-left-icon" @click="onselect()"></div>
+          <div class="float-left top-tab-item" @click="onselect()">
+            <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
+            <div class="float-left top-tab-background-color">{{ data.name }}</div>
+          </div>
+          <div @click="close()" class="float-left tab-cancel"></div>
+        </div>
+      </div>
+    </div>
+    <!-- selected end -->
+
   </div>
+
 </template>
 
 <script>
@@ -96,9 +130,11 @@ export default {
   /* border: solid 1px gray; */
 }
 .top-tab-background-color {
-  background-color:pink;
+  /* background-color:pink; */
+  color: white;
 }
 .top-tab-background-color-unselect {
-  background-color:transparent;
+  /* background-color:transparent; */
+  color: #A5ACB3;
 }
 </style>
