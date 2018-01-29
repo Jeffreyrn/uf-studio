@@ -1,16 +1,23 @@
+
 <template>
-  <div>
-    <el-input class="float-left" id="pip-install-input-id" v-model="input" placeholder="pip install" style="width:500px;"></el-input>
-    <el-button class="float-right" @click="clearText()">Clear</el-button>
-    <span v-if="model.localProjTree.isCmdRunning===true">
+  <div style="height:30px;background:#3C3F41;">
+    <input
+      class="float-left"
+      style="width:1100px;height:30px;border:0;background:#46494B;color:white;box-shadow:inset 0 0 1px 0 rgba(255,255,255,0.50);"
+      id="pip-install-input-id"
+      v-model="input"
+      placeholder="pip install" />
+    <!-- <el-button class="float-right" @click="clearText()">Clear</el-button> -->
+    <!-- <span v-if="model.localProjTree.isCmdRunning===true">
       <el-button class="float-right" @click="runCmd()" disabled>
         Run
       </el-button>
-    </span>
+    </span> -->
+    <div class="clear-icon float-right" @click="clearText()">
+    </div>
     <span v-if="model.localProjTree.isCmdRunning===false">
-      <el-button class="float-right" @click="runCmd()">
-        Run
-      </el-button>
+      <div class="run-icon float-right" @click="runCmd()">
+      </div>
     </span>
   </div>
 </template>
@@ -61,4 +68,23 @@ export default {
 </script>
 
 <style scoped>
+
+.run-icon {
+  margin-right: 10px;
+  margin-top: 5px;
+  width: 18px;
+  height: 18px;
+  background-image: url('./../../assets/img/ide/icon_running.svg');
+  cursor: pointer;
+}
+
+.clear-icon {
+  margin-right: 10px;
+  margin-top: 5px;
+  width: 18px;
+  height: 18px;
+  background-image: url('./../../assets/img/ide/btn_clear.svg');
+  cursor: pointer;
+}
+
 </style>

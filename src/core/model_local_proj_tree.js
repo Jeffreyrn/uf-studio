@@ -390,7 +390,7 @@ self.onwinresize = () => {
   const totalFrameWidth = document.body.clientWidth;//- 120;
   const totalFrameHeight = document.body.clientHeight - 120;
   const leftFrameWidth = 200;
-  const rightFrameWidth = totalFrameWidth - leftFrameWidth; //- 2;
+  const rightFrameWidth = totalFrameWidth - leftFrameWidth;
   console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
   totalFrame.style.width = `${totalFrameWidth}px`;
   rightFrame.style.width = `${rightFrameWidth}px`;
@@ -400,11 +400,11 @@ self.onwinresize = () => {
     const editor = editors[key];
     if (editor !== null && editor !== undefined) {
       // editor.setSize('auto', `${totalFrameHeight - 200}px`);
-      const editorHeight = GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 200 : totalFrameHeight - 80;
+      const editorHeight = GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
       editor.setSize('auto', `${editorHeight}px`);
     }
   }
-  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 150}px`;
+  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 80}px`;
   // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 

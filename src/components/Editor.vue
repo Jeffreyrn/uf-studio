@@ -8,7 +8,7 @@
       <span class="title-ide">IDE</span>
     </div>
     <TopMenu style="position:absolute;width:100%;top:64px;height:36px;background:#313131;"></TopMenu>
-    <div class="float-clear"></div>
+    <!-- <div class="float-clear"></div> -->
     <div id="total-frame" class="total-frame position-absolute">
       <!-- <ProjTree class="float-left left-frame"></ProjTree> -->
       <ElTree id="left-frame" class="float-left left-frame position-absolute"></ElTree>
@@ -20,7 +20,7 @@
             <TopTab :data='data'></TopTab>
           </template>
         </div>
-        <div class="float-clear"></div>
+        <!-- <div class="float-clear"></div> -->
         <div class="float-left" style="width:100%">
           <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
             <CodeEditor :data='data'></CodeEditor>
@@ -28,8 +28,8 @@
           <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
           </div> -->
-          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:40px;left:0px;">
-            <div style="width:100%;height:18px;background:#434749;">
+          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:25px;left:0px;">
+            <div style="width:100%;height:25px;background:#434749;">
               <!-- background-image: url('./../assets/img/ide/icon_close.svg'); -->
               <!-- background-image:url('./../assets/img/ide/icon_btmclose.svg'); -->
               <!-- background:yellow; -->
@@ -43,9 +43,9 @@
               v-model="model.localProjTree.runningCmdResult">
             </textarea>
           </div>
+        </div>
+        <ResultRun class="result-frame position-absolute" style="width:100%;"></ResultRun>
       </div>
-      <ResultRun class="result-frame position-absolute" style="width:100%;"></ResultRun>
-    </div>
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
   </div>
