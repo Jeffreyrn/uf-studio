@@ -29,8 +29,10 @@
     </div>
     <div class="del-icon float-left" @click="delFile()">
     </div>
-    <div class="stop-icon float-right" @click="stop()">
-    </div>
+    <span v-if="model.localProjTree.isCmdRunning===true">
+      <div class="stop-icon float-right" @click="stop()">
+      </div>
+    </span>
     <span v-if="model.localProjTree.isCmdRunning===false">
       <div class="run-icon float-right" @click="run()">
       </div>
