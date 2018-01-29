@@ -2,8 +2,7 @@
 <template>
   <div style="height:30px;background:#3C3F41;">
     <input
-      class="float-left"
-      style="width:1100px;height:30px;border:0;background:#46494B;color:white;box-shadow:inset 0 0 1px 0 rgba(255,255,255,0.50);"
+      class="float-left pip-input-text"
       id="pip-install-input-id"
       v-model="input"
       placeholder="pip install" />
@@ -31,6 +30,7 @@ export default {
     };
   },
   mounted() {
+    GlobalUtil.model.localProjTree.onwinresize();
   },
   methods: {
     clearText() {
@@ -68,6 +68,18 @@ export default {
 </script>
 
 <style scoped>
+
+.pip-input-text {
+  width:1100px;
+  height:30px;
+  border:0;
+  background:#46494B;
+  color:white;
+  /* box-shadow:inset 0 0 0px 0 rgba(255,255,255,0.50); */
+  /* top: -5px; */
+  bottom: 5px;
+  padding-left: 10px;
+}
 
 .run-icon {
   margin-right: 10px;
