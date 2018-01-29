@@ -45,7 +45,12 @@
       <el-input v-model="inputText" auto-complete="off"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible=false">取 消</el-button>
-        <el-button type="primary" @click="add()">确 定</el-button>
+        <span v-if="isFileNameCorrect">
+          <el-button type="primary" @click="add()">确 定</el-button>
+        </span>
+        <span v-if="!isFileNameCorrect">
+          <el-button type="primary" @click="add()" disabled>确 定</el-button>
+        </span>
       </span>
     </el-dialog>
 
@@ -64,10 +69,10 @@
       </select>
       <span slot="footer" class="dialog-footer">
         <el-button @click="fileDialogVisible=false">取 消</el-button>
-        <span v-if="inputText.length > 0">
+        <span v-if="isFileNameCorrect">
           <el-button type="primary" @click="add()">确 定</el-button>
         </span>
-        <span v-if="inputText.length === 0">
+        <span v-if="!isFileNameCorrect">
           <el-button type="primary" @click="add()" disabled>确 定</el-button>
         </span>
       </span>
@@ -327,6 +332,9 @@ export default {
         tmpList.push(onePro);
       }
       return tmpList;
+    },
+    isFileNameCorrect() {
+      return GlobalUtil.isFileStr(this.inputText);
     },
   },
   components: {
