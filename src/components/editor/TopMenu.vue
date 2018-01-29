@@ -61,11 +61,10 @@
       :before-close="handleClose"
       center>
       <input v-model="inputText" auto-complete="off" style="width:150px;height:20px;" />
-      <select>
-        <option>py</option>
-        <option>txt</option>
-        <option>md</option>
-        <option>none</option>
+      <select v-model="selected">
+        <option v-for="option in options" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
       </select>
       <span slot="footer" class="dialog-footer">
         <el-button @click="fileDialogVisible=false">取 消</el-button>
@@ -106,7 +105,6 @@
 
 <script>
 
-
 export default {
   data() {
     return {
@@ -118,6 +116,13 @@ export default {
       inputText: '',
       folderOrFile: '',
       title: '',
+      selected: '.py',
+      options: [
+        { text: 'py', value: '.py' },
+        { text: 'txt', value: '.txt' },
+        { text: 'md', value: '.md' },
+        { text: 'none', value: '' },
+      ],
     };
   },
   mounted() {
@@ -220,7 +225,7 @@ export default {
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        CommandsEditorSocket.createFile(text);
+        CommandsEditorSocket.createFile(`${text}${this.selected}`);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
@@ -233,7 +238,7 @@ export default {
       if (this.folderOrFile === 'rename') {
         // GlobalUtil.model.localProjTree.renameFile(text);
         const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-        CommandsEditorSocket.renameFile(curUUID, text)
+        CommandsEditorSocket.renameFile(curUUID, `${text}${this.selected}`)
       }
       if (this.folderOrFile === 'renameproj') {
         // GlobalUtil.model.localProjTree.renameProj(text);
@@ -270,6 +275,7 @@ export default {
         this.folderOrFile = 'renameproj';
         this.title = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
         this.inputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
+        this.selected = '';
         this.dialogVisible = true;
         return;
       }
@@ -277,10 +283,21 @@ export default {
       if (curFile === null) {
         return;
       }
+      if (curFile.type === 'folder') {
+        this.title = `Rename ${curFile.name}`;
+        this.inputText = curFile.name;
+        this.dialogVisible = true;
+        this.selected = '';
+        return;
+      }
       this.folderOrFile = 'rename';
       this.title = `Rename ${curFile.name}`;
-      this.inputText = `${curFile.name}`;
-      this.dialogVisible = true;
+      this.inputText = `${curFile.name}`.split('.')[0];
+      this.fileDialogVisible = true;
+      this.selected = '.' + `${curFile.name}`.split('.')[1];
+      if (`${curFile.name}`.split('.')[1] === undefined ) {
+        this.selected = '';
+      }
     },
     tableRowClassName({row, rowIndex}) {
       // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
