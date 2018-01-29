@@ -387,10 +387,11 @@ self.onwinresize = () => {
   // leftFrame.style.width = `${leftFrameWidth}px`;
   const rightFrame = document.getElementById("right-frame");
   const totalFrame = document.getElementById("total-frame");
-  const totalFrameWidth = document.body.clientWidth - 20;
+  const totalFrameWidth = document.body.clientWidth;//- 120;
   const totalFrameHeight = document.body.clientHeight - 120;
   const leftFrameWidth = 200;
-  const rightFrameWidth = totalFrameWidth - leftFrameWidth - 2;
+  const rightFrameWidth = totalFrameWidth - leftFrameWidth; //- 2;
+  console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
   totalFrame.style.width = `${totalFrameWidth}px`;
   rightFrame.style.width = `${rightFrameWidth}px`;
   totalFrame.style.height = `${totalFrameHeight}px`;

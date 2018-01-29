@@ -298,7 +298,7 @@ export default {
   width:100%;
   height:600px;
   top: 90px;
-  left: 10px;
+  // left: 10px;
   border:1px solid #96c2f1;
   background:#eff7ff;
   /*top: 200px;
@@ -311,7 +311,7 @@ export default {
 }
 .right-frame {
   left: 250px;
-  width:85%;
+  // width:85%;
   /*width:100%;*/
   height: 100%;
   /*background-color:#e9e6d3;*/

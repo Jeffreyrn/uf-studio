@@ -19,7 +19,7 @@
     <!-- <el-button class="top-btn" @click="allProjs()">
       Projs
     </el-button> -->
-    <div class="proj-icon float-left" @click="newProj()">
+    <div class="proj-icon float-left" @click="allProjs()">
     </div>
     <div class="folder-icon float-left" @click="addFolder()">
     </div>
@@ -316,8 +316,8 @@ export default {
 .proj-icon {
   margin-left: 15px;
   margin-top: 8px;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   background-image: url('./../../assets/img/ide/btn_addproject.svg');
   cursor: pointer;
 }

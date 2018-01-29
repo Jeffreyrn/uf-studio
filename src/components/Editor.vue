@@ -29,13 +29,19 @@
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
           </div> -->
           <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:40px;left:0px;">
-            <el-input
+            <div style="width:100%;height:18px;background:#434749;">
+              <!-- background-image: url('./../assets/img/ide/icon_close.svg'); -->
+              <!-- background-image:url('./../assets/img/ide/icon_btmclose.svg'); -->
+              <!-- background:yellow; -->
+              <div class="position-absolute" style="top:0px;right:10px;width:18px;height:18px;background:yellow;cursor:pointer;" @click="onCloseResult()"></div>
+            </div>
+            <textarea
               id="result-text"
               type="textarea"
-              :rows="5"
+              disabled
+              style="background:#313131;width:100%;color:white;border:0;height:100px;"
               v-model="model.localProjTree.runningCmdResult">
-            </el-input>
-            <div class="position-absolute" style="top:0px;right:0px;width:50px;height:30px;text-align:center;background-color:yellow;line-height:30px;cursor:pointer;" @click="onCloseResult()">X</div>
+            </textarea>
           </div>
       </div>
       <ResultRun class="result-frame position-absolute" style="width:100%;"></ResultRun>
@@ -55,6 +61,7 @@ import TopTab from './editor/TopTab';
 // import FilesOpenTab from './editor/FilesOpenTab';
 
 import '../assets/css/reseet.css';
+import { setTimeout } from 'timers';
 
 export default {
   data() {
@@ -79,11 +86,25 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
     }
     window.addEventListener('resize', GlobalUtil.model.localProjTree.onwinresize, false);
-    // self.onwinresize
     GlobalUtil.model.localProjTree.onwinresize();
+    // self.onwinresize
+    // setTimeout(() => {
+    //   GlobalUtil.model.localProjTree.onwinresize();
+    // }, 5);
     CommandsEditorSocket.listProjs((dict) => {
 
     });
+
+    // const leftFrame = document.getElementById("left-frame");
+  //   const rightFrame = document.getElementById("right-frame");
+  // const totalFrameWidth = document.body.clientWidth;//- 120;
+  // const leftFrameWidth = 200;
+  // const rightFrameWidth = totalFrameWidth - leftFrameWidth;
+  // console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
+  // totalFrame.style.width = `${totalFrameWidth}px`;
+  // rightFrame.style.width = `${rightFrameWidth}px`;
+  // totalFrame.style.height = `${totalFrameHeight}px`;
+
     // const editors = document.getElementsByName("code-editor");
     // for (let i = 0; i < editors.length; i += 1) {
     //   const editor = editors[i];
@@ -168,9 +189,9 @@ a {
   width:100%;
   height:600px;
   top: 100px;
-  left: 10px;
+  /* left: 10px; */
   border:1px solid #96c2f1;
-  background:#eff7ff;
+  background:yellow;
   /*top: 200px;
   left: 100px;*/
 }
@@ -178,16 +199,18 @@ a {
 .left-frame {
   width:200px;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  background: #3C3F41;
+  scrollbar-track-color: #3C3F41;
 }
 
 .right-frame {
   left: 200px;
-  width:85%;
+  /* width:90%; */
   /*width:100%;*/
   height: 100%;
   /*background-color:#e9e6d3;*/
-  background-color:#f6f6f6;
+  background: #3C3F41;
 }
 
 .result-frame {
@@ -202,7 +225,7 @@ a {
 
 .top-tab-color {
   width: 100%;
-  background-color:#e9e6d3;
+  background: #313335;
 }
 
 </style>
