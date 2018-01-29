@@ -3,7 +3,7 @@
     <div class="hello-row">
       <div class="block" v-for="j in 7" :key="j">
         <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
-        <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+        <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input></el-slider>
       </div>
       <el-radio-group v-model="state.online" @change="setOnline">
         <el-radio-button :label="true">online</el-radio-button>
@@ -28,6 +28,7 @@ export default {
   name: 'Emulator',
   data() {
     return {
+      testindex: 6,
       test: null,
       testtest: [],
       config: {

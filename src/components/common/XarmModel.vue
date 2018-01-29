@@ -1,16 +1,6 @@
 <!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> -->
 <template>
   <div class="hello">
-    <div class="hello-row">
-      <div class="block" v-for="j in 7" :key="j">
-        <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
-        <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
-      </div>
-      <div id="emulator-container"></div>
-    </div>
-    <!-- 
-    <div class="block">{{ msg }}-debugTest-{{joints}}</div>
-    step<input v-model="config.step"/>>
     <div class="block">
       <el-select v-model="select" placeholder="Select" @change="changeJoint">
         <el-option
@@ -46,7 +36,22 @@
         <span class="text">Joint-Z</span>
         <el-slider v-model="state.test.jz" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
       </div>
-    </div> -->
+      <div class="block">
+        <span class="text">Scale</span>
+        <el-slider v-model="state.test.scale" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
+      </div>
+    </div>
+    <div class="hello-row">
+      <div class="block" v-for="j in 7" :key="j">
+        <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
+        <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
+      </div>
+      <div id="emulator-container"></div>
+    </div>
+    <!-- 
+    <div class="block">{{ msg }}-debugTest-{{joints}}</div>
+    step<input v-model="config.step"/>> -->
+    
   </div>
 </template>
 
@@ -58,21 +63,23 @@ import OrbitControls from 'three-orbitcontrols';
 
 const JOINT_POSITION = [
   null,
-  [-0.2, 0, -0.1],
-  [-0.2, -3.1, -0.1],
-  [-0.15, 0, -0.1],
-  [0.45, -6.48, 0],
-  [0, -7.35, -0.02],
-  [4.17, -7.35, 0],
+  [42, 4.6, 0],
+  [-0.3, 4.7, -24.2],
+  [42.05, 4.2, 0],
+  [0.45, -1.2, -52.8],
+  [42, -7.3, -60.7],
+  [7.36, -35.05, -60.7],
 ];
 const GROUP_POSITION = [
-  [0.2, 0, 0.1],
-  [0, 3.1, -0.1],
-  [-0.05, -3.2, 0],
-  [-0.59, 6.48, -0.12],
-  [0.45, 0.86, 0.02],
-  [-4.17, 0, -0.05],
+  [0.1, 0.04, -0.04],
+  [42.4, -0.1, 24.2],
+  [-42.35, 0.5, -24],
+  [41.51, 5.38, 52.72],
+  [-41.4, 6.16, 7.9],
+  [35.47, 27.8, -0.05],
+  [0, 0, 0],
 ];
+
 export default {
   name: 'xarm-model',
   props: ['control'],
@@ -114,11 +121,11 @@ export default {
       test: null,
       testtest: [],
       config: {
-        debugMax: 10,
-        debugMin: -10,
+        debugMax: 100,
+        debugMin: -100,
         jointMax: 180,
         jointMin: -180,
-        step: 0.01,
+        step: 0.1,
       },
       options: [0, 1, 2, 3, 4, 5, 6, 7],
       select: 5,
@@ -143,6 +150,7 @@ export default {
           jx: 0,
           jy: 0,
           jz: 0,
+          scale: 1,
         },
       },
       msg: 'Emulator',
@@ -215,22 +223,26 @@ export default {
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.getElementById('emulator-container').appendChild(renderer.domElement);
       // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
-      const joints = [];
-      const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
-      joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
-      const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
-      joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
-      scene.add(joints[0]);
       const STLLoader = new THREESTLLoader(THREE);
       const loader = new STLLoader();
+      let base;
       loader.load(JOINT_MODEL_SRC[0], (geometry) => {
-        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+        base = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
           vertexColors: THREE.FaceColors,
           morphTargets: true,
         }));
-        scene.add(mesh);
+        const position = [7.66, 0.04, -0.86];
+        base.position.set(...position);
+        this.setDiff(base);
+        scene.add(base);
       });
       const groups = [];
+      const joints = [];
+      // const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
+      // joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
+      const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
+      joints[7] = new THREE.Mesh(geometry7, new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      // scene.add(joints[0]);
       // this.three.groups = groups;
       for (let i = 0; i < 7; i += 1) {
         groups[i] = new THREE.Group();
@@ -246,19 +258,25 @@ export default {
         //   }
         // }
         const angles = this.online ? this.joints : this.control;
-        groups[0].rotation.y = this.valueToRotation(angles[0]);
-        groups[1].rotation.z = this.valueToRotation(angles[1]);
-        groups[2].rotation.y = this.valueToRotation(angles[2]);
-        groups[3].rotation.z = this.valueToRotation(angles[3]);
-        groups[4].rotation.x = this.valueToRotation(angles[4]);
-        groups[5].rotation.z = this.valueToRotation(angles[5]);
-        joints[7].rotation.y = this.valueToRotation(angles[6]);
-        // groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
-        // if (joints[this.select + 1]) {
-        //   joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
-        // }
+        groups[0].rotation.z = this.valueToRotation(angles[0]);
+        groups[1].rotation.x = this.valueToRotation(angles[1]);
+        groups[2].rotation.z = this.valueToRotation(angles[2]);
+        groups[3].rotation.x = this.valueToRotation(angles[3]);
+        groups[4].rotation.y = this.valueToRotation(angles[4]);
+        groups[5].rotation.x = this.valueToRotation(angles[5]);
+        joints[7].rotation.z = this.valueToRotation(angles[6]);
+        if (groups[this.select]) {
+          groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
+        }
+        // groups[this.select].rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+        // base.position.set(this.state.test.x, this.state.test.y, this.state.test.z);
+        // base.rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+        // base.scale.set(this.state.test.scale, this.state.test.scale, this.state.test.scale);
+        if (joints[this.select + 1]) {
+          joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+        }
       };
-      function loadModel(index) { // model index: 1-6
+      const loadModel = (index) => { // model index: 1-6
         if (index < 7) {
           loader.load(JOINT_MODEL_SRC[index], (geometry) => {
             console.log(index, 'model loaded:');
@@ -270,12 +288,14 @@ export default {
           });
         }
         else {
+          // groups[6].add(joints[7]);
           console.log('loading all');
+          this.setDiff(groups[0]);
           scene.add(groups[0]);
           animate();
           loading.close(); // hide loading overlay
         }
-      }
+      };
       loadModel(1);
       const gridplaneSize = 20;
       const gridstep = 10;
@@ -286,13 +306,21 @@ export default {
       scene.add(gridHelper_xy);
       const axisHelper = new THREE.AxesHelper(5);
       scene.add(axisHelper);
-      // this.changeJoint(this.select);
+      this.changeJoint(this.select);
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
       window.addEventListener('resize', onWindowResize, false);
+    },
+    setDiff(mesh) {
+      const STL_DIFF = {
+        rotation: [-1.57, 0, 0],
+        scale: [0.18, 0.18, 0.18],
+      };
+      mesh.rotation.set(...STL_DIFF.rotation);
+      mesh.scale.set(...STL_DIFF.scale);
     },
     changeJoint(value) {
       this.state.test.jx = JOINT_POSITION[value + 1][0];
