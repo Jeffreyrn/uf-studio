@@ -1,6 +1,6 @@
 <!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> -->
 <template>
-  <div class="hello">
+  <div class="hello" id="model-wrapper">
     <!-- <div class="block">
       <el-select v-model="select" placeholder="Select" @change="changeJoint">
         <el-option
@@ -223,7 +223,7 @@ export default {
       controls.dampingFactor = 0.25;
       controls.enableZoom = true;
       controls.update();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(...this.getRenderSize());
       document.getElementById('emulator-container').appendChild(renderer.domElement);
       // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
       const STLLoader = new THREESTLLoader(THREE);
@@ -308,12 +308,20 @@ export default {
       const axisHelper = new THREE.AxesHelper(5);
       scene.add(axisHelper);
       this.changeJoint(this.select);
-      function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
+      const onWindowResize = () => {
+        camera.aspect = this.getCameraAspect();
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      }
+        renderer.setSize(...this.getRenderSize());
+      };
       window.addEventListener('resize', onWindowResize, false);
+    },
+    getCameraAspect() {
+      return 0.8;
+    },
+    getRenderSize() {
+      const rootDiv = document.getElementById('model-wrapper');
+      const height = (rootDiv.offsetWidth * window.innerHeight * 0.45) / (window.innerWidth * 0.8);
+      return [rootDiv.offsetWidth, height];
     },
     setDiff(mesh) {
       const STL_DIFF = {
@@ -350,7 +358,7 @@ export default {
 <style scoped>
 .hello {
   display: flex;
-  flex-direction: column;
+  flex-direction: column;    
 }
 .hello-row {
   display: inline-block;

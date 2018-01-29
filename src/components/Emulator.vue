@@ -1,23 +1,46 @@
 <template>
-  <div class="hello">
-    <div class="hello-row">
-      <div class="block" v-for="j in 7" :key="j">
-        <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
-        <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input></el-slider>
-      </div>
-      <el-radio-group v-model="state.online" @change="setOnline">
-        <el-radio-button :label="true">online</el-radio-button>
-        <el-radio-button :label="false">offline</el-radio-button>
-      </el-radio-group>
-      <el-button @click="movediv">error</el-button>
-      <div id="a"><keep-alive><xarm-model :control="state.joint"></xarm-model></keep-alive></div>
-      <div id="b"></div>
-      
-      <div class="block">{{ msg }}-debugTest</div>
-      step<input v-model="config.step"/>
-      
-    </div>
-  </div>
+  <el-container class="hello">
+    <el-header>
+      <el-row :gutter="20">
+        <el-col :span="20">
+          <router-link :to="{ name: 'Home'}">
+            <el-button >Home</el-button>
+          </router-link>
+        </el-col>
+        <el-col :span="4">
+          <el-radio-group v-model="state.online" @change="setOnline">
+            <el-radio-button :label="true">online</el-radio-button>
+            <el-radio-button :label="false">offline</el-radio-button>
+          </el-radio-group>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-main>
+    <el-row :gutter="20">
+      <el-col :span="20">
+        <keep-alive><xarm-model :control="state.joint"></xarm-model></keep-alive>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="movediv">error</el-button>
+        <div class="block">{{ msg }}-debugTest</div>
+        step<input v-model="config.step"/>
+      </el-col>
+    </el-row>
+    </el-main>
+    <el-footer>
+    <el-row :gutter="20">
+      <el-col :span="16">
+
+      </el-col>
+      <el-col :span="8">
+        <div class="block" v-for="j in 7" :key="j">
+          <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
+          <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input></el-slider>
+        </div>
+      </el-col>
+    </el-row>
+    </el-footer>
+  </el-container>
 </template>
 
 <script>
@@ -123,9 +146,7 @@ export default {
   display: inline-block;
 }
 .block {
-  width: 30%;
   padding: 0.2vw 1vw;
-  display: inline-block;
 }
 span.text {
   display: block;
