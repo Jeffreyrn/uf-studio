@@ -72,47 +72,18 @@ export default {
     };
   },
   mounted() {
-    // let totalFrame = document.getElementById("total-frame");
-    // totalFrame.style.height = `${screen.height - 400}px`;
     const curFile = GlobalUtil.model.localProjTree.curFile;
     if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-      // const editors = document.getElementsByName("code-editor");
-      // console.log(`editor value =  cur ${curFile.uuid}`);
-      // for (let i = 0; i < editors.length; i += 1) {
-      //   const editor = editors[i];
-      //   editor.style.display = 'none';
-      // }
       GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+    }
+    else {
+      GlobalUtil.model.localProjTree.setSelectedUI('');
     }
     window.addEventListener('resize', GlobalUtil.model.localProjTree.onwinresize, false);
     GlobalUtil.model.localProjTree.onwinresize();
-    // self.onwinresize
-    // setTimeout(() => {
-    //   GlobalUtil.model.localProjTree.onwinresize();
-    // }, 5);
     CommandsEditorSocket.listProjs((dict) => {
 
     });
-
-    // const leftFrame = document.getElementById("left-frame");
-  //   const rightFrame = document.getElementById("right-frame");
-  // const totalFrameWidth = document.body.clientWidth;//- 120;
-  // const leftFrameWidth = 200;
-  // const rightFrameWidth = totalFrameWidth - leftFrameWidth;
-  // console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
-  // totalFrame.style.width = `${totalFrameWidth}px`;
-  // rightFrame.style.width = `${rightFrameWidth}px`;
-  // totalFrame.style.height = `${totalFrameHeight}px`;
-
-    // const editors = document.getElementsByName("code-editor");
-    // for (let i = 0; i < editors.length; i += 1) {
-    //   const editor = editors[i];
-    //   console.log(`editor value = ${JSON.stringify(editor)}`);
-    // }
-    // console.log(`rightFrame value 1`);
-    // const rightFrame = document.getElementById("right-frame");
-    // console.log(`rightFrame value = ${rightFrame.innerHTML}`);
-    // console.log(`rightFrame value 2`);
   },
   methods: {
     onCloseResult() {
@@ -125,13 +96,6 @@ export default {
   watch: {
   },
   computed: {
-    // openedFilesList() {
-    //   // GlobalUtil.model.localProjTree.curOpenedFilesList
-    //   const proId = GlobalUtil.model.localProjTree.curProj.uuid;
-    //   const curOpenedTabs = GlobalUtil.model.localProjTree.curOpenedTabs[proId];
-    //   // console.log(`curOpenedTabs = $`);
-    //   return curOpenedTabs;
-    // },
   },
   components: {
     TopMenu,

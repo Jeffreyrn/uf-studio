@@ -272,7 +272,7 @@ self.setSelectedUUID = (uuid) => {
   }
   if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
     self.curSelectedFolderUUID = uuid;
-    return;
+    // return;
   }
   self.curSelectedFolderUUID = '';
   self.curFile = file;
@@ -293,63 +293,30 @@ self.setSelectedUUID = (uuid) => {
     // }
   });
   self.setSelectedUI(uuid);
-
-  // for (let i = 0; i < self.curProj.files.length; i += 1) {
-  //   const file = self.curProj.files[i];
-  //   if (file.uuid === uuid) {
-  //     if (file.type === self.PROJ_TREE_TYPE.FILE) {
-  //       // self.setSelectedContent(file.uuid, file.localContent);
-  //       self.setCurSelectedFileUUIDs(uuid);
-  //       self.curSelectedFolderUUID = '';
-  //       self.curFile = file;
-  //       console.log(`selected = ${file.name}`);
-  //       CommandsEditorSocket.getFile(file.uuid, (dict) => {
-  //         let content = dict.data;
-  //         if (content === null || content === undefined) {
-  //           content = '';
-  //         }
-  //         self.curFile.remoteContent = content;
-  //         if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
-  //           // self.curFile.localContent === content;
-  //           self.setSelectedContent(file.uuid, content);
-  //         }
-  //       });
-  //     }
-  //     if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-  //       self.curSelectedFolderUUID = uuid;
-  //     }
-  //   }
-  // }
-
   // ui
   
 };
 
 self.setSelectedUI = (uuid) => {
+  
   console.log(`setSelectedUI 2 file uuid = ${uuid}`);
-  const file = GlobalUtil.model.localProjTree.getFileInfo(uuid);
-  // console.log(`setSelectedUI file type uuid = ${uuid}, file = ${file}`);
-  // if (file) {
-  //   console.log(`setSelectedUI file type = ${file.type}`);
-  // }
-  const nodes = document.getElementsByClassName('el-tree-node__label');
-  for (let i = 0; i < nodes.length; i += 1) {
-    const node = nodes[i];
-    if (file === null) {
-      node.style.color = 'gray';
+  const file = self.getFileInfo(uuid);
+  console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
+  setTimeout(() => {
+    const nodes = document.getElementsByClassName('el-tree-node__label');
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      if (file !== null && file !== undefined && file.name === node.innerHTML) {
+        // node.style.color = 'blue';
+        node.style.color = '#4F7597';
+      }
+      else {
+        // node.style.color = 'gray';
+        node.style.color = '#A6A6A6';
+      }
     }
-    else if (file.type !== 'file') {
-      return;
-    }
-    else if (file.name === node.innerHTML) {
-      // node.style.color = 'blue';
-      node.style.color = '#4F7597';
-    }
-    else {
-      // node.style.color = 'gray';
-      node.style.color = '#A6A6A6';
-    }
-  }
+  })
+
   const curFile = self.curFile;
   if (curFile === null) {
     return;
@@ -394,9 +361,11 @@ self.onwinresize = () => {
   const leftFrameWidth = 200;
   const rightFrameWidth = totalFrameWidth - leftFrameWidth;
   // console.log(`totalFrameWidth = ${totalFrameWidth}, rightFrameWidth = ${rightFrameWidth}`);
-  totalFrame.style.width = `${totalFrameWidth}px`;
+  if (totalFrame !== null) {
+    totalFrame.style.width = `${totalFrameWidth}px`;
+    totalFrame.style.height = `${totalFrameHeight}px`;
+  }
   rightFrame.style.width = `${rightFrameWidth}px`;
-  totalFrame.style.height = `${totalFrameHeight}px`;
   const editors = GlobalUtil.model.localProjTree.editors;
   for (const key in editors) {
     const editor = editors[key];
@@ -628,6 +597,7 @@ self.getFile = (uuid) => {
   }
   return null;
 };
+
 self.getFileInfo = (uuid) => {
   const files = self.curProj.files;
   for (let i = 0; i < files.length; i += 1) {

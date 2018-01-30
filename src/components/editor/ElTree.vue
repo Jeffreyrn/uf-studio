@@ -13,6 +13,7 @@
 <script>
 
 import ELTreeNode from './ELTreeNode';
+import { setTimeout } from 'timers';
 
 export default {
   data() {
@@ -26,11 +27,9 @@ export default {
     };
   },
   mounted() {
-    const nodes = document.getElementsByClassName('el-tree-node__label');
-    for (let i = 0; i < nodes.length; i += 1) {
-      const node = nodes[i];
-      node.style.color = 'gray';
-    }
+  },
+  created() {
+    console.log(`el tree created`);
   },
   methods: {
     handleNodeClick(data) {
@@ -44,10 +43,9 @@ export default {
       // console.log(`isFile = ${isFile}`);
 
       GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
-
-      GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
+      GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
     },
     renderContent(h, { node, data, store }) {
       return ( '<div>1234567<div/>' );
