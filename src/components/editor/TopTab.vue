@@ -31,12 +31,12 @@
     <div v-if="data.uuid===model.localProjTree.curSelectedFileUUID" class="">
       <div class="float-left top-tab" name="top-tab" :id="getTabId()" style="background:#3F4955;">
         <div class="float-left top-tab-item-border">
-          <div class="float-left tab-left-icon" @click="onselect()"></div>
+          <div class="float-left tab-left-icon-white" @click="onselect()"></div>
           <div class="float-left top-tab-item" @click="onselect()">
             <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
             <div class="float-left top-tab-background-color">{{ data.name }}</div>
           </div>
-          <div @click="close()" class="float-left tab-cancel"></div>
+          <div @click="close()" class="float-left tab-cancel-white"></div>
         </div>
       </div>
     </div>
@@ -113,12 +113,32 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
 }
+.tab-cancel-white {
+  /* background-color:yellow; */
+  width: 20px;
+  height: 20px;
+  text-align:center;
+  line-height:20px;
+  cursor:pointer;
+  background-image: url('./../../assets/img/ide/icon_close_white.svg');
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .tab-left-icon {
   margin-left: 8px;
   margin-top: 3px;
   width: 12px;
   height: 12px;
   background-image: url('./../../assets/img/ide/language_python.svg');
+  background-size: 12px 12px;
+}
+.tab-left-icon-white {
+  margin-left: 8px;
+  margin-top: 3px;
+  width: 12px;
+  height: 12px;
+  background-image: url('./../../assets/img/ide/language-python_white.svg');
   background-size: 12px 12px;
 }
 .top-tab-item {

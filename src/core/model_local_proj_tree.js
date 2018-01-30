@@ -317,8 +317,11 @@ self.setSelectedUI = (uuid) => {
     }
   })
 
-  const curFile = self.curFile;
-  if (curFile === null) {
+  // const file = self.getFileInfo(uuid);
+  if (file === null) {
+    return;
+  }
+  if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
     return;
   }
   setTimeout(() => {
@@ -335,7 +338,7 @@ self.setSelectedUI = (uuid) => {
       // console.log(`editor value = ${editor.getAttribute("value")}`);
       const aUUID = editor.getAttribute("value");
       // editor.style.display = 'none';
-      if (aUUID === curFile.uuid) {
+      if (aUUID === file.uuid) {
         editor.style.opacity = '1.0';
         // editor.style.display = 'block';
         // selectedEditor = editor;
