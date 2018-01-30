@@ -2,7 +2,6 @@
   <div class="main-wrapper editor-wrapper">
     <div class="top-style">
       <router-link :to="{ name: 'Home'}">
-        <!-- <el-button >Home</el-button> -->
         <div class="back-icon"></div>
       </router-link>
       <span class="title-ide">IDE</span>

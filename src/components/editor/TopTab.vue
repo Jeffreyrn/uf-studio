@@ -103,7 +103,7 @@ export default {
 }
 .tab-cancel {
   /* background-color:yellow; */
-  width: 15px;
+  width: 20px;
   height: 20px;
   text-align:center;
   line-height:20px;
@@ -114,7 +114,7 @@ export default {
   background-position: center;
 }
 .tab-left-icon {
-  margin-left: 3px;
+  margin-left: 8px;
   margin-top: 3px;
   width: 12px;
   height: 12px;

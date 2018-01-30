@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div>
-      <router-link :to="{ name: 'Home'}">
+      <!-- <router-link :to="{ name: 'Home'}">
         <el-button >Home</el-button>
-      </router-link>
+      </router-link> -->
     </div>
     <div class="main-container">
       <router-view/>

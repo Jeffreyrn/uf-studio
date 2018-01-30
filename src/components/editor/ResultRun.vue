@@ -83,19 +83,25 @@ export default {
 
 .run-icon {
   margin-right: 10px;
-  margin-top: 5px;
+  /* margin-top: 4px; */
   width: 18px;
-  height: 18px;
+  height: 30px;
   background-image: url('./../../assets/img/ide/icon_running.svg');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
 }
 
 .clear-icon {
   margin-right: 10px;
-  margin-top: 5px;
+  /* margin-top: 4px; */
   width: 18px;
-  height: 18px;
+  height: 30px;
   background-image: url('./../../assets/img/ide/btn_clear.svg');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
 }
 

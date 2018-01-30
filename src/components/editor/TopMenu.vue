@@ -29,8 +29,10 @@
     </div>
     <div class="del-icon float-left" @click="delFile()">
     </div>
-    <div class="stop-icon float-right" @click="stop()">
-    </div>
+    <span v-if="model.localProjTree.isCmdRunning===true">
+      <div class="stop-icon float-right" @click="stop()">
+      </div>
+    </span>
     <span v-if="model.localProjTree.isCmdRunning===false">
       <div class="run-icon float-right" @click="run()">
       </div>
@@ -45,10 +47,38 @@
       <el-input v-model="inputText" auto-complete="off"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible=false">取 消</el-button>
-        <el-button type="primary" @click="add()">确 定</el-button>
+        <span v-if="isFileNameCorrect">
+          <el-button type="primary" @click="add()">确 定</el-button>
+        </span>
+        <span v-if="!isFileNameCorrect">
+          <el-button type="primary" @click="add()" disabled>确 定</el-button>
+        </span>
       </span>
     </el-dialog>
 
+    <el-dialog
+      :title="title"
+      :visible.sync="fileDialogVisible"
+      width="300px"
+      :before-close="handleClose"
+      center>
+      <input v-model="inputText" auto-complete="off" style="width:150px;height:20px;" />
+      <select v-model="selected">
+        <option v-for="option in options" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="fileDialogVisible=false">取 消</el-button>
+        <span v-if="isFileNameCorrect">
+          <el-button type="primary" @click="add()">确 定</el-button>
+        </span>
+        <span v-if="!isFileNameCorrect">
+          <el-button type="primary" @click="add()" disabled>确 定</el-button>
+        </span>
+      </span>
+    </el-dialog>
+    
     <el-dialog
       title="Select a project"
       :visible.sync="projSelectDialog">
@@ -77,17 +107,24 @@
 
 <script>
 
-
 export default {
   data() {
     return {
       model: GlobalUtil.model,
       store: GlobalUtil.store,
       dialogVisible: false,
+      fileDialogVisible: false,
       projSelectDialog: false,
       inputText: '',
       folderOrFile: '',
       title: '',
+      selected: '.py',
+      options: [
+        { text: 'py', value: '.py' },
+        { text: 'txt', value: '.txt' },
+        { text: 'md', value: '.md' },
+        { text: 'none', value: '' },
+      ],
     };
   },
   mounted() {
@@ -190,7 +227,7 @@ export default {
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        CommandsEditorSocket.createFile(text);
+        CommandsEditorSocket.createFile(`${text}${this.selected}`);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
@@ -203,13 +240,14 @@ export default {
       if (this.folderOrFile === 'rename') {
         // GlobalUtil.model.localProjTree.renameFile(text);
         const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-        CommandsEditorSocket.renameFile(curUUID, text)
+        CommandsEditorSocket.renameFile(curUUID, `${text}${this.selected}`)
       }
       if (this.folderOrFile === 'renameproj') {
         // GlobalUtil.model.localProjTree.renameProj(text);
         CommandsEditorSocket.renameProj(text);
       }
       this.dialogVisible = false;
+      this.fileDialogVisible = false;
     },
     newProj() {
       this.folderOrFile = 'proj';
@@ -229,7 +267,8 @@ export default {
       this.folderOrFile = 'file';
       this.title = 'add file';
       this.inputText = '';
-      this.dialogVisible = true;
+      // this.dialogVisible = true;
+      this.fileDialogVisible = true;
     },
     rename() {
       console.log(`Rename`);
@@ -238,6 +277,7 @@ export default {
         this.folderOrFile = 'renameproj';
         this.title = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
         this.inputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
+        this.selected = '';
         this.dialogVisible = true;
         return;
       }
@@ -245,10 +285,21 @@ export default {
       if (curFile === null) {
         return;
       }
+      if (curFile.type === 'folder') {
+        this.title = `Rename ${curFile.name}`;
+        this.inputText = curFile.name;
+        this.dialogVisible = true;
+        this.selected = '';
+        return;
+      }
       this.folderOrFile = 'rename';
       this.title = `Rename ${curFile.name}`;
-      this.inputText = `${curFile.name}`;
-      this.dialogVisible = true;
+      this.inputText = `${curFile.name}`.split('.')[0];
+      this.fileDialogVisible = true;
+      this.selected = '.' + `${curFile.name}`.split('.')[1];
+      if (`${curFile.name}`.split('.')[1] === undefined ) {
+        this.selected = '';
+      }
     },
     tableRowClassName({row, rowIndex}) {
       // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
@@ -301,6 +352,9 @@ export default {
       }
       return tmpList;
     },
+    isFileNameCorrect() {
+      return GlobalUtil.isFileStr(this.inputText);
+    },
   },
   components: {
   },
@@ -308,14 +362,16 @@ export default {
 </script>
 
 <style scoped>
+
 .top-btn {
   /*width: 50px;
   height: 20px;*/
   padding: 10px;
 }
+
 .proj-icon {
   margin-left: 15px;
-  margin-top: 8px;
+  margin-top: 10px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_addproject.svg');
@@ -323,16 +379,16 @@ export default {
 }
 
 .folder-icon {
-  margin-left: 25px;
+  margin-left: 15px;
   margin-top: 10px;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   background-image: url('./../../assets/img/ide/btn_addfolder.svg');
   cursor: pointer;
 }
 
 .file-icon {
-  margin-left: 25px;
+  margin-left: 15px;
   margin-top: 8px;
   width: 24px;
   height: 24px;
@@ -341,7 +397,7 @@ export default {
 }
 
 .rename-icon {
-  margin-left: 25px;
+  margin-left: 15px;
   margin-top: 8px;
   width: 24px;
   height: 24px;
@@ -350,7 +406,7 @@ export default {
 }
 
 .del-icon {
-  margin-left: 25px;
+  margin-left: 15px;
   margin-top: 8px;
   width: 24px;
   height: 24px;
@@ -359,19 +415,19 @@ export default {
 }
 
 .stop-icon {
-  margin-right: 25px;
+  margin-right: 15px;
   margin-top: 10px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background-image: url('./../../assets/img/ide/icon_stop.svg');
   cursor: pointer;
 }
 
 .run-icon {
-  margin-right: 25px;
+  margin-right: 15px;
   margin-top: 8px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background-image: url('./../../assets/img/ide/icon_running.svg');
   cursor: pointer;
 }

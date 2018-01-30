@@ -42,11 +42,11 @@ self.userId = "test";
 self.runPythonScript = (uuid, callback) => {
   const filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
   const params = {
-    data: {
+    data: merge(self.VERSION, {
       path: filePath, // 要执行的python文件路径, /python/prj1/test.py
       userId: self.userId, // 和path共同存在，用来区分不同用户
       // "script": "", // 要执行的python代码
-    }
+    })
   };
   self.sendCmd(GlobalConstant.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
     GlobalUtil.model.localProjTree.isCmdRunning = true;

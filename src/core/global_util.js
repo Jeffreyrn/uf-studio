@@ -32,6 +32,26 @@ self.nativeCom = NativeCom;
 
 self.autoSizeScale = 0;
 
+self.isFileStr = (str) => {
+  if (str === null || str === undefined) {
+    return false;
+  }
+  if (str.length === 0) {
+    return false;
+  }
+  const firstChar = str[0];
+  if ( !(firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z') ) {
+    return false;
+  }
+  for (let i = 0; i < str.length; i += 1) {
+    const aChar = str[i];
+    if ( !(aChar >= 'a' && aChar <= 'z' || aChar >= 'A' && aChar <= 'Z' || aChar === '_' || aChar >= '0' && aChar <= '9') ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 self.getMinWidth = () => {
   const min_width = Math.min(screen.width, screen.height);
   self.min_width = Math.min(min_width, 480);
