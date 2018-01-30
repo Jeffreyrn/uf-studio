@@ -296,6 +296,14 @@ self.setSelectedUUID = (uuid) => {
 
 self.setSelectedUI = (uuid) => {
   console.log(`setSelectedUI 2 file uuid = ${uuid}`);
+  if (uuid === null || uuid === '') {
+    const nodes = document.getElementsByClassName('el-tree-node__label');
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      node.style.color = '#A6A6A6';
+    }
+    return;
+  }
   let file = self.getFileInfo(uuid);
   if (file.type === 'folder') {
     file = self.curFile;
