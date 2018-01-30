@@ -274,39 +274,41 @@ self.setSelectedUUID = (uuid) => {
     self.curSelectedFolderUUID = uuid;
     // return;
   }
-  self.curSelectedFolderUUID = '';
-  self.curFile = file;
-  self.setCurSelectedFileUUIDs(uuid);
-  CommandsEditorSocket.getFile(file.uuid, (dict) => {
-    let content = dict.data;
-    if (content === null || content === undefined) {
-      content = '';
-    }
-    self.curFile.remoteContent = content;
-    self.setSelectedContent(file.uuid, content);
-    // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
-    //   // self.curFile.localContent === content;
-    //   self.setSelectedContent(file.uuid, '');
-    // }
-    // else {
-    //   self.setSelectedContent(file.uuid, content);
-    // }
-  });
+  else {
+    self.curSelectedFolderUUID = '';
+    self.curFile = file;
+    self.setCurSelectedFileUUIDs(uuid);
+    CommandsEditorSocket.getFile(file.uuid, (dict) => {
+      let content = dict.data;
+      if (content === null || content === undefined) {
+        content = '';
+      }
+      self.curFile.remoteContent = content;
+      self.setSelectedContent(file.uuid, content);
+    });
+    
+  }
   self.setSelectedUI(uuid);
+  
   // ui
   
 };
 
 self.setSelectedUI = (uuid) => {
-  
   console.log(`setSelectedUI 2 file uuid = ${uuid}`);
-  const file = self.getFileInfo(uuid);
+  let file = self.getFileInfo(uuid);
+  if (file.type === 'folder') {
+    file = self.curFile;
+  }
   console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
   setTimeout(() => {
     const nodes = document.getElementsByClassName('el-tree-node__label');
     for (let i = 0; i < nodes.length; i += 1) {
       const node = nodes[i];
-      if (file !== null && file !== undefined && file.name === node.innerHTML) {
+      if (file === null || file === undefined) {
+        node.style.color = '#A6A6A6';
+      }
+      else if (file.name === node.innerHTML) {
         // node.style.color = 'blue';
         node.style.color = '#4F7597';
       }
