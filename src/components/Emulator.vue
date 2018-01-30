@@ -18,7 +18,7 @@
     <el-main>
     <el-row :gutter="20">
       <el-col :span="20">
-        <keep-alive><xarm-model :control="state.joint"></xarm-model></keep-alive>
+        <keep-alive><xarm-model :control="state.joint" :size="emulatorSize"></xarm-model></keep-alive>
       </el-col>
       <el-col :span="4">
         <el-button @click="movediv">error</el-button>
@@ -30,12 +30,21 @@
     <el-footer>
     <el-row :gutter="20">
       <el-col :span="16">
-
+        <div class="control-wrapper dark-backgroud">
+          <div id="position-joystick" class="joystick-wrapper"></div>
+          <div id="orientation-joystick" class="joystick-wrapper"></div>
+        </div>
+        <div class="config-wrapper dark-backgroud">
+          <el-slider v-model="state.speed" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+          <el-slider v-model="state.acceleration" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+        </div>
       </el-col>
       <el-col :span="8">
-        <div class="block" v-for="j in 7" :key="j">
-          <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
-          <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input></el-slider>
+        <div class="dark-backgroud">
+          <div class="block" v-for="j in 7" :key="j">
+            <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
+            <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input></el-slider>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -44,6 +53,7 @@
 </template>
 
 <script>
+import Nipple from 'nipplejs';
 import * as types from '../store/mutation-types';
 import XarmModel from './common/XarmModel';
 
@@ -84,10 +94,32 @@ export default {
           jz: 0,
         },
       },
+      emulatorSize: {
+        width: 1452 / 1872,
+        height: 530 / 1030,
+      },
       msg: 'Emulator',
     };
   },
   mounted() {
+    // const NIPPLE_OPTION = {};
+    Nipple.create({
+      zone: document.getElementById('position-joystick'),
+      color: 'white',
+      mode: 'static',
+      position: {
+        left: '30%',
+      },
+    });
+
+    Nipple.create({
+      zone: document.getElementById('orientation-joystick'),
+      color: 'white',
+      mode: 'static',
+      position: {
+        right: '25%',
+      },
+    });
   },
   methods: {
     movediv() {
@@ -137,7 +169,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 .hello {
   display: flex;
   flex-direction: column;
@@ -151,5 +183,17 @@ export default {
 span.text {
   display: block;
   float: left;
+}
+.control-wrapper {
+  margin: 1%;
+  display: flex;
+  position: relative;
+  .joystick-wrapper {
+    padding: 14%;
+  }
+}
+.dark-backgroud {
+  background: #434343;
+  border-radius: 8px;
 }
 </style>

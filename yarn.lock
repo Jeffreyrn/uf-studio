@@ -4786,6 +4786,10 @@ nightwatch@^0.9.12:
     proxy-agent "2.0.0"
     q "1.4.1"
 
+nipplejs@^0.6.8:
+  version "0.6.8"
+  resolved "http://registry.npm.taobao.org/nipplejs/download/nipplejs-0.6.8.tgz#5400ff464be15a6199be33b5854a19989d03fe99"
+
 nise@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/nise/-/nise-1.2.0.tgz#079d6cadbbcb12ba30e38f1c999f36ad4d6baa53"

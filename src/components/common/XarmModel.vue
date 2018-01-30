@@ -1,4 +1,5 @@
-<!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> -->
+<!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> 
+     传递参数size = {width: xx, heigth: xx}, 数值为百分比（0.01-0.99）窗口宽高占当前总窗口的百分比-->
 <template>
   <div class="hello" id="model-wrapper">
     <!-- <div class="block">
@@ -82,7 +83,7 @@ const GROUP_POSITION = [
 
 export default {
   name: 'xarm-model',
-  props: ['control'],
+  props: ['control', 'size'],
   watch: {
     control(newValue) {
       console.log('watch posi print:');
@@ -197,12 +198,13 @@ export default {
       ];
       const materialList = [];
       RAINBOW_COLOR_LIST.forEach((hex) => {
+        hex = 0xffffff;
         materialList.push(new THREE.MeshPhongMaterial({ color: hex }));
       });
       console.log(materialList);
       const scene = new THREE.Scene();
       console.log(this.three.scene, scene);
-      scene.background = new THREE.Color(0xc0c0c0);
+      scene.background = new THREE.Color(0xeeeeee); // c0c0c0
       const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 1, 1000);
       // camera.position.z = -50;
       // camera.up = new THREE.Vector3(-1, -1, -1);
@@ -319,11 +321,12 @@ export default {
       window.addEventListener('resize', onWindowResize, false);
     },
     getCameraAspect() {
-      return (window.innerWidth * 0.8) / (window.innerHeight * 0.45);
+      const ratio = this.size ? (this.size.width / this.size.height) : (0.8 / 0.45);
+      return (window.innerWidth / window.innerHeight) * ratio;
     },
     getRenderSize() {
       const rootDiv = document.getElementById('model-wrapper');
-      const height = (rootDiv.clientWidth * window.innerHeight * 0.45) / (window.innerWidth * 0.8);
+      const height = rootDiv.clientWidth / this.getCameraAspect();
       return [rootDiv.clientWidth, height];
     },
     setDiff(mesh) {
@@ -367,7 +370,6 @@ export default {
   display: inline-block;
 }
 .block {
-  width: 30%;
   padding: 0.2vw 1vw;
   display: inline-block;
 }
