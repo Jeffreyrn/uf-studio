@@ -126,6 +126,7 @@ export default {
         jointMax: 180,
         jointMin: -180,
         step: 0.1,
+        offsetY: -7,
       },
       options: [0, 1, 2, 3, 4, 5, 6, 7],
       select: 5,
@@ -202,10 +203,10 @@ export default {
       const scene = new THREE.Scene();
       console.log(this.three.scene, scene);
       scene.background = new THREE.Color(0xc0c0c0);
-      const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
-      // camera.position.z = 8;
+      const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 1, 1000);
+      // camera.position.z = -50;
       // camera.up = new THREE.Vector3(-1, -1, -1);
-      camera.position.set(8, 14, 8); // camera position
+      camera.position.set(6, 5, 6); // camera position
       camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
       const light = new THREE.PointLight(0xffffff, 1, 100); // light
       light.position.set(10, 14, 10);
@@ -231,7 +232,7 @@ export default {
       let base;
       loader.load(JOINT_MODEL_SRC[0], (geometry) => {
         base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xcccccc }));
-        const position = [7.66, 0.04, -0.86];
+        const position = [7.66, 0.04 + this.config.offsetY, -0.86];
         base.position.set(...position);
         this.setDiff(base);
         scene.add(base);
@@ -292,36 +293,38 @@ export default {
           // groups[6].add(joints[7]);
           console.log('loading all');
           this.setDiff(groups[0]);
+          groups[0].position.y += this.config.offsetY;
           scene.add(groups[0]);
           animate();
           loading.close(); // hide loading overlay
         }
       };
       loadModel(1);
-      const gridplaneSize = 10;
-      const gridstep = 20;
+      const gridplaneSize = 50;
+      const gridstep = 30;
       // const gridcolor = 0xCCCCCC;
       const gridHelper_xy = new THREE.GridHelper(gridplaneSize, gridstep);
-      gridHelper_xy.position.set(0, 0, 0);
+      gridHelper_xy.position.set(0, this.config.offsetY, 0);
       // gridHelper_xy.setColors(new THREE.Color(gridcolor), new THREE.Color(gridcolor));
       scene.add(gridHelper_xy);
       const axisHelper = new THREE.AxesHelper(5);
+      axisHelper.position.y = this.config.offsetY;
       scene.add(axisHelper);
       this.changeJoint(this.select);
       const onWindowResize = () => {
+        renderer.setSize(...this.getRenderSize());
         camera.aspect = this.getCameraAspect();
         camera.updateProjectionMatrix();
-        renderer.setSize(...this.getRenderSize());
       };
       window.addEventListener('resize', onWindowResize, false);
     },
     getCameraAspect() {
-      return 0.8;
+      return (window.innerWidth * 0.8) / (window.innerHeight * 0.45);
     },
     getRenderSize() {
       const rootDiv = document.getElementById('model-wrapper');
-      const height = (rootDiv.offsetWidth * window.innerHeight * 0.45) / (window.innerWidth * 0.8);
-      return [rootDiv.offsetWidth, height];
+      const height = (rootDiv.clientWidth * window.innerHeight * 0.45) / (window.innerWidth * 0.8);
+      return [rootDiv.clientWidth, height];
     },
     setDiff(mesh) {
       const STL_DIFF = {
