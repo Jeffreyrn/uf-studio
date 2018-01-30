@@ -43,8 +43,8 @@
       </div>
     </div> -->
     <div class="hello-row">
-      <div class="block" v-for="j in 7" :key="j">
-        <span class="text">J{{j-1}}:{{joints[j-1]}}</span>
+      <div id="emulator-overlay">
+        <span v-for="j in 7" :key="j" class="text">J{{j-1}}:{{joints[j-1]}},</span>
         <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
       </div>
       <div id="emulator-container"></div>
@@ -204,7 +204,7 @@ export default {
       console.log(materialList);
       const scene = new THREE.Scene();
       console.log(this.three.scene, scene);
-      scene.background = new THREE.Color(0xeeeeee); // c0c0c0
+      scene.background = new THREE.Color(0xffffff); // c0c0c0
       const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 1, 1000);
       // camera.position.z = -50;
       // camera.up = new THREE.Vector3(-1, -1, -1);
@@ -376,5 +376,11 @@ export default {
 span.text {
   display: block;
   float: left;
+}
+#emulator-overlay {
+  position: absolute;
+}
+#emulator-container > *{
+  border-radius: 8px;
 }
 </style>
