@@ -1,4 +1,5 @@
 
+import { setTimeout } from 'timers';
 <template>
   <div>
     <!-- <form id='f_form' v-show='false'>
@@ -44,7 +45,7 @@
       width="300px"
       :before-close="handleClose"
       center>
-      <el-input v-model="inputText" auto-complete="off"></el-input>
+      <input name="inputText" v-model="inputText" auto-complete="off"></input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible=false">取 消</el-button>
         <span v-if="isFileNameCorrect">
@@ -62,7 +63,7 @@
       width="300px"
       :before-close="handleClose"
       center>
-      <input v-model="inputText" auto-complete="off" style="width:150px;height:20px;" />
+      <input name="inputText" v-model="inputText" auto-complete="off" style="width:150px;height:20px;" />
       <select v-model="selected">
         <option v-for="option in options" v-bind:value="option.value">
           {{ option.text }}
@@ -249,11 +250,22 @@ export default {
       this.dialogVisible = false;
       this.fileDialogVisible = false;
     },
+    textFocus() {
+      setTimeout(() => {
+        const elements = document.getElementsByName('inputText');
+        for (let i = 0; i < elements.length; i += 1) {
+          const element = elements[i];
+          element.focus();
+        }
+      });
+    },
     newProj() {
       this.folderOrFile = 'proj';
       this.title = 'new project name';
       this.inputText = '';
       this.dialogVisible = true;
+      
+      this.textFocus();
     },
     addFolder() {
       console.log('add folder');
@@ -261,6 +273,7 @@ export default {
       this.title = 'add folder';
       this.inputText = '';
       this.dialogVisible = true;
+      this.textFocus();
     },
     addFile() {
       console.log('add file');
@@ -269,6 +282,7 @@ export default {
       this.inputText = '';
       // this.dialogVisible = true;
       this.fileDialogVisible = true;
+      this.textFocus();
     },
     rename() {
       console.log(`Rename`);
@@ -279,6 +293,7 @@ export default {
         this.inputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
         this.selected = '';
         this.dialogVisible = true;
+        this.textFocus();
         return;
       }
       const curFile = this.getCurFile();
@@ -290,6 +305,7 @@ export default {
         this.inputText = curFile.name;
         this.dialogVisible = true;
         this.selected = '';
+        this.textFocus();
         return;
       }
       this.folderOrFile = 'rename';
@@ -300,6 +316,7 @@ export default {
       if (`${curFile.name}`.split('.')[1] === undefined ) {
         this.selected = '';
       }
+      this.textFocus();
     },
     tableRowClassName({row, rowIndex}) {
       // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
