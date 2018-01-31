@@ -38,13 +38,19 @@
     <el-row :gutter="20">
       <el-col :span="16">
         <div class="control-wrapper dark-backgroud">
-          <div class="control-left">
-            <el-slider v-model="state.position.z" vertical height="200px"></el-slider>
-            <div id="position-joystick" class="joystick-wrapper"></div>
+          <div class="control-header">
+            <div class="header-text">Position Control</div>
+            <div class="header-text">Orientation Control</div>
           </div>
-          <div class="control-right">
-            <el-slider v-model="state.orientation.roll"></el-slider>
-            <div id="orientation-joystick" class="joystick-wrapper"></div>
+          <div class="control-body">
+            <div class="control-left">
+              <el-slider v-model="state.position.z" vertical height="200px"></el-slider>
+              <div id="position-joystick" class="joystick-wrapper"></div>
+            </div>
+            <div class="control-right">
+              <el-slider v-model="state.orientation.roll"></el-slider>
+              <div id="orientation-joystick" class="joystick-wrapper"></div>
+            </div>
           </div>
         </div>
         <div class="config-wrapper dark-backgroud">
@@ -60,6 +66,7 @@
       </el-col>
       <el-col :span="8">
         <div class="dark-backgroud">
+          <div class="header-text">Joints Control</div>
           <div class="block" v-for="j in 7" :key="j">
             <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
             <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input :show-input-controls="false"></el-slider>
@@ -318,27 +325,58 @@ span.text {
   display: flex;
   position: relative;
   justify-content: space-around;
-  .control-left {
-    width: 50%;
+  flex-direction: column;
+  .control-header {
     display: flex;
-    align-items: flex-end;
-    .el-slider {
-      padding: 6% 0;
-      margin-left: 15%;
+    flex-direction: row;
+    .header-text {
+      width: 50%;
     }
   }
-  .control-right {
-    width: 50%;
+  .control-body {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    .el-slider {
-      padding: 0 10%;
+    position: relative;
+    justify-content: space-around;
+    & > div {
+      margin: 2.5% 0;
+      .joystick-wrapper {
+        padding: 20% 0;
+        margin: 0;
+      }
+    }
+    .control-left {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      border-right: solid 1px white;
+      .el-slider {
+        padding-bottom: 0;
+        margin-left: 15%;
+      }
+
+    }
+    .control-right {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      align-items: center;
+      .joystick-wrapper {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+      }
+      .el-slider {
+        padding: 0 10%;
+        position: absolute;
+        width: 80%;
+        top: 0;
+        left: 10%;
+      }
     }
   }
-  .joystick-wrapper {
-    padding: 20% 30% 30%;
-  }
+  
 }
 .config-wrapper {
   display: flex;
@@ -366,5 +404,12 @@ span.text {
   color: #444;
   letter-spacing: -1px;
   padding-left: 2%;
+}
+.header-text {
+  font-size: 1.6rem;
+  color: white;
+  width: 50%;
+  padding: 1% 2% 0;
+  letter-spacing: -1px;
 }
 </style>
