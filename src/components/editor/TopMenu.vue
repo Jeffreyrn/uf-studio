@@ -172,6 +172,8 @@ export default {
       //     done();
       //   })
       //   .catch(_ => {});
+      this.dialogVisible = false;
+      this.fileDialogVisible = false;
     },
     importPro() {
       document.getElementById('f_input').click();
