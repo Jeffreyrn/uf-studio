@@ -415,7 +415,7 @@ export default {
 }
 
 .stop-icon {
-  margin-right: 15px;
+  margin-right: 60px;
   margin-top: 10px;
   width: 16px;
   height: 16px;
@@ -424,7 +424,7 @@ export default {
 }
 
 .run-icon {
-  margin-right: 15px;
+  margin-right: 60px;
   margin-top: 8px;
   width: 16px;
   height: 16px;

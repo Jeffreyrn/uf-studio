@@ -82,7 +82,7 @@ export default {
 }
 
 .run-icon {
-  margin-right: 10px;
+  margin-right: 30px;
   /* margin-top: 4px; */
   width: 18px;
   height: 30px;
@@ -94,7 +94,7 @@ export default {
 }
 
 .clear-icon {
-  margin-right: 10px;
+  margin-right: 30px;
   /* margin-top: 4px; */
   width: 18px;
   height: 30px;
