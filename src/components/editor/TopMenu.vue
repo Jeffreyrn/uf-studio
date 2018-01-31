@@ -225,12 +225,12 @@ export default {
       const text = this.inputText;
       console.log(`text = ${text}`);
       if (this.folderOrFile === 'folder') {
-        CommandsEditorSocket.createFile(text);
+        CommandsEditorSocket.createFile(text, false);
         // const folder = GlobalUtil.model.localProjTree.createFolder(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        CommandsEditorSocket.createFile(`${text}${this.selected}`);
+        CommandsEditorSocket.createFile(`${text}${this.selected}`, true);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);

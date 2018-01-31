@@ -48,7 +48,7 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
     },
     renderContent(h, { node, data, store }) {
-      return ( '<div>1234567<div/>' );
+      return '1234567';
     },
     // renderContent(h, { node, data, store }) {
     //   return (

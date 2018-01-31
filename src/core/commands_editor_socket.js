@@ -168,18 +168,24 @@ self.renameProj = (name) => {
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
-      GlobalUtil.model.localProjTree.setSelectedUI('');
+      const curFile = GlobalUtil.model.localProjTree.curFile;
+      if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
+        GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+      }
+      else {
+        GlobalUtil.model.localProjTree.setSelectedUI('');
+      }
     });
   });
 };
 
-self.createFile = (name) => {
+self.createFile = (name, isProjFile) => {
   console.log(`createFile 3 file 1`);
   let filePath = self.model.localProjTree.getSelectedFileFolder();
   console.log(`createFile 3 file 2`);
   filePath = path.join(filePath, name);
   console.log(`createFile 3 file 3 = ${filePath}`);
-  const isProjFile = name.indexOf('.') > 0;
+  // const isProjFile = name.indexOf('.') > 0;
   const params = {
     data: merge(self.VERSION, {
       userId: self.userId, // 默认是test，用来区分不同用户
@@ -191,12 +197,28 @@ self.createFile = (name) => {
   const proId = self.model.localProjTree.curProj.uuid;
   if (isProjFile === true) {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
-      self.listProjs();
+      self.listProjs(() => {
+        const curFile = GlobalUtil.model.localProjTree.curFile;
+        if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
+          GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+        }
+        else {
+          GlobalUtil.model.localProjTree.setSelectedUI('');
+        }
+      });
     });
   }
   else {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
-      self.listProjs();
+      self.listProjs(() => {
+        const curFile = GlobalUtil.model.localProjTree.curFile;
+        if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
+          GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+        }
+        else {
+          GlobalUtil.model.localProjTree.setSelectedUI('');
+        }
+      });
     });
   }
 };

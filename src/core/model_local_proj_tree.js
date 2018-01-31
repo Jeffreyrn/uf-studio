@@ -296,7 +296,7 @@ self.setSelectedUUID = (uuid) => {
 };
 
 self.setSelectedUI = (uuid) => {
-  console.log(`setSelectedUI 2 file uuid = ${uuid}`);
+  // console.log(`setSelectedUI 2 file uuid = ${uuid}`);
   if (uuid === null || uuid === '') {
     setTimeout(() => {
       const nodes = document.getElementsByClassName('el-tree-node__label');
@@ -311,7 +311,7 @@ self.setSelectedUI = (uuid) => {
   if (file.type === 'folder') {
     file = self.curFile;
   }
-  console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
+  // console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
   setTimeout(() => {
     const nodes = document.getElementsByClassName('el-tree-node__label');
     for (let i = 0; i < nodes.length; i += 1) {
@@ -328,7 +328,7 @@ self.setSelectedUI = (uuid) => {
         node.style.color = '#A6A6A6';
       }
     }
-  })
+  });
 
   // const file = self.getFileInfo(uuid);
   if (file === null) {
@@ -415,12 +415,14 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
 };
 
 self.getSelectedFileFolder = () => {
-  let curSelectedUUID = self.curSelectedUUID;
-  let filePath = curSelectedUUID; //self.getThisFileFullPath(curSelectedUUID);
-  console.log(`getSelectedFileFolder path = ${filePath}`);
-  const isProjFile = filePath.indexOf('.') > 0;
+  let curUUID = self.curSelectedUUID;
+  // let filePath = curSelectedUUID; //self.getThisFileFullPath(curSelectedUUID);
+  const fileInfo = self.getFileInfo(curUUID);
+  // console.log(`getSelectedFileFolder path = ${filePath}`);
+  let filePath = fileInfo.uuid;
+  const isProjFile = fileInfo.type === 'file';  // filePath.indexOf('.') > 0;
   if (isProjFile === true) {
-    filePath = path.basename(filePath);
+    filePath = path.dirname(filePath);
   }
   return filePath;
 };
