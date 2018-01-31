@@ -21,13 +21,15 @@
           <keep-alive><xarm-model :control="state.joint" :size="emulatorSize"></xarm-model></keep-alive>
         </el-col>
         <el-col :span="4">
-          <el-button @click="movediv">error</el-button>
           <div class="block">{{ msg }}-debugTest</div>
           step<input v-model="config.step"/>
           <ul>
-            <li>{{state.position.x}}</li>
-            <li>{{state.position.y}}</li>
-            <li>{{state.position.z}}</li>
+            <li>x-{{state.position.x}}</li>
+            <li>y-{{state.position.y}}</li>
+            <li>z-{{state.position.z}}</li>
+            <li>roll-{{state.orientation.roll}}</li>
+            <li>yaw-{{state.orientation.yaw}}</li>
+            <li>pitch{{state.orientation.pitch}}</li>
           </ul>
         </el-col>
       </el-row>
@@ -36,9 +38,14 @@
     <el-row :gutter="20">
       <el-col :span="16">
         <div class="control-wrapper dark-backgroud">
-          <el-slider v-model="state.position.z" vertical height="200px"></el-slider>
-          <div id="position-joystick" class="joystick-wrapper"></div>
-          <div id="orientation-joystick" class="joystick-wrapper"></div>
+          <div class="control-left">
+            <el-slider v-model="state.position.z" vertical height="200px"></el-slider>
+            <div id="position-joystick" class="joystick-wrapper"></div>
+          </div>
+          <div class="control-right">
+            <el-slider v-model="state.orientation.roll"></el-slider>
+            <div id="orientation-joystick" class="joystick-wrapper"></div>
+          </div>
         </div>
         <div class="config-wrapper dark-backgroud">
           <div>
@@ -86,6 +93,18 @@ export default {
         jointMin: -180,
         step: 0.01,
       },
+      joystick: {
+        step: {
+          position: {
+            x: 0,
+            y: 0,
+          },
+          orientation: {
+            x: 0,
+            y: 0,
+          },
+        },
+      },
       state: {
         speed: 50,
         acceleration: 50,
@@ -103,7 +122,6 @@ export default {
           x: 0,
           y: 0,
           z: 0,
-          force: 0,
         },
         orientation: {
           roll: 0,
@@ -133,11 +151,10 @@ export default {
   methods: {
     createJoyStick() {
       // const NIPPLE_OPTION = {};
-      const size = 150;
+      const size = 110;
       const color = 'white';
       const mode = 'static';
       const restOpacity = 1;
-      const step = 1;
       const positionManager = Nipple.create({
         size,
         zone: document.getElementById('position-joystick'),
@@ -148,44 +165,77 @@ export default {
         },
         restOpacity,
       });
+      let positionInterval;
       positionManager.on('move', (evt, nipple) => {
-        console.log('event type', evt, nipple);
-        this.state.position.force = nipple.force;
-        if (nipple.direction.x === 'right') {
-          this.state.position.x += step;
-        }
-        else if (nipple.direction.x === 'left') {
-          this.state.position.x -= step;
-        }
-        if (nipple.direction.y === 'up') {
-          this.state.position.y += step;
-        }
-        else if (nipple.direction.y === 'down') {
-          this.state.position.y -= step;
-        }
-        this.state.position.z = nipple.direction.angle;
+        console.log('event type', evt.type);
+        this.setJoystickStep(nipple, 'position');
+        // this.state.position.z = nipple.direction.angle;
+      }).on('start', () => {
+        positionInterval = setInterval(() => {
+          console.log(typeof this.joystick.step.position.x, typeof this.state.position.x);
+          const nextX = this.joystick.step.position.x + this.state.position.x;
+          const nextY = this.joystick.step.position.y + this.state.position.y;
+          this.state.position.x = Number(nextX.toFixed(2));
+          this.state.position.y = Number(nextY.toFixed(2));
+        }, 500);
+      }).on('end', () => {
+        clearInterval(positionInterval);
       });
       const orientationManager = Nipple.create({
         size,
         zone: document.getElementById('orientation-joystick'),
         color,
-        mode: 'static',
+        mode,
         position: {
           right: '25%',
         },
         restOpacity,
       });
+      let orientationInterval;
       orientationManager.on('move', (evt, nipple) => {
-        console.log('event type', evt, nipple);
-        this.state.position.force = nipple.force;
-        this.state.orientation.roll = nipple.direction.x;
-        this.state.orientation.yaw = nipple.direction.y;
-        this.state.orientation.pitch = nipple.direction.angle;
+        console.log('event type', evt.type);
+        this.setJoystickStep(nipple, 'orientation');
+      }).on('start', () => {
+        orientationInterval = setInterval(() => {
+          console.log(typeof this.joystick.step.orientation.x, typeof this.state.orientation.yaw);
+          const nextX = this.joystick.step.orientation.x + this.state.orientation.yaw;
+          const nextY = this.joystick.step.orientation.y + this.state.orientation.pitch;
+          this.state.orientation.yaw = Number(nextX.toFixed(2));
+          this.state.orientation.pitch = Number(nextY.toFixed(2));
+        }, 500);
+      }).on('end', () => {
+        clearInterval(orientationInterval);
       });
     },
-    movediv() {
-      document.getElementById('b').innerHTML = document.getElementById('a').innerHTML;
-      document.getElementById('a').innerHTML = '';
+    setJoystickStep(nipple, type) {
+      let stepX = nipple.force;
+      let stepY = nipple.force;
+      if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
+        stepY = 2 * nipple.force;
+      }
+      else if (nipple.direction.angle === 'right' || nipple.direction.angle === 'left') {
+        stepX = 2 * nipple.force;
+      }
+      // stepX = Number(stepX.toFixed(2));
+      // stepY = Number(stepY.toFixed(2));
+      if (nipple.direction.x === 'right') {
+        this.joystick.step[type].x = stepX;
+      }
+      else if (nipple.direction.x === 'left') {
+        this.joystick.step[type].x = 0 - stepX;
+      }
+      else {
+        this.joystick.step[type].x = 0;
+      }
+      if (nipple.direction.y === 'up') {
+        this.joystick.step[type].y = stepY;
+      }
+      else if (nipple.direction.y === 'down') {
+        this.joystick.step[type].y = 0 - stepY;
+      }
+      else {
+        this.joystick.step[type].y = 0;
+      }
     },
     setSpeed(value) {
       this.setRobotState('speed', value);
@@ -268,8 +318,26 @@ span.text {
   display: flex;
   position: relative;
   justify-content: space-around;
+  .control-left {
+    width: 50%;
+    display: flex;
+    align-items: flex-end;
+    .el-slider {
+      padding: 6% 0;
+      margin-left: 15%;
+    }
+  }
+  .control-right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    .el-slider {
+      padding: 0 10%;
+    }
+  }
   .joystick-wrapper {
-    padding: 15% 14%;
+    padding: 20% 30% 30%;
   }
 }
 .config-wrapper {

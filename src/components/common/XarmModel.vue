@@ -304,7 +304,7 @@ export default {
       loadModel(1);
       const gridplaneSize = 50;
       const gridstep = 30;
-      // const gridcolor = 0xCCCCCC;
+      // const gridcolor = 0xCCCCCC; // e27347
       const gridHelper_xy = new THREE.GridHelper(gridplaneSize, gridstep);
       gridHelper_xy.position.set(0, this.config.offsetY, 0);
       // gridHelper_xy.setColors(new THREE.Color(gridcolor), new THREE.Color(gridcolor));
