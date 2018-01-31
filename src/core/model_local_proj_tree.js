@@ -540,6 +540,8 @@ self.changeProj = (uuid) => {
   // self.getCurFilePath();
   self.curOpenedFilesList = openList;
   self.curPro2Tree();
+
+  GlobalUtil.model.localProjTree.setSelectedUI('');
 };
 
 self.curProjExpandedKeys = [];
