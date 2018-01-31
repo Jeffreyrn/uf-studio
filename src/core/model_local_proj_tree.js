@@ -2,6 +2,7 @@
 import LocalProjTreeDatas from './model_local_proj_tree_datas';
 import Base64 from '../lib/Base64';
 import { log } from 'util';
+import { setTimeout } from 'timers';
 const uuidv4 = require('uuid/v4');
 const path = require('path')
 
@@ -297,11 +298,13 @@ self.setSelectedUUID = (uuid) => {
 self.setSelectedUI = (uuid) => {
   console.log(`setSelectedUI 2 file uuid = ${uuid}`);
   if (uuid === null || uuid === '') {
-    const nodes = document.getElementsByClassName('el-tree-node__label');
-    for (let i = 0; i < nodes.length; i += 1) {
-      const node = nodes[i];
-      node.style.color = '#A6A6A6';
-    }
+    setTimeout(() => {
+      const nodes = document.getElementsByClassName('el-tree-node__label');
+      for (let i = 0; i < nodes.length; i += 1) {
+        const node = nodes[i];
+        node.style.color = '#A6A6A6';
+      }
+    });
     return;
   }
   let file = self.getFileInfo(uuid);

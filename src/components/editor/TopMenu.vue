@@ -20,22 +20,22 @@ import { setTimeout } from 'timers';
     <!-- <el-button class="top-btn" @click="allProjs()">
       Projs
     </el-button> -->
-    <div class="proj-icon float-left" @click="allProjs()">
+    <div class="proj-icon float-left" @click="allProjs()" title='Projects'>
     </div>
-    <div class="folder-icon float-left" @click="addFolder()">
+    <div class="folder-icon float-left" @click="addFolder()" title='Add folder'>
     </div>
-    <div class="file-icon float-left" @click="addFile()">
+    <div class="file-icon float-left" @click="addFile()" title='Add file'>
     </div>
-    <div class="rename-icon float-left" @click="rename()">
+    <div class="rename-icon float-left" @click="rename()" title='Rename'>
     </div>
-    <div class="del-icon float-left" @click="delFile()">
+    <div class="del-icon float-left" @click="delFile()" title='Delete file'>
     </div>
     <span v-if="model.localProjTree.isCmdRunning===true">
-      <div class="stop-icon float-right" @click="stop()">
+      <div class="stop-icon float-right" @click="stop()" title='Stop'>
       </div>
     </span>
     <span v-if="model.localProjTree.isCmdRunning===false">
-      <div class="run-icon float-right" @click="run()">
+      <div class="run-icon float-right" @click="run()" title='Run'>
       </div>
     </span>
 
@@ -390,7 +390,7 @@ export default {
 
 .proj-icon {
   margin-left: 15px;
-  margin-top: 10px;
+  margin-top: 6px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_addproject.svg');
@@ -399,7 +399,7 @@ export default {
 
 .folder-icon {
   margin-left: 15px;
-  margin-top: 10px;
+  margin-top: 6px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_addfolder.svg');
@@ -408,7 +408,7 @@ export default {
 
 .file-icon {
   margin-left: 15px;
-  margin-top: 8px;
+  margin-top: 5px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_addfile.svg');
@@ -417,7 +417,7 @@ export default {
 
 .rename-icon {
   margin-left: 15px;
-  margin-top: 8px;
+  margin-top: 6px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_rename.svg');
@@ -426,7 +426,7 @@ export default {
 
 .del-icon {
   margin-left: 15px;
-  margin-top: 8px;
+  margin-top: 6px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_trash.svg');

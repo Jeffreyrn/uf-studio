@@ -12,10 +12,10 @@
         Run
       </el-button>
     </span> -->
-    <div class="clear-icon float-right" @click="clearText()">
+    <div class="clear-icon float-right" @click="clearText()" title='Clear'>
     </div>
     <span v-if="model.localProjTree.isCmdRunning===false">
-      <div class="run-icon float-right" @click="runCmd()">
+      <div class="run-icon float-right" @click="runCmd()" title='Run'>
       </div>
     </span>
   </div>

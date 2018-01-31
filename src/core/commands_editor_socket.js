@@ -168,6 +168,7 @@ self.renameProj = (name) => {
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
+      GlobalUtil.model.localProjTree.setSelectedUI('');
     });
   });
 };
