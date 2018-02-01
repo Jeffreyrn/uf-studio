@@ -10,11 +10,11 @@
           </div>
         </div>
         <table>
-            <tr>
-              <th class="dialog-table-head">Project name</th>
-              <th class="dialog-table-head">Date</th>
-              <th class="dialog-table-head">Option</th>
-            </tr>
+          <tr>
+            <th class="dialog-table-head">Project name</th>
+            <th class="dialog-table-head">Date</th>
+            <th class="dialog-table-head">Option</th>
+          </tr>
         </table>
         <div class="dialog-table">
           <table>
@@ -22,7 +22,10 @@
               <tr>
                 <td>{{ data.name }}</td>
                 <td>{{ data.ctime }}</td>
-                <td>Option</td>
+                <td>
+                  <el-button @click="onSelect(data.uuid)" type="text" size="small">Select</el-button>
+                  <el-button v-if="model.localProjTree.curProj.uuid!==data.uuid" @click="onDelete(data.uuid)" type="text" size="small">Delete</el-button>
+                </td>
               </tr>
             </template>
           </table>
@@ -40,12 +43,6 @@
 
 <script>
   export default {
-    props: {
-      isShow: {
-        type: Boolean,
-        default: false
-      }
-    },
     data () {
       return {
         model: GlobalUtil.model,
@@ -57,8 +54,13 @@
         this.model.localProjTree.projsDialogShow = false;
       },
       addProj() {
-        GlobalUtil.model.localProjTree.dialogVisible = true;
-      }
+        this.model.localProjTree.dialogVisible = true;
+      },
+      onSelect(uuid) {
+        console.log(uuid);
+        this.model.localProjTree.changeProj(uuid);
+        this.model.localProjTree.projsDialogShow = false;
+      },
     }
   }
 </script>
