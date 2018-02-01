@@ -21,6 +21,9 @@ self.PROJ_TREE_TYPE = {
 
 // self.curSelectedFile = '';
 self.projsDialogShow = false;
+self.fileDialogShow = false;
+self.curDialogTitle = '';
+self.folderOrFile = '';
 self.fileDialogVisible = false;
 self.dialogVisible = false;
 self.treeBgColor = 'white';
@@ -423,6 +426,9 @@ self.getSelectedFileFolder = () => {
   // let filePath = curSelectedUUID; //self.getThisFileFullPath(curSelectedUUID);
   const fileInfo = self.getFileInfo(curUUID);
   // console.log(`getSelectedFileFolder path = ${filePath}`);
+  if (fileInfo === null) {
+    return `${path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name)}`;
+  }
   let filePath = fileInfo.uuid;
   const isProjFile = fileInfo.type === 'file';  // filePath.indexOf('.') > 0;
   if (isProjFile === true) {

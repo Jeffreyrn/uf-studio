@@ -282,21 +282,29 @@ export default {
         }
       });
     },
-    newProj() {
-      this.folderOrFile = 'proj';
-      this.title = 'new project name';
-      this.inputText = '';
-      GlobalUtil.model.localProjTree.dialogVisible = true;
+    // newProj() {
+    //   this.folderOrFile = 'proj';
+    //   this.title = 'new project name';
+    //   this.inputText = '';
+    //   GlobalUtil.model.localProjTree.dialogVisible = true;
       
-      this.textFocus();
-    },
+    //   this.textFocus();
+    // },
     addFolder() {
-      console.log('add folder');
-      this.folderOrFile = 'folder';
-      this.title = 'add folder';
-      this.inputText = '';
-      GlobalUtil.model.localProjTree.dialogVisible = true;
-      this.textFocus();
+      // console.log('add folder');
+      // this.folderOrFile = 'folder';
+      // this.title = 'add folder';
+      // this.inputText = '';
+      // GlobalUtil.model.localProjTree.dialogVisible = true;
+      // this.textFocus();
+
+      this.model.localProjTree.folderOrFile = 'folder';
+      this.model.localProjTree.curDialogTitle = 'add folder';
+      this.model.localProjTree.fileDialogShow = true;
+      setTimeout(() => {
+        document.getElementById('input-text').focus();
+      });
+
     },
     addFile() {
       console.log('add file');

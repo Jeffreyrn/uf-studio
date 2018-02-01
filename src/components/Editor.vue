@@ -48,6 +48,9 @@
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
     <DialogProjs v-if="model.localProjTree.projsDialogShow"></DialogProjs>
+    <DialogText 
+      v-if="model.localProjTree.fileDialogShow">
+    </DialogText>
   </div>
 </template>
 <script>
@@ -59,6 +62,7 @@ import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
 import TopTab from './editor/TopTab';
 import DialogProjs from './DialogProjs';
+import DialogText from './DialogText';
 
 // import FilesOpenTab from './editor/FilesOpenTab';
 
@@ -102,13 +106,12 @@ export default {
   },
   components: {
     TopMenu,
-    // ProjTree,
     ElTree,
     CodeEditor,
     ResultRun,
     TopTab,
     DialogProjs,
-    // FilesOpenTab,
+    DialogText,
   },
 };
 </script>

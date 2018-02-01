@@ -1,4 +1,5 @@
 
+import { setTimeout } from 'timers';
 <template>
   <div>
     <div class="dialog-wrap">
@@ -54,7 +55,12 @@
         this.model.localProjTree.projsDialogShow = false;
       },
       addProj() {
-        this.model.localProjTree.dialogVisible = true;
+        this.model.localProjTree.folderOrFile = 'proj';
+        this.model.localProjTree.curDialogTitle = 'new project name';
+        this.model.localProjTree.fileDialogShow = true;
+        setTimeout(() => {
+          document.getElementById('input-text').focus();
+        });
       },
       onSelect(uuid) {
         console.log(uuid);

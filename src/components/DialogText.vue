@@ -4,10 +4,28 @@
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
       <div class="dialog-content">
-        <div class="dialog-top">
-          <span class="proj-top-title">Select a Project</span>
+        <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
+        <!-- <div class="dialog-top">
+          <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
           <div class="dialog-close" @click="closeMyself">
           </div>
+        </div> -->
+        <input id="input-text" v-model="inputText" type="text" class="position-absolute dialog-input" />
+        <div style="margin-top:230px;">
+          <div class="float-left btn-cancel" @click="closeMyself">
+            Cancel
+          </div>
+
+          <span v-if="isFileNameCorrect">
+            <div class="float-left btn-create dialog-input" @click="oncreate">
+              Create
+            </div>
+          </span>
+          <span v-if="!isFileNameCorrect">
+            <div class="float-left btn-create dialog-input dialog-input-opacity">
+              Create
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -16,26 +34,65 @@
 
 <script>
   export default {
-    props: {
-      isShow: {
-        type: Boolean,
-        default: false
-      }
-    },
     data () {
       return {
         model: GlobalUtil.model,
+        inputText: '',
+        selected: '.py',
+        options: [
+            { text: 'py', value: '.py' },
+            { text: 'txt', value: '.txt' },
+            { text: 'md', value: '.md' },
+            { text: 'none', value: '' },
+        ],
       }
     },
     methods: {
       closeMyself() {
         // this.$emit('on-close')
-        this.model.localProjTree.projsDialogShow = false;
+        // this.model.localProjTree.projsDialogShow = false;
+        this.model.localProjTree.fileDialogShow = false;
       },
-      addProj() {
-        GlobalUtil.model.localProjTree.dialogVisible = true;
+    //   addProj() {
+    //     GlobalUtil.model.localProjTree.dialogVisible = true;
+    //   },
+      oncreate() {
+        const text = this.inputText;
+        console.log(`text = ${text}, folderOrFile = ${this.model.localProjTree.folderOrFile}`);
+        if (this.model.localProjTree.folderOrFile === 'folder') {
+          CommandsEditorSocket.createFile(text, false);
+          // const folder = GlobalUtil.model.localProjTree.createFolder(text);
+          // GlobalUtil.model.localProjTree.curProj.files.push(folder);
+        }
+        if (this.model.localProjTree.folderOrFile === 'file') {
+          CommandsEditorSocket.createFile(`${text}${this.selected}`, true);
+          // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
+          // GlobalUtil.model.localProjTree.curProj.files.push(file);
+          // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
+        }
+        if (this.model.localProjTree.folderOrFile === 'proj') {
+          CommandsEditorSocket.createProj(text);
+          // const proj = GlobalUtil.model.localProjTree.createProj(text);
+          // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
+        }
+        if (this.model.localProjTree.folderOrFile === 'rename') {
+          // GlobalUtil.model.localProjTree.renameFile(text);
+          const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
+          CommandsEditorSocket.renameFile(curUUID, `${text}${this.selected}`)
+        }
+        if (this.model.localProjTree.folderOrFile === 'renameproj') {
+          // GlobalUtil.model.localProjTree.renameProj(text);
+          CommandsEditorSocket.renameProj(text);
+        }
+        this.model.localProjTree.projsDialogShow = false;
+        this.model.localProjTree.fileDialogShow = false;
       }
-    }
+    },
+    computed: {
+      isFileNameCorrect() {
+        return GlobalUtil.isFileStr(this.inputText);
+      },
+    },
   }
 </script>
 
@@ -56,7 +113,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 500;
+    z-index: 1000;
   }
   .dialog-cover {
     background: #000;
@@ -68,7 +125,7 @@
     width: 100%;
     height: 100%;
   }
-  .proj-top-title {
+  .top-title {
     position: absolute;
     left: 24px;
     top: 25px;
@@ -81,9 +138,9 @@
     /* line-height: 16px; */
   }
   .dialog-content {
-    width: 580px;
+    width: 356px;
     position: fixed;
-    height: 330px;
+    height: 269px;
     top: 20%;
     left: 0px;
     right: 0px;
@@ -93,76 +150,53 @@
     background: #303030;
     overflow: hidden;
   }
-  .dialog-top {
-    width: 100%;
-    height: 67px;
-    background: #3F4955;
-  }
-  .dialog-table {
-    /* width: 100%; */
-    width: 600px;
-    height: 140px;
-    overflow-y: scroll;
-  }
-  .dialog-table-head {
-    width: 194px;
-    height: 66px;
-    font-family: Gotham-Medium;
-    font-size: 16px;
-    color: #FFFFFF;
-    letter-spacing: -1px;
-    text-align: center;
-    line-height: 16px;
-  }
-  .dialog-table td {
-    width: 194px;
-    height: 40px;
-    font-family: Gotham-Book;
-    font-size: 12px;
-    color: #FFFFFF;
-    padding-left: 50px;
-    letter-spacing: -0.38px;
-    /* text-align: center; */
-    line-height: 12px;
-  }
-  .dialog-close {
-    position: absolute;
-    right: 10px;
-    top: 25px;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    cursor: pointer;
-    background-position: center;
-    background-image: url('./../assets/img/pop/icon_close.svg');
-    background-size: 10px 11px;
-    background-repeat: no-repeat;
-  }
   .dialog-close:hover {
     color: #4fc08d;
+  }
+  .dialog-input {
+    width:288px;
+    height:34px;
+    top:113px;
+    left:34px;
+    background: #2C2C2C;
+    border: 0.5 solid #4E4C4C;
+    color: white;
+  }
+  .dialog-input-opacity {
+    opacity: 0.5;
   }
   .dialog-add {
     width: 100%;
     height: 100px;
     /* background-color: yellow; */
-
   }
-  .dialog-add-content {
-    position: absolute;
-    bottom: 16px;
-    left: 0;
-    right: 0;
-    margin: auto;
+  .btn-cancel {
+    width: 178px;
+    height: 40px;
+    /* margin-top: 230px; */
     /* background-color: yellow; */
-    width: 496px;
-    height: 26px;
-    font-family: Gotham-Book;
+    background: #484848;
     text-align: center;
-    line-height: 10px; 
-    letter-spacing: -0.5px;
+    font-family: Gotham-Book;
+    font-size: 14px;
+    color: #7B7B7B;
+    letter-spacing: -0.88px;
+    line-height: 40px;
+    cursor: pointer;
+  }
+  .btn-create {
+    width: 178px;
+    height: 40px;
+    /* margin-top: 230px; */
+    /* margin-left: 178px; */
+    /* background-color: green; */
+    background: #52BF53;
+    text-align: center;
+    font-family: Gotham-Book;
+    font-size: 14px;
     color: #FFFFFF;
-    padding-top: 8px;
-    border:1px dashed #5C5C5C;
+    letter-spacing: -0.88px;
+    line-height: 40px;
     cursor: pointer;
   }
 </style>
