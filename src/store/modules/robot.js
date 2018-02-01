@@ -1,6 +1,5 @@
 import * as types from '../mutation-types';
 // import SocketCom from '../../core/socket_com';
-
 const state = {
   running: true,
   info: {
@@ -108,32 +107,65 @@ const mutations = {
     state.printer.progress = data.progress;
   },
   [types.ROBOT_MOVE_LINE](state, data) {
-    if (data.position !== undefined) {
-      Object.assign(state.info.position, data.position.map(num => num.toFixed(2)));
-    }
-    if (data.orientation !== undefined) {
-      Object.assign(state.info.orientation, data.orientation);
-    }
-    console.log('set position:', data);
+    // console.log('set position:', data);
     if (state.info.online) {
-      window.GlobalUtil.socketCom.socket_info.socket.send();
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_joint',
+        {
+          data: {
+            X: data.value,
+            Y: data.value,
+            Z: data.value,
+            A: data.value,
+            B: data.value,
+            C: data.value,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('socket res', response); },
+      );
+    }
+    else { // offline mode
+      if (data.position !== undefined) {
+        Object.assign(state.info.position, data.position.map(num => num.toFixed(2)));
+      }
+      if (data.orientation !== undefined) {
+        Object.assign(state.info.orientation, data.orientation);
+      }
     }
   },
-  [types.ROBOT_MOVE_JOINT](state, data) {
-    state.info.axis = data.slice();
-    console.log('set joint:', data);
-    if (state.info.online) {
-      window.GlobalUtil.socketCom.socket_info.socket.send();
-    }
-  },
+  // [types.ROBOT_MOVE_JOINT](state, data) {
+  //   state.info.axis = data.slice();
+  //   console.log('set joint:', data);
+  //   if (state.info.online) {
+  //     window.GlobalUtil.socketCom.socket_info.socket.send();
+  //   }
+  // },
   [types.SET_ROBOT_STATE](state, data) {
     state.info[data.index] = data.value;
   },
+
+  // self.CMD_ID_MOVE_LINE = 'xarm_move_line';
+  // self.CMD_ID_MOVE_JOINT = 'xarm_move_joint';
   [types.MOVE_ONE_JOINT](state, data) {
-    state.info.axis[data.index] = Number(data.value);
-    console.log('set one joint:', data);
+    // console.log('set one joint:', data);
     if (state.info.online) {
-      window.GlobalUtil.socketCom.socket_info.socket.send();
+      const JOINT_LIST = ['I', 'J', 'K', 'L', 'M', 'N', 'O'];
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_joint',
+        {
+          data: {
+            [JOINT_LIST[data.index]]: data.value,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('socket res', response); },
+      );
+    }
+    else { // offline mode
+      state.info.axis[data.index] = Number(data.value);
     }
   },
 };

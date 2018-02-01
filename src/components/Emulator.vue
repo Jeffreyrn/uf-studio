@@ -183,7 +183,7 @@ export default {
         // this.state.position.z = nipple.direction.angle;
       }).on('start', () => {
         positionInterval = setInterval(() => {
-          console.log(typeof this.joystick.step.position.x, typeof this.state.position.x);
+          // console.log(typeof this.joystick.step.position.x, typeof this.state.position.x);
           const nextX = this.joystick.step.position.x + this.state.position.x;
           const nextY = this.joystick.step.position.y + this.state.position.y;
           this.state.position.x = Number(nextX.toFixed(2));
@@ -270,6 +270,9 @@ export default {
         index,
         value,
       });
+    },
+    setPosition() {
+
     },
   },
   watch: {

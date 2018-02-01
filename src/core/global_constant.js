@@ -10,8 +10,6 @@ self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
 self.CMD_ID_GET_TCP_POSE = 'xarm_get_tcp_pose';
 self.CMD_ID_GET_VERSION = 'xarm_get_version';
 self.CMD_ID_GET_STATE = 'xarm_get_state';
-self.CMD_ID_MOVE_LINE = 'xarm_move_line';
-self.CMD_ID_MOVE_JOINT = 'xarm_move_joint';
 
 // python file cmd
 self.FILE_ID_LIST_DIR = 'list_dir';
