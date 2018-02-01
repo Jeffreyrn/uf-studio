@@ -47,6 +47,7 @@
       </div>
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
+    <DialogProjs v-if="model.localProjTree.projsDialogShow"></DialogProjs>
   </div>
 </template>
 <script>
@@ -57,6 +58,8 @@ import ElTree from './editor/ElTree';
 import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
 import TopTab from './editor/TopTab';
+import DialogProjs from './DialogProjs';
+
 // import FilesOpenTab from './editor/FilesOpenTab';
 
 import '../assets/css/reseet.css';
@@ -104,6 +107,7 @@ export default {
     CodeEditor,
     ResultRun,
     TopTab,
+    DialogProjs,
     // FilesOpenTab,
   },
 };

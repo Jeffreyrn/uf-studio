@@ -41,13 +41,13 @@ import { setTimeout } from 'timers';
 
     <el-dialog
       :title="title"
-      :visible.sync="dialogVisible"
+      :visible.sync="model.localProjTree.dialogVisible"
       width="300px"
       :before-close="handleClose"
       center>
       <input name="inputText" v-model="inputText" auto-complete="off"></input>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible=false">取 消</el-button>
+        <el-button @click="model.localProjTree.dialogVisible=false">取 消</el-button>
         <span v-if="isFileNameCorrect">
           <el-button type="primary" @click="add()">确 定</el-button>
         </span>
@@ -59,7 +59,7 @@ import { setTimeout } from 'timers';
 
     <el-dialog
       :title="title"
-      :visible.sync="fileDialogVisible"
+      :visible.sync="model.localProjTree.fileDialogVisible"
       width="300px"
       :before-close="handleClose"
       center>
@@ -70,7 +70,7 @@ import { setTimeout } from 'timers';
         </option>
       </select>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="fileDialogVisible=false">取 消</el-button>
+        <el-button @click="model.localProjTree.fileDialogVisible=false">取 消</el-button>
         <span v-if="isFileNameCorrect">
           <el-button type="primary" @click="add()">确 定</el-button>
         </span>
@@ -79,30 +79,50 @@ import { setTimeout } from 'timers';
         </span>
       </span>
     </el-dialog>
-    
-    <el-dialog
-      title="Select a project"
+
+    <!-- <el-dialog
+      width="900px"
+      height="500px"
+      :show-close="false"
+      :fullscreen="false"
       :visible.sync="projSelectDialog">
-      <el-button class="top-btn" @click="newProj()">
-        New
-      </el-button>
-      <el-table
-        border
-        width="800px"
-        max-height="250"
-        :row-class-name="tableRowClassName"
-        :data="proListData">
-        <el-table-column property="name" label="pro name" width="200"></el-table-column>
-        <el-table-column property="time" label="date" width="200"></el-table-column>
-        <el-table-column property="state" label="state" width="100"></el-table-column>
-        <el-table-column property="operate" label="Operate" width="150">
-          <template slot-scope="scope">
-            <el-button @click="onSelect(scope.row)" type="text" size="small">Select</el-button>
-            <el-button v-if="model.localProjTree.curProj.uuid!==scope.row.uuid" @click="onDelete(scope.row)" type="text" size="small">Delete</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
+      <div style="margin:0px;padding:0px;width:900px;height:500px;background-color:yellow;">
+      </div>
+    </el-dialog> -->
+
+            <!-- width="900px"
+        height="500px"
+        :show-close="false"
+        :fullscreen="false"
+        :custom-class="proj-list-style"
+        :visible.sync="projSelectDialog" -->
+    
+    <!-- <div style="position:absolute;width:100%;height:100%;background-color:rgba(255,255,255,0.2);z-index:500px;">
+      <div style="position:absolute;left:50%;width:900px;height:500px;vertical-align:middle;">
+        <div style="width:100%;height:100px;background-color:yellow;">
+          <el-button class="top-btn" @click="newProj()">
+            New
+          </el-button>
+        </div>
+        <div style="width:100%;height:400px;background-color:green">
+          <el-table
+            max-height="250"
+            :row-class-name="tableRowClassName"
+            :data="proListData">
+            <el-table-column property="name" label="pro name" width="200"></el-table-column>
+            <el-table-column property="time" label="date" width="200"></el-table-column>
+            <el-table-column property="state" label="state" width="100"></el-table-column>
+            <el-table-column property="operate" label="Operate" width="150">
+              <template slot-scope="scope">
+                <el-button @click="onSelect(scope.row)" type="text" size="small">Select</el-button>
+                <el-button v-if="model.localProjTree.curProj.uuid!==scope.row.uuid" @click="onDelete(scope.row)" type="text" size="small">Delete</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </div> -->
+
   </div>
 </template>
 
@@ -113,9 +133,9 @@ export default {
     return {
       model: GlobalUtil.model,
       store: GlobalUtil.store,
-      dialogVisible: false,
-      fileDialogVisible: false,
-      projSelectDialog: false,
+      // dialogVisible: false,
+      // fileDialogVisible: false,
+      // projSelectDialog: false,
       inputText: '',
       folderOrFile: '',
       title: '',
@@ -132,7 +152,7 @@ export default {
   },
   methods: {
     run() {
-      const curFile = this.getCurFile();
+      const curFile = GlobalUtil.model.localProjTree.curFile; //this.getCurFile();
       if (curFile === null) {
         return;
       }
@@ -172,8 +192,8 @@ export default {
       //     done();
       //   })
       //   .catch(_ => {});
-      this.dialogVisible = false;
-      this.fileDialogVisible = false;
+      GlobalUtil.model.localProjTree.dialogVisible = false;
+      GlobalUtil.model.localProjTree.fileDialogVisible = false;
     },
     importPro() {
       document.getElementById('f_input').click();
@@ -196,7 +216,8 @@ export default {
       // CommandsEditorSocket.listProjs((dict) => {
       //   // console.log(`listProjs dict = ${JSON.stringify(dict)}`);
       // });
-      this.projSelectDialog = true;
+      // this.projSelectDialog = true;
+      GlobalUtil.model.localProjTree.projsDialogShow = true;
     },
     getCurFile() {
       const curSelectedUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
@@ -249,8 +270,8 @@ export default {
         // GlobalUtil.model.localProjTree.renameProj(text);
         CommandsEditorSocket.renameProj(text);
       }
-      this.dialogVisible = false;
-      this.fileDialogVisible = false;
+      GlobalUtil.model.localProjTree.dialogVisible = false;
+      GlobalUtil.model.localProjTree.fileDialogVisible = false;
     },
     textFocus() {
       setTimeout(() => {
@@ -265,7 +286,7 @@ export default {
       this.folderOrFile = 'proj';
       this.title = 'new project name';
       this.inputText = '';
-      this.dialogVisible = true;
+      GlobalUtil.model.localProjTree.dialogVisible = true;
       
       this.textFocus();
     },
@@ -274,7 +295,7 @@ export default {
       this.folderOrFile = 'folder';
       this.title = 'add folder';
       this.inputText = '';
-      this.dialogVisible = true;
+      GlobalUtil.model.localProjTree.dialogVisible = true;
       this.textFocus();
     },
     addFile() {
@@ -283,7 +304,7 @@ export default {
       this.title = 'add file';
       this.inputText = '';
       // this.dialogVisible = true;
-      this.fileDialogVisible = true;
+      GlobalUtil.model.localProjTree.fileDialogVisible = true;
       this.textFocus();
     },
     rename() {
@@ -294,7 +315,7 @@ export default {
         this.title = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
         this.inputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
         this.selected = '';
-        this.dialogVisible = true;
+        GlobalUtil.model.localProjTree.dialogVisible = true;
         this.textFocus();
         return;
       }
@@ -305,7 +326,7 @@ export default {
       if (curFile.type === 'folder') {
         this.title = `Rename ${curFile.name}`;
         this.inputText = curFile.name;
-        this.dialogVisible = true;
+        GlobalUtil.model.localProjTree.dialogVisible = true;
         this.selected = '';
         this.textFocus();
         return;
@@ -313,7 +334,7 @@ export default {
       this.folderOrFile = 'rename';
       this.title = `Rename ${curFile.name}`;
       this.inputText = `${curFile.name}`.split('.')[0];
-      this.fileDialogVisible = true;
+      GlobalUtil.model.localProjTree.fileDialogVisible = true;
       this.selected = '.' + `${curFile.name}`.split('.')[1];
       if (`${curFile.name}`.split('.')[1] === undefined ) {
         this.selected = '';
@@ -381,6 +402,10 @@ export default {
 </script>
 
 <style scoped>
+
+.proj-list-style {
+  background: green;
+}
 
 .top-btn {
   /*width: 50px;

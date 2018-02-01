@@ -20,6 +20,9 @@ self.PROJ_TREE_TYPE = {
 }
 
 // self.curSelectedFile = '';
+self.projsDialogShow = false;
+self.fileDialogVisible = false;
+self.dialogVisible = false;
 self.treeBgColor = 'white';
 self.curSelectedUUID = '';
 self.curSelectedFileUUIDs = {};
@@ -146,6 +149,7 @@ self.setSelectedContent = (uuid, content) => {
   // self.allCodeEditorVue[uuid] = content
   const curFile = self.getFile(uuid);
   curFile.localContent = content;
+  self.curFile = curFile;
 };
 
 self.curOpenedFilesList = [];
@@ -594,6 +598,7 @@ self.curPro2Tree = () => {
   const aChild = {};
   aChild.label = self.curProj.name;
   aChild.uuid = self.curProj.uuid;
+  aChild.icon = '';
   aChild.children = [];
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
