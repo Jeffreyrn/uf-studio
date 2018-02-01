@@ -69,7 +69,7 @@
           <div class="header-text">Joints Control</div>
           <div class="block" v-for="j in 7" :key="j">
             <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
-            <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin" show-input :show-input-controls="false"></el-slider>
+            <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false"></el-slider>
           </div>
         </div>
       </el-col>
@@ -99,6 +99,10 @@ export default {
         jointMax: 180,
         jointMin: -180,
         step: 0.01,
+        joint: {
+          max: [179.9, 30, 34.8, 7.2, 50.4, 102.1, 179.9],
+          min: [-179.9, -120, -179.9, -220, -118.6, -99.9, -179.9],
+        },
       },
       joystick: {
         step: {
