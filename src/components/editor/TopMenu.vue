@@ -331,7 +331,7 @@ export default {
         this.model.localProjTree.curDialogTitle = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
         this.model.localProjTree.curDialogInputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
         this.model.localProjTree.fileDialogShow = true;
-        this.model.localProjTree.curDialogIsExtend = true;
+        this.model.localProjTree.curDialogIsExtend = false;
         setTimeout(() => {
           document.getElementById('input-text').focus();
         });
