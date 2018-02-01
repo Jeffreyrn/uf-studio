@@ -11,7 +11,7 @@
           </div>
         </div> -->
         <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
-        <select class="position-absolute dialog-select" v-model="this.model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
+        <select class="position-absolute dialog-select" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
           <option v-for="option in options" v-bind:value="option.value">
             {{ option.text }}
           </option>
@@ -62,7 +62,8 @@
     //   },
       oncreate() {
         const text = this.model.localProjTree.curDialogInputText;
-        console.log(`text = ${text}, folderOrFile = ${this.model.localProjTree.folderOrFile}`);
+        console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
+        console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
         if (this.model.localProjTree.folderOrFile === 'folder') {
           CommandsEditorSocket.createFile(text, false);
           // const folder = GlobalUtil.model.localProjTree.createFolder(text);

@@ -342,7 +342,7 @@ export default {
         return;
       }
       if (curFile.type === 'folder') {
-        this.model.localProjTree.folderOrFile = 'renameproj';
+        this.model.localProjTree.folderOrFile = 'rename';
         this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
         this.model.localProjTree.curDialogInputText = curFile.name;
         this.model.localProjTree.fileDialogShow = true;
@@ -355,7 +355,7 @@ export default {
         // this.textFocus();
         return;
       }
-      this.model.localProjTree.folderOrFile = 'renameproj';
+      this.model.localProjTree.folderOrFile = 'rename';
       this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
       this.model.localProjTree.curDialogInputText = `${curFile.name}`.split('.')[0];
       // GlobalUtil.model.localProjTree.fileDialogVisible = true;
