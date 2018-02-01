@@ -210,12 +210,12 @@ export default {
       // camera.up = new THREE.Vector3(-1, -1, -1);
       camera.position.set(6, 5, 6); // camera position
       camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
-      const light = new THREE.PointLight(0xffffff, 1, 100); // light
+      const light = new THREE.PointLight(0xcccccc, 1, 100); // light
       light.position.set(10, 14, 10);
-      const lightBottomBack = new THREE.PointLight(0xffffff, 1, 100); // light
+      const lightBottomBack = new THREE.PointLight(0xcccccc, 1, 100); // light
       const lightBottomFront = new THREE.PointLight(0xffffff, 1, 100); // light
-      lightBottomBack.position.set(-7, 0, -7);
-      lightBottomFront.position.set(-7, 0, -7);
+      lightBottomBack.position.set(-12, 0, 0);
+      lightBottomFront.position.set(22, 0, -10);
       scene.add(lightBottomBack);
       scene.add(lightBottomFront);
       scene.add(light);
@@ -233,7 +233,7 @@ export default {
       const loader = new STLLoader();
       let base;
       loader.load(JOINT_MODEL_SRC[0], (geometry) => {
-        base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xcccccc }));
+        base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
         const position = [7.66, 0.04 + this.config.offsetY, -0.86];
         base.position.set(...position);
         this.setDiff(base);
@@ -261,12 +261,12 @@ export default {
         //   }
         // }
         const angles = this.online ? this.joints : this.control;
-        groups[0].rotation.z = this.valueToRotation(angles[0]);
-        groups[1].rotation.x = this.valueToRotation(angles[1]);
+        groups[0].rotation.z = this.valueToRotation(angles[0] + 135);
+        groups[1].rotation.x = -this.valueToRotation(angles[1]);
         groups[2].rotation.z = this.valueToRotation(angles[2]);
-        groups[3].rotation.x = this.valueToRotation(angles[3]);
+        groups[3].rotation.x = -this.valueToRotation(angles[3] + 90);
         groups[4].rotation.y = this.valueToRotation(angles[4]);
-        groups[5].rotation.x = this.valueToRotation(angles[5]);
+        groups[5].rotation.x = -this.valueToRotation(angles[5] - 90);
         joints[7].rotation.z = this.valueToRotation(angles[6]);
         // groups[this.select].rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // base.position.set(this.state.test.x, this.state.test.y, this.state.test.z);

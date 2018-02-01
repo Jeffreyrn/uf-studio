@@ -69,7 +69,7 @@
           <div class="header-text">Joints Control</div>
           <div class="block" v-for="j in 7" :key="j">
             <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
-            <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false"></el-slider>
+            <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider>
           </div>
         </div>
       </el-col>
@@ -263,6 +263,13 @@ export default {
         value,
       };
       this.$store.commit(types.SET_ROBOT_STATE, data);
+    },
+    setJoint(index, value) {
+      // console.log('test', index, value);
+      this.$store.commit(types.MOVE_ONE_JOINT, {
+        index,
+        value,
+      });
     },
   },
   watch: {

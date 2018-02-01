@@ -130,7 +130,7 @@ const mutations = {
     state.info[data.index] = data.value;
   },
   [types.MOVE_ONE_JOINT](state, data) {
-    state.info.axis[data.index] = Number(data.value).toFixed(2);
+    state.info.axis[data.index] = Number(data.value);
     console.log('set one joint:', data);
     if (state.info.online) {
       window.GlobalUtil.socketCom.socket_info.socket.send();
