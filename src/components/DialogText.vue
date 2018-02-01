@@ -10,8 +10,8 @@
           <div class="dialog-close" @click="closeMyself">
           </div>
         </div> -->
-        <input id="input-text" v-model="inputText" type="text" class="position-absolute dialog-input" />
-        <select class="position-absolute dialog-select" v-model="selected" v-if="model.localProjTree.curDialogIsExtend">
+        <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
+        <select class="position-absolute dialog-select" v-model="this.model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
           <option v-for="option in options" v-bind:value="option.value">
             {{ option.text }}
           </option>
@@ -41,8 +41,8 @@
     data () {
       return {
         model: GlobalUtil.model,
-        inputText: '',
-        selected: '.py',
+        // inputText: '',
+        // selected: '.py',
         options: [
             { text: 'py', value: '.py' },
             { text: 'txt', value: '.txt' },
@@ -61,7 +61,7 @@
     //     GlobalUtil.model.localProjTree.dialogVisible = true;
     //   },
       oncreate() {
-        const text = this.inputText;
+        const text = this.model.localProjTree.curDialogInputText;
         console.log(`text = ${text}, folderOrFile = ${this.model.localProjTree.folderOrFile}`);
         if (this.model.localProjTree.folderOrFile === 'folder') {
           CommandsEditorSocket.createFile(text, false);
@@ -69,7 +69,7 @@
           // GlobalUtil.model.localProjTree.curProj.files.push(folder);
         }
         if (this.model.localProjTree.folderOrFile === 'file') {
-          CommandsEditorSocket.createFile(`${text}${this.selected}`, true);
+          CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
           // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
           // GlobalUtil.model.localProjTree.curProj.files.push(file);
           // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
@@ -82,7 +82,7 @@
         if (this.model.localProjTree.folderOrFile === 'rename') {
           // GlobalUtil.model.localProjTree.renameFile(text);
           const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-          CommandsEditorSocket.renameFile(curUUID, `${text}${this.selected}`)
+          CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
         }
         if (this.model.localProjTree.folderOrFile === 'renameproj') {
           // GlobalUtil.model.localProjTree.renameProj(text);
@@ -94,7 +94,7 @@
     },
     computed: {
       isFileNameCorrect() {
-        return GlobalUtil.isFileStr(this.inputText);
+        return GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
       },
     },
   }

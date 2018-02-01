@@ -327,12 +327,14 @@ export default {
       console.log(`Rename`);
       if (GlobalUtil.model.localProjTree.curSelectedUUID === GlobalUtil.model.localProjTree.curProj.uuid) {
         console.log(`Rename proj`);
-        this.folderOrFile = 'renameproj';
-        this.title = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
-        this.inputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
-        this.selected = '';
-        GlobalUtil.model.localProjTree.dialogVisible = true;
-        this.textFocus();
+        this.model.localProjTree.folderOrFile = 'renameproj';
+        this.model.localProjTree.curDialogTitle = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
+        this.model.localProjTree.curDialogInputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
+        this.model.localProjTree.fileDialogShow = true;
+        this.model.localProjTree.curDialogIsExtend = true;
+        setTimeout(() => {
+          document.getElementById('input-text').focus();
+        });
         return;
       }
       const curFile = this.getCurFile();
@@ -340,22 +342,33 @@ export default {
         return;
       }
       if (curFile.type === 'folder') {
-        this.title = `Rename ${curFile.name}`;
-        this.inputText = curFile.name;
-        GlobalUtil.model.localProjTree.dialogVisible = true;
-        this.selected = '';
-        this.textFocus();
+        this.model.localProjTree.folderOrFile = 'renameproj';
+        this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
+        this.model.localProjTree.curDialogInputText = curFile.name;
+        this.model.localProjTree.fileDialogShow = true;
+        this.model.localProjTree.curDialogIsExtend = false;
+        setTimeout(() => {
+          document.getElementById('input-text').focus();
+        });
+        // GlobalUtil.model.localProjTree.dialogVisible = true;
+        this.model.localProjTree.fileSelected = '';
+        // this.textFocus();
         return;
       }
-      this.folderOrFile = 'rename';
-      this.title = `Rename ${curFile.name}`;
-      this.inputText = `${curFile.name}`.split('.')[0];
-      GlobalUtil.model.localProjTree.fileDialogVisible = true;
-      this.selected = '.' + `${curFile.name}`.split('.')[1];
+      this.model.localProjTree.folderOrFile = 'renameproj';
+      this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
+      this.model.localProjTree.curDialogInputText = `${curFile.name}`.split('.')[0];
+      // GlobalUtil.model.localProjTree.fileDialogVisible = true;
+      this.model.localProjTree.fileDialogShow = true;
+      this.model.localProjTree.fileSelected = '.' + `${curFile.name}`.split('.')[1];
       if (`${curFile.name}`.split('.')[1] === undefined ) {
-        this.selected = '';
+        this.model.localProjTree.fileSelected = '';
       }
-      this.textFocus();
+      // this.textFocus();
+      this.model.localProjTree.curDialogIsExtend = true;
+      setTimeout(() => {
+        document.getElementById('input-text').focus();
+      });
     },
     tableRowClassName({row, rowIndex}) {
       // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);

@@ -24,8 +24,11 @@ self.projsDialogShow = false;
 self.fileDialogShow = false;
 self.curDialogTitle = '';
 self.curDialogIsExtend = false;
+self.curDialogInputText = '';
 self.folderOrFile = '';
 self.fileDialogVisible = false;
+self.fileSelected = '';
+
 self.dialogVisible = false;
 self.treeBgColor = 'white';
 self.curSelectedUUID = '';
