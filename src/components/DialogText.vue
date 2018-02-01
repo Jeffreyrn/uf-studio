@@ -11,11 +11,15 @@
           </div>
         </div> -->
         <input id="input-text" v-model="inputText" type="text" class="position-absolute dialog-input" />
+        <select class="position-absolute dialog-select" v-model="selected" v-if="model.localProjTree.curDialogIsExtend">
+          <option v-for="option in options" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
         <div style="margin-top:230px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
           </div>
-
           <span v-if="isFileNameCorrect">
             <div class="float-left btn-create dialog-input" @click="oncreate">
               Create
@@ -154,13 +158,17 @@
     color: #4fc08d;
   }
   .dialog-input {
-    width:288px;
+    width:250px;
     height:34px;
     top:113px;
     left:34px;
     background: #2C2C2C;
     border: 0.5 solid #4E4C4C;
     color: white;
+  }
+  .dialog-select {
+    top:113px;
+    left:284px;
   }
   .dialog-input-opacity {
     opacity: 0.5;

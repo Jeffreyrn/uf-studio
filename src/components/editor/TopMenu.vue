@@ -301,19 +301,27 @@ export default {
       this.model.localProjTree.folderOrFile = 'folder';
       this.model.localProjTree.curDialogTitle = 'add folder';
       this.model.localProjTree.fileDialogShow = true;
+      this.model.localProjTree.curDialogIsExtend = false;
       setTimeout(() => {
         document.getElementById('input-text').focus();
       });
-
     },
     addFile() {
-      console.log('add file');
-      this.folderOrFile = 'file';
-      this.title = 'add file';
-      this.inputText = '';
-      // this.dialogVisible = true;
-      GlobalUtil.model.localProjTree.fileDialogVisible = true;
-      this.textFocus();
+      // console.log('add file');
+      // this.folderOrFile = 'file';
+      // this.title = 'add file';
+      // this.inputText = '';
+      // // this.dialogVisible = true;
+      // GlobalUtil.model.localProjTree.fileDialogVisible = true;
+      // this.textFocus();
+
+      this.model.localProjTree.folderOrFile = 'file';
+      this.model.localProjTree.curDialogTitle = 'add file';
+      this.model.localProjTree.fileDialogShow = true;
+      this.model.localProjTree.curDialogIsExtend = true;
+      setTimeout(() => {
+        document.getElementById('input-text').focus();
+      });
     },
     rename() {
       console.log(`Rename`);

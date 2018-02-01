@@ -23,6 +23,7 @@ self.PROJ_TREE_TYPE = {
 self.projsDialogShow = false;
 self.fileDialogShow = false;
 self.curDialogTitle = '';
+self.curDialogIsExtend = false;
 self.folderOrFile = '';
 self.fileDialogVisible = false;
 self.dialogVisible = false;
