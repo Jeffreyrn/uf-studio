@@ -11,6 +11,7 @@ import Teach from '@/components/Teach';
 import EditHome from '@/components/EditHome';
 import Setting from '@/components/Setting';
 import AppStore from '@/components/AppStore';
+import AppDetail from '@/components/appStore/AppDetail';
 Vue.use(Router);
 
 export default new Router({
@@ -35,6 +36,11 @@ export default new Router({
       path: '/AppStore',
       name: 'AppStore',
       component: AppStore,
+    },
+    {
+      path: '/AppDetail',
+      name: 'AppDetail',
+      component: AppDetail,
     },
     {
       path: '/control',
