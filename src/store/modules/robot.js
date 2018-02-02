@@ -138,7 +138,7 @@ const mutations = {
           },
         },
         (response) => {
-          Object.assign(state.info.axis, response.data);
+          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
           console.log('get 7 angle, socket res', response);
         },
       );
@@ -160,6 +160,14 @@ const mutations = {
       );
     }
     else { // offline mode
+      console.log({
+        X: state.info.position.x,
+        Y: state.info.position.y,
+        Z: data,
+        A: state.info.orientation.roll,
+        B: state.info.orientation.yaw,
+        C: state.info.orientation.pitch,
+      });
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_get_ik',
         {
@@ -174,7 +182,7 @@ const mutations = {
         },
         (response) => {
           console.log('get 7 angle, socket res', response);
-          state.info.axis = response.data.map(num => Number(num).toFixed(2)).slice();
+          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
 
           console.log('set', response.data.map(num => Number(num).toFixed(2)).slice());
           console.log('get', state.info.axis);

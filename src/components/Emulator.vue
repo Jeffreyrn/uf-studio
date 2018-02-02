@@ -221,7 +221,7 @@ export default {
       });
     },
     setJoystickStep(nipple, type) {
-      const speed = nipple.force * 3;
+      const speed = nipple.force * 30;
       let stepX = speed;
       let stepY = speed;
       if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
