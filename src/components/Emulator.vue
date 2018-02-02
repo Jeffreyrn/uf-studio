@@ -44,7 +44,7 @@
           </div>
           <div class="control-body">
             <div class="control-left">
-              <el-slider v-model="state.position.z" vertical height="200px"></el-slider>
+              <el-slider v-model="state.position.z" vertical height="200px" @change="setPositionZ"></el-slider>
               <div id="position-joystick" class="joystick-wrapper"></div>
             </div>
             <div class="control-right">
@@ -186,8 +186,9 @@ export default {
           // console.log(typeof this.joystick.step.position.x, typeof this.state.position.x);
           const nextX = this.joystick.step.position.x + this.state.position.x;
           const nextY = this.joystick.step.position.y + this.state.position.y;
-          this.state.position.x = Number(nextX.toFixed(2));
-          this.state.position.y = Number(nextY.toFixed(2));
+          this.$store.commit(types.MOVE_END_XY, [Number(nextX.toFixed(2)), Number(nextY.toFixed(2))]);
+          // this.state.position.x = Number(nextX.toFixed(2));
+          // this.state.position.y = Number(nextY.toFixed(2));
         }, 500);
       }).on('end', () => {
         clearInterval(positionInterval);
@@ -211,21 +212,23 @@ export default {
           console.log(typeof this.joystick.step.orientation.x, typeof this.state.orientation.yaw);
           const nextX = this.joystick.step.orientation.x + this.state.orientation.yaw;
           const nextY = this.joystick.step.orientation.y + this.state.orientation.pitch;
-          this.state.orientation.yaw = Number(nextX.toFixed(2));
-          this.state.orientation.pitch = Number(nextY.toFixed(2));
+          this.$store.commit(types.MOVE_END_XY, [Number(nextX.toFixed(2)), Number(nextY.toFixed(2))]);
+          // this.state.orientation.yaw = Number(nextX.toFixed(2));
+          // this.state.orientation.pitch = Number(nextY.toFixed(2));
         }, 500);
       }).on('end', () => {
         clearInterval(orientationInterval);
       });
     },
     setJoystickStep(nipple, type) {
-      let stepX = nipple.force;
-      let stepY = nipple.force;
+      const speed = nipple.force * 3;
+      let stepX = speed;
+      let stepY = speed;
       if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
-        stepY = 2 * nipple.force;
+        stepY = 2 * speed;
       }
       else if (nipple.direction.angle === 'right' || nipple.direction.angle === 'left') {
-        stepX = 2 * nipple.force;
+        stepX = 2 * speed;
       }
       // stepX = Number(stepX.toFixed(2));
       // stepY = Number(stepY.toFixed(2));
@@ -271,8 +274,8 @@ export default {
         value,
       });
     },
-    setPosition() {
-
+    setPositionZ(value) {
+      this.$store.commit(types.MOVE_END_Z, value);
     },
   },
   watch: {

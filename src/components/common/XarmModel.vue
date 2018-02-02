@@ -265,8 +265,6 @@ export default {
         // base.position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // base.rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // base.scale.set(this.state.test.scale, this.state.test.scale, this.state.test.scale);
-        // joints[7].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
-        // groups[6].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // if (groups[this.select]) {
         //   groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // }

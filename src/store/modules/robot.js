@@ -57,20 +57,22 @@ const mutations = {
     const end = data.xarm_tcp_pose;
     const joint = data.xarm_joint_pose;
     const error = data.xarm_error_code;
-    if (end && (end.length > 0)) {
-      console.log('table posi print:');
-      console.table(end);
-      state.info.position.x = Number(end[0]);
-      state.info.position.y = Number(end[1]);
-      state.info.position.z = Number(end[2]);
-      state.info.orientation.roll = Number(end[3]);
-      state.info.orientation.yaw = Number(end[4]);
-      state.info.orientation.pitch = Number(end[5]);
-    }
-    if (joint && (joint.length > 0)) {
-      // console.table(joint);
-      state.info.axis = joint.map(num => Number(num).toFixed(2)).slice(); // .slice()
-      state.info.test = joint[1];
+    if (state.info.online || (state.info.axis.length === 0)) {
+      if (end && (end.length > 0)) {
+        console.log('table posi print:');
+        console.table(end);
+        state.info.position.x = Number(end[0]);
+        state.info.position.y = Number(end[1]);
+        state.info.position.z = Number(end[2]);
+        state.info.orientation.roll = Number(end[3]);
+        state.info.orientation.yaw = Number(end[4]);
+        state.info.orientation.pitch = Number(end[5]);
+      }
+      if (joint && (joint.length > 0)) {
+        // console.table(joint);
+        state.info.axis = joint.map(num => Number(num).toFixed(2)).slice(); // .slice()
+        state.info.test = joint[1];
+      }
     }
     state.status.warning = data.xarm_warn_code;
     if (error && (error > 0)) {
@@ -106,24 +108,94 @@ const mutations = {
   [types.ROBOT_BROADCAST](state, data) {
     state.printer.progress = data.progress;
   },
-  [types.ROBOT_MOVE_LINE](state, data) {
+  [types.MOVE_END_XY](state, data) {
     // console.log('set position:', data);
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_joint',
         {
           data: {
-            X: data.value,
-            Y: data.value,
-            Z: data.value,
-            A: data.value,
-            B: data.value,
-            C: data.value,
+            X: data[0],
+            Y: data[1],
             F: state.info.speed,
             Q: state.info.acceleration,
           },
         },
-        (response) => { console.log('socket res', response); },
+        (response) => { console.log('xy socket res', response); },
+      );
+    }
+    else { // offline mode
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_get_ik',
+        {
+          data: {
+            X: data[0],
+            Y: data[1],
+            Z: state.info.position.z,
+            A: state.info.orientation.roll,
+            B: state.info.orientation.yaw,
+            C: state.info.orientation.pitch,
+          },
+        },
+        (response) => {
+          Object.assign(state.info.axis, response.data);
+          console.log('get 7 angle, socket res', response);
+        },
+      );
+    }
+  },
+  [types.MOVE_END_Z](state, data) {
+    // console.log('set position:', data);
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_joint',
+        {
+          data: {
+            Z: data,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('xy socket res', response); },
+      );
+    }
+    else { // offline mode
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_get_ik',
+        {
+          data: {
+            X: state.info.position.x,
+            Y: state.info.position.y,
+            Z: data,
+            A: state.info.orientation.roll,
+            B: state.info.orientation.yaw,
+            C: state.info.orientation.pitch,
+          },
+        },
+        (response) => {
+          console.log('get 7 angle, socket res', response);
+          state.info.axis = response.data.map(num => Number(num).toFixed(2)).slice();
+
+          console.log('set', response.data.map(num => Number(num).toFixed(2)).slice());
+          console.log('get', state.info.axis);
+        },
+      );
+    }
+  },
+  [types.MOVE_YAW_PITCH](state, data) {
+    // console.log('set position:', data);
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_joint',
+        {
+          data: {
+            B: data[0],
+            C: data[1],
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('roll yaw socket res', response); },
       );
     }
     else { // offline mode
