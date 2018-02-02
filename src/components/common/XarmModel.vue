@@ -11,8 +11,8 @@
           :value="item">
         </el-option>
       </el-select>
-    </div>
-    <div class="hello-row">
+    </div> -->
+    <!-- <div class="hello-row">
       <div class="block">
         <span class="text">Group-X</span>
         <el-slider v-model="state.test.x" :step="config.step" :max="config.debugMax" :min="config.debugMin" show-input></el-slider>
@@ -44,7 +44,7 @@
     </div> -->
     <div class="hello-row">
       <div id="emulator-overlay">
-        <span v-for="j in 7" :key="j" class="text">J{{j-1}}:{{joints[j-1]}},</span>
+        <span v-for="j in 7" :key="j" class="text">#{{j-1}}:{{joints[j-1]}}</span>
         <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
       </div>
       <div id="emulator-container"></div>
@@ -70,6 +70,7 @@ const JOINT_POSITION = [
   [0.45, -1.2, -52.8],
   [42, -7.3, -60.7],
   [7.36, -35.85, -60.7],
+  [42, -42.2, 0],
 ];
 const GROUP_POSITION = [
   [0.1, 0.04, -0.04],
@@ -78,7 +79,7 @@ const GROUP_POSITION = [
   [41.51, 5.38, 52.72],
   [-41.4, 6.16, 7.9],
   [35.47, 27.6, -0.05],
-  [0, 0, 0],
+  [-34.6, 6.4, -60.8],
 ];
 
 export default {
@@ -122,15 +123,15 @@ export default {
       test: null,
       testtest: [],
       config: {
-        debugMax: 100,
-        debugMin: -100,
+        debugMax: 200,
+        debugMin: -300,
         jointMax: 180,
         jointMin: -180,
         step: 0.1,
         offsetY: -7,
       },
       options: [0, 1, 2, 3, 4, 5, 6, 7],
-      select: 5,
+      select: 7,
       state: {
         speed: 50,
         acceleration: 50,
@@ -168,13 +169,9 @@ export default {
   beforeDestroy() {
     if (this.three.scene) {
       this.three.scene.remove();
+      this.three.scene.remove(this.three.groups[0]);
     }
     // this.three.scene.remove(this.three.groups[0]);
-    if (this.three.groups) {
-      this.three.groups.forEach((group) => {
-        group.dispose();
-      });
-    }
   },
   methods: {
     createRobotModel() {
@@ -195,6 +192,7 @@ export default {
         `${MODEL_DIR}5${FILE_FORMAT}`,
         `${MODEL_DIR}6${FILE_FORMAT}`,
         `${MODEL_DIR}7${FILE_FORMAT}`,
+        `${MODEL_DIR}8${FILE_FORMAT}`,
       ];
       const materialList = [];
       RAINBOW_COLOR_LIST.forEach((hex) => {
@@ -243,23 +241,18 @@ export default {
       const joints = [];
       // const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
       // joints[0] = new THREE.Mesh(geometry1, new THREE.MeshBasicMaterial({ color: 0x4B0082 }));
-      const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
-      joints[7] = new THREE.Mesh(geometry7, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+      // const geometry7 = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 4, 4);
+      // joints[7] = new THREE.Mesh(geometry7, new THREE.MeshPhongMaterial({ color: 0xffffff }));
       // scene.add(joints[0]);
-      // this.three.groups = groups;
+      this.three.groups = groups;
       for (let i = 0; i < 7; i += 1) {
         groups[i] = new THREE.Group();
       }
-      groups[6].add(joints[7]);
+      // groups[6].add(joints[7]);
       const animate = () => {
         requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
-        // if (this.state.online) {
-        //   for (let i = 0; i < 7; i += 1) {
-        //     this.$set(this.state.joint, i, GlobalUtil.model.robot.info.axis[i]);
-        //   }
-        // }
         const angles = this.online ? this.joints : this.control;
         groups[0].rotation.z = this.valueToRotation(angles[0] + 135);
         groups[1].rotation.x = -this.valueToRotation(angles[1]);
@@ -267,12 +260,13 @@ export default {
         groups[3].rotation.x = -this.valueToRotation(angles[3] + 90);
         groups[4].rotation.y = this.valueToRotation(angles[4]);
         groups[5].rotation.x = -this.valueToRotation(angles[5] - 90);
-        joints[7].rotation.z = this.valueToRotation(angles[6]);
+        groups[6].rotation.z = this.valueToRotation(angles[6]);
         // groups[this.select].rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // base.position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // base.rotation.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // base.scale.set(this.state.test.scale, this.state.test.scale, this.state.test.scale);
-
+        // joints[7].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
+        // groups[6].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // if (groups[this.select]) {
         //   groups[this.select].position.set(this.state.test.x, this.state.test.y, this.state.test.z);
         // }
@@ -281,18 +275,22 @@ export default {
         // }
       };
       const loadModel = (index) => { // model index: 1-6
-        if (index < 7) {
+        if (index < 8) {
           loader.load(JOINT_MODEL_SRC[index], (geometry) => {
             console.log(index, 'model loaded:');
             joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
             joints[index].position.set(...JOINT_POSITION[index]);
-            groups[index - 1].add(joints[index], groups[index]);
+            if (index < 7) {
+              groups[index - 1].add(joints[index], groups[index]);
+            }
+            else {
+              groups[index - 1].add(joints[index]);
+            }
             groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
             loadModel(index + 1); // load next model
           });
         }
         else {
-          // groups[6].add(joints[7]);
           console.log('loading all');
           this.setDiff(groups[0]);
           groups[0].position.y += this.config.offsetY;
@@ -312,7 +310,7 @@ export default {
       const axisHelper = new THREE.AxesHelper(5);
       axisHelper.position.y = this.config.offsetY;
       scene.add(axisHelper);
-      this.changeJoint(this.select);
+      // this.changeJoint(this.select);
       const onWindowResize = () => {
         renderer.setSize(...this.getRenderSize());
         camera.aspect = this.getCameraAspect();
@@ -370,6 +368,7 @@ export default {
   display: inline-block;
 }
 .block {
+  width: 30%;
   padding: 0.2vw 1vw;
   display: inline-block;
 }
