@@ -95,12 +95,12 @@
   box-shadow: 0 0 8px 0 rgba(192,192,192,0.50);
   border-radius: 20px;
 }
-/**  common gradual  **/
-.com-gradual-middle {
+/**  common radial-gradient  **/
+.com-radial-gradient {
   background: -webkit-radial-gradient(#FFF,#E7E7E7); /* Safari 5.1 - 6.0 */
   background: -o-radial-gradient(#FFF,#E7E7E7); /* Opera 11.6 - 12.0 */
   background: -moz-radial-gradient(#FFF,#E7E7E7); /* Firefox 3.6 - 15 */
-  background: radial-gradient(#FFF,#E7E7E7); /* 标准的语法（必须放在最后） */
+  background: radial-gradient(#FFF,#E7E7E7); /* */
 }
 /**  common font  **/
 .com-text-center{
@@ -153,7 +153,7 @@
   margin-left: 4rem;
   cursor: pointer;
 }
-.com-icon-module {                   /**组件的模块icon**/
+.com-module-icon {                   /**组件的模块icon**/
   width: 2.4rem;
 }
 .com-module-name {                    /**组件的模块名**/

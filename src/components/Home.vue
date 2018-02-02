@@ -1,12 +1,12 @@
 <template>
   <div class="home-wrapper com-text-center com-module-wrapper">
     <section style="position: absolute;left: 0; right: 0;top:0;margin: 0 auto; font-size: 1.2rem;text-align: center;">
-      <button class="change-btn" @click="onLink()">
-        link/unlink
-      </button>
-      <span id='show'>{{ model.localDeviceStatus.socket_connected ? 'Linked' : 'Unlinked' }}</span>
-      <h1>{{ msg }}</h1>
-      <h2></h2>
+      <!--<button class="change-btn" @click="onLink()">-->
+        <!--link/unlink-->
+      <!--</button>-->
+      <!--<span id='show'>{{ model.localDeviceStatus.socket_connected ? 'Linked' : 'Unlinked' }}</span>-->
+      <!--<h1>{{ msg }}</h1>-->
+      <!--<h2></h2>-->
       <router-link :to="{ name: 'Paint'}"><el-button type="success">Paint</el-button></router-link>
       <router-link :to="{ name: 'Editor'}"><el-button type="primary">Editor</el-button></router-link>
       <router-link :to="{ name: 'Control'}"><el-button type="warning">Control</el-button></router-link>
@@ -20,9 +20,9 @@
     </section>
     <section class="section2-wrapper com-font-GB-22 com-text-center">
       <div class="box1-wrapper ">
-        <router-link class="com-text-center" :to="{ name: 'AppStore'}"><img src="../assets/img/home/icon_shopping.svg" />APP STORE</router-link>
-        <router-link class="com-text-center" :to="{ name: 'EditHome'}"><img src="../assets/img/home/icon_developers.svg" />EDITOR</router-link>
-        <router-link class="com-text-center" :to="{ name: 'Setting'}"><img src="../assets/img/home/icon_setting.svg" />SETTING</router-link>
+        <router-link class="com-text-center" :to="{ name: 'AppStore'}"><img src="../assets/img/home/icon_shopping.svg" alt="shopping"/>APP STORE</router-link>
+        <router-link class="com-text-center" :to="{ name: 'EditHome'}"><img src="../assets/img/home/icon_developers.svg" alt="developers"/>EDITOR</router-link>
+        <router-link class="com-text-center" :to="{ name: 'Setting'}"><img src="../assets/img/home/icon_setting.svg" alt="setting"/>SETTING</router-link>
       </div>
     </section>
   </div>
