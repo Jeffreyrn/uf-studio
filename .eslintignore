@@ -13,4 +13,6 @@
 /src/components/Teach.vue
 /src/components/Params.vue
 /src/components/Editor.vue
+/src/components/DialogProjs.vue
+/src/components/DialogText.vue
 /src/router/*
