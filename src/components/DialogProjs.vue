@@ -105,7 +105,7 @@ import { setTimeout } from 'timers';
     left: 24px;
     top: 25px;
     /* height: 67px; */
-    font-family: Gotham-Medium;
+    font-family: 'Gotham-Medium';
     font-size: 16px;
     color: #FFFFFF;
     letter-spacing: -1px;
@@ -139,7 +139,7 @@ import { setTimeout } from 'timers';
   .dialog-table-head {
     width: 194px;
     height: 66px;
-    font-family: Gotham-Medium;
+    font-family: 'Gotham-Medium';
     font-size: 16px;
     color: #FFFFFF;
     letter-spacing: -1px;
@@ -149,7 +149,7 @@ import { setTimeout } from 'timers';
   .dialog-table td {
     width: 194px;
     height: 40px;
-    font-family: Gotham-Book;
+    font-family: 'Gotham-Book';
     font-size: 12px;
     color: #FFFFFF;
     padding-left: 50px;
@@ -188,7 +188,7 @@ import { setTimeout } from 'timers';
     /* background-color: yellow; */
     width: 496px;
     height: 26px;
-    font-family: Gotham-Book;
+    font-family: 'Gotham-Book';
     text-align: center;
     line-height: 10px; 
     letter-spacing: -0.5px;

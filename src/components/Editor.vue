@@ -148,7 +148,7 @@ a {
   left: 62px;
   top: 50%;
   transform: translateY(-50%);
-  font-family: Gotham-Bold;
+  font-family: 'Gotham-Bold';
   font-size: 36px;
   color: #FFFFFF;
   letter-spacing: -1px; 

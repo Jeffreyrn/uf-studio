@@ -135,7 +135,7 @@
     left: 24px;
     top: 25px;
     /* height: 67px; */
-    font-family: Gotham-Medium;
+    font-family: 'Gotham-Medium';
     font-size: 16px;
     color: #FFFFFF;
     letter-spacing: -1px;
@@ -186,7 +186,7 @@
     /* background-color: yellow; */
     background: #484848;
     text-align: center;
-    font-family: Gotham-Book;
+    font-family: 'Gotham-Book';
     font-size: 14px;
     color: #7B7B7B;
     letter-spacing: -0.88px;
@@ -201,7 +201,7 @@
     /* background-color: green; */
     background: #52BF53;
     text-align: center;
-    font-family: Gotham-Book;
+    font-family: 'Gotham-Book';
     font-size: 14px;
     color: #FFFFFF;
     letter-spacing: -0.88px;
