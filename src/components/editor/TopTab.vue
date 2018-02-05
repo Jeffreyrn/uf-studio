@@ -127,7 +127,7 @@ export default {
 }
 .tab-left-icon {
   margin-left: 8px;
-  margin-top: 3px;
+  margin-top: 4px;
   width: 12px;
   height: 12px;
   background-image: url('./../../assets/img/ide/language_python.svg');
@@ -135,7 +135,7 @@ export default {
 }
 .tab-left-icon-white {
   margin-left: 8px;
-  margin-top: 3px;
+  margin-top: 4px;
   width: 12px;
   height: 12px;
   background-image: url('./../../assets/img/ide/language-python_white.svg');
@@ -143,7 +143,7 @@ export default {
 }
 .top-tab-item {
   height: 20px;
-  padding-left: 3px;
+  padding-left: 10px;
   padding-right: 3px;
 }
 .top-tab-item-border {

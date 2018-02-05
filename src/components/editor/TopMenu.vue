@@ -443,11 +443,13 @@ export default {
 }
 
 .proj-icon {
-  margin-left: 15px;
-  margin-top: 6px;
+  margin-left: 33px;
+  margin-top: 13px;
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_addproject.svg');
+  background-size: 13px 11px;
+  background-repeat: no-repeat;
   cursor: pointer;
 }
 
@@ -497,7 +499,7 @@ export default {
 }
 
 .run-icon {
-  margin-right: 60px;
+  margin-right: 30px;
   margin-top: 8px;
   width: 16px;
   height: 16px;

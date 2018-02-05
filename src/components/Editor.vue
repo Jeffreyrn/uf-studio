@@ -198,7 +198,9 @@ a {
 
 .top-tab-color {
   width: 100%;
-  background: #313335;
+  /* background: #313335; */
+  /* background-color: yellow; */
+  background: #282828;
 }
 
 .result-close {
