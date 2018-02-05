@@ -21,16 +21,18 @@
           <keep-alive><xarm-model :control="state.joint" :size="emulatorSize"></xarm-model></keep-alive>
         </el-col>
         <el-col :span="4">
-          <div class="block">{{ msg }}-debugTest</div>
-          step<input v-model="config.step"/>
-          <ul>
-            <li>x-{{state.position.x}}</li>
-            <li>y-{{state.position.y}}</li>
-            <li>z-{{state.position.z}}</li>
-            <li>roll-{{state.orientation.roll}}</li>
-            <li>yaw-{{state.orientation.yaw}}</li>
-            <li>pitch{{state.orientation.pitch}}</li>
+          <ul class="position-set">
+            <li><span>X</span><el-input placeholder="Please input" v-model="state.position.x"></el-input></li>
+            <li><span>Y</span><el-input placeholder="Please input" v-model="state.position.y"></el-input></li>
+            <li><span>Z</span><el-input placeholder="Please input" v-model="state.position.z"></el-input></li>
+            <li><span>Roll</span><el-input placeholder="Please input" v-model="state.orientation.roll"></el-input></li>
+            <li><span>Yaw</span><el-input placeholder="Please input" v-model="state.orientation.yaw"></el-input></li>
+            <li><span>Pitch</span><el-input placeholder="Please input" v-model="state.orientation.pitch"></el-input></li>
           </ul>
+          <div>
+            <el-button type="primary" round size="small">Apply</el-button>
+            <el-button round size="small">Cancel</el-button>
+          </div>
         </el-col>
       </el-row>
     </el-main>
@@ -258,7 +260,8 @@ export default {
       this.setRobotState('acceleration', value);
     },
     setOnline(value) {
-      this.setRobotState('online', value);
+      const data = Object.prototype.hasOwnProperty.call(value, 'value') ? value.value : value;
+      this.setRobotState('online', data);
     },
     setRobotState(index, value) {
       const data = {
@@ -324,6 +327,14 @@ export default {
     padding: 10px 20px;
     .model-container{
       border-radius: 0px;
+    }
+    ul.position-set li{
+      & > span {
+        width: 20%;
+      }
+      & > div {
+        width: 75%;
+      }
     }
   }
 }

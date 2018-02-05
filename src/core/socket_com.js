@@ -69,7 +69,6 @@ self.send_msg = (msg, callback) => {
     self.penddingCmds[msg.id] = callback;
   }
   const js_msg = JSON.stringify(msg);
-  console.log('xxxxxxx', js_msg);
   self.socket_info.socket.send(js_msg);
   return msg.id;
 };
