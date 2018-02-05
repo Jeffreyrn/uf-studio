@@ -299,7 +299,7 @@ export default {
       // this.textFocus();
 
       this.model.localProjTree.folderOrFile = 'folder';
-      this.model.localProjTree.curDialogTitle = 'add folder';
+      this.model.localProjTree.curDialogTitle = 'Please insert a folder';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = false;
       setTimeout(() => {
@@ -316,7 +316,7 @@ export default {
       // this.textFocus();
 
       this.model.localProjTree.folderOrFile = 'file';
-      this.model.localProjTree.curDialogTitle = 'add file';
+      this.model.localProjTree.curDialogTitle = 'Please insert a file';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = true;
       setTimeout(() => {
@@ -443,7 +443,7 @@ export default {
 }
 
 .proj-icon {
-  margin-left: 33px;
+  margin-left: 17px;
   margin-top: 13px;
   width: 24px;
   height: 24px;
@@ -454,7 +454,7 @@ export default {
 }
 
 .folder-icon {
-  margin-left: 15px;
+  margin-left: 10px;
   margin-top: 6px;
   width: 24px;
   height: 24px;
@@ -472,7 +472,7 @@ export default {
 }
 
 .rename-icon {
-  margin-left: 15px;
+  margin-left: 20px;
   margin-top: 6px;
   width: 24px;
   height: 24px;
@@ -481,7 +481,7 @@ export default {
 }
 
 .del-icon {
-  margin-left: 15px;
+  margin-left: 20px;
   margin-top: 6px;
   width: 24px;
   height: 24px;

@@ -402,7 +402,7 @@ self.onwinresize = () => {
       editor.setSize('auto', `${editorHeight}px`);
     }
   }
-  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 120}px`;
+  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 61}px`;
   // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 

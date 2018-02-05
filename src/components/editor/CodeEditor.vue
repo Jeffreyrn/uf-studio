@@ -4,7 +4,7 @@
     <!-- v-if="data.uuid===model.localProjTree.curFile.uuid" -->
     <!-- <div style="position:absolute;top:100px;">这家伙很懒,什么文件也没有打开</div> -->
     <!-- <div class="top-path" style="">this:{{ data.uuid }}, cur:{{ model.localProjTree.curFile.uuid }}</div> -->
-    <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;">{{ data.uuid }}</div>
+    <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }}</div>
           <!-- v-model="model.localProjTree.curSelectedContent" -->
     <codemirror
       v-model="inputText"

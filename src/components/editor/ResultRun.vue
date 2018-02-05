@@ -1,6 +1,6 @@
 
 <template>
-  <div style="height:30px;background:#3C3F41;">
+  <div style="height:30px;background:#282828;">
     <input
       class="float-left pip-input-text"
       id="pip-install-input-id"
@@ -82,10 +82,11 @@ export default {
 }
 
 .run-icon {
-  margin-right: 30px;
+  margin-right: 1px;
   /* margin-top: 4px; */
-  width: 18px;
+  width: 30px;
   height: 30px;
+  background: #3C3F41;
   background-image: url('./../../assets/img/ide/icon_running.svg');
   background-size: 16px 16px;
   background-repeat: no-repeat;
@@ -94,10 +95,11 @@ export default {
 }
 
 .clear-icon {
-  margin-right: 30px;
+  margin-right: 0px;
   /* margin-top: 4px; */
-  width: 18px;
+  width: 30px;
   height: 30px;
+  background: #3C3F41;
   background-image: url('./../../assets/img/ide/btn_clear.svg');
   background-size: 16px 16px;
   background-repeat: no-repeat;

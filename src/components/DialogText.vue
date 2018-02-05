@@ -91,7 +91,7 @@
         }
         this.model.localProjTree.projsDialogShow = false;
         this.model.localProjTree.fileDialogShow = false;
-      }
+      },
     },
     computed: {
       isFileNameCorrect() {
@@ -163,9 +163,10 @@
     height:34px;
     top:113px;
     left:34px;
+    padding-left: 5px;
     background: #2C2C2C;
-    border: 0.5 solid #4E4C4C;
     color: white;
+    border: 0.02 solid #4E4C4C;
   }
   .dialog-select {
     top:113px;

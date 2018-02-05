@@ -24,8 +24,10 @@ import { setTimeout } from 'timers';
                 <td>{{ data.name }}</td>
                 <td>{{ data.ctime }}</td>
                 <td>
-                  <el-button @click="onSelect(data.uuid)" type="text" size="small">Select</el-button>
-                  <el-button v-if="model.localProjTree.curProj.uuid!==data.uuid" @click="onDelete(data.uuid)" type="text" size="small">Delete</el-button>
+                  <div class="float-left proj-selected" v-if="model.localProjTree.curProj.uuid===data.uuid"></div>
+                  <div class="float-left proj-open" v-if="model.localProjTree.curProj.uuid!==data.uuid" @click="onSelect(data.uuid)">Open</div>
+                  <!-- btn_trash.svg -->
+                  <div class="proj-icon-trash float-left" v-if="model.localProjTree.curProj.uuid!==data.uuid" @click="onDelete(data.uuid)"></div>
                 </td>
               </tr>
             </template>
@@ -66,6 +68,21 @@ import { setTimeout } from 'timers';
         console.log(uuid);
         this.model.localProjTree.changeProj(uuid);
         this.model.localProjTree.projsDialogShow = false;
+      },
+      onDelete(uuid) {
+        this.projSelectDialog = false;
+        this.$confirm(`Delete project?`, {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'CANCEL',
+          type: 'info',
+          showClose: false,
+          closeOnClickModal: false,
+        }).then(() => {
+          CommandsEditorSocket.delProj(uuid, (dict) => {
+            console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
+          });
+        }).catch(() => {
+        });
       },
     }
   }
@@ -196,5 +213,34 @@ import { setTimeout } from 'timers';
     padding-top: 8px;
     border:1px dashed #5C5C5C;
     cursor: pointer;
+  }
+  .proj-icon-trash {
+    margin-left: 20px;
+    width: 30px;
+    height: 30px;
+    background-image: url('./../assets/img/pop/btn_trash.svg');
+    background-size: 8px 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+  .proj-open {
+    font-family: 'Gotham-Book';
+    font-size: 12px;
+    color: #FFFFFF;
+    letter-spacing: -0.38px;
+    line-height: 26px;
+    height: 26px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  .proj-selected {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    background-image: url('./../assets/img/pop/icon_select.svg');
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 </style>
