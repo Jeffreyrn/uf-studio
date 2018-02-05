@@ -201,13 +201,16 @@ export default {
       });
       console.log(materialList);
       const scene = new THREE.Scene();
-      console.log(this.three.scene, scene);
+      // console.log(this.three.scene, scene);
       scene.background = new THREE.Color(0xffffff); // c0c0c0
-      const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 1, 1000);
+      // const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 0.1, 1000);
+      const sizeArray = this.getRenderSize();
+      const halfSize = sizeArray.map(value => value / 64);
+      const camera = new THREE.OrthographicCamera(halfSize[0], -halfSize[0], halfSize[1], -halfSize[1], -50, 50);
       // camera.position.z = -50;
       // camera.up = new THREE.Vector3(-1, -1, -1);
-      camera.position.set(6, 5, 6); // camera position
-      camera.lookAt(new THREE.Vector3(0, 0, 0)); // camera look at
+      camera.position.set(3, 1, 3); // camera position
+      camera.lookAt(scene.position); // camera look at
       const light = new THREE.PointLight(0xcccccc, 1, 100); // light
       light.position.set(10, 14, 10);
       const lightBottomBack = new THREE.PointLight(0xcccccc, 1, 100); // light
@@ -310,8 +313,14 @@ export default {
       scene.add(axisHelper);
       // this.changeJoint(this.select);
       const onWindowResize = () => {
-        renderer.setSize(...this.getRenderSize());
-        camera.aspect = this.getCameraAspect();
+        const sizeArray = this.getRenderSize();
+        renderer.setSize(...sizeArray);
+        const halfSize = sizeArray.map(value => value / 32);
+        camera.left = -halfSize[0];
+        camera.right = halfSize[0];
+        camera.top = -halfSize[1];
+        camera.bottom = halfSize[1];
+        // camera.aspect = this.getCameraAspect();
         camera.updateProjectionMatrix();
       };
       window.addEventListener('resize', onWindowResize, false);
