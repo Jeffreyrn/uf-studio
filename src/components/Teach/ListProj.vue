@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <template v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
+    <div v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
         <div style="background-color:red;height:2px;width:1000px;"></div>
         <div>{{ index }} -- {{ file.uuid }}</div>
@@ -21,14 +21,14 @@
         <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;height:80px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
           <div style="width:81100px;">
             <!-- <template v-for='(data,index) in model.localTeach.fileDatas[file.uuid]'> -->
-            <template v-for='index in model.localTeach.showArr'>
+            <div v-for='index in model.localTeach.showArr'>
               <ListProjCell :index='index' :file='file'></ListProjCell>
-            </template>
+            </div>
           </div>
         </div>
         <!-- scroll timer end -->
       </div>
-    </template>
+    </div>
   </div>
 </template>
 <script>
