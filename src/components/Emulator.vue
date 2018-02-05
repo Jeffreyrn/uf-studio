@@ -427,7 +427,7 @@ span.text {
   border-radius: 8px;
 }
 .title-ide {
-  font-family: Gotham-Bold;
+  font-family: 'Gotham-Bold';
   font-size: 36px;
   color: #444;
   letter-spacing: -1px;

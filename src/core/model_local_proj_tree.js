@@ -20,6 +20,16 @@ self.PROJ_TREE_TYPE = {
 }
 
 // self.curSelectedFile = '';
+self.projsDialogShow = false;
+self.fileDialogShow = false;
+self.curDialogTitle = '';
+self.curDialogIsExtend = false;
+self.curDialogInputText = '';
+self.folderOrFile = '';
+self.fileDialogVisible = false;
+self.fileSelected = '';
+
+self.dialogVisible = false;
 self.treeBgColor = 'white';
 self.curSelectedUUID = '';
 self.curSelectedFileUUIDs = {};
@@ -146,6 +156,7 @@ self.setSelectedContent = (uuid, content) => {
   // self.allCodeEditorVue[uuid] = content
   const curFile = self.getFile(uuid);
   curFile.localContent = content;
+  self.curFile = curFile;
 };
 
 self.curOpenedFilesList = [];
@@ -391,7 +402,7 @@ self.onwinresize = () => {
       editor.setSize('auto', `${editorHeight}px`);
     }
   }
-  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 120}px`;
+  document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 61}px`;
   // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 
@@ -419,6 +430,9 @@ self.getSelectedFileFolder = () => {
   // let filePath = curSelectedUUID; //self.getThisFileFullPath(curSelectedUUID);
   const fileInfo = self.getFileInfo(curUUID);
   // console.log(`getSelectedFileFolder path = ${filePath}`);
+  if (fileInfo === null) {
+    return `${path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name)}`;
+  }
   let filePath = fileInfo.uuid;
   const isProjFile = fileInfo.type === 'file';  // filePath.indexOf('.') > 0;
   if (isProjFile === true) {
@@ -540,6 +554,8 @@ self.changeProj = (uuid) => {
   // self.getCurFilePath();
   self.curOpenedFilesList = openList;
   self.curPro2Tree();
+
+  GlobalUtil.model.localProjTree.setSelectedUI('');
 };
 
 self.curProjExpandedKeys = [];
@@ -592,6 +608,7 @@ self.curPro2Tree = () => {
   const aChild = {};
   aChild.label = self.curProj.name;
   aChild.uuid = self.curProj.uuid;
+  aChild.icon = '';
   aChild.children = [];
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;

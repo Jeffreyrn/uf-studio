@@ -168,15 +168,19 @@ self.renameProj = (name) => {
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
-      const curFile = GlobalUtil.model.localProjTree.curFile;
-      if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-        GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
-      }
-      else {
-        GlobalUtil.model.localProjTree.setSelectedUI('');
-      }
+      self.model.localProjTree.setSelectedUI(null);
     });
   });
+};
+
+self.selectedUI = () => {
+  const curFile = GlobalUtil.model.localProjTree.curFile;
+  if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
+    GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+  }
+  else {
+    GlobalUtil.model.localProjTree.setSelectedUI('');
+  }
 };
 
 self.createFile = (name, isProjFile) => {
@@ -198,26 +202,14 @@ self.createFile = (name, isProjFile) => {
   if (isProjFile === true) {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
       self.listProjs(() => {
-        const curFile = GlobalUtil.model.localProjTree.curFile;
-        if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-          GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
-        }
-        else {
-          GlobalUtil.model.localProjTree.setSelectedUI('');
-        }
+        GlobalUtil.model.localProjTree.selectedUI();
       });
     });
   }
   else {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
       self.listProjs(() => {
-        const curFile = GlobalUtil.model.localProjTree.curFile;
-        if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-          GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
-        }
-        else {
-          GlobalUtil.model.localProjTree.setSelectedUI('');
-        }
+        GlobalUtil.model.localProjTree.selectedUI();
       });
     });
   }

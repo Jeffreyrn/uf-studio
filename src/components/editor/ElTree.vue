@@ -48,7 +48,10 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
     },
     renderContent(h, { node, data, store }) {
-      return '1234567';
+      // return ('span', null, 'aabbcc');
+      return (
+        '<span class="el-tree-node__label">33445566</span>'
+      );
     },
     // renderContent(h, { node, data, store }) {
     //   return (

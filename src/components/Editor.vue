@@ -47,6 +47,10 @@
       </div>
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
+    <DialogProjs v-if="model.localProjTree.projsDialogShow"></DialogProjs>
+    <DialogText 
+      v-if="model.localProjTree.fileDialogShow">
+    </DialogText>
   </div>
 </template>
 <script>
@@ -57,6 +61,9 @@ import ElTree from './editor/ElTree';
 import CodeEditor from './editor/CodeEditor';
 import ResultRun from './editor/ResultRun';
 import TopTab from './editor/TopTab';
+import DialogProjs from './DialogProjs';
+import DialogText from './DialogText';
+
 // import FilesOpenTab from './editor/FilesOpenTab';
 
 import '../assets/css/reseet.css';
@@ -99,12 +106,12 @@ export default {
   },
   components: {
     TopMenu,
-    // ProjTree,
     ElTree,
     CodeEditor,
     ResultRun,
     TopTab,
-    // FilesOpenTab,
+    DialogProjs,
+    DialogText,
   },
 };
 </script>
@@ -141,7 +148,7 @@ a {
   left: 62px;
   top: 50%;
   transform: translateY(-50%);
-  font-family: Gotham-Bold;
+  font-family: 'Gotham-Bold';
   font-size: 36px;
   color: #FFFFFF;
   letter-spacing: -1px; 
@@ -191,7 +198,9 @@ a {
 
 .top-tab-color {
   width: 100%;
-  background: #313335;
+  /* background: #313335; */
+  /* background-color: yellow; */
+  background: #282828;
 }
 
 .result-close {

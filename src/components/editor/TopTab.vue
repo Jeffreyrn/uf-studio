@@ -93,9 +93,9 @@ export default {
 
 <style scoped>
 .top-tab {
-  height: 20px;
-  line-height: 20px;
-  font-family: Gotham-Book;
+  height: 26px;
+  line-height: 26px;
+  font-family: 'Gotham-Book';
   font-size: 12px;
   color: #A5ACB3;
   letter-spacing: -0.8px;
@@ -104,9 +104,9 @@ export default {
 .tab-cancel {
   /* background-color:yellow; */
   width: 20px;
-  height: 20px;
+  height: 26px;
   text-align:center;
-  line-height:20px;
+  line-height:26px;
   cursor:pointer;
   background-image: url('./../../assets/img/ide/icon_close.svg');
   background-size: 6px 6px;
@@ -116,9 +116,9 @@ export default {
 .tab-cancel-white {
   /* background-color:yellow; */
   width: 20px;
-  height: 20px;
+  height: 26px;
   text-align:center;
-  line-height:20px;
+  line-height:26px;
   cursor:pointer;
   background-image: url('./../../assets/img/ide/icon_close_white.svg');
   background-size: 6px 6px;
@@ -127,7 +127,7 @@ export default {
 }
 .tab-left-icon {
   margin-left: 8px;
-  margin-top: 3px;
+  margin-top: 7px;
   width: 12px;
   height: 12px;
   background-image: url('./../../assets/img/ide/language_python.svg');
@@ -135,15 +135,15 @@ export default {
 }
 .tab-left-icon-white {
   margin-left: 8px;
-  margin-top: 3px;
+  margin-top: 7px;
   width: 12px;
   height: 12px;
   background-image: url('./../../assets/img/ide/language-python_white.svg');
   background-size: 12px 12px;
 }
 .top-tab-item {
-  height: 20px;
-  padding-left: 3px;
+  height: 26px;
+  padding-left: 10px;
   padding-right: 3px;
 }
 .top-tab-item-border {
