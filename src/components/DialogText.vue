@@ -37,6 +37,9 @@
 </template>
 
 <script>
+
+  const path = require('path')
+
   export default {
     data () {
       return {
@@ -97,8 +100,20 @@
       isFileNameCorrect() {
         const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
         const isHasProj = GlobalUtil.model.localProjTree.isHasProj(this.model.localProjTree.curDialogInputText);
-        if (this.model.localProjTree.folderOrFile === 'proj') {
+        if (this.model.localProjTree.folderOrFile === 'proj'
+         || this.model.localProjTree.folderOrFile === 'renameproj') {
           return isFileStr && !isHasProj;
+        }
+        if (this.model.localProjTree.folderOrFile === 'file'
+         || this.model.localProjTree.folderOrFile === 'folder'
+         || this.model.localProjTree.folderOrFile === 'rename') {
+          const text = this.model.localProjTree.curDialogInputText;
+          const ext = this.model.localProjTree.fileSelected;
+          const getFileSuperid = this.model.localProjTree.getFileSuperid();
+          const toAddFile = path.join(getFileSuperid, `${text}${ext}`);
+          const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
+          console.log(`toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
+          return isFileStr && !isRepeatFile;
         }
         return isFileStr;
       },

@@ -47,13 +47,24 @@ self.isHasProj = (name) => {
   return false;
 };
 
+self.isRepeatFile = (uuid) => {
+  // console.log(`isRepeatFile count = ${self.curProj.files.length}`);
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    // console.log(`file uuid = ${self.curProj.files[i].uuid}`);
+    if (self.curProj.files[i].uuid === uuid) {
+      return true;
+    }
+  }
+  return false;
+};
+
 // self.getProjsFromArm((dict) => {
 //   self.curProjList = dict;
 // }); //LocalProjTreeDatas.curProjList;
 // self.curProj = LocalProjTreeDatas.curProjList[2];
 // self.curFilePath = `/${self.curProj.name}`;
 self.curProj = {};
-self.curFilePath = ''
+// self.curFilePath = ''
 
 // self.getThisFileFullPath = (uuid) => {
 //   let file = self.getFileInfo(uuid);
@@ -450,8 +461,11 @@ self.getSelectedFileFolder = () => {
   return filePath;
 };
 
-function getFileSuperid() {
+self.getFileSuperid = () => {
   let curSelectedUUID = self.curSelectedUUID;
+  if (curSelectedUUID === null || curSelectedUUID === undefined || curSelectedUUID === '') {
+    return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
+  }
   let superid = curSelectedUUID;
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
@@ -481,7 +495,7 @@ self.createProj = (name) => {
 self.createFolder = (proId, name) => {
   const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
-  let superid = getFileSuperid();
+  let superid = self.getFileSuperid();
   const fileInfo = self.getFileInfo(superid);
   if (superid === proId || superid === undefined) {
     superid = '';
@@ -492,7 +506,7 @@ self.createFolder = (proId, name) => {
 
 self.createSimpleFile = (proId, name) => {
   const uuid = uuidv4();
-  let superid = getFileSuperid();
+  let superid = self.getFileSuperid();
   if (superid === proId || superid === undefined) {
     superid = '';
   }
