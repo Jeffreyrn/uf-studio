@@ -228,7 +228,7 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
       data: text, // 文件内容
     })
   };
-  self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
     // self.listProjs(callback);
     if (callback) {
       callback(dict);
