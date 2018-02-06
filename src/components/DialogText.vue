@@ -12,11 +12,18 @@
         </div> -->
         <div v-if="isExtInput">
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext" />
-          <select class="position-absolute dialog-select" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
-            <option v-for="option in options" v-bind:value="option.value">
-              {{ option.text }}
-            </option>
-          </select>
+          <div class="position-absolute dialog-select dialog-select-size">
+            {{ model.localProjTree.fileSelected }}
+            <select style="z-index:200;" class="position-absolute dialog-select-size opacity0" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
+              <option class="select-option" v-for="option in options" v-bind:value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+            <div class="position-absolute select-toparrow">
+            </div>
+            <div class="position-absolute select-bottomarrow">
+            </div>
+          </div>
         </div>
         <div v-if="!isExtInput">
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
@@ -106,11 +113,11 @@
         const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
         const isHasProj = GlobalUtil.model.localProjTree.isHasProj(this.model.localProjTree.curDialogInputText);
         if (this.model.localProjTree.folderOrFile === 'proj'
-         || this.model.localProjTree.folderOrFile === 'renameproj') {
+         || this.model.localProjTree.folderOrFile === 'renameproj'
+         || this.model.localProjTree.folderOrFile === 'folder') {
           return isFileStr && !isHasProj;
         }
         if (this.model.localProjTree.folderOrFile === 'file'
-         || this.model.localProjTree.folderOrFile === 'folder'
          || this.model.localProjTree.folderOrFile === 'rename') {
           const text = this.model.localProjTree.curDialogInputText;
           const ext = this.model.localProjTree.fileSelected;
@@ -123,6 +130,9 @@
         return isFileStr;
       },
       isExtInput() {
+        if (this.model.localProjTree.curDialogIsExtend === false) {
+          return false;
+        }
         return this.model.localProjTree.folderOrFile === 'file' || this.model.localProjTree.folderOrFile === 'rename';
       }
     },
@@ -196,6 +206,7 @@
     /* background: yellow; */
     color: white;
     border: 0;
+    outline:none;
     /* border: 0.02 solid #4E4C4C; */
     background-image: url('./../assets/img/pop/frame01.svg');
     background-position: center;
@@ -213,6 +224,48 @@
   .dialog-select {
     top:113px;
     left:284px;
+    width: 46px;
+    height: 34px;
+    color: white;
+    font-family: 'Gotham-Book';
+    font-size: 12px;
+    color: #FFFFFF;
+    letter-spacing: -0.75px;
+    padding-left: 5px;
+    padding-top: 10px;
+    /* opacity: 0; */
+    background-image: url('./../assets/img/pop/frame03_fileselection.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .dialog-select-size {
+    background-size: 46px 34px;
+  }
+  .select-toparrow {
+    top:10px;
+    left:32px;
+    width: 7px;
+    height: 5px;
+    background-image: url('./../assets/img/pop/toparrowbtns.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 7px 5px
+  }
+  .select-bottomarrow {
+    top:20px;
+    left:32px;
+    width: 7px;
+    height: 5px;
+    background-image: url('./../assets/img/pop/bottomarrowbtns.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 7px 5px
+  }
+  .select-option {
+    background-color: yellow;
+  }
+  .opacity0 {
+    opacity: 0;
   }
   .btn-create-opacity {
     opacity: 0.5;
