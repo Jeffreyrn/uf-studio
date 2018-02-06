@@ -35,12 +35,12 @@
           </div>
           <span v-if="isFileNameCorrect">
             <div class="float-left btn-create cursor-pointer" @click="oncreate"r>
-              Create
+              OK
             </div>
           </span>
           <span v-if="!isFileNameCorrect">
             <div class="float-left btn-create btn-create-opacity">
-              Create
+              OK
             </div>
           </span>
         </div>
