@@ -74,6 +74,9 @@
 .position-absolute {
   position: absolute;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .col2{
   width: 50%;
 }

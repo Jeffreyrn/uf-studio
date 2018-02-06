@@ -21,7 +21,7 @@
             Cancel
           </div>
           <span v-if="isFileNameCorrect">
-            <div class="float-left btn-create dialog-input" @click="oncreate">
+            <div class="float-left btn-create dialog-input cursor-pointer" @click="oncreate"r>
               Create
             </div>
           </span>
@@ -95,7 +95,12 @@
     },
     computed: {
       isFileNameCorrect() {
-        return GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
+        const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
+        const isHasProj = GlobalUtil.model.localProjTree.isHasProj(this.model.localProjTree.curDialogInputText);
+        if (this.model.localProjTree.folderOrFile === 'proj') {
+          return isFileStr && !isHasProj;
+        }
+        return isFileStr;
       },
     },
   }
@@ -207,6 +212,6 @@
     color: #FFFFFF;
     letter-spacing: -0.88px;
     line-height: 40px;
-    cursor: pointer;
+    /* cursor: pointer; */
   }
 </style>

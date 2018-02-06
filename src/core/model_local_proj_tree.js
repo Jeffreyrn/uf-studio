@@ -38,6 +38,15 @@ self.curProjList = [];
 self.isResultFrameDisplay = false;
 self.isEditingPoints = false;
 
+self.isHasProj = (name) => {
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    if (self.curProjList[i].name === name) {
+      return true;
+    }
+  }
+  return false;
+};
+
 // self.getProjsFromArm((dict) => {
 //   self.curProjList = dict;
 // }); //LocalProjTreeDatas.curProjList;
