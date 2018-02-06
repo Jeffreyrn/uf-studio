@@ -12,7 +12,8 @@
         </div> -->
         <div v-if="isExtInput">
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext" />
-          <div class="position-absolute dialog-select dialog-select-size">
+          <custom-select class="position-absolute dialog-select-origin dialog-select-bg dialog-select-size" style=""></custom-select>
+          <!-- <div class="position-absolute dialog-select dialog-select-size">
             {{ model.localProjTree.fileSelected }}
             <select style="z-index:200;" class="position-absolute dialog-select-size opacity0" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
               <option class="select-option" v-for="option in options" v-bind:value="option.value">
@@ -23,7 +24,7 @@
             </div>
             <div class="position-absolute select-bottomarrow">
             </div>
-          </div>
+          </div> -->
         </div>
         <div v-if="!isExtInput">
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
@@ -50,93 +51,98 @@
 
 <script>
 
-  const path = require('path')
+const path = require('path')
+  
+import CustomSelect from './CustomSelect';
 
-  export default {
-    data () {
-      return {
-        model: GlobalUtil.model,
-        // inputText: '',
-        // selected: '.py',
-        options: [
-            { text: 'py', value: '.py' },
-            { text: 'txt', value: '.txt' },
-            { text: 'md', value: '.md' },
-            { text: 'none', value: '' },
-        ],
-      }
+export default {
+  data () {
+    return {
+      model: GlobalUtil.model,
+      // inputText: '',
+      // selected: '.py',
+      options: [
+          { text: 'py', value: '.py' },
+          { text: 'txt', value: '.txt' },
+          { text: 'md', value: '.md' },
+          { text: 'none', value: '' },
+      ],
+    }
+  },
+  methods: {
+    closeMyself() {
+      // this.$emit('on-close')
+      // this.model.localProjTree.projsDialogShow = false;
+      this.model.localProjTree.fileDialogShow = false;
     },
-    methods: {
-      closeMyself() {
-        // this.$emit('on-close')
-        // this.model.localProjTree.projsDialogShow = false;
-        this.model.localProjTree.fileDialogShow = false;
-      },
-    //   addProj() {
-    //     GlobalUtil.model.localProjTree.dialogVisible = true;
-    //   },
-      oncreate() {
+  //   addProj() {
+  //     GlobalUtil.model.localProjTree.dialogVisible = true;
+  //   },
+    oncreate() {
+      const text = this.model.localProjTree.curDialogInputText;
+      console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
+      console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
+      if (this.model.localProjTree.folderOrFile === 'folder') {
+        CommandsEditorSocket.createFile(text, false);
+        // const folder = GlobalUtil.model.localProjTree.createFolder(text);
+        // GlobalUtil.model.localProjTree.curProj.files.push(folder);
+      }
+      if (this.model.localProjTree.folderOrFile === 'file') {
+        CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
+        // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
+        // GlobalUtil.model.localProjTree.curProj.files.push(file);
+        // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
+      }
+      if (this.model.localProjTree.folderOrFile === 'proj') {
+        CommandsEditorSocket.createProj(text);
+        // const proj = GlobalUtil.model.localProjTree.createProj(text);
+        // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
+      }
+      if (this.model.localProjTree.folderOrFile === 'rename') {
+        // GlobalUtil.model.localProjTree.renameFile(text);
+        const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
+        CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
+      }
+      if (this.model.localProjTree.folderOrFile === 'renameproj') {
+        // GlobalUtil.model.localProjTree.renameProj(text);
+        CommandsEditorSocket.renameProj(text);
+      }
+      this.model.localProjTree.projsDialogShow = false;
+      this.model.localProjTree.fileDialogShow = false;
+    },
+  },
+  components: {
+    CustomSelect,
+  },
+  computed: {
+    isFileNameCorrect() {
+      const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
+      const isHasProj = GlobalUtil.model.localProjTree.isHasProj(this.model.localProjTree.curDialogInputText);
+      if (this.model.localProjTree.folderOrFile === 'proj'
+        || this.model.localProjTree.folderOrFile === 'renameproj'
+        || this.model.localProjTree.folderOrFile === 'folder') {
+        return isFileStr && !isHasProj;
+      }
+      if (this.model.localProjTree.folderOrFile === 'file'
+        || this.model.localProjTree.folderOrFile === 'rename') {
         const text = this.model.localProjTree.curDialogInputText;
-        console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
-        console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
-        if (this.model.localProjTree.folderOrFile === 'folder') {
-          CommandsEditorSocket.createFile(text, false);
-          // const folder = GlobalUtil.model.localProjTree.createFolder(text);
-          // GlobalUtil.model.localProjTree.curProj.files.push(folder);
-        }
-        if (this.model.localProjTree.folderOrFile === 'file') {
-          CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
-          // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
-          // GlobalUtil.model.localProjTree.curProj.files.push(file);
-          // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
-        }
-        if (this.model.localProjTree.folderOrFile === 'proj') {
-          CommandsEditorSocket.createProj(text);
-          // const proj = GlobalUtil.model.localProjTree.createProj(text);
-          // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
-        }
-        if (this.model.localProjTree.folderOrFile === 'rename') {
-          // GlobalUtil.model.localProjTree.renameFile(text);
-          const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-          CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
-        }
-        if (this.model.localProjTree.folderOrFile === 'renameproj') {
-          // GlobalUtil.model.localProjTree.renameProj(text);
-          CommandsEditorSocket.renameProj(text);
-        }
-        this.model.localProjTree.projsDialogShow = false;
-        this.model.localProjTree.fileDialogShow = false;
-      },
-    },
-    computed: {
-      isFileNameCorrect() {
-        const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
-        const isHasProj = GlobalUtil.model.localProjTree.isHasProj(this.model.localProjTree.curDialogInputText);
-        if (this.model.localProjTree.folderOrFile === 'proj'
-         || this.model.localProjTree.folderOrFile === 'renameproj'
-         || this.model.localProjTree.folderOrFile === 'folder') {
-          return isFileStr && !isHasProj;
-        }
-        if (this.model.localProjTree.folderOrFile === 'file'
-         || this.model.localProjTree.folderOrFile === 'rename') {
-          const text = this.model.localProjTree.curDialogInputText;
-          const ext = this.model.localProjTree.fileSelected;
-          const getFileSuperid = this.model.localProjTree.getFileSuperid();
-          const toAddFile = path.join(getFileSuperid, `${text}${ext}`);
-          const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
-          console.log(`toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
-          return isFileStr && !isRepeatFile;
-        }
-        return isFileStr;
-      },
-      isExtInput() {
-        if (this.model.localProjTree.curDialogIsExtend === false) {
-          return false;
-        }
-        return this.model.localProjTree.folderOrFile === 'file' || this.model.localProjTree.folderOrFile === 'rename';
+        const ext = this.model.localProjTree.fileSelected;
+        const getFileSuperid = this.model.localProjTree.getFileSuperid();
+        const toAddFile = path.join(getFileSuperid, `${text}${ext}`);
+        const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
+        console.log(`toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
+        return isFileStr && !isRepeatFile;
       }
+      return isFileStr;
     },
-  }
+    isExtInput() {
+      if (this.model.localProjTree.curDialogIsExtend === false) {
+        return false;
+      }
+      return this.model.localProjTree.folderOrFile === 'file' || this.model.localProjTree.folderOrFile === 'rename';
+    },
+  },
+}
 </script>
 
 <style scoped>
@@ -238,10 +244,20 @@
     background-position: center;
     background-repeat: no-repeat;
   }
+  .dialog-select-origin {
+    top:113px;
+    left:284px;
+  }
+  .dialog-select-bg {
+    background-image: url('./../assets/img/pop/frame03_fileselection.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 46px 34px;
+  }
   .dialog-select-size {
     background-size: 46px 34px;
   }
-  .select-toparrow {
+  /* .select-toparrow {
     top:10px;
     left:32px;
     width: 7px;
@@ -260,9 +276,9 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 7px 5px
-  }
+  } */
   .select-option {
-    background-color: yellow;
+    background: yellow;
   }
   .opacity0 {
     opacity: 0;
