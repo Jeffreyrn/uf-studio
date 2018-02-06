@@ -10,23 +10,28 @@
           <div class="dialog-close" @click="closeMyself">
           </div>
         </div> -->
-        <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
-        <select class="position-absolute dialog-select" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
-          <option v-for="option in options" v-bind:value="option.value">
-            {{ option.text }}
-          </option>
-        </select>
+        <div v-if="isExtInput">
+          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext" />
+          <select class="position-absolute dialog-select" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
+            <option v-for="option in options" v-bind:value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <div v-if="!isExtInput">
+          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
+        </div>
         <div style="margin-top:230px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
           </div>
           <span v-if="isFileNameCorrect">
-            <div class="float-left btn-create dialog-input cursor-pointer" @click="oncreate"r>
+            <div class="float-left btn-create cursor-pointer" @click="oncreate"r>
               Create
             </div>
           </span>
           <span v-if="!isFileNameCorrect">
-            <div class="float-left btn-create dialog-input dialog-input-opacity">
+            <div class="float-left btn-create btn-create-opacity">
               Create
             </div>
           </span>
@@ -117,6 +122,9 @@
         }
         return isFileStr;
       },
+      isExtInput() {
+        return this.model.localProjTree.folderOrFile === 'file' || this.model.localProjTree.folderOrFile === 'rename';
+      }
     },
   }
 </script>
@@ -179,20 +187,34 @@
     color: #4fc08d;
   }
   .dialog-input {
-    width:250px;
+    width:288px;
     height:34px;
     top:113px;
     left:34px;
-    padding-left: 5px;
-    background: #2C2C2C;
+    padding-left: 15px;
+    /* background: #2C2C2C; */
+    /* background: yellow; */
     color: white;
-    border: 0.02 solid #4E4C4C;
+    border: 0;
+    /* border: 0.02 solid #4E4C4C; */
+    background-image: url('./../assets/img/pop/frame01.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 288px 34px;
+  }
+  .dialog-input-ext {
+    width:252px;
+    /* background: green; */
+    background-image: url('./../assets/img/pop/frame02.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 252px 34px;
   }
   .dialog-select {
     top:113px;
     left:284px;
   }
-  .dialog-input-opacity {
+  .btn-create-opacity {
     opacity: 0.5;
   }
   .dialog-add {
