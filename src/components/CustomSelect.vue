@@ -38,7 +38,7 @@ export default {
                 { text: 'py', value: '.py' },
                 { text: 'txt', value: '.txt' },
                 { text: 'md', value: '.md' },
-                { text: 'none', value: '' },
+                // { text: 'none', value: '' },
             ],
         };
     },
