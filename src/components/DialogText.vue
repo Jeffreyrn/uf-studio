@@ -27,14 +27,14 @@
           </div> -->
         </div>
         <div v-if="!isExtInput">
-          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
+          <input @keydown="model.localProjTree.show();" id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
         </div>
         <div style="margin-top:230px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
           </div>
           <span v-if="isFileNameCorrect">
-            <div class="float-left btn-create cursor-pointer" @click="oncreate"r>
+            <div class="float-left btn-create cursor-pointer" @click="oncreate">
               OK
             </div>
           </span>

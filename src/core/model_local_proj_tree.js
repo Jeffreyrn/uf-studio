@@ -39,6 +39,16 @@ self.curProjList = [];
 self.isResultFrameDisplay = false;
 self.isEditingPoints = false;
 
+self.show = () => {
+  const e = window.event||arguments.callee.caller.arguments[0];
+  console.log(`self show = ${e.keyCode}`);
+  if (e.keyCode === 13) {
+    self.projsDialogShow = false;
+    self.fileDialogShow = false;
+    self.deleteDialogShow = false;
+  }
+}
+
 self.isHasProj = (name) => {
   for (let i = 0; i < self.curProjList.length; i += 1) {
     if (self.curProjList[i].name === name) {
