@@ -79,6 +79,7 @@ export default {
   /* top: -5px; */
   bottom: 5px;
   padding-left: 10px;
+  outline:none;
 }
 
 .run-icon {
