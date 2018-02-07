@@ -19,11 +19,24 @@
     <div class="el-tree-node__content"
       :style="{ 'padding-left': (node.level - 1) * tree.indent + 'px' }">
       <span
-        class="el-tree-node__expand-icon el-icon-caret-right"
+        v-if="node.label.indexOf('.py')>=0"
+        class="py-icon"
         @click.stop="handleExpandIconClick"
         :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
       </span>
-      <el-checkbox
+      <span
+        v-if="node.label.indexOf('.txt')>=0||node.label.indexOf('.md')>=0"
+        class="txt-icon"
+        @click.stop="handleExpandIconClick"
+        :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
+      </span>
+      <span
+        v-if="node.label.indexOf('.')<0"
+        class="icon-folder"
+        @click.stop="handleExpandIconClick"
+        :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
+      </span>
+      <!-- <el-checkbox
         v-if="showCheckbox"
         v-model="node.checked"
         :indeterminate="node.indeterminate"
@@ -31,14 +44,14 @@
         @click.native.stop
         @change="handleCheckChange"
       >
-      </el-checkbox>
-      <span
+      </el-checkbox> -->
+      <!-- <span
         v-if="node.loading"
         class="el-tree-node__loading-icon el-icon-loading">
-      </span>
-      <node-content :node="node"></node-content>
+      </span> -->
+      <node-content :node="node" style="padding-left:5px;"></node-content>
     </div>
-    <el-collapse-transition>
+    <!-- <el-collapse-transition>
       <div
         class="el-tree-node__children"
         v-if="childNodeRendered"
@@ -54,7 +67,22 @@
           @node-expand="handleChildNodeExpand">
         </el-tree-node>
       </div>
-    </el-collapse-transition>
+    </el-collapse-transition> -->
+      <div
+        class="el-tree-node__children"
+        v-if="childNodeRendered"
+        v-show="expanded"
+        role="group"
+        :aria-expanded="expanded"
+      >
+        <el-tree-node
+          :render-content="renderContent"
+          v-for="child in node.childNodes"
+          :key="getNodeKey(child)"
+          :node="child"
+          @node-expand="handleChildNodeExpand">
+        </el-tree-node>
+      </div>
   </div>
 </template>
 
@@ -180,6 +208,12 @@
       }
     },
 
+    mounted() {
+      console.log(`mounted node 2 = ${this.node.label}`);
+      console.log(`mounted node 2 = ${this.node}`);
+      const label = this.node.label;
+    },
+
     created() {
       const parent = this.$parent;
 
@@ -218,3 +252,32 @@
     }
   };
 </script>
+
+<style scoped>
+.icon-folder {
+  width: 12px;
+  height: 16px;
+  background-image: url('./../assets/img/icon_folder.svg');
+  background-size: 12px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.py-icon {
+  margin-left: 8px;
+  margin-top: 4px;
+  width: 12px;
+  height: 12px;
+  background-image: url('./../assets/img/language_python.svg');
+  background-size: 12px 12px;
+}
+.txt-icon {
+  margin-left: 8px;
+  margin-top: 4px;
+  width: 12px;
+  height: 12px;
+  background-image: url('./../assets/img/icon_documents.svg');
+  /* background-image: url('./../assets/img/language_python.svg'); */
+  background-size: 12px 12px;
+}
+</style>
+

@@ -1,13 +1,14 @@
 <template>
   <!-- :default-expanded-keys="model.localProjTree.curProjExpandedKeys" -->
   <!-- :render-content="renderContent" -->
-  <el-tree
+  <Tree
     id="tree-root"
     :data="model.localProjTree.curProTreeDatas"
     node-key="uuid"
+    :render-content="renderContent"
     :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
     @node-click="handleNodeClick">
-  </el-tree>
+  </Tree>
 </template>
 
 <script>
@@ -28,6 +29,7 @@ export default {
     };
   },
   mounted() {
+    console.log(`el tree mounted`);
   },
   created() {
     console.log(`el tree created`);
@@ -49,9 +51,16 @@ export default {
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
     },
     renderContent(h, { node, data, store }) {
-      // return ('span', null, 'aabbcc');
+      if (node !== null && node !== undefined) {
+        console.log(`renderContent node = ${JSON.stringify(data)}`);
+        // <img src="./../../assets/img/ide/language_python.svg" />
+      }
       return (
-        '<span class="el-tree-node__label">33445566</span>'
+        <span class="">
+          <span class="el-tree-node__label">
+            { data.label }
+          </span>  
+        </span>
       );
     },
     // renderContent(h, { node, data, store }) {
@@ -97,5 +106,12 @@ export default {
 </script>
 
 <style scoped>
-
+/* .file-left-icon {
+  width: 12px;
+  height: 12px;
+  background-image: url('./../../assets/img/ide/language_python.svg');
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+} */
 </style>
