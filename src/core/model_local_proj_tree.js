@@ -22,6 +22,7 @@ self.PROJ_TREE_TYPE = {
 // self.curSelectedFile = '';
 self.projsDialogShow = false;
 self.fileDialogShow = false;
+self.deleteDialogShow = false;
 self.curDialogTitle = '';
 self.curDialogIsExtend = false;
 self.curDialogInputText = '';

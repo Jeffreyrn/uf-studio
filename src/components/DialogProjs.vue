@@ -70,19 +70,29 @@ import { setTimeout } from 'timers';
         this.model.localProjTree.projsDialogShow = false;
       },
       onDelete(uuid) {
-        this.projSelectDialog = false;
-        this.$confirm(`Delete project?`, {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'CANCEL',
-          type: 'info',
-          showClose: false,
-          closeOnClickModal: false,
-        }).then(() => {
+        // this.projSelectDialog = false;
+        // this.$confirm(`Delete project?`, {
+        //   confirmButtonText: 'OK',
+        //   cancelButtonText: 'CANCEL',
+        //   type: 'info',
+        //   showClose: false,
+        //   closeOnClickModal: false,
+        // }).then(() => {
+        //   CommandsEditorSocket.delProj(uuid, (dict) => {
+        //     console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
+        //   });
+        // }).catch(() => {
+        // });
+
+        GlobalUtil.model.localProjTree.curDialogTitle = `Delete project?`; 
+        // 'Please insert a folder';
+        GlobalUtil.model.localProjTree.deleteDialogShow = true;
+        GlobalUtil.model.localProjTree.onDeleteDialog = () => {
           CommandsEditorSocket.delProj(uuid, (dict) => {
+            // GlobalUtil.model.localProjTree.deleteDialogShow = false;
             console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
           });
-        }).catch(() => {
-        });
+        };
       },
     }
   }
