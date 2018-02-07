@@ -136,6 +136,37 @@ self.getCurSelectedFileUUIDs = () => {
   self.hasOpenFileInCurPro = curUUID !== null && curUUID !== undefined && curUUID !== '';
   // console.log(`self.hasOpenFileInCurPro = ${self.hasOpenFileInCurPro}, curUUID = ${curUUID}`);
   // self.getCurFilePath();
+
+  if (!self.hasOpenFileInCurPro) {
+    self.setSelectedUI('');
+  }
+
+  if (self.hasOpenFileInCurPro) {
+    self.setSelectedUI(curUUID);
+    CommandsEditorSocket.getFile(curUUID, (dict) => {
+      const editors = GlobalUtil.model.localProjTree.editors;
+      for (const key in editors) {
+        if (key === curUUID) {
+          const editor = editors[key];
+          if (editor !== null && editor !== undefined) {
+            
+            let content = dict.data;
+            if (content === null || content === undefined) {
+              content = '';
+            }
+            self.curFile.remoteContent = content;
+            editor.setValue(content);
+            self.setSelectedContent(curUUID, content);
+
+            // editor.setSize('auto', `${totalFrameHeight - 200}px`);
+            // const editorHeight = GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
+            // editor.setSize('auto', `${editorHeight}px`);
+          }
+        }
+      }
+    });
+  }
+
   return self.curSelectedFileUUID;
 };
 self.uuids2Files = (uuids) => {
@@ -579,7 +610,7 @@ self.changeProj = (uuid) => {
   self.curOpenedFilesList = openList;
   self.curPro2Tree();
 
-  GlobalUtil.model.localProjTree.setSelectedUI('');
+  // GlobalUtil.model.localProjTree.setSelectedUI('');
 };
 
 self.curProjExpandedKeys = [];

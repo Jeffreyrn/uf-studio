@@ -27,11 +27,8 @@
           <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
           </div> -->
-          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:25px;left:0px;">
+          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:20px;left:0px;">
             <div style="width:100%;height:25px;background:#434749;">
-              <!-- background-image: url('./../assets/img/ide/icon_close.svg'); -->
-              <!-- background-image:url('./../assets/img/ide/icon_btmclose.svg'); -->
-              <!-- background:yellow; -->
               <div class="position-absolute result-close" @click="onCloseResult()"></div>
             </div>
             <textarea
@@ -167,14 +164,19 @@ a {
   left: 100px;*/
 }
 
+body {
+  scrollbar-track-color: #3C3F41;
+}
+
 .left-frame {
   /* width:200px; */
   width: 215px;
   height: 100%;
   overflow-y: scroll;
+  /* overflow-x: scroll; */
   background: #3C3F41;
   /* scrollbar-track-color: #3C3F41; */
-  SCROLLBAR-TRACK-COLOR: aquamarine;
+  /* SCROLLBAR-TRACK-COLOR: aquamarine; */
 }
 
 .right-frame {

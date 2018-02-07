@@ -326,6 +326,7 @@ export default {
       this.model.localProjTree.folderOrFile = 'file';
       this.model.localProjTree.curDialogTitle = 'Please insert a file';
       this.model.localProjTree.fileSelected = '.py';
+      this.model.localProjTree.curDialogInputText = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = true;
       setTimeout(() => {
