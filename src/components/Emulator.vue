@@ -232,34 +232,36 @@ export default {
       });
     },
     setJoystickStep(nipple, type) {
-      const speed = nipple.force * 0.5;
-      let stepX = speed;
-      let stepY = speed;
-      if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
-        stepY = 2 * speed;
-      }
-      else if (nipple.direction.angle === 'right' || nipple.direction.angle === 'left') {
-        stepX = 2 * speed;
-      }
-      // stepX = Number(stepX.toFixed(2));
-      // stepY = Number(stepY.toFixed(2));
-      if (nipple.direction.x === 'right') {
-        this.joystick.step[type].x = stepX;
-      }
-      else if (nipple.direction.x === 'left') {
-        this.joystick.step[type].x = 0 - stepX;
-      }
-      else {
-        this.joystick.step[type].x = 0;
-      }
-      if (nipple.direction.y === 'up') {
-        this.joystick.step[type].y = stepY;
-      }
-      else if (nipple.direction.y === 'down') {
-        this.joystick.step[type].y = 0 - stepY;
-      }
-      else {
-        this.joystick.step[type].y = 0;
+      if (nipple.direction) {
+        const speed = nipple.force * 0.5;
+        let stepX = speed;
+        let stepY = speed;
+        if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
+          stepY = 2 * speed;
+        }
+        else if (nipple.direction.angle === 'right' || nipple.direction.angle === 'left') {
+          stepX = 2 * speed;
+        }
+        // stepX = Number(stepX.toFixed(2));
+        // stepY = Number(stepY.toFixed(2));
+        if (nipple.direction.x === 'right') {
+          this.joystick.step[type].x = stepX;
+        }
+        else if (nipple.direction.x === 'left') {
+          this.joystick.step[type].x = 0 - stepX;
+        }
+        else {
+          this.joystick.step[type].x = 0;
+        }
+        if (nipple.direction.y === 'up') {
+          this.joystick.step[type].y = stepY;
+        }
+        else if (nipple.direction.y === 'down') {
+          this.joystick.step[type].y = 0 - stepY;
+        }
+        else {
+          this.joystick.step[type].y = 0;
+        }
       }
     },
     setSpeed(value) {

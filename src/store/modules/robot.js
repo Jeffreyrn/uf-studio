@@ -2,6 +2,22 @@ import Vue from 'vue';
 import * as types from '../mutation-types';
 
 // import SocketCom from '../../core/socket_com';
+function getReverseKinematics(data, callback) {
+  window.GlobalUtil.socketCom.sendCmd(
+    'xarm_get_ik',
+    {
+      data: {
+        X: data.info.position.x,
+        Y: data.info.position.y,
+        Z: data.info.position.z,
+        A: data.info.orientation.roll,
+        B: data.info.orientation.yaw,
+        C: data.info.orientation.pitch,
+      },
+    },
+    callback,
+  );
+}
 const state = {
   running: true,
   info: {
@@ -129,23 +145,10 @@ const mutations = {
       );
     }
     else { // offline mode
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_get_ik',
-        {
-          data: {
-            X: state.info.position.x,
-            Y: state.info.position.y,
-            Z: state.info.position.z,
-            A: state.info.orientation.roll,
-            B: state.info.orientation.yaw,
-            C: state.info.orientation.pitch,
-          },
-        },
-        (response) => {
-          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-          console.log('get 7 angle, socket res', response);
-        },
-      );
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
     }
   },
   [types.MOVE_END_Z](state, data) {
@@ -165,27 +168,10 @@ const mutations = {
       );
     }
     else { // offline mode
-      console.log('zzzzzz', state.info.position.z, data);
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_get_ik',
-        {
-          data: {
-            X: state.info.position.x,
-            Y: state.info.position.y,
-            Z: state.info.position.z,
-            A: state.info.orientation.roll,
-            B: state.info.orientation.yaw,
-            C: state.info.orientation.pitch,
-          },
-        },
-        (response) => {
-          console.log('get 7 angle, socket res', response);
-          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-
-          console.log('set', response.data.map(num => Number(num.toFixed(2))).slice());
-          console.log('get', state.info.axis);
-        },
-      );
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
     }
   },
   [types.MOVE_YAW_PITCH](state, data) {
@@ -213,23 +199,10 @@ const mutations = {
       // if (data.orientation !== undefined) {
       //   Object.assign(state.info.orientation, data.orientation);
       // }
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_get_ik',
-        {
-          data: {
-            X: state.info.position.x,
-            Y: state.info.position.y,
-            Z: state.info.position.z,
-            A: state.info.orientation.roll,
-            B: state.info.orientation.yaw,
-            C: state.info.orientation.pitch,
-          },
-        },
-        (response) => {
-          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-          console.log('get 7 angle, socket res', response);
-        },
-      );
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
     }
   },
   [types.MOVE_END_ROLL](state, data) {
@@ -255,23 +228,10 @@ const mutations = {
       // if (data.orientation !== undefined) {
       //   Object.assign(state.info.orientation, data.orientation);
       // }
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_get_ik',
-        {
-          data: {
-            X: state.info.position.x,
-            Y: state.info.position.y,
-            Z: state.info.position.z,
-            A: state.info.orientation.roll,
-            B: state.info.orientation.yaw,
-            C: state.info.orientation.pitch,
-          },
-        },
-        (response) => {
-          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-          console.log('get 7 angle, socket res', response);
-        },
-      );
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
     }
   },
   // [types.ROBOT_MOVE_JOINT](state, data) {
