@@ -18,7 +18,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20">
         <el-col :span="20" class="model-container">
-          <keep-alive><xarm-model :control="state.joint" :size="emulatorSize"></xarm-model></keep-alive>
+          <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive>
         </el-col>
         <el-col :span="4">
           <ul class="position-set">
@@ -46,11 +46,17 @@
           </div>
           <div class="control-body">
             <div class="control-left">
-              <el-slider v-model="state.position.z" vertical height="200px" @change="setPositionZ"></el-slider>
+              <div class="height-wrapper">
+                <el-button @click="setPositionZ(true)">Up</el-button>
+                <el-button @click="setPositionZ(false)">Down</el-button>
+              </div>
               <div id="position-joystick" class="joystick-wrapper"></div>
             </div>
             <div class="control-right">
-              <el-slider v-model="state.orientation.roll"></el-slider>
+              <div class="yaw-wrapper">
+                <el-button @click="setYaw(true)">Left</el-button>
+                <el-button @click="setYaw(false)">Right</el-button>
+              </div>
               <div id="orientation-joystick" class="joystick-wrapper"></div>
             </div>
           </div>
@@ -70,7 +76,7 @@
         <div class="dark-backgroud">
           <div class="header-text">Joints Control</div>
           <div class="block" v-for="j in 7" :key="j">
-            <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span>
+            <!-- <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span> -->
             <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider>
           </div>
         </div>
@@ -186,9 +192,10 @@ export default {
       }).on('start', () => {
         positionInterval = setInterval(() => {
           // console.log(typeof this.joystick.step.position.x, typeof this.state.position.x);
-          const nextX = this.joystick.step.position.x + this.state.position.x;
-          const nextY = this.joystick.step.position.y + this.state.position.y;
-          this.$store.commit(types.MOVE_END_XY, [Number(nextX.toFixed(2)), Number(nextY.toFixed(2))]);
+          const nextX = Number((this.joystick.step.position.x).toFixed(2));
+          const nextY = Number((this.joystick.step.position.y).toFixed(2));
+          this.$store.commit(types.MOVE_END_XY, [nextX, nextY]);
+          console.log('interval 500 commit', types.MOVE_END_XY, [nextX, nextY]);
           // this.state.position.x = Number(nextX.toFixed(2));
           // this.state.position.y = Number(nextY.toFixed(2));
         }, 500);
@@ -211,10 +218,12 @@ export default {
         this.setJoystickStep(nipple, 'orientation');
       }).on('start', () => {
         orientationInterval = setInterval(() => {
-          console.log(typeof this.joystick.step.orientation.x, typeof this.state.orientation.yaw);
-          const nextX = this.joystick.step.orientation.x + this.state.orientation.yaw;
-          const nextY = this.joystick.step.orientation.y + this.state.orientation.pitch;
-          this.$store.commit(types.MOVE_END_XY, [Number(nextX.toFixed(2)), Number(nextY.toFixed(2))]);
+          console.log(typeof this.joystick.step.orientation.x, typeof this.joystick.step.orientation.y);
+          // const nextX = this.joystick.step.orientation.x + this.state.orientation.yaw;
+          // const nextY = this.joystick.step.orientation.y + this.state.orientation.pitch;
+          const nextX = Number((this.joystick.step.orientation.x).toFixed(2));
+          const nextY = Number((this.joystick.step.orientation.y).toFixed(2));
+          this.$store.commit(types.MOVE_YAW_PITCH, [nextX, nextY]);
           // this.state.orientation.yaw = Number(nextX.toFixed(2));
           // this.state.orientation.pitch = Number(nextY.toFixed(2));
         }, 500);
@@ -223,7 +232,7 @@ export default {
       });
     },
     setJoystickStep(nipple, type) {
-      const speed = nipple.force * 30;
+      const speed = nipple.force * 0.5;
       let stepX = speed;
       let stepY = speed;
       if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
@@ -278,7 +287,16 @@ export default {
       });
     },
     setPositionZ(value) {
-      this.$store.commit(types.MOVE_END_Z, value);
+      const zoom = 5;
+      const step = value ? zoom : -zoom;
+      console.log('z changeddd', value);
+      this.$store.commit(types.MOVE_END_Z, step);
+    },
+    setYaw(value) {
+      const zoom = 5;
+      const step = value ? zoom : -zoom;
+      console.log('yaw changeddd', value);
+      this.$store.commit(types.MOVE_END_ROLL, step);
     },
   },
   watch: {
@@ -291,6 +309,16 @@ export default {
     // },
   },
   computed: {
+    end: {
+      get() {
+        return this.$store.getters.end;
+      },
+      set(value) {
+        console.log('SET');
+        console.table(value);
+        // this.$store.commit();
+      },
+    },
     // testtest: {
     //   get() {
     //     return this.$store.state.robot.info.test;
@@ -377,10 +405,15 @@ span.text {
       display: flex;
       align-items: center;
       border-right: solid 1px white;
-      .el-slider {
-        padding-bottom: 0;
-        margin-left: 15%;
+      .height-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
+      // .el-slider {
+      //   padding-bottom: 0;
+      //   margin-left: 15%;
+      // }
 
     }
     .control-right {
@@ -395,12 +428,15 @@ span.text {
         left: 50%;
         right: 50%;
       }
-      .el-slider {
-        padding: 0 10%;
-        position: absolute;
-        width: 80%;
-        top: 0;
-        left: 10%;
+      // .el-slider {
+      //   padding: 0 10%;
+      //   position: absolute;
+      //   width: 80%;
+      //   top: 0;
+      //   left: 10%;
+      // }
+      .yaw-wrapper {
+        padding-bottom: 50%;
       }
     }
   }
