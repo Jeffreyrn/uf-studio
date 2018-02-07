@@ -325,6 +325,7 @@ export default {
 
       this.model.localProjTree.folderOrFile = 'file';
       this.model.localProjTree.curDialogTitle = 'Please insert a file';
+      this.model.localProjTree.fileSelected = '.py';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = true;
       setTimeout(() => {
@@ -352,7 +353,7 @@ export default {
       if (curFile.type === 'folder') {
         this.model.localProjTree.folderOrFile = 'rename';
         this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
-        this.model.localProjTree.curDialogInputText = curFile.name;
+        this.model.localProjTree.curDialogInputText = '';//curFile.name;
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
         setTimeout(() => {

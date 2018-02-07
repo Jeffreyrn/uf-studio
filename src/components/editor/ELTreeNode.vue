@@ -1,32 +1,32 @@
-<template>
-  <div class="float-left">
-    aabbbcc
-  </div>
-</template>
+// <template>
+//   <div class="float-left">
+//     aabbbcc
+//   </div>
+// </template>
 
-<script>
+// <script>
 
-export default {
-  data() {
-    return {
-      model: GlobalUtil.model,
-    }
-  },
-  mounted() {
-  },
-  methods: {
-  },
-  beforeDestroy() {
-  },
-  watch: {
-  },
-  computed: {
-  },
-  components: {
-  },
-};
-</script>
+// export default {
+//   data() {
+//     return {
+//       model: GlobalUtil.model,
+//     }
+//   },
+//   mounted() {
+//   },
+//   methods: {
+//   },
+//   beforeDestroy() {
+//   },
+//   watch: {
+//   },
+//   computed: {
+//   },
+//   components: {
+//   },
+// };
+// </script>
 
-<style scoped>
+// <style scoped>
 
-</style>
+// </style>

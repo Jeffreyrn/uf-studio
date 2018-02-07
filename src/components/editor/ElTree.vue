@@ -12,8 +12,9 @@
 
 <script>
 
-import ELTreeNode from './ELTreeNode';
+// import ELTreeNode from './ELTreeNode';
 import { setTimeout } from 'timers';
+import Tree from './../../lib/tree/src/tree';
 
 export default {
   data() {
@@ -89,7 +90,8 @@ export default {
     // },
   },
   components: {
-    ELTreeNode,
+    // ELTreeNode,
+    Tree,
   },
 };
 </script>

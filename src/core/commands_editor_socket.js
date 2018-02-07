@@ -129,8 +129,8 @@ self.createProj = (name) => {
   };
   self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
     self.listProjs(() => {
-      const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
-      self.model.localProjTree.changeProj(lastProj.uuid);
+      // const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
+      self.model.localProjTree.changeProj(filePath);
     });
   });
 };
