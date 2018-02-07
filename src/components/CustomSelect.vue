@@ -64,6 +64,9 @@ export default {
             optionItem[i].addEventListener('click',function(){
                 selectHeadCont[0].innerHTML = optionItem[this.index].innerHTML;
                 GlobalUtil.model.localProjTree.fileSelected = `.${selectHeadCont[0].innerHTML}`;
+                if (selectHeadCont[0].innerHTML === 'none') {
+                    selectHeadCont[0].innerHTML = '';
+                }
                 Option.style.display = 'none';
             },false);
         }
@@ -77,6 +80,9 @@ export default {
         setSelected() {
             const selectHeadCont = document.getElementsByClassName('select-head-cont');
             selectHeadCont[0].innerHTML = GlobalUtil.model.localProjTree.fileSelected.replace('.', ''); //optionItem[0].innerHTML;
+            if (selectHeadCont[0].innerHTML === 'none') {
+                selectHeadCont[0].innerHTML = '';
+            }
         },
     },
     computed: {
