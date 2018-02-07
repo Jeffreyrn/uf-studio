@@ -39,6 +39,9 @@ self.isFileStr = (str) => {
   if (str.length === 0) {
     return false;
   }
+  if (str.length > 10) {
+    return false;
+  }
   const firstChar = str[0];
   if ( !(firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z') ) {
     return false;
