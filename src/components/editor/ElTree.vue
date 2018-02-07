@@ -6,6 +6,7 @@
     style="padding-left:10px;"
     :data="model.localProjTree.curProTreeDatas"
     node-key="uuid"
+    :indent=8
     :render-content="renderContent"
     :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
     @node-click="handleNodeClick">
