@@ -3,6 +3,7 @@
   <!-- :render-content="renderContent" -->
   <Tree
     id="tree-root"
+    style="padding-left:10px;"
     :data="model.localProjTree.curProTreeDatas"
     node-key="uuid"
     :render-content="renderContent"
