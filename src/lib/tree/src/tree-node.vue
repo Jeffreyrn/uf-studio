@@ -284,6 +284,7 @@
   /* font-size: 5px; */
   /* color: #FFFFFF; */
   color:#A6A6A6;
+  /* color: yellow; */
   letter-spacing: -0.8px;
 }
 </style>
