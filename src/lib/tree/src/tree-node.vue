@@ -49,7 +49,7 @@
         v-if="node.loading"
         class="el-tree-node__loading-icon el-icon-loading">
       </span> -->
-      <node-content :node="node" style="padding-left:5px;"></node-content>
+      <node-content :node="node" class="label-font" style="padding-left:5px;"></node-content>
     </div>
     <!-- <el-collapse-transition>
       <div
@@ -278,6 +278,13 @@
   background-image: url('./../assets/img/icon_documents.svg');
   /* background-image: url('./../assets/img/language_python.svg'); */
   background-size: 12px 12px;
+}
+.label-font {
+  font-family: 'Gotham-Book';
+  /* font-size: 5px; */
+  /* color: #FFFFFF; */
+  color:#A6A6A6;
+  letter-spacing: -0.8px;
 }
 </style>
 
