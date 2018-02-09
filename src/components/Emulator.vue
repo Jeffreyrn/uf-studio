@@ -22,16 +22,17 @@
         </el-col>
         <el-col :span="4">
           <ul class="position-set">
-            <li><span>X</span><el-input placeholder="Please input" v-model="state.position.x"></el-input></li>
-            <li><span>Y</span><el-input placeholder="Please input" v-model="state.position.y"></el-input></li>
-            <li><span>Z</span><el-input placeholder="Please input" v-model="state.position.z"></el-input></li>
-            <li><span>Roll</span><el-input placeholder="Please input" v-model="state.orientation.roll"></el-input></li>
-            <li><span>Yaw</span><el-input placeholder="Please input" v-model="state.orientation.yaw"></el-input></li>
-            <li><span>Pitch</span><el-input placeholder="Please input" v-model="state.orientation.pitch"></el-input></li>
+            <li><span>X</span><input v-model.number="state.position.x" type="number"></li>
+            <li><span>Y</span><input v-model.number="state.position.y" type="number"></li>
+            <li><span>Z</span><input v-model.number="state.position.z" type="number"></li>
+            <li><span>Roll</span><input v-model.number="state.orientation.roll" type="number"></li>
+            <li><span>Yaw</span><input v-model.number="state.orientation.yaw" type="number"></li>
+            <li><span>Pitch</span><input v-model.number="state.orientation.pitch" type="number"></li>
+            <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
           </ul>
           <div>
-            <el-button type="primary" round size="small">Apply</el-button>
-            <el-button round size="small">Cancel</el-button>
+            <el-button type="primary" round size="small" @click="setEnd">Apply</el-button>
+            <el-button round size="small" @click="resetEnd">Cancel</el-button>
           </div>
         </el-col>
       </el-row>
@@ -47,15 +48,19 @@
           <div class="control-body">
             <div class="control-left">
               <div class="height-wrapper">
-                <el-button @click="setPositionZ(true)">Up</el-button>
-                <el-button @click="setPositionZ(false)">Down</el-button>
+                <!-- <el-button @click="setPositionZ(true)">Up</el-button>
+                <el-button @click="setPositionZ(false)">Down</el-button> -->
+                <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control" 
+                  @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
               </div>
               <div id="position-joystick" class="joystick-wrapper"></div>
             </div>
             <div class="control-right">
               <div class="yaw-wrapper">
-                <el-button @click="setYaw(true)">Left</el-button>
-                <el-button @click="setYaw(false)">Right</el-button>
+                <!-- <el-button @click="setYaw(true)">Left</el-button>
+                <el-button @click="setYaw(false)">Right</el-button> -->
+                <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
+                  @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw">
               </div>
               <div id="orientation-joystick" class="joystick-wrapper"></div>
             </div>
@@ -63,13 +68,11 @@
         </div>
         <div class="config-wrapper dark-backgroud">
           <div>
-            <span>Speed</span><el-slider v-model="state.speed" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+            <span>Speed</span><input type="range" v-model="state.speed" :step="config.step" :max="config.jointMax" :min="config.jointMin">
           </div>
-          
           <div>
-            <span>Acceleration</span><el-slider v-model="state.acceleration" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider>
+            <span>Acceleration</span><input type="range" v-model="state.acceleration" :step="config.step" :max="config.jointMax" :min="config.jointMin">
           </div>
-          
         </div>
       </el-col>
       <el-col :span="8">
@@ -77,7 +80,10 @@
           <div class="header-text">Joints Control</div>
           <div class="block" v-for="j in 7" :key="j">
             <!-- <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span> -->
-            <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider>
+            <input v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+              @input="setJoint(j-1)" @change="setJointOnline(j-1)">
+            <input type="number" v-model="state.joint[j-1]">
+            <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
           </div>
         </div>
       </el-col>
@@ -117,10 +123,12 @@ export default {
           position: {
             x: 0,
             y: 0,
+            z: 0,
           },
           orientation: {
             x: 0,
             y: 0,
+            z: 0,
           },
         },
       },
@@ -162,6 +170,8 @@ export default {
         height: 530 / 1030,
       },
       msg: 'Emulator',
+      interval: null,
+      intervalYaw: null,
     };
   },
   mounted() {
@@ -281,24 +291,54 @@ export default {
       };
       this.$store.commit(types.SET_ROBOT_STATE, data);
     },
-    setJoint(index, value) {
+    setJoint(index) {
       // console.log('test', index, value);
-      this.$store.commit(types.MOVE_ONE_JOINT, {
-        index,
-        value,
+      if (!this.state.online) {
+        this.$store.commit(types.MOVE_ONE_JOINT, {
+          index,
+          value: this.state.joint[index],
+        });
+      }
+    },
+    setJointOnline(index) {
+      if (this.state.online) {
+        this.$store.commit(types.MOVE_ONE_JOINT, {
+          index,
+          value: this.state.joint[index],
+        });
+      }
+    },
+    setYaw() {
+      this.intervalYaw = setInterval(() => {
+        this.$store.commit(types.MOVE_END_ROLL, Number(this.joystick.step.orientation.z));
+      }, 500);
+    },
+    resetYaw() {
+      this.joystick.step.orientation.z = 0;
+      clearInterval(this.intervalYaw);
+    },
+    setPositionZ() {
+      this.interval = setInterval(() => {
+        this.$store.commit(types.MOVE_END_Z, Number(this.joystick.step.position.z));
+      }, 500);
+    },
+    resetPositionZ() {
+      this.joystick.step.position.z = 0;
+      clearInterval(this.interval);
+    },
+    resetEnd() {
+      Object.keys(this.state.position).forEach((index) => {
+        this.state.position[index] = 0;
+      });
+      Object.keys(this.state.orientation).forEach((index) => {
+        this.state.orientation[index] = 0;
       });
     },
-    setPositionZ(value) {
-      const zoom = 5;
-      const step = value ? zoom : -zoom;
-      console.log('z changeddd', value);
-      this.$store.commit(types.MOVE_END_Z, step);
-    },
-    setYaw(value) {
-      const zoom = 5;
-      const step = value ? zoom : -zoom;
-      console.log('yaw changeddd', value);
-      this.$store.commit(types.MOVE_END_ROLL, step);
+    setEnd() {
+      this.$store.commit(types.MOVE_END, {
+        position: this.state.position,
+        orientation: this.state.orientation,
+      });
     },
   },
   watch: {
@@ -411,6 +451,23 @@ span.text {
         display: flex;
         flex-direction: column;
         align-items: center;
+        #z-control {
+          // appearance: slider-vertical; // abandoned, can not set width with css
+          width: 100%;
+          height: 20px;
+          background: #fff;
+          opacity: 1;
+          transform: rotate(-90deg);
+        }
+        #z-control::-webkit-slider-thumb {
+          width: 25px;
+          height: 25px;
+          background-image: gradient(right, #222, #eee);
+          -webkit-appearance: none;
+          border: none;
+          border-radius: 50%;
+          background: orange;
+        }
       }
       // .el-slider {
       //   padding-bottom: 0;

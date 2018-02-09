@@ -207,10 +207,10 @@ export default {
       // const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 0.1, 1000);
       const sizeArray = this.getRenderSize();
       const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
-      const camera = new THREE.OrthographicCamera(halfSize[0], -halfSize[0], halfSize[1], -halfSize[1], 50, -50);
+      const camera = new THREE.OrthographicCamera(-halfSize[0], halfSize[0], halfSize[1], -halfSize[1], -50, 50);
       // camera.position.z = -50;
       // camera.up = new THREE.Vector3(-1, -1, -1);
-      camera.position.set(-3, -1, -3); // camera position
+      camera.position.set(3, 1, 3); // camera position
       camera.lookAt(scene.position); // camera look at
       const light = new THREE.PointLight(0xcccccc, 1, 100); // light
       light.position.set(10, 14, 10);
@@ -317,8 +317,8 @@ export default {
         const sizeArray = this.getRenderSize();
         renderer.setSize(...sizeArray);
         const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
-        camera.left = halfSize[0];
-        camera.right = -halfSize[0];
+        camera.left = -halfSize[0];
+        camera.right = halfSize[0];
         camera.top = halfSize[1];
         camera.bottom = -halfSize[1];
         // camera.aspect = this.getCameraAspect();

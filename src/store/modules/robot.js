@@ -234,6 +234,45 @@ const mutations = {
       });
     }
   },
+  [types.MOVE_END](state, data) {
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_line',
+        {
+          data: {
+            X: data.position.x,
+            Y: data.position.y,
+            Z: data.position.z,
+            A: data.orientation.roll,
+            B: data.orientation.yaw,
+            C: data.orientation.pitch,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('roll yaw socket res', response); },
+      );
+    }
+    else { // offline mode
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_get_ik',
+        {
+          data: {
+            X: data.position.x,
+            Y: data.position.y,
+            Z: data.position.z,
+            A: data.orientation.roll,
+            B: data.orientation.yaw,
+            C: data.orientation.pitch,
+          },
+        },
+        (response) => {
+          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+          console.log('set end, socket res', response);
+        },
+      );
+    }
+  },
   // [types.ROBOT_MOVE_JOINT](state, data) {
   //   state.info.axis = data.slice();
   //   console.log('set joint:', data);
