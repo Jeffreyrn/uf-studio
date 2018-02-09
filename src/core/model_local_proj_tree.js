@@ -629,18 +629,28 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   // console.log(`curProjAddOrRemoveExpandedKeys`);
   const isFile = self.isFile(uuid);
   let isExist = false;
+  let tempKeys = [];
   if (isFile === false) {
     for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
-      if (uuid === self.curProjExpandedKeys[i]) {
+      // if (uuid === self.curProjExpandedKeys[i]) {
+      //   // self.curProjExpandedKeys[i] = null;
+      //   self.curProjExpandedKeys.splice(i,1);
+      //   isExist = true;
+      // }
+      // if (self.curProjExpandedKeys[i].indexOf(uuid)> -1) {
         // self.curProjExpandedKeys[i] = null;
-        self.curProjExpandedKeys.splice(i,1);
-        isExist = true;
+        // self.curProjExpandedKeys.splice(i,1);
+        // isExist = true;
+      // }
+      if (self.curProjExpandedKeys[i].indexOf(uuid) < 0) {
+        tempKeys.push(self.curProjExpandedKeys[i]);
       }
     }
   }
-  if (isExist === false && isFile === false) {
-    self.curProjExpandedKeys.push(uuid);
-  }
+  // if (isExist === false && isFile === false) {
+  //   self.curProjExpandedKeys.push(uuid);
+  // }
+  self.curProjExpandedKeys = tempKeys; //self.curProjExpandedKeys;
   // console.log(`curProjAddOrRemoveExpandedKeys count = ${JSON.stringify(self.curProjExpandedKeys)}`);
 };
 
