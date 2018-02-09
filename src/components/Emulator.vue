@@ -2,15 +2,16 @@
   <el-container class="hello emulator-container">
     <el-header height="50px">
       <el-row :gutter="20" class="header-wrapper">
-        <el-col :span="20">
+        <el-col :span="19">
           <router-link :to="{ name: 'Home'}">
             <img src="./../assets/img/control/icon_back.svg" alt="back home">
           </router-link>
           <span class="title-ide">Control</span>
         </el-col>
-        <el-col :span="4">
-          <toggle-button v-model="state.online" color="#82C7EB" :sync="true" 
-            :labels="{checked: 'online', unchecked: 'offline'}" @change="setOnline"
+        <el-col :span="5">
+          <div class="title-online">Live Control</div>
+          <toggle-button v-model="state.online" :color="{checked: '#8FFF94', unchecked: '#FF0000'}" :sync="true" 
+            :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
             :width="71" :height="36"/>
         </el-col>
       </el-row>
@@ -33,7 +34,7 @@
           </ul>
           <div class="set-button">
             <button class="confirm" @click="setEnd">Apply</button>
-            <button calss="cancel" @click="resetEnd">Cancel</button>
+            <button class="cancel" @click="resetEnd">Reset</button>
           </div>
         </el-col>
       </el-row>
@@ -626,6 +627,12 @@ span.text {
   letter-spacing: -1px;
   padding-left: 2%;
 }
+.title-online {
+  margin-right: 5%;
+  font-size: 1.2rem;
+  color: #434343;
+  letter-spacing: -0.75px;
+}
 .header-text {
   font-size: 1.6rem;
   color: white;
@@ -641,8 +648,9 @@ span.text {
     display: flex;
     align-items: center;
     span {
-    width: 2vw;
-    font-size: 1.2rem;
+      width: 2vw;
+      font-size: 1.2rem;
+      font-family: "Gotham-Book";
     }
     input[type=range] {
       height: 2px;

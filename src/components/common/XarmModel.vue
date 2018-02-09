@@ -390,4 +390,7 @@ span.text {
 #emulator-container > *{
   border-radius: 8px;
 }
+#model-wrapper {
+  box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
+}
 </style>
