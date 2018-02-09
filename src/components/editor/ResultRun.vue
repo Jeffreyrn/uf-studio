@@ -18,6 +18,10 @@
       <div class="run-icon float-right" @click="runCmd()" title='Run'>
       </div>
     </span>
+    <span v-if="model.localProjTree.isCmdRunning===true">
+      <div class="stop-icon float-right" @click="stopCmd()" title='Run'>
+      </div>
+    </span>
   </div>
 </template>
 
@@ -35,6 +39,11 @@ export default {
   methods: {
     clearText() {
       GlobalUtil.model.localProjTree.runningCmdResult = '';
+    },
+    stopCmd() {
+      CommandsEditorSocket.stopPythonScript((dict) => {
+
+      });
     },
     runCmd() {
       console.log(`run run`);
@@ -89,6 +98,19 @@ export default {
   height: 30px;
   background: #3C3F41;
   background-image: url('./../../assets/img/ide/icon_running.svg');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.stop-icon {
+  margin-right: 1px;
+  /* margin-top: 4px; */
+  width: 30px;
+  height: 30px;
+  background: #3C3F41;
+  background-image: url('./../../assets/img/ide/icon_stop.svg');
   background-size: 16px 16px;
   background-repeat: no-repeat;
   background-position: center;

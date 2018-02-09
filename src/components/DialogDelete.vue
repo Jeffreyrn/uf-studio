@@ -1,6 +1,6 @@
 
 <template>
-  <div id="root-delete">
+  <div id="root-delete" class="noselected">
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
       <div class="dialog-content">

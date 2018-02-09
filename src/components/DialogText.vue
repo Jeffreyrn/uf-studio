@@ -1,6 +1,6 @@
 
 <template>
-  <div id="root-dialog">
+  <div id="root-dialog" class="noselected">
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
       <div class="dialog-content" @click="contentClick">

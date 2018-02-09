@@ -10,7 +10,7 @@
       <div @click="close()" class="float-left tab-cancel"></div>
     </div>
   </div> -->
-  <div>
+  <div class="noselected">
 
     <!-- un selected -->
     <div v-if="data.uuid!==model.localProjTree.curSelectedFileUUID" class="">

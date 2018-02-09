@@ -1,6 +1,6 @@
 <template>
   <div
-    class="el-tree-node"
+    class="el-tree-node noselected"
     @click.stop="handleClick"
     v-show="node.visible"
     :class="{
@@ -308,6 +308,7 @@
   /* color: yellow; */
   letter-spacing: -0.8px;
 }
+
 /* ::selection
 {
   color:#ff0000;

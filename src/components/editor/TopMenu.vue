@@ -1,5 +1,6 @@
 
 import { setTimeout } from 'timers';
+import { setTimeout } from 'timers';
 <template>
   <div>
     <!-- <form id='f_form' v-show='false'>
@@ -157,14 +158,17 @@ export default {
         return;
       }
       GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
+      GlobalUtil.model.localProjTree.runningCmdResult = '';
       GlobalUtil.model.localProjTree.onwinresize();
       CommandsEditorSocket.stopPythonScript(() => {
         GlobalUtil.model.localProjTree.runningCmdResult = '';
+      });
+      setTimeout(() => {
         CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
           // GlobalUtil.model.localProjTree.isCmdRunning = true;
           GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
         });
-      });
+      }, 100);
     },
     stop() {
       CommandsEditorSocket.stopPythonScript((dict) => {
