@@ -16,23 +16,24 @@
       </el-row>
     </el-header>
     <el-main class="main-wrapper">
-      <el-row :gutter="20">
-        <el-col :span="20" class="model-container">
+      <el-row :gutter="20" class="main-view">
+        <el-col :span="19" class="model-container">
           <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="5" class="end-container">
+          <div class="container-title">TCP</div>
           <ul class="position-set">
-            <li><span>X</span><input v-model.number="state.position.x" type="number"></li>
-            <li><span>Y</span><input v-model.number="state.position.y" type="number"></li>
-            <li><span>Z</span><input v-model.number="state.position.z" type="number"></li>
-            <li><span>Roll</span><input v-model.number="state.orientation.roll" type="number"></li>
-            <li><span>Yaw</span><input v-model.number="state.orientation.yaw" type="number"></li>
-            <li><span>Pitch</span><input v-model.number="state.orientation.pitch" type="number"></li>
+            <li><div>X</div><input v-model.number="state.position.x" type="number"><span>mm</span></li>
+            <li><div>Y</div><input v-model.number="state.position.y" type="number"><span>mm</span></li>
+            <li><div>Z</div><input v-model.number="state.position.z" type="number"><span>mm</span></li>
+            <li><div>Roll</div><input v-model.number="state.orientation.roll" type="number"><span>&deg;</span></li>
+            <li><div>Yaw</div><input v-model.number="state.orientation.yaw" type="number"><span>&deg;</span></li>
+            <li><div>Pitch</div><input v-model.number="state.orientation.pitch" type="number"><span>&deg;</span></li>
             <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
           </ul>
-          <div>
-            <el-button type="primary" round size="small" @click="setEnd">Apply</el-button>
-            <el-button round size="small" @click="resetEnd">Cancel</el-button>
+          <div class="set-button">
+            <button class="confirm" @click="setEnd">Apply</button>
+            <button calss="cancel" @click="resetEnd">Cancel</button>
           </div>
         </el-col>
       </el-row>
@@ -76,10 +77,10 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="dark-backgroud">
+        <div class="dark-backgroud joint-control">
           <div class="header-text">Joints Control</div>
-          <div class="block" v-for="j in 7" :key="j">
-            <!-- <span class="text">J{{j-1}}:{{state.joint[j-1]}}</span> -->
+          <div class="block joint-range" v-for="j in 7" :key="j">
+            <span class="text">J{{j}}</span>
             <input v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
               @input="setJoint(j-1)" @change="setJointOnline(j-1)">
             <input type="number" v-model="state.joint[j-1]">
@@ -378,9 +379,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$liDivWidth : 17%;
+$liInputWidth : 70%;
 .hello {
+  font-family:'Gotham-Medium';
   display: flex;
   flex-direction: column;
+}
+input[type=range] {
+  cursor: pointer;
 }
 .emulator-container {
   background-color: #F8F8F8;
@@ -395,15 +402,72 @@ export default {
   }
   .main-wrapper{
     padding: 10px 20px;
-    .model-container{
-      border-radius: 0px;
-    }
-    ul.position-set li{
-      & > span {
-        width: 20%;
+    .main-view {
+      display: flex;
+      align-items: flex-start;
+      overflow: hidden;
+      .model-container{
+        border-radius: 0px;
       }
-      & > div {
-        width: 75%;
+      .end-container {
+        background: white;
+        border-radius: 8px;
+        .container-title {
+          padding: 2vw 1vw;
+          font-size: 1.5rem;
+          color: #444444;
+          letter-spacing: -1px;
+        }
+        .set-button {
+          margin-left: $liDivWidth;
+          width: $liInputWidth;
+          padding-bottom: 6vw;
+          button {
+            border: none;
+            background: #E9E9E9;
+            box-shadow: inset 0 0 1px 0 rgba(177,177,177,0.50);
+            border-radius: 100px;
+            cursor: pointer;
+            height: 3vw;
+            width: 45%;
+            margin: 5% 1%;
+            color: #6C6A6A;
+            letter-spacing: -0.75px;
+            font-family: "Gotham-Book";
+          }
+          button.cancel {
+            color: #BEBEBE;
+            background: #F2F3F5;
+          }
+        }
+        
+      }
+      ul.position-set li{
+        margin-bottom: 4%;
+        div {
+          width: $liDivWidth;
+          font-family: "Gotham-Book";
+          font-size: 1rem;
+          color: #909293;
+          letter-spacing: -0.67px;
+          display: inline-block;
+          padding: 4% 0;
+          text-align: center;
+        }
+        input[type=number] {
+          height: 2.5vw;
+          width: $liInputWidth;
+          background: #F2F3F5;
+          border: none;
+          box-shadow: inset 0 0 2px 0 rgba(152,152,152,0.50);
+          border-radius: 100px;
+          text-align: center;
+        }
+        span {
+          font-size: 0.8rem;
+          color: #666;
+          margin-left: 0.3vw;
+        }
       }
     }
   }
@@ -453,11 +517,13 @@ span.text {
         align-items: center;
         #z-control {
           // appearance: slider-vertical; // abandoned, can not set width with css
-          width: 100%;
-          height: 20px;
+          width: 120%;
+          height: 18px;
           background: #fff;
           opacity: 1;
           transform: rotate(-90deg);
+          border-radius: 100px;
+          border: none;
         }
         #z-control::-webkit-slider-thumb {
           width: 25px;
@@ -466,7 +532,8 @@ span.text {
           -webkit-appearance: none;
           border: none;
           border-radius: 50%;
-          background: orange;
+          background: #5A93D7;
+          box-shadow: 0 0 2px 0 rgba(45,73,67,0.17);
         }
       }
       // .el-slider {
@@ -496,6 +563,25 @@ span.text {
       // }
       .yaw-wrapper {
         padding-bottom: 50%;
+        input {
+          // appearance: slider-vertical; // abandoned, can not set width with css
+          width: 100%;
+          height: 18px;
+          background: #fff;
+          opacity: 1;
+          border-radius: 100px;
+          border: none;
+        }
+        input::-webkit-slider-thumb {
+          width: 25px;
+          height: 25px;
+          background-image: gradient(right, #222, #eee);
+          -webkit-appearance: none;
+          border: none;
+          border-radius: 50%;
+          background: #5A93D7;
+          box-shadow: 0 0 2px 0 rgba(45,73,67,0.17);
+        }
       }
     }
   }
@@ -511,9 +597,21 @@ span.text {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    & > div {
+    input[type=range] {
+      height: 8px;
       width: 100%;
-      padding-left: 7%;
+      margin-left: 7%;
+      border-radius: 100px;
+      background-image: linear-gradient(90deg, #8FFF94 0%, #FF6868 100%);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      width: 22px;
+      height: 22px;
+      -webkit-appearance: none;
+      border: none;
+      border-radius: 50%;
+      background: #FEFEFE;
+      box-shadow: 0 0 8px 0 rgba(214,214,214,0.50);
     }
   }
 }
@@ -535,4 +633,41 @@ span.text {
   padding: 1% 2% 0;
   letter-spacing: -1px;
 }
+.joint-control {
+  padding-bottom: 1vw;
+  .joint-range {
+    color: white;
+    padding: 0.8vw 1vw;
+    display: flex;
+    align-items: center;
+    span {
+    width: 2vw;
+    font-size: 1.2rem;
+    }
+    input[type=range] {
+      height: 2px;
+      background: white;
+      width: 20vw;
+      margin-right: 0.5vw;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      width: 24px;
+      height: 24px;
+      -webkit-appearance: none;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+    }
+    input[type=number] {
+      width: 5.5vw;
+      border: none;
+      border-radius: 100px;
+      text-align: center;
+      color: #666;
+      letter-spacing: -0.67px;
+      font-size: 1rem;
+    }
+  }
+}
+
 </style>
