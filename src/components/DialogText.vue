@@ -27,7 +27,7 @@
           </div> -->
         </div>
         <div v-if="!isExtInput">
-          <input @keydown="model.localProjTree.show();" id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
+          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
         </div>
         <div style="margin-top:230px;">
           <div class="float-left btn-cancel" @click="closeMyself">
@@ -114,6 +114,7 @@ export default {
       }
       this.model.localProjTree.projsDialogShow = false;
       this.model.localProjTree.fileDialogShow = false;
+      this.model.localProjTree.deleteDialogShow = false;
     },
   },
   components: {

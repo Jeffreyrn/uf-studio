@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="noselect">
         <ul class="root-select">
             <li>
                 <div class="select-head">
@@ -126,7 +126,7 @@ ul,li {
     // border-radius: 5px;
     cursor: pointer;
 }
-.select-head{
+.select-head {
     overflow: hidden;
     // width: 249px;
     // height: 40px;
@@ -136,7 +136,7 @@ ul,li {
     width: 46px;
     height: 34px;
 }
-.select-head .select-head-cont{
+.select-head .select-head-cont {
     float: left;
 }
 .select-font {
@@ -147,10 +147,10 @@ ul,li {
     padding-left: 8px;
     // padding-top: 8px;
 }
-.select-head .select-icon{
+.select-head .select-icon {
     float: right;
 }
-.option{
+.option {
     // text-indent: 10px;
     // margin-top: 1px;
     // width: 249px;
@@ -163,7 +163,7 @@ ul,li {
     // border: 1px #cfcfcf solid;
     display: none;
 }
-.option-item:hover{
+.option-item:hover {
     // background: rgba(204,106,67,0.3);
     background: #202020;
 }
@@ -187,5 +187,13 @@ ul,li {
     background-repeat: no-repeat;
     background-size: 7px 5px
 }
-
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+not supported by any browser */
+}
 </style>

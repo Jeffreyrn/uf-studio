@@ -267,19 +267,19 @@
 
 <style scoped>
 .icon-folder {
-  width: 12px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   background-image: url('./../assets/img/icon_folder.svg');
-  background-size: 12px 16px;
+  background-size: 18px 18px;
   background-repeat: no-repeat;
   background-position: center;
 }
 .icon-folder-open {
-  width: 12px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   /* background-image: url('./../assets/img/icon_folder.svg'); */
   background-image: url('./../assets/img/language_python.svg');
-  background-size: 12px 16px;
+  background-size: 18px 18px;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -308,7 +308,7 @@
   /* color: yellow; */
   letter-spacing: -0.8px;
 }
-::selection
+/* ::selection
 {
   color:#ff0000;
 }
@@ -316,6 +316,6 @@
 ::-moz-selection
 {
   color:#ff0000;
-}
+} */
 </style>
 

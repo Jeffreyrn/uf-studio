@@ -88,6 +88,10 @@ export default {
     CommandsEditorSocket.listProjs((dict) => {
 
     });
+
+    document.onkeydown = () => {
+      GlobalUtil.model.localProjTree.show();
+    };
   },
   methods: {
     onCloseResult() {

@@ -16,7 +16,7 @@
 <script>
 
 // import ELTreeNode from './ELTreeNode';
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 import Tree from './../../lib/tree/src/tree';
 
 export default {
@@ -65,31 +65,6 @@ export default {
         </span>
       );
     },
-    // renderContent(h, { node, data, store }) {
-    //   return (
-    //     <span style="flex: 1; display: flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-    //       <span>
-    //         <span>{node.label}</span>
-    //       </span>
-    //       <span>
-    //         <el-button style="font-size: 12px;" type="text" on-click={ () => this.append(data) }>Append</el-button>
-    //         <el-button style="font-size: 12px;" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-    //       </span>
-    //     </span>);
-    // }
-    // renderContent(h, { node, data, store }) {
-    //   return (
-    //       <span style="flex:1;display:flex;align-items:center;justify-content:space-between;font-size:14px;padding-right:8px;">
-    //         <span>
-    //           <span>{node.label}</span>
-    //         </span>
-    //         <span>
-    //           <el-button style="font-size: 12px;" type="text" on-click={ () => this.append(data) }>Append</el-button>
-    //           <el-button style="font-size: 12px;" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-    //         </span>
-    //     </span>
-    //   );
-    // },
   },
   beforeDestroy() {
   },
@@ -101,7 +76,6 @@ export default {
     // },
   },
   components: {
-    // ELTreeNode,
     Tree,
   },
 };

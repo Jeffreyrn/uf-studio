@@ -1,8 +1,8 @@
 
 <template>
-  <div>
+  <div id="root-delete">
     <div class="dialog-wrap">
-      <!-- <div class="dialog-cover" @click="closeMyself"></div> -->
+      <div class="dialog-cover" @click="closeMyself"></div>
       <div class="dialog-content">
         <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
         <div style="margin-top:156px;">
@@ -49,6 +49,10 @@ export default {
   },
   components: {
     CustomSelect,
+  },
+  mounted() {
+    // const div = document.getElementById('root-delete');
+    // div.addEventListener('keydown', 'GlobalUtil.model.localProjTree.show');
   },
   computed: {
   },
