@@ -278,7 +278,7 @@
   width: 18px;
   height: 18px;
   /* background-image: url('./../assets/img/icon_folder.svg'); */
-  background-image: url('./../assets/img/language_python.svg');
+  background-image: url('./../assets/img/icon_openfolder.svg');
   background-size: 18px 18px;
   background-repeat: no-repeat;
   background-position: center;
