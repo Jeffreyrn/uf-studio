@@ -1,9 +1,9 @@
 
 <template>
-  <div>
+  <div id="root-dialog">
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
-      <div class="dialog-content">
+      <div class="dialog-content" @click="contentClick">
         <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
         <!-- <div class="dialog-top">
           <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
@@ -70,6 +70,11 @@ export default {
     }
   },
   methods: {
+    contentClick() {
+      console.log(`contentClick contentClick`);
+      const Option = document.getElementsByClassName('option')[0];
+      Option.style.display = 'none';
+    },
     closeMyself() {
       // this.$emit('on-close')
       // this.model.localProjTree.projsDialogShow = false;
@@ -130,7 +135,7 @@ export default {
         const getFileSuperid = this.model.localProjTree.getFileSuperid();
         const toAddFile = path.join(getFileSuperid, `${text}${ext}`);
         const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
-        console.log(`toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
+        console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
         return isFileStr && !isRepeatFile;
       }
       return isFileStr;

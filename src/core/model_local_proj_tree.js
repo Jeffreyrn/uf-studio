@@ -643,21 +643,22 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   }
   // console.log(`curProjAddOrRemoveExpandedKeys count = ${JSON.stringify(self.curProjExpandedKeys)}`);
 };
-self.findFolder = (tmpArr, superid) => {
-  for (let i = 0; i < self.curProj.files.length; i += 1) {
-    const aChild = {};
-    const file = self.curProj.files[i];
-    if (superid === file.superid) {
-      aChild.label = file.name; //`<div>${file.name}</div>`;// self.getThisFileFullPath(file.uuid); //
-      aChild.uuid = file.uuid;
-      aChild.children = [];
-      tmpArr.push(aChild);
-      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-        // self.curProjExpandedKeys.push(file.uuid);
-        self.findFolder(aChild.children, file.uuid);
-      }
+
+self.sortProjFiles = (files) => {
+  let tempFiles = [];
+  let tempFolders = [];
+  for (let j = 0; j < files.length; j += 1) {
+    const file = files[j];
+    // console.log(`bChild bChild type = ${JSON.stringify(bChild.type)}`);
+    // const file = files[j];
+    if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+      tempFolders.push(file);
+    }
+    if (file.type === self.PROJ_TREE_TYPE.FILE) {
+      tempFiles.push(file);
     }
   }
+  return tempFiles.concat(tempFolders);
 };
 
 self.curProTreeDatas = [];
@@ -670,6 +671,7 @@ self.curPro2Tree = () => {
   }
   const files = self.curProj.files;
   let tempDatas = [];
+  // first folder proj
   const aChild = {};
   aChild.label = self.curProj.name;
   aChild.uuid = self.curProj.uuid;
@@ -681,6 +683,23 @@ self.curPro2Tree = () => {
   // console.log(`self.curProjTreeData = ${JSON.stringify(tempDatas)}`);
   // return tempDatas;
   self.curProTreeDatas = tempDatas;
+};
+
+self.findFolder = (tmpArr, superid) => {
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
+    const aChild = {};
+    const file = self.curProj.files[i];
+    if (superid === file.superid) {
+      aChild.label = file.name; //`<div>${file.name}</div>`;// self.getThisFileFullPath(file.uuid); //
+      aChild.uuid = file.uuid;
+      aChild.type = file.type;
+      aChild.children = [];
+      tmpArr.push(aChild);
+      if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+        self.findFolder(aChild.children, file.uuid);
+      }
+    }
+  }
 };
 
 self.curFile = null;
@@ -816,8 +835,10 @@ self.remoteProjs2Local = (dict) => {
 
         curProj.files.push(file);
       }
+      curProj.files = self.sortProjFiles(curProj.files);
       tempPath = path.dirname(tempPath);
-    } //;
+    } 
+    //;
     // console.log(`filesDict = ${JSON.stringify(filesDict)}`);
     // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
   }

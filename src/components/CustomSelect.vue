@@ -55,7 +55,12 @@ export default {
         
         /*点击后出现下拉框*/
         selectHead.addEventListener('click',function(){
-            Option.style.display = 'block';
+            // setTimeout(()=>{
+            //     Option.style.display = 'block';
+            // }, 10);
+            setTimeout(() => {
+                Option.style.display = 'block';
+            }, 100);
         },false);
         /*点击选项后出现在下拉框*/
         var len = optionItem.length;
@@ -71,9 +76,14 @@ export default {
             },false);
         }
         /*点击其他地方时，select会收起来*/
-        document.body.addEventListener('click',function(){
-            Option.style.display = 'none';
-        }.false);
+        // document.body.addEventListener('click',function(){
+        //     Option.style.display = 'none';
+        // }.false);
+
+        // document.getElementById('root-dialog').addEventListener('click',function(){
+        //     Option.style.display = 'none';
+        // }.false);
+
         this.setSelected();
     },
     methods: {
@@ -114,6 +124,7 @@ ul,li {
     color: white;
     // border: 1px #1a1a1a solid;
     // border-radius: 5px;
+    cursor: pointer;
 }
 .select-head{
     overflow: hidden;

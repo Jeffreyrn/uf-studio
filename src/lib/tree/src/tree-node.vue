@@ -29,13 +29,25 @@
         class="txt-icon"
         @click.stop="handleExpandIconClick"
         :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
-      </span>
+      </span>      
       <span
-        v-if="node.label.indexOf('.')<0"
+        v-if="node.label.indexOf('.')<0 && !expanded"
         class="icon-folder"
         @click.stop="handleExpandIconClick"
         :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
       </span>
+      <span
+        v-if="node.label.indexOf('.')<0 && expanded"
+        class="icon-folder-open"
+        @click.stop="handleExpandIconClick"
+        :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
+      </span>
+      <!-- <span
+        v-if="node.label.indexOf('.')<0"
+        class="el-tree-node__expand-icon el-icon-caret-right icon-folder2"
+        @click.stop="handleExpandIconClick"
+        :class="{ 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }">
+      </span> -->
       <!-- <el-checkbox
         v-if="showCheckbox"
         v-model="node.checked"
@@ -262,6 +274,15 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+.icon-folder-open {
+  width: 12px;
+  height: 16px;
+  /* background-image: url('./../assets/img/icon_folder.svg'); */
+  background-image: url('./../assets/img/language_python.svg');
+  background-size: 12px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .py-icon {
   margin-left: 8px;
   margin-top: 4px;
@@ -286,6 +307,15 @@
   color:#A6A6A6;
   /* color: yellow; */
   letter-spacing: -0.8px;
+}
+::selection
+{
+  color:#ff0000;
+}
+
+::-moz-selection
+{
+  color:#ff0000;
 }
 </style>
 
