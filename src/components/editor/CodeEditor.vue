@@ -5,8 +5,8 @@
 
   <div>
 
-    <div v-if="model.localProjTree.curSelectedFileUUID!==data.uuid" :value="data.uuid" class="position-absolute opacity0" style="width:100%;">
-      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }} --- {{ model.localProjTree.inputsText[data.uuid] }} </div>
+    <div v-if="model.localProjTree.curSelectedFileUUID!==data.uuid && isShow" :value="data.uuid" class="position-absolute opacity0" style="width:100%;">
+      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';"> {{ data.uuid }} </div>
       <codemirror
         v-model="model.localProjTree.inputsText[data.uuid]"
         style="width:100%"
@@ -18,8 +18,8 @@
       <div class="float-clear"></div>
     </div>
 
-    <div v-if="model.localProjTree.curSelectedFileUUID===data.uuid" :value="data.uuid" class="position-absolute opacity1" style="width:100%;">
-      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }} --- {{ model.localProjTree.inputsText[data.uuid] }} </div>
+    <div v-if="model.localProjTree.curSelectedFileUUID===data.uuid && isShow" :value="data.uuid" class="position-absolute opacity1" style="width:100%;">
+      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';"> {{ data.uuid }} </div>
       <codemirror
         v-model="model.localProjTree.inputsText[data.uuid]"
         style="width:100%"
@@ -61,6 +61,7 @@ export default {
     return {
       // code: 'def as #123',
       // inputText: '',
+      isShow: true,
       model: GlobalUtil.model,
       complete_prefix: '',
       uneditorOption: {
@@ -133,6 +134,8 @@ export default {
   mounted() {
     const self = this;
     console.log(`init uuid = ${this.data.uuid}`);
+    let fileInfo = GlobalUtil.model.localProjTree.getFileInfo(self.data.uuid);
+    GlobalUtil.model.localProjTree.inputsText[self.data.uuid] = fileInfo.localContent;
     GlobalUtil.model.localProjTree.allCodeEditorVue[this.data.uuid] = this;//.inputText;
     // const file = GlobalUtil.model.localProjTree.getFile(this.data.uuid);
     // this.inputText = file.content;
@@ -150,34 +153,15 @@ export default {
       }
       let fileInfo = GlobalUtil.model.localProjTree.getFileInfo(self.data.uuid);
       fileInfo.localContent = content;
-      // self.inputText = content;
       GlobalUtil.model.localProjTree.inputsText[self.data.uuid] = content;
-      // GlobalUtil.model.localProjTree.allCodeEditorVue[self.data.uuid].inputText = content;
-
-      // GlobalUtil.model.localProjTree.allCodeEditorVue[self.data.uuid].inputText = content;
-      // self.curFile.remoteContent = content;
-      // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
-      //   // self.curFile.localContent === content;
-      //   self.setSelectedContent(file.uuid, content);
-      // }
+      self.isShow = false;
+      self.isShow = true;
     });
   },
   methods: {
     onEditorCodeChange(newCode) {
-      // console.log('this is new code', newCode);
-      // GlobalUtil.model.localProjTree.curFile.content = newCode;
-      // const curFile = GlobalUtil.model.localProjTree.curFile;
-      // GlobalUtil.model.localProjTree.setSelectedContent(curFile.uuid, newCode);
-      // GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
-      // // const curFile = this.getCurFile();
-      // if (curFile === null) {
-      //   return;
-      // }
-      // const uuid = curFile.uuid;
-      // const text = curFile.localContent;
       CommandsEditorSocket.saveOrUpdateFile(this.data.uuid, newCode, (dict) => {
         if (dict.data === 'success') {
-          // curFile.remoteContent = text;
           GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
         }
         console.log(`update content success`);
