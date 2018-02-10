@@ -383,6 +383,7 @@ export default {
       maskBar.style.width = `${getWidth}px`;
     },
     rangeColor(index) {
+      // TODO: use $refs instead of getElementById
       const dom = document.getElementById(`joint${index}`);
       const domInput = document.getElementById(`joint-input${index}`);
       const maskBar = document.getElementById(`mask${index}`);
