@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="5">
           <div class="title-online">Live Control</div>
-          <toggle-button v-model="state.online" :color="{checked: '#8FFF94', unchecked: '#FF0000'}" :sync="true" 
+          <toggle-button v-model="state.online" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
             :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
             :width="71" :height="36"/>
         </el-col>
@@ -79,12 +79,15 @@
       </el-col>
       <el-col :span="8">
         <div class="dark-backgroud joint-control">
-          <div class="header-text">Joints Control</div>
+          <div class="header-text" id="testtest">Joints Control</div>
           <div class="block joint-range" v-for="j in 7" :key="j">
             <span class="text">J{{j}}</span>
-            <input v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            <div class="range-wrapper">
+              <input :id="'joint' + j" v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
               @input="setJoint(j-1)" @change="setJointOnline(j-1)">
-            <input type="number" v-model="state.joint[j-1]">
+              <p :id="'mask' + j" class="mask-bar"></p>
+            </div>
+            <input :id="'joint-input' + j" type="number" v-model="state.joint[j-1]">
             <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
           </div>
         </div>
@@ -178,6 +181,11 @@ export default {
   },
   mounted() {
     this.createJoyStick();
+    // console.log(document.getElementById('joint1'));
+    // console.log(document.getElementById('joint1').parentNode);
+    for (let i = 1; i < 8; i += 1) {
+      this.rangeColor(`${i}`);
+    }
   },
   methods: {
     createJoyStick() {
@@ -342,6 +350,61 @@ export default {
         orientation: this.state.orientation,
       });
     },
+    setMask(e) {
+      console.log('scs');
+      const dom = e.target;
+      const maskBar = dom.nextElementSibling;
+
+      const inputWidth = Number(dom.clientWidth);
+      const rangeLength = Number(dom.max) - Number(dom.min);
+      const getWidth = inputWidth * (Math.abs(Number(dom.value)) / rangeLength);
+
+      if (dom.value > 0) {
+        maskBar.style.transform = 'none';
+      }
+      else {
+        maskBar.style.transform = 'rotate(180deg)';
+      }
+      maskBar.style.width = `${getWidth}px`;
+    },
+    setMaskInput(e) {
+      const dom = e.target.previousElementSibling.childNodes[0];
+      const maskBar = dom.nextElementSibling;
+
+      const inputWidth = Number(dom.clientWidth);
+      const rangeLength = Number(dom.max) - Number(dom.min);
+      const getWidth = inputWidth * (Math.abs(Number(dom.value)) / rangeLength);
+
+      if (dom.value > 0) {
+        maskBar.style.transform = 'none';
+      }
+      else {
+        maskBar.style.transform = 'rotate(180deg)';
+      }
+      maskBar.style.width = `${getWidth}px`;
+    },
+    rangeColor(index) {
+      const dom = document.getElementById(`joint${index}`);
+      const domInput = document.getElementById(`joint-input${index}`);
+      const maskBar = document.getElementById(`mask${index}`);
+      const rangeLength = Number(dom.max) - Number(dom.min);
+      maskBar.style.left = `${((-Number(dom.min) * 100) / rangeLength)}%`;
+      dom.addEventListener('input', this.setMask);
+      domInput.addEventListener('input', this.setMaskInput);
+      domInput.addEventListener('keyup', this.setMaskInput);
+    },
+    removeRangeColor(index) {
+      const dom = document.getElementById(`joint${index}`);
+      const domInput = document.getElementById(`joint-input${index}`);
+      dom.removeEventListener('input', this.setMask);
+      domInput.removeEventListener('input', this.setMaskInput);
+      domInput.removeEventListener('keyup', this.setMaskInput);
+    },
+  },
+  beforeDestroy() {
+    for (let i = 1; i < 8; i += 1) {
+      this.removeRangeColor(i);
+    }
   },
   watch: {
     'state.joints': (newValue) => {
@@ -378,7 +441,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 $liDivWidth : 17%;
 $liInputWidth : 70%;
@@ -389,6 +451,9 @@ $liInputWidth : 70%;
 }
 input[type=range] {
   cursor: pointer;
+}
+input[type=range]:focus {
+  outline: none;
 }
 .emulator-container {
   background-color: #F8F8F8;
@@ -652,20 +717,45 @@ span.text {
       font-size: 1.2rem;
       font-family: "Gotham-Book";
     }
-    input[type=range] {
-      height: 2px;
-      background: white;
+    .range-wrapper {
+      position: relative;
       width: 20vw;
       margin-right: 0.5vw;
+      background: white;
+      height: 2px;
+      input[type=range] {
+        height: 2px;
+        background: transparent;
+        width: 100%;
+        vertical-align: middle;
+        z-index: 5;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+        -webkit-appearance: none;
+        border: none;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .mask-bar {
+        position: absolute;
+        background-color: #E27347;
+        height: 2px;
+        line-height: 2px;
+        z-index: 200;
+        border-radius: 3px;
+        padding: 0;
+        margin: 0;
+        pointer-events: none;
+        transform-origin: left;
+        z-index: 2;
+      }
     }
-    input[type=range]::-webkit-slider-thumb {
-      width: 24px;
-      height: 24px;
-      -webkit-appearance: none;
-      border: none;
-      border-radius: 50%;
-      background: #fff;
-    }
+    
     input[type=number] {
       width: 5.5vw;
       border: none;
@@ -677,5 +767,6 @@ span.text {
     }
   }
 }
+
 
 </style>
