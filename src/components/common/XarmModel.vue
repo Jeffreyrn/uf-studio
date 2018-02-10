@@ -227,6 +227,7 @@ export default {
       controls.enableDamping = true;
       controls.dampingFactor = 0.25;
       controls.enableZoom = true;
+      controls.enablePan = false; // disable keyboard camera control
       controls.update();
       renderer.setSize(...this.getRenderSize());
       document.getElementById('emulator-container').appendChild(renderer.domElement);

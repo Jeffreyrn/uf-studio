@@ -351,7 +351,6 @@ export default {
       });
     },
     setMask(e) {
-      console.log('scs');
       const dom = e.target;
       const maskBar = dom.nextElementSibling;
 
@@ -396,9 +395,12 @@ export default {
     removeRangeColor(index) {
       const dom = document.getElementById(`joint${index}`);
       const domInput = document.getElementById(`joint-input${index}`);
-      dom.removeEventListener('input', this.setMask);
-      domInput.removeEventListener('input', this.setMaskInput);
-      domInput.removeEventListener('keyup', this.setMaskInput);
+      console.log('remove', dom, domInput);
+      if (dom || domInput) {
+        dom.removeEventListener('input', this.setMask);
+        domInput.removeEventListener('input', this.setMaskInput);
+        domInput.removeEventListener('keyup', this.setMaskInput);
+      }
     },
   },
   beforeDestroy() {
