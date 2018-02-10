@@ -33,6 +33,7 @@ self.nativeCom = NativeCom;
 self.autoSizeScale = 0;
 
 self.isFileStr = (str) => {
+  const errStr = `'Name contains "only letter, numbers, '_' and no more than 10 characters in total.`;
   if (str === null || str === undefined) {
     return false;
   }
@@ -40,18 +41,21 @@ self.isFileStr = (str) => {
     return false;
   }
   if (str.length > 10) {
+    GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
     return false;
   }
   const firstChar = str[0];
   if ( !(firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z') ) {
-    return false;
+    // return false;
   }
   for (let i = 0; i < str.length; i += 1) {
     const aChar = str[i];
     if ( !(aChar >= 'a' && aChar <= 'z' || aChar >= 'A' && aChar <= 'Z' || aChar === '_' || aChar >= '0' && aChar <= '9') ) {
+      GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
       return false;
     }
   }
+  GlobalUtil.model.localProjTree.dialogErrorTips = '';
   return true;
 }
 

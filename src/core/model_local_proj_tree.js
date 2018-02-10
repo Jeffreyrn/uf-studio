@@ -29,6 +29,7 @@ self.curDialogInputText = '';
 self.folderOrFile = '';
 self.fileDialogVisible = false;
 self.fileSelected = '';
+self.dialogErrorTips = '';
 
 self.dialogVisible = false;
 self.treeBgColor = 'white';
@@ -53,6 +54,7 @@ self.show = () => {
 self.isHasProj = (name) => {
   for (let i = 0; i < self.curProjList.length; i += 1) {
     if (self.curProjList[i].name === name) {
+      GlobalUtil.model.localProjTree.dialogErrorTips = 'Project name is the same';
       return true;
     }
   }
@@ -64,6 +66,7 @@ self.isRepeatFile = (uuid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     // console.log(`file uuid = ${self.curProj.files[i].uuid}`);
     if (self.curProj.files[i].uuid === uuid) {
+      GlobalUtil.model.localProjTree.dialogErrorTips = 'File name is the same';
       return true;
     }
   }

@@ -59,6 +59,7 @@ import { setTimeout } from 'timers';
       addProj() {
         this.model.localProjTree.folderOrFile = 'proj';
         this.model.localProjTree.curDialogTitle = 'new project name';
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         setTimeout(() => {
           document.getElementById('input-text').focus();
@@ -86,6 +87,7 @@ import { setTimeout } from 'timers';
 
         GlobalUtil.model.localProjTree.curDialogTitle = `Delete project?`; 
         // 'Please insert a folder';
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
         GlobalUtil.model.localProjTree.deleteDialogShow = true;
         GlobalUtil.model.localProjTree.onDeleteDialog = () => {
           CommandsEditorSocket.delProj(uuid, (dict) => {

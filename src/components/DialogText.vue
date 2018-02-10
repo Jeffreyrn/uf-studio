@@ -13,22 +13,11 @@
         <div v-if="isExtInput">
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext" />
           <custom-select class="position-absolute dialog-select-origin dialog-select-bg dialog-select-size" style=""></custom-select>
-          <!-- <div class="position-absolute dialog-select dialog-select-size">
-            {{ model.localProjTree.fileSelected }}
-            <select style="z-index:200;" class="position-absolute dialog-select-size opacity0" v-model="model.localProjTree.fileSelected" v-if="model.localProjTree.curDialogIsExtend">
-              <option class="select-option" v-for="option in options" v-bind:value="option.value">
-                {{ option.text }}
-              </option>
-            </select>
-            <div class="position-absolute select-toparrow">
-            </div>
-            <div class="position-absolute select-bottomarrow">
-            </div>
-          </div> -->
         </div>
         <div v-if="!isExtInput">
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
         </div>
+        <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div>
         <div style="margin-top:230px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
@@ -123,22 +112,36 @@ export default {
   computed: {
     isFileNameCorrect() {
       const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
-      const isHasProj = GlobalUtil.model.localProjTree.isHasProj(this.model.localProjTree.curDialogInputText);
+      const text = this.model.localProjTree.curDialogInputText;
+
       if (this.model.localProjTree.folderOrFile === 'proj'
         || this.model.localProjTree.folderOrFile === 'renameproj'
-        || this.model.localProjTree.folderOrFile === 'folder') {
+        ) {
+        const isHasProj = GlobalUtil.model.localProjTree.isHasProj(text);
         return isFileStr && !isHasProj;
       }
       if (this.model.localProjTree.folderOrFile === 'file'
-        || this.model.localProjTree.folderOrFile === 'rename') {
-        const text = this.model.localProjTree.curDialogInputText;
+        || this.model.localProjTree.folderOrFile === 'rename'
+        || this.model.localProjTree.folderOrFile === 'folder') {
+        
         const ext = this.model.localProjTree.fileSelected;
         const getFileSuperid = this.model.localProjTree.getFileSuperid();
-        const toAddFile = path.join(getFileSuperid, `${text}${ext}`);
+        let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
+        if (this.model.localProjTree.folderOrFile === 'folder') {
+          toAddFile = path.join(getFileSuperid, `${text}`);
+        }
         const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
         console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
+        if (text === null || text === '') {
+          GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        }
         return isFileStr && !isRepeatFile;
       }
+
+      if (text === null || text === '') {
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      }
+
       return isFileStr;
     },
     isExtInput() {
@@ -224,6 +227,14 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 288px 34px;
+  }
+  .dialog-error {
+    left:35px;
+    top:155px;
+    width: 288px;
+    font-size: 7.8px;
+    color: #878787;
+    font-family: 'Gotham-Book';
   }
   .dialog-input-ext {
     width:252px;
