@@ -1,15 +1,15 @@
 <template>
   <div class="edit-home-wrapper com-module-wrapper">
     <div class="com-back-home-wrapper com-text-center">
-      <router-link :to="{name: 'Home'}"><img class="com-icon-back" src="../assets/img/common/icon_back.svg"/></router-link>
+      <router-link :to="{name: 'Home'}"><img class="com-icon-back" src="../assets/img/common/icon_back.svg" alt="back"/></router-link>
       <span class="com-font-GB-24 com-module-name">EDITOR</span>
-      <img class="com-icon-module" src="../assets/img/edit/edit-home/icon_developers.svg" />
+      <img class="com-module-icon" src="../assets/img/edit/edit-home/icon_developers.svg" alt="developers" />
     </div>
     <section class="section1-wrapper com-font-GB-22">
       <div class="box1-wrapper com-text-center">
-        <a class="com-text-center"><img src="../assets/img/home/icon_shopping.svg" />RECORDING</a>
-        <router-link class="com-text-center" :to="{ name: 'Editor'}"><img src="../assets/img/home/icon_developers.svg" />APP EDITOR</router-link>
-        <a class="com-text-center "><img src="../assets/img/home/icon_setting.svg" />IDE</a>
+        <router-link class="com-text-center"  :to="{ name: 'Teach'}"><img src="../assets/img/home/icon_shopping.svg" alt="shopping" />RECORDING</router-link>
+        <router-link class="com-text-center" :to="{ name: 'Editor'}"><img src="../assets/img/home/icon_developers.svg" alt="developers"/>APP EDITOR</router-link>
+        <router-link class="com-text-center"  :to="{ name: 'Editor'}"><img src="../assets/img/home/icon_setting.svg" alt="setting"/>IDE</router-link>
       </div>
     </section>
   </div>

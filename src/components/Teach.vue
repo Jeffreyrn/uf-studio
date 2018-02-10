@@ -1,56 +1,78 @@
 <template lang="html">
-    <div class='app-container'>
-      <div>
-        Teach
-      </div>
-
-      <span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>
-
-      <router-link :to="{ name: 'Home'}">
-        <el-button >Home</el-button>
-      </router-link>
-      <el-button value='new' @click='newProj()'>New</el-button>
-      <el-button value='new' @click='delProj()'>Delete</el-button>
-      <!-- <span> {{ socketCom.diff }} </span> -->
-      <!-- :default-expanded-keys="model.localTeach.curProjExpandedKeys" -->
-      <div id="total-teach-frame" class="total-frame position-absolute">
-        <div id="left-teach-frame" class="left-frame position-absolute">
-          <el-tree
-            :data="model.localTeach.curProTreeDatas"
-            node-key="uuid"
-            highlight-current
-            :default-expanded-keys="model.localTeach.curProjExpandedKeys"
-            @node-click="handleNodeClick">
-          </el-tree>
+  <div class="app-container com-module-wrapper">
+    <div class="recording-header-wrapper">
+      <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
+      <div class="edit-btn-wrapper">
+        <el-button class="com-btn" type="primary" v-if="!editState" @click="editState=true">Edit</el-button>
+        <div v-else>
+          <el-button class="com-btn" type="danger" @click="cancelEdit()">Cancel</el-button>
+          <el-button class="com-btn" type="success" @click="saveEdit()">Save Change</el-button>
         </div>
-        <div id="right-teach-frame" class="right-frame position-absolute">
+      </div>
+    </div>
+    <div class="main-contain">
+      <div class="recording-area-wrapper">
+        <div class="top-area">
 
-          <el-button @click='addRecord(true)'>addContinusRecord</el-button>
-          <el-button @click='addRecord(false)'>addDiscontinusRecord</el-button>
-
-          <!-- scroll -->
+        </div>
+        <div class="bottom-area">
+          <div class="switch-wrapper">
+            <div class="switch-btn">
+              <span :class="{'active': pointWay}" @click="changePointWay(true)">Waypoint</span>
+              <span :class="{'active': !pointWay}" @click="changePointWay(false)">Single Point</span>
+            </div>
+            <div class="recording">
+              <div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ model.localTeach.curProj.name }}</span></div>
+              <div class="recording-btn">
+                <el-button class="com-btn" type="success">Finish Recording</el-button>
+                <el-button class="com-btn" type="danger">Press to record</el-button>
+              </div>
+              <div class="start-btn"><i class="el-icon-caret-right"></i></div>
+              <div class="recording-time">00 : 00 : 00</div>
+            </div>
+          </div>
           <ListProj></ListProj>
-          <!-- scroll end -->
-
-          <!-- chart begin -->
-          <!-- <div class="chart" id="echart-main-2">
-          </div> -->
-          <!-- chart end -->
-
-          <div class="float-clear"></div>
         </div>
       </div>
 
-      <!-- One setting -->
-      <OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>
-      <!-- One setting end -->
+      <div id="left-teach-frame" class="projects-list-wrapper">
+        <h3>My Projects <button class="add-file" @click='newProj()'><img src="../assets/img/edit/recording/icon_addfile.svg" alt="add file"/></button></h3>
+        <el-tree
+          :data="model.localTeach.curProTreeDatas"
+          node-key="uuid"
+          highlight-current
+          :default-expanded-keys="model.localTeach.curProjExpandedKeys"
+          @node-click="handleNodeClick"
+          :render-content="renderContent"
+          >
+        </el-tree>
+        <div class="add-project"><i class="el-icon-circle-plus"></i>
+          Project
+        </div>
+      </div>
 
-      <!-- <div style="position:absolute;width:left:200px;top:200px;200px;height:200px;">
-        <xarm-model :control="model.localTeach.curPoint"></xarm-model>
-      </div> -->
+    </div>
 
-      <!-- dialog -->
-      <!-- :before-close="handleClose" -->
+
+      <!--<span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>-->
+
+      <!--<el-button value='new' @click='newProj()'>New</el-button>-->
+      <!--<el-button value='new' @click='delProj()'>Delete</el-button>-->
+
+      <!--<el-button @click='addRecord(true)'>addContinusRecord</el-button>-->
+      <!--<el-button @click='addRecord(false)'>addDiscontinusRecord</el-button>-->
+
+
+
+
+      <!--<div id="total-teach-frame" class="total-frame position-absolute">-->
+        <!--<div id="right-teach-frame" class="right-frame position-absolute">-->
+        <!--</div>-->
+      <!--</div>-->
+
+
+      <!--<OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>-->
+
       <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
@@ -62,15 +84,14 @@
           <el-button type="primary" @click="add()">确 定</el-button>
         </span>
       </el-dialog>
-      <!-- dialog end -->
 
-    </div>
+  </div>
 </template>
 <script>
 
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import XarmModel from './common/XarmModel';
+import XarmModel from './common/XarmModel'; import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 
 const echarts = require('echarts');
 let t;
@@ -91,6 +112,11 @@ export default {
       clientWidth: 100,
       clientHeight: 200,
       leftFrameWidth: 250,
+      pointWay: false,
+      editState: false,
+      fileIcon: {
+        front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
+      },
     };
   },
   mounted() {
@@ -99,10 +125,9 @@ export default {
     // window.myChart = myChart;
     // const option = GlobalUtil.model.localTeach.chartOption;
     // myChart.setOption(option, true);
-
+    console.log('aaaa',this.model.localTeach.curProTreeDatas);
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
-
     GlobalUtil.model.localTeach.setSelectedTreeItem(null);
     // const nodes = document.getElementsByClassName('el-tree-node__label');
     // for (let i = 0; i < nodes.length; i += 1) {
@@ -114,6 +139,15 @@ export default {
     });
   },
   methods: {
+    changePointWay(way) {
+      this.pointWay = way;
+    },
+    cancelEdit() {
+      this.editState = false;
+    },
+    saveEdit() {
+      this.editState = false;
+    },
     addDiscontinusRecord() {
     },
     addRecord(isContinus) {
@@ -238,6 +272,30 @@ export default {
         });
       }
     },
+    renderContent(createElement, { node, data, store }) {
+      return createElement(
+        'span', [
+          createElement('span',{
+            attrs:{
+              style:`background:url('${this.fileIcon.front}') no-repeat center left;padding-left:30px;`,
+            }},node.label),
+          createElement('span',{
+            attrs:{
+              style:"color: red;"
+            },
+            on:{
+              click: function() {
+                console.log('rename-button');
+              }
+            }},'rename'),
+          createElement('span',{
+            on:{
+              click: function() {
+                console.log('delete-button');
+              }
+            }},'delete'),
+        ]);
+    },
     onClick(e) {
       const attr = e.currentTarget.value;
       console.log(`attr = ${attr}`);
@@ -256,7 +314,8 @@ export default {
   beforeDestroy() {
   },
   components: {
-    OnePointSetting,
+    ElButton,
+OnePointSetting,
     ListProj,
     XarmModel,
   },
@@ -266,7 +325,156 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.app-container {
+  .recording-header-wrapper {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 2rem;
+    background: #F8F8F8;
+    display: flex;
+    justify-content: space-between;
+    img {
+      width: 1.6rem;
+    }
+    span {
+      margin-left: 1rem;
+      font-family: 'Gotham-Bold';
+      font-size: 2rem;
+      color: #444;
+      letter-spacing: -1px;
+    }
+  }
+  .main-contain {
+    width: 100%;
+    padding: 0 14px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    .recording-area-wrapper {
+      width: 80%;
+      margin: 0 12px;
+      font-size: 14px;
+      .top-area {
+        box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
+        border-radius: 8px;
+        height: 530px;
+      }
+      .bottom-area {
+        display: flex;
+        margin-top: 20px;
+      }
+      .switch-wrapper {
+        width: 350px;
+        text-align: center;
+        .switch-btn {
+          height: 62px;
+          line-height: 62px;
+          background: #ECECEC;
+          border-radius: 30px;
+          color: #9C9C9C;
+          letter-spacing: -0.78px;
+          text-align: center;
+          display: flex;
+          justify-content: space-around;
+          span {
+            width: 50%;
+            cursor: pointer;
+          }
+          .active {
+            background: #FFF;
+            border-radius: 100px;
+          }
+        }
+        .recording {
+          background: #F3F3F3;
+          .file-name {
+            height: 42px;
+            line-height: 42px;
+            color: #8B8B8B;
+            background: #EFEFEF;
+            span {
+              padding-left: 38px;
+            }
+          }
+          .recording-btn {
+            padding-top: 120px;
+            height: 270px;
+            button {
+              margin: 18px auto;
+              display: block;
+            }
+          }
+          .start-btn {
+            height: 42px;
+            line-height: 42px;
+            background: #D4D4D4;
+            font-size: 22px;
+            color: #fff;
+            cursor: pointer;
+            transition: all .4s;
+          }
+          .start-btn:hover {
+            background: rgba(212,212,212,0.6);
+          }
+          .recording-time {
+            height: 36px;
+            line-height: 36px;
+          }
+        }
+      }
 
+    }
+    .projects-list-wrapper {
+      width: 440px;
+      background: #EDEDED;
+      border: 1px solid #DFDFDF;
+      position: relative;
+      h3 {
+        height: 58px;
+        line-height: 58px;
+        font-family: 'Gotham-Bold';
+        font-size: 1.4rem;
+        color: #444;
+        letter-spacing: -1.33px;
+        padding: 0 22px;
+        display: flex;
+        justify-content: space-between;
+        .add-file {
+          border: none;
+          outline: 0;
+          cursor: pointer;
+        }
+      }
+      .add-project {
+        width: 100%;
+        height: 62px;
+        line-height: 62px;
+        text-align: center;
+        background: #E2E2E2;
+        font-family: 'Gotham-Book';
+        font-size: 1rem;
+        color: #707274;
+        letter-spacing: -1px;
+        cursor: pointer;
+        transition: all .4s;
+        position: absolute;
+        bottom: 0;
+      }
+      .add-project:hover {
+        background: rgba(226,226,226,0.4);
+      }
+    }
+  }
+}
+
+
+
+
+.com-btn {
+  width: 168px;
+  height: 40px;
+  border-radius: 100px;
+}
 .background-color-transparent {
   background-color: transparent;
 }

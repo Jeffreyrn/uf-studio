@@ -129,8 +129,8 @@ self.createProj = (name) => {
   };
   self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
     self.listProjs(() => {
-      const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
-      self.model.localProjTree.changeProj(lastProj.uuid);
+      // const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
+      self.model.localProjTree.changeProj(filePath);
     });
   });
 };
@@ -168,7 +168,7 @@ self.renameProj = (name) => {
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
-      self.model.localProjTree.setSelectedUI(null);
+      // self.model.localProjTree.setSelectedEditor('');
     });
   });
 };
@@ -176,10 +176,10 @@ self.renameProj = (name) => {
 self.selectedUI = () => {
   const curFile = GlobalUtil.model.localProjTree.curFile;
   if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-    GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+    // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
   }
   else {
-    GlobalUtil.model.localProjTree.setSelectedUI('');
+    // GlobalUtil.model.localProjTree.setSelectedEditor('');
   }
 };
 
@@ -228,7 +228,7 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
       data: text, // 文件内容
     })
   };
-  self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
     // self.listProjs(callback);
     if (callback) {
       callback(dict);

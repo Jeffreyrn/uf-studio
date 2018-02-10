@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="13px" viewBox="0 0 20 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_triangle</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="xstudio_recording_v1.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-1021.000000, -802.000000)">
+        <g id="single-path_display-panel" transform="translate(370.000000, 797.000000)">
+            <g id="niddle" transform="translate(651.000000, 5.000000)">
+                <g id="icon_triangle">
+                    <polygon id="Path-2" fill="#5A93D7" points="0 0 19.5842825 0 19.5842825 6.62597105 9.79214124 12.5300988 0 6.62597105"></polygon>
+                    <path d="M5.91376246,2.8022588 L5.91376246,5.8022588" id="Line-3" stroke="#FFFFFF" stroke-linecap="square"></path>
+                    <path d="M9.88977925,2.79752972 L9.88977925,5.79752972" id="Line-3" stroke="#FFFFFF" stroke-linecap="square"></path>
+                    <path d="M13.9090334,2.78807155 L13.9090334,5.78807155" id="Line-3" stroke="#FFFFFF" stroke-linecap="square"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

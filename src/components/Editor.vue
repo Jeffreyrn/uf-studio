@@ -20,18 +20,19 @@
           </template>
         </div>
         <!-- <div class="float-clear"></div> -->
+        <!-- v-if="model.localProjTree.curSelectedFileUUID===data.uuid" -->
+        <!-- name="code-editor" -->
         <div class="float-left" style="width:100%">
           <template v-for='(data,index) in model.localProjTree.curOpenedFilesList'>
-            <CodeEditor :data='data'></CodeEditor>
+            <CodeEditor
+              :data='data'>
+            </CodeEditor>
           </template>
           <!-- <div class="" style="background-color:#e9e6d3;height:20px"></div> -->
           <!-- <div class="position-absolute" style="background-color:gray;width:100%;height:200px;bottom:35px;">
           </div> -->
-          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:25px;left:0px;">
+          <div class="position-absolute" v-if="model.localProjTree.isResultFrameDisplay" style="width:100%;bottom:20px;left:0px;">
             <div style="width:100%;height:25px;background:#434749;">
-              <!-- background-image: url('./../assets/img/ide/icon_close.svg'); -->
-              <!-- background-image:url('./../assets/img/ide/icon_btmclose.svg'); -->
-              <!-- background:yellow; -->
               <div class="position-absolute result-close" @click="onCloseResult()"></div>
             </div>
             <textarea
@@ -48,9 +49,8 @@
     </div>
     <!-- <div style="z-index:10;position:absolute;overflow:hidden;left:18%;width:15px;height:100%;background-color:red;"></div> -->
     <DialogProjs v-if="model.localProjTree.projsDialogShow"></DialogProjs>
-    <DialogText 
-      v-if="model.localProjTree.fileDialogShow">
-    </DialogText>
+    <DialogText v-if="model.localProjTree.fileDialogShow"></DialogText>
+    <DialogDelete v-if="model.localProjTree.deleteDialogShow"></DialogDelete>
   </div>
 </template>
 <script>
@@ -63,6 +63,7 @@ import ResultRun from './editor/ResultRun';
 import TopTab from './editor/TopTab';
 import DialogProjs from './DialogProjs';
 import DialogText from './DialogText';
+import DialogDelete from './DialogDelete';
 
 // import FilesOpenTab from './editor/FilesOpenTab';
 
@@ -81,16 +82,20 @@ export default {
   mounted() {
     const curFile = GlobalUtil.model.localProjTree.curFile;
     if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-      GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+      // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
     }
     else {
-      GlobalUtil.model.localProjTree.setSelectedUI('');
+      // GlobalUtil.model.localProjTree.setSelectedEditor('');
     }
     window.addEventListener('resize', GlobalUtil.model.localProjTree.onwinresize, false);
     GlobalUtil.model.localProjTree.onwinresize();
     CommandsEditorSocket.listProjs((dict) => {
 
     });
+
+    document.onkeydown = () => {
+      GlobalUtil.model.localProjTree.show();
+    };
   },
   methods: {
     onCloseResult() {
@@ -112,6 +117,7 @@ export default {
     TopTab,
     DialogProjs,
     DialogText,
+    DialogDelete,
   },
 };
 </script>
@@ -166,14 +172,19 @@ a {
   left: 100px;*/
 }
 
+body {
+  scrollbar-track-color: #3C3F41;
+}
+
 .left-frame {
   /* width:200px; */
   width: 215px;
   height: 100%;
   overflow-y: scroll;
+  /* overflow-x: scroll; */
   background: #3C3F41;
   /* scrollbar-track-color: #3C3F41; */
-  SCROLLBAR-TRACK-COLOR: aquamarine;
+  /* SCROLLBAR-TRACK-COLOR: aquamarine; */
 }
 
 .right-frame {

@@ -3,7 +3,7 @@
     <div class="com-back-home-wrapper com-text-center">
       <router-link :to="{name: 'Home'}"><img class="com-icon-back" src="../assets/img/common/icon_back.svg"/></router-link>
       <span class="com-font-GB-24 com-module-name">APP STORE</span>
-      <img class="com-icon-module" src="../assets/img/appStore/shopping_bag.svg" />
+      <img class="com-module-icon" src="../assets/img/appStore/shopping_bag.svg" />
     </div>
     <section class="section1-wrapper com-font-GM-20">
       <div class="tab-wrapper">
@@ -11,26 +11,26 @@
           <span class="tab-text" :class="{'active':showApp === index}">{{ item }}</span>
         </div>
       </div>
-      <div class="tab-contain-wrapper" v-show="showApp === 'allApp'">
+      <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
         <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">Default App
           <ul>
             <li v-for="(icon ,index) in item">
-              <!--<a><img :src="icon.img"/><span>{{ icon.name }}</span></a>-->
+              <router-link :to="{name: 'AppDetail'}"><img :src="icon.img"/><span>{{ icon.name }}</span></router-link>
             </li>
           </ul>
         </div>
         <div class="tab-contain">Third-Party
-          <ThirdParty></ThirdParty>
+          <third-party></third-party>
         </div>
         <div class="tab-contain">My App
-          <MyApp></MyApp>
+          <my-app></my-app>
         </div>
       </div>
-      <div class="tab-contain-wrapper" v-show="showApp === 'thirdParty'">
-        <ThirdParty></ThirdParty>
+      <div class="tab-contain-wrapper" v-else-if="showApp === 'thirdParty'">
+        <third-party></third-party>
       </div>
-      <div class="tab-contain-wrapper" v-show="showApp === 'myApp'">
-        <MyApp></MyApp>
+      <div class="tab-contain-wrapper" v-else="showApp === 'myApp'">
+        <my-app></my-app>
       </div>
     </section>
   </div>
