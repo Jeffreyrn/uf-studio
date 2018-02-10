@@ -6,9 +6,9 @@
   <div>
 
     <div v-if="model.localProjTree.curSelectedFileUUID!==data.uuid" :value="data.uuid" class="position-absolute opacity0" style="width:100%;">
-      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }}</div>
+      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }} --- {{ model.localProjTree.inputsText[data.uuid] }} </div>
       <codemirror
-        v-model="inputText"
+        v-model="model.localProjTree.inputsText[data.uuid]"
         style="width:100%"
         id="codemirror-id"
         :options="editorOption"
@@ -19,9 +19,9 @@
     </div>
 
     <div v-if="model.localProjTree.curSelectedFileUUID===data.uuid" :value="data.uuid" class="position-absolute opacity1" style="width:100%;">
-      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }}</div>
+      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }} --- {{ model.localProjTree.inputsText[data.uuid] }} </div>
       <codemirror
-        v-model="inputText"
+        v-model="model.localProjTree.inputsText[data.uuid]"
         style="width:100%"
         id="codemirror-id"
         :options="editorOption"
@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       // code: 'def as #123',
-      inputText: '',
+      // inputText: '',
       model: GlobalUtil.model,
       complete_prefix: '',
       uneditorOption: {
@@ -133,7 +133,7 @@ export default {
   mounted() {
     const self = this;
     console.log(`init uuid = ${this.data.uuid}`);
-    // GlobalUtil.model.localProjTree.allCodeEditorVue[this.data.uuid] = this;//.inputText;
+    GlobalUtil.model.localProjTree.allCodeEditorVue[this.data.uuid] = this;//.inputText;
     // const file = GlobalUtil.model.localProjTree.getFile(this.data.uuid);
     // this.inputText = file.content;
     CodeMirror.registerHelper('hintWords', 'python', PythonHint);
@@ -141,7 +141,6 @@ export default {
     this.editor.foldCode(CodeMirror.Pos(13, 0));
     const html = document.getElementById("codemirror-id").innerHTML;
     GlobalUtil.model.localProjTree.editors[this.data.uuid] = this.editor;
-    // GlobalUtil.model.localProjTree.editors[this.data.uuid].setSize('auto', `${document.body.clientHeight - 120 - 200}px`);
     GlobalUtil.model.localProjTree.onwinresize();
     
     CommandsEditorSocket.getFile(this.data.uuid, (dict) => {
@@ -149,10 +148,11 @@ export default {
       if (content === null || content === undefined) {
         content = '';
       }
-      let fileInfo = GlobalUtil.model.localProjTree.getFileInfo(this.data.uuid);
+      let fileInfo = GlobalUtil.model.localProjTree.getFileInfo(self.data.uuid);
       fileInfo.localContent = content;
-      self.inputText = content;
-
+      // self.inputText = content;
+      GlobalUtil.model.localProjTree.inputsText[self.data.uuid] = content;
+      // GlobalUtil.model.localProjTree.allCodeEditorVue[self.data.uuid].inputText = content;
 
       // GlobalUtil.model.localProjTree.allCodeEditorVue[self.data.uuid].inputText = content;
       // self.curFile.remoteContent = content;

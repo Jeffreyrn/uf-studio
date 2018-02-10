@@ -38,6 +38,7 @@ self.curSelectedFileUUID = '';
 self.curProjList = [];
 self.isResultFrameDisplay = false;
 self.isEditingPoints = false;
+self.inputsText = {};
 
 self.show = () => {
   const e = window.event||arguments.callee.caller.arguments[0];

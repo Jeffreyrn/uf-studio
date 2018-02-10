@@ -50,13 +50,21 @@ export default {
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
-      // GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+      GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+
+      if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
+        // const inputText = GlobalUtil.model.localProjTree.allCodeEditorVue[uuid].inputText;
+        // console.log(`inputText 2 = ${inputText}`);
+        // GlobalUtil.model.localProjTree.allCodeEditorVue[uuid].inputText = inputText;
+
+        // GlobalUtil.model.localProjTree.editors[uuid].setValue(inputText);
+      }
     },
     renderContent(h, { node, data, store }) {
       // console.log(`renderContent data uuid = ${data.uuid}`);
       const curUUID = GlobalUtil.model.localProjTree.curSelectedFileUUID;
       const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
-      if (data.uuid === curUUID && fileInfo.type === 'file') {
+      if (fileInfo !== null && data.uuid === curUUID && fileInfo.type === 'file') {
         return (
           <span class="">
             <span class="el-tree-node__label" style="color:#4F7597;">
