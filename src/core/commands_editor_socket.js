@@ -168,7 +168,7 @@ self.renameProj = (name) => {
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
-      self.model.localProjTree.setSelectedUI(null);
+      // self.model.localProjTree.setSelectedEditor('');
     });
   });
 };
@@ -176,10 +176,10 @@ self.renameProj = (name) => {
 self.selectedUI = () => {
   const curFile = GlobalUtil.model.localProjTree.curFile;
   if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-    GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+    // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
   }
   else {
-    GlobalUtil.model.localProjTree.setSelectedUI('');
+    // GlobalUtil.model.localProjTree.setSelectedEditor('');
   }
 };
 

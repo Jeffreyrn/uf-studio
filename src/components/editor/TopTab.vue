@@ -18,7 +18,7 @@
         <div class="float-left top-tab-item-border">
           <div class="float-left tab-left-icon" @click="onselect()"></div>
           <div class="float-left top-tab-item" @click="onselect()">
-            <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
+            <!-- <div v-if="data.localContent !== data.remoteContent" class="float-left"></div> -->
             <div class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
           </div>
           <div @click="close()" class="float-left tab-cancel"></div>
@@ -33,7 +33,7 @@
         <div class="float-left top-tab-item-border">
           <div class="float-left tab-left-icon-white" @click="onselect()"></div>
           <div class="float-left top-tab-item" @click="onselect()">
-            <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
+            <!-- <div v-if="data.localContent !== data.remoteContent" class="float-left"></div> -->
             <div class="float-left top-tab-background-color">{{ data.name }}</div>
           </div>
           <div @click="close()" class="float-left tab-cancel-white"></div>

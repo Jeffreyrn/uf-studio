@@ -69,70 +69,8 @@ self.isRepeatFile = (uuid) => {
   return false;
 };
 
-// self.getProjsFromArm((dict) => {
-//   self.curProjList = dict;
-// }); //LocalProjTreeDatas.curProjList;
-// self.curProj = LocalProjTreeDatas.curProjList[2];
-// self.curFilePath = `/${self.curProj.name}`;
 self.curProj = {};
-// self.curFilePath = ''
 
-// self.getThisFileFullPath = (uuid) => {
-//   let file = self.getFileInfo(uuid);
-//   // console.log(`getThisFileFullPath file = ${JSON.stringify(file)}`);
-//   if (file === null || file === undefined) {
-//     // self.curFilePath = `/${self.curProj.name}`;
-//     return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
-//   }
-//   let proj = null;
-//   for (let i = 0; i < self.curProjList.length; i += 1) {
-//     const pro = self.curProjList[i];
-//     if (pro.uuid === file.proId) {
-//       proj = pro;
-//       break;
-//     }
-//   }
-//   // console.log(`getThisFileFullPath proj = ${JSON.stringify(proj)}`);
-//   const projPath = path.join(CommandsEditorSocket.ROOT_DIR, proj.name);
-//   let filename = file.name;
-//   while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
-//     const superid = file.superid;
-//     file = self.getFileInfo(superid);
-//     if (file !== null && file !== undefined) {
-//       filename = path.join(`${file.name}`, filename);
-//     }
-//     else {
-//       break;
-//     }
-//   }
-//   const fullPath = path.join(projPath, filename);
-//   console.log(`fullPath = ${fullPath}`);
-//   return fullPath;
-// };
-
-// self.getCurFilePath = () => {
-//   const curUUID = self.curSelectedFileUUID;
-//   let file = self.getFileInfo(curUUID);
-//   if (file === null || file === undefined) {
-//     self.curFilePath = `/${self.curProj.name}`;
-//     return;
-//   }
-//   let filename = file.name;
-//   while (file.superid !== null && file.superid !=='' && file.superid !== undefined) {
-//     const superid = file.superid;
-//     file = self.getFileInfo(superid);
-//     if (file !== null && file !== undefined) {
-//       filename = path.join(`${file.name}`, filename);
-//     }
-//     else {
-//       break;
-//     }
-//   }
-//   filename = path.join(`/${self.curProj.name}`, filename);
-//   // filename = filename.replace("/", "/ ");
-//   self.curFilePath = filename;
-// };
-// self.getCurFilePath();
 self.hasOpenFileInCurPro = false;
 self.getCurSelectedFileUUIDs = () => {
   const proId = self.curProj.uuid;
@@ -148,33 +86,31 @@ self.getCurSelectedFileUUIDs = () => {
   // self.getCurFilePath();
 
   if (!self.hasOpenFileInCurPro) {
-    self.setSelectedUI('');
+    // self.setSelectedUI('');
+    // self.setSelectedEditor('');
   }
 
   if (self.hasOpenFileInCurPro) {
-    self.setSelectedUI(curUUID);
-    CommandsEditorSocket.getFile(curUUID, (dict) => {
-      const editors = GlobalUtil.model.localProjTree.editors;
-      for (const key in editors) {
-        if (key === curUUID) {
-          const editor = editors[key];
-          if (editor !== null && editor !== undefined) {
+    // self.setSelectedUI(curUUID);
+    // self.setSelectedEditor(curUUID);
+    // CommandsEditorSocket.getFile(curUUID, (dict) => {
+    //   const editors = GlobalUtil.model.localProjTree.editors;
+    //   for (const key in editors) {
+    //     if (key === curUUID) {
+    //       const editor = editors[key];
+    //       if (editor !== null && editor !== undefined) {
             
-            let content = dict.data;
-            if (content === null || content === undefined) {
-              content = '';
-            }
-            self.curFile.remoteContent = content;
-            editor.setValue(content);
-            self.setSelectedContent(curUUID, content);
-
-            // editor.setSize('auto', `${totalFrameHeight - 200}px`);
-            // const editorHeight = GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
-            // editor.setSize('auto', `${editorHeight}px`);
-          }
-        }
-      }
-    });
+    //         let content = dict.data;
+    //         if (content === null || content === undefined) {
+    //           content = '';
+    //         }
+    //         self.curFile.remoteContent = content;
+    //         editor.setValue(content);
+    //         self.setSelectedContent(curUUID, content);
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   return self.curSelectedFileUUID;
@@ -210,16 +146,20 @@ self.allCodeEditorVue = {};
 //   self.curSelectedContent = curSelectedContents[uuid];
 //   return curSelectedContents[uuid];
 // };
-self.setSelectedContent = (uuid, content) => {
+// self.setSelectedContent = (uuid, content) => {
   // self.curSelectedContent = content;
-  self.curSelectedContents[uuid] = content;
-  self.allCodeEditorVue[uuid].inputText = content;
-  console.log(`self.allCodeEditorVue[uuid].inputText = ${self.allCodeEditorVue[uuid]}`);
+  // if (self.curSelectedContents[uuid] !== null && self.curSelectedContents[uuid] !== undefined) {
+    // self.curSelectedContents[uuid] = content;
+  // }
+  // if (self.allCodeEditorVue[uuid] !== null && self.allCodeEditorVue[uuid] != undefined) {
+    // self.allCodeEditorVue[uuid].inputText = content;
+  // }
+  // console.log(`self.allCodeEditorVue[uuid].inputText = ${self.allCodeEditorVue[uuid]}`);
   // self.allCodeEditorVue[uuid] = content
-  const curFile = self.getFile(uuid);
-  curFile.localContent = content;
-  self.curFile = curFile;
-};
+  // const curFile = self.getFile(uuid);
+  // curFile.localContent = content;
+  // self.curFile = curFile;
+// };
 
 self.curOpenedFilesList = [];
 self.curOpenedTabs = {};
@@ -282,14 +222,23 @@ self.removeOpenTab = (fileId) => {
     return;
   }
   let spliceIndex = 0;
+  let tempList = [];
   for (let i = 0; i < proTabsList.length; i += 1) {
     const file = proTabsList[i];
     if (file.uuid === fileId) {
-      proTabsList.splice(i,1);
+      // proTabsList.splice(i,1);
       spliceIndex = i;
-      break;
+    }
+    else {
+      tempList.push(file);
     }
   }
+  proTabsList = tempList;
+  self.curOpenedTabs[proId] = proTabsList;
+  self.curOpenedFilesList = proTabsList;
+  // const alltext = JSON.stringify(GlobalUtil.model.localProjTree.allCodeEditorVue);
+  // console.log(`GlobalUtil.model.localProjTree.allCodeEditorVue = ${alltext}`);
+  GlobalUtil.model.localProjTree.allCodeEditorVue = GlobalUtil.model.localProjTree.allCodeEditorVue;
   // 选中前一个
   if (fileId === self.getCurSelectedFileUUIDs()) {
     if (proTabsList.length > 0) {
@@ -300,24 +249,12 @@ self.removeOpenTab = (fileId) => {
       self.setCurSelectedFileUUIDs(null);
     }
   }
-  self.curOpenedFilesList = proTabsList;
+  
   if (self.curOpenedFilesList.length === 0) {
-    self.setSelectedUI(null);
+    // self.setSelectedUI(null);
+    // self.setSelectedEditor('');
   }
 };
-// self.addOpenFile = (uuid) => {
-//   const file = self.getFile(uuid);
-//   if (file === null) {
-//     return;
-//   }
-//   for (let i = 0; i < self.curOpenedFilesList.length; i += 1) {
-//     const file = self.curOpenedFilesList[i];
-//     if (file.uuid === uuid) {
-//       return;
-//     }
-//   }
-//   self.curOpenedFilesList.push(file);
-// };
 
 self.isFile = (uuid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -346,99 +283,124 @@ self.setSelectedUUID = (uuid) => {
   }
   if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
     self.curSelectedFolderUUID = uuid;
-    // return;
+    return;
   }
   else {
     self.curSelectedFolderUUID = '';
     self.curFile = file;
     self.setCurSelectedFileUUIDs(uuid);
-    CommandsEditorSocket.getFile(file.uuid, (dict) => {
-      let content = dict.data;
-      if (content === null || content === undefined) {
-        content = '';
-      }
-      self.curFile.remoteContent = content;
-      self.setSelectedContent(file.uuid, content);
-    });
+    // CommandsEditorSocket.getFile(file.uuid, (dict) => {
+    //   let content = dict.data;
+    //   if (content === null || content === undefined) {
+    //     content = '';
+    //   }
+    //   self.curFile.remoteContent = content;
+    //   self.setSelectedContent(file.uuid, content);
+    // });
     
   }
-  self.setSelectedUI(uuid);
-  
+  // self.setSelectedUI(uuid);
+  // self.setSelectedEditor(uuid);
   // ui
   
 };
 
-self.setSelectedUI = (uuid) => {
-  // console.log(`setSelectedUI 2 file uuid = ${uuid}`);
-  if (uuid === null || uuid === '') {
-    setTimeout(() => {
-      const nodes = document.getElementsByClassName('el-tree-node__label');
-      for (let i = 0; i < nodes.length; i += 1) {
-        const node = nodes[i];
-        node.style.color = '#A6A6A6';
-      }
-    });
-    return;
-  }
-  let file = self.getFileInfo(uuid);
-  if (file.type === 'folder') {
-    file = self.curFile;
-  }
-  // console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
-  setTimeout(() => {
-    const nodes = document.getElementsByClassName('el-tree-node__label');
-    for (let i = 0; i < nodes.length; i += 1) {
-      const node = nodes[i];
-      if (file === null || file === undefined) {
-        node.style.color = '#A6A6A6';
-      }
-      else if (file.name === node.innerHTML) {
-        // node.style.color = 'blue';
-        node.style.color = '#4F7597';
-      }
-      else {
-        // node.style.color = 'gray';
-        node.style.color = '#A6A6A6';
-      }
-    }
-  });
+// self.setSelectedUI = (uuid) => {
+//   // console.log(`setSelectedUI 2 file uuid = ${uuid}`);
+//   // if (uuid === null || uuid === '') {
+//   //   setTimeout(() => {
+//   //     const nodes = document.getElementsByClassName('el-tree-node__label');
+//   //     for (let i = 0; i < nodes.length; i += 1) {
+//   //       const node = nodes[i];
+//   //       // node.style.color = '#A6A6A6';
+//   //     }
+//   //   });
+//   //   return;
+//   // }
+//   let file = self.getFileInfo(uuid);
+//   if (file.type === 'folder') {
+//     file = self.curFile;
+//   }
+//   // console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
+//   // setTimeout(() => {
+//   //   const nodes = document.getElementsByClassName('el-tree-node__label');
+//   //   for (let i = 0; i < nodes.length; i += 1) {
+//   //     const node = nodes[i];
+//   //     if (file === null || file === undefined) {
+//   //       // node.style.color = '#A6A6A6';
+//   //     }
+//   //     else if (file.name === node.innerHTML) {
+//   //       // node.style.color = 'blue';
+//   //       // node.style.color = '#4F7597';
+//   //     }
+//   //     else {
+//   //       // node.style.color = 'gray';
+//   //       // node.style.color = '#A6A6A6';
+//   //     }
+//   //   }
+//   // });
 
-  // const file = self.getFileInfo(uuid);
-  if (file === null) {
-    return;
-  }
-  if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-    return;
-  }
-  setTimeout(() => {
-    // const curFile = GlobalUtil.model.localProjTree.curFile;
-    let selectedEditor = null;
-    const editors = document.getElementsByName("code-editor");
-    // console.log(`editor value =  cur ${curFile.uuid}`);
-    // for (let i = 0; i < editors.length; i += 1) {
-    //   const editor = editors[i];
-    //   editor.style.display = 'none';
-    // }
-    for (let i = 0; i < editors.length; i += 1) {
-      const editor = editors[i];
-      // console.log(`editor value = ${editor.getAttribute("value")}`);
-      const aUUID = editor.getAttribute("value");
-      // editor.style.display = 'none';
-      if (aUUID === file.uuid) {
-        editor.style.opacity = '1.0';
-        // editor.style.display = 'block';
-        // selectedEditor = editor;
-      }
-      else {
-        // editor.style.display = 'none';
-        editor.style.opacity = '0.0';
-      }
-    }
-    // if (selectedEditor !== null) {
-    //   selectedEditor.style.display = 'block';
-    // }
-  });
-};
+//   // const file = self.getFileInfo(uuid);
+//   if (file === null) {
+//     return;
+//   }
+//   if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+//     return;
+//   }
+//   setTimeout(() => {
+//     // const curFile = GlobalUtil.model.localProjTree.curFile;
+//     let selectedEditor = null;
+//     const editors = document.getElementsByName("code-editor");
+//     // console.log(`editor value =  cur ${curFile.uuid}`);
+//     // for (let i = 0; i < editors.length; i += 1) {
+//     //   const editor = editors[i];
+//     //   editor.style.display = 'none';
+//     // }
+//     for (let i = 0; i < editors.length; i += 1) {
+//       const editor = editors[i];
+//       // console.log(`editor value = ${editor.getAttribute("value")}`);
+//       const aUUID = editor.getAttribute("value");
+//       // editor.style.display = 'none';
+//       if (aUUID === file.uuid) {
+//         editor.style.opacity = '1.0';
+//         // editor.style.display = 'block';
+//         // selectedEditor = editor;
+//       }
+//       else {
+//         // editor.style.display = 'none';
+//         editor.style.opacity = '0.0';
+//       }
+//     }
+//     // if (selectedEditor !== null) {
+//     //   selectedEditor.style.display = 'block';
+//     // }
+//   });
+// };
+
+// self.setSelectedEditor = (uuid) => {
+  // let selectedEditor = null;
+  // const editors = document.getElementsByName("code-editor");
+  // // console.log(`editor value =  cur ${curFile.uuid}`);
+  // // for (let i = 0; i < editors.length; i += 1) {
+  // //   const editor = editors[i];
+  // //   editor.style.display = 'none';
+  // // }
+  // for (let i = 0; i < editors.length; i += 1) {
+  //   const editor = editors[i];
+  //   // console.log(`editor value = ${editor.getAttribute("value")}`);
+  //   const aUUID = editor.getAttribute("value");
+  //   // editor.style.display = 'none';
+  //   if (aUUID === uuid) {
+  //     editor.style.opacity = '1.0';
+  //     // editor.style.display = 'block';
+  //     // selectedEditor = editor;
+  //   }
+  //   else {
+  //     // editor.style.display = 'none';
+  //     editor.style.opacity = '0.0';
+  //   }
+  // }
+// };
 
 self.onwinresize = () => {
   const leftFrame = document.getElementById("left-frame");
@@ -478,7 +440,7 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
     type: type,
     name: name,
     localContent: content,
-    remoteContent: content,
+    // remoteContent: content,
     proId: proId,
   };
   // if (self.curProj.files !== undefined) {
@@ -619,8 +581,6 @@ self.changeProj = (uuid) => {
   // self.getCurFilePath();
   self.curOpenedFilesList = openList;
   self.curPro2Tree();
-
-  // GlobalUtil.model.localProjTree.setSelectedUI('');
 };
 
 self.curProjExpandedKeys = [];
@@ -632,26 +592,12 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   let tempKeys = [];
   if (isFile === false) {
     for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
-      // if (uuid === self.curProjExpandedKeys[i]) {
-      //   // self.curProjExpandedKeys[i] = null;
-      //   self.curProjExpandedKeys.splice(i,1);
-      //   isExist = true;
-      // }
-      // if (self.curProjExpandedKeys[i].indexOf(uuid)> -1) {
-        // self.curProjExpandedKeys[i] = null;
-        // self.curProjExpandedKeys.splice(i,1);
-        // isExist = true;
-      // }
       if (self.curProjExpandedKeys[i].indexOf(uuid) < 0) {
         tempKeys.push(self.curProjExpandedKeys[i]);
       }
     }
   }
-  // if (isExist === false && isFile === false) {
-  //   self.curProjExpandedKeys.push(uuid);
-  // }
-  self.curProjExpandedKeys = tempKeys; //self.curProjExpandedKeys;
-  // console.log(`curProjAddOrRemoveExpandedKeys count = ${JSON.stringify(self.curProjExpandedKeys)}`);
+  self.curProjExpandedKeys = tempKeys;
 };
 
 self.sortProjFiles = (files) => {
@@ -659,8 +605,6 @@ self.sortProjFiles = (files) => {
   let tempFolders = [];
   for (let j = 0; j < files.length; j += 1) {
     const file = files[j];
-    // console.log(`bChild bChild type = ${JSON.stringify(bChild.type)}`);
-    // const file = files[j];
     if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
       tempFolders.push(file);
     }
@@ -690,8 +634,6 @@ self.curPro2Tree = () => {
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
   self.findFolder(fileDatas, '');
-  // console.log(`self.curProjTreeData = ${JSON.stringify(tempDatas)}`);
-  // return tempDatas;
   self.curProTreeDatas = tempDatas;
 };
 

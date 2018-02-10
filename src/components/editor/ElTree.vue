@@ -27,6 +27,7 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'label',
+        uuid: 'uuid',
       },
     };
   },
@@ -42,8 +43,6 @@ export default {
       const treeRoot = document.getElementById('left-frame');
       // console.log(`treeRoot = ${treeRoot.innerHTML}`);
       const uuid = data.uuid;
-      // console.log(`data uuid = ${uuid}`);
-
       const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
       // console.log(`isFile = ${isFile}`);
 
@@ -51,15 +50,24 @@ export default {
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
+      // GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
     },
     renderContent(h, { node, data, store }) {
-      if (node !== null && node !== undefined) {
-        // console.log(`renderContent node = ${JSON.stringify(node)}`);
-        // <img src="./../../assets/img/ide/language_python.svg" />
+      // console.log(`renderContent data uuid = ${data.uuid}`);
+      const curUUID = GlobalUtil.model.localProjTree.curSelectedFileUUID;
+      const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
+      if (data.uuid === curUUID && fileInfo.type === 'file') {
+        return (
+          <span class="">
+            <span class="el-tree-node__label" style="color:#4F7597;">
+              { data.label }
+            </span>  
+          </span>
+        );  
       }
       return (
         <span class="">
-          <span class="el-tree-node__label">
+          <span class="el-tree-node__label" style="color:#A6A6A6;">
             { data.label }
           </span>  
         </span>

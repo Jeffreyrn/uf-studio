@@ -184,7 +184,7 @@ export default {
       const text = curFile.localContent;
       CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
         if (dict.data === 'success') {
-          curFile.remoteContent = text;
+          // curFile.remoteContent = text;
           GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
         }
         console.log(`update content success`);

@@ -1,22 +1,39 @@
+<!-- v-model="model.localProjTree.curSelectedContent" -->
+<!-- v-bind:class="classObject" -->
+
 <template>
-  <div name="code-editor" :value="data.uuid" class="position-absolute" style="width:100%;">
-    <!-- <input v-model="example0"/> -->
-    <!-- v-if="data.uuid===model.localProjTree.curFile.uuid" -->
-    <!-- <div style="position:absolute;top:100px;">这家伙很懒,什么文件也没有打开</div> -->
-    <!-- <div class="top-path" style="">this:{{ data.uuid }}, cur:{{ model.localProjTree.curFile.uuid }}</div> -->
-    <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }}</div>
-          <!-- v-model="model.localProjTree.curSelectedContent" -->
-    <codemirror
-      v-model="inputText"
-      v-bind:class="classObject"
-      style="width:100%"
-      id="codemirror-id"
-      :options="editorOption"
-      ref="myEditor"
-      @input="onEditorCodeChange">
-    </codemirror>
-    <div class="float-clear"></div>
+
+  <div>
+
+    <div v-if="model.localProjTree.curSelectedFileUUID!==data.uuid" :value="data.uuid" class="position-absolute opacity0" style="width:100%;">
+      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }}</div>
+      <codemirror
+        v-model="inputText"
+        style="width:100%"
+        id="codemirror-id"
+        :options="editorOption"
+        ref="myEditor"
+        @input="onEditorCodeChange">
+      </codemirror>
+      <div class="float-clear"></div>
+    </div>
+
+    <div v-if="model.localProjTree.curSelectedFileUUID===data.uuid" :value="data.uuid" class="position-absolute opacity1" style="width:100%;">
+      <div class="top-path" style="width:100%;background:#2E3032;color:#50E3C2;font-family:'Gotham-Book';">{{ data.uuid }}</div>
+      <codemirror
+        v-model="inputText"
+        style="width:100%"
+        id="codemirror-id"
+        :options="editorOption"
+        ref="myEditor"
+        @input="onEditorCodeChange">
+      </codemirror>
+      <div class="float-clear"></div>
+    </div>
+
   </div>
+
+  
 </template>
 
 <script>
@@ -116,7 +133,7 @@ export default {
   mounted() {
     const self = this;
     console.log(`init uuid = ${this.data.uuid}`);
-    GlobalUtil.model.localProjTree.allCodeEditorVue[this.data.uuid] = this;//.inputText;
+    // GlobalUtil.model.localProjTree.allCodeEditorVue[this.data.uuid] = this;//.inputText;
     // const file = GlobalUtil.model.localProjTree.getFile(this.data.uuid);
     // this.inputText = file.content;
     CodeMirror.registerHelper('hintWords', 'python', PythonHint);
@@ -127,18 +144,23 @@ export default {
     // GlobalUtil.model.localProjTree.editors[this.data.uuid].setSize('auto', `${document.body.clientHeight - 120 - 200}px`);
     GlobalUtil.model.localProjTree.onwinresize();
     
-    // CommandsEditorSocket.getFile(this.data.uuid, (dict) => {
-    //   let content = dict.data;
-    //   if (content === null || content === undefined) {
-    //     content = '';
-    //   }
-    //   self.inputText = content;
-    //   // self.curFile.remoteContent = content;
-    //   // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
-    //   //   // self.curFile.localContent === content;
-    //   //   self.setSelectedContent(file.uuid, content);
-    //   // }
-    // });
+    CommandsEditorSocket.getFile(this.data.uuid, (dict) => {
+      let content = dict.data;
+      if (content === null || content === undefined) {
+        content = '';
+      }
+      let fileInfo = GlobalUtil.model.localProjTree.getFileInfo(this.data.uuid);
+      fileInfo.localContent = content;
+      self.inputText = content;
+
+
+      // GlobalUtil.model.localProjTree.allCodeEditorVue[self.data.uuid].inputText = content;
+      // self.curFile.remoteContent = content;
+      // if (self.curFile.localContent === null || self.curFile.localContent === undefined || self.curFile.localContent === '') {
+      //   // self.curFile.localContent === content;
+      //   self.setSelectedContent(file.uuid, content);
+      // }
+    });
   },
   methods: {
     onEditorCodeChange(newCode) {
@@ -176,8 +198,10 @@ export default {
     },
     classObject: () => {
       return {
-        'opacity0': !GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
-        'opacity1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+        // 'opacity0': !GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+        // 'opacity1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+        'opacity0': GlobalUtil.model.localProjTree.curSelectedFileUUID!==this.data.uuid,
+        'opacity1': GlobalUtil.model.localProjTree.curSelectedFileUUID===this.data.uuid,
       }
     },
     classObject1: (uuid) => {
