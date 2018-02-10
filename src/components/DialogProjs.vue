@@ -142,7 +142,7 @@ import { setTimeout } from 'timers';
   .dialog-content {
     width: 580px;
     position: fixed;
-    height: 330px;
+    height: 340px;
     top: 20%;
     left: 0px;
     right: 0px;
@@ -160,7 +160,7 @@ import { setTimeout } from 'timers';
   .dialog-table {
     /* width: 100%; */
     width: 600px;
-    height: 140px;
+    height: 160px;
     overflow-y: scroll;
   }
   .dialog-table-head {

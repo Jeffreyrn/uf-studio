@@ -26,7 +26,7 @@ export default {
       // curProTreeDatas: GlobalUtil.model.localProjTree.curProTreeDatas,
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'label',
       },
     };
   },
@@ -54,7 +54,7 @@ export default {
     },
     renderContent(h, { node, data, store }) {
       if (node !== null && node !== undefined) {
-        console.log(`renderContent node = ${JSON.stringify(data)}`);
+        // console.log(`renderContent node = ${JSON.stringify(node)}`);
         // <img src="./../../assets/img/ide/language_python.svg" />
       }
       return (
