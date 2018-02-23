@@ -2,13 +2,6 @@
   <div class="app-container com-module-wrapper">
     <div class="recording-header-wrapper">
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
-      <div class="edit-btn-wrapper">
-        <el-button class="com-btn" type="primary" v-if="!editState" @click="editState=true">Edit</el-button>
-        <div v-else>
-          <el-button class="com-btn" type="danger" @click="cancelEdit()">Cancel</el-button>
-          <el-button class="com-btn" type="success" @click="saveEdit()">Save Change</el-button>
-        </div>
-      </div>
     </div>
     <div class="main-contain">
       <div class="recording-area-wrapper">
@@ -17,18 +10,20 @@
         </div>
         <div class="bottom-area">
           <div class="switch-wrapper">
-            <div class="switch-btn">
-              <span :class="{'active': pointWay}" @click="changePointWay(true)">Waypoint</span>
-              <span :class="{'active': !pointWay}" @click="changePointWay(false)">Single Point</span>
-            </div>
             <div class="recording">
-              <div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ model.localTeach.curProj.name }}</span></div>
-              <div class="recording-btn">
-                <el-button class="com-btn" type="success">Finish Recording</el-button>
-                <el-button class="com-btn" type="danger">Press to record</el-button>
+              <!--<div class="recording-time">00 : 00 : 00</div>-->
+              <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
+
+              <div class="recording-btn" v-if="visible.singlePointRecording">
+                <el-button v-if="visible.starRecording" class="com-btn" type="danger" @click='addRecord(false)'>Press to record</el-button>
+                <el-button v-else class="com-btn" type="success" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</el-button>
               </div>
-              <div class="start-btn"><i class="el-icon-caret-right"></i></div>
-              <div class="recording-time">00 : 00 : 00</div>
+              <div class="recording-btn" v-if="visible.wayPointRecording">
+                <el-button v-if="visible.starRecording" class="com-btn" type="danger" @click='addRecord(true)'>Start Recording</el-button>
+                <el-button v-else class="com-btn" type="success" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</el-button>
+              </div>
+
+              <button class="start-btn"><i class="el-icon-caret-right"></i></button>
             </div>
           </div>
           <ListProj></ListProj>
@@ -36,18 +31,18 @@
       </div>
 
       <div id="left-teach-frame" class="projects-list-wrapper">
-        <h3>My Projects <button class="add-file" @click='newProj()'><img src="../assets/img/edit/recording/icon_addfile.svg" alt="add file"/></button></h3>
-        <el-tree
-          :data="model.localTeach.curProTreeDatas"
-          node-key="uuid"
-          highlight-current
-          :default-expanded-keys="model.localTeach.curProjExpandedKeys"
-          @node-click="handleNodeClick"
-          :render-content="renderContent"
-          >
-        </el-tree>
-        <div class="add-project"><i class="el-icon-circle-plus"></i>
-          Project
+        <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
+        <div class="tree-wrapper">
+          <el-tree
+            class="recording-project-list"
+            :data="model.localTeach.curProTreeDatas"
+            node-key="uuid"
+            :default-expanded-keys="model.localTeach.curProjExpandedKeys"
+            :expand-on-click-node="false"
+            @node-click="handleNodeClick"
+            :render-content="renderContent"
+            >
+          </el-tree>
         </div>
       </div>
 
@@ -74,25 +69,48 @@
       <!--<OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>-->
 
       <el-dialog
-        :title="title"
-        :visible.sync="dialogVisible"
-        width="300px"
+        class="create-project-dialog"
+        title="title"
+        :visible.sync="visible.createProjectDialog"
+        width="30%"
         center>
+
+        <div class="select-way">
+          <div class="common-box" :class="{active: createWayPoint}" @click="createWayPoint=true">
+            <span>WayPoint</span>
+          </div>
+          <div class="common-box" :class="{active: !createWayPoint}" @click="createWayPoint=false">
+            <span>Single Point</span>
+          </div>
+        </div>
+        <el-input class="project-name-input" v-model="inputText" auto-complete="off" @blur="checkInputText()" @focus="checkInputText()"></el-input>
+
         <el-input v-model="inputText" auto-complete="off"></el-input>
         <el-radio v-model="radio" label="1">连续点</el-radio>
         <el-radio v-model="radio" label="2">非连续点</el-radio>
+
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible=false">取 消</el-button>
-          <el-button type="primary" @click="add()">确 定</el-button>
+          <!--<el-button @click="visible.createProjectDialog=false">取 消</el-button>-->
+          <el-button class="create-project-btn" type="success" @click="add()" :disabled="createProjectDisable">确 定</el-button>
         </span>
       </el-dialog>
 
+      <el-dialog
+        class="save-dialog"
+        title="System Notice"
+        width="470px"
+        :visible.sync="visible.saveDialog"
+        >
+        <p>Stop Recording and save automatically.</p>
+        <span>The recording file will be saved to my project list</span>
+        <el-button>确 定</el-button>
+      </el-dialog>
+      
       <!-- <DialogTeachProjName></DialogTeachProjName> -->
 
   </div>
 </template>
 <script>
-
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
 import XarmModel from './common/XarmModel';
@@ -111,7 +129,6 @@ export default {
       sentCounter: 0,
       recCounter: 0,
       // curSelectedIndex: 0,
-      dialogVisible: false,
       folderOrFile: '',
       title: '',
       inputText: '',
@@ -124,7 +141,20 @@ export default {
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         discontinuous: require('../assets/img/edit/recording/icon_addfile.svg'),
+        pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
+        rename: require('../assets/img/edit/recording/btn_rename.svg'),
+        delete: require('../assets/img/edit/recording/btn_trash_white.svg')
       },
+      visible: {
+        createProjectDialog: false,
+        saveDialog: false,
+        editSinglePointWay: false,
+        singlePointRecording: false,
+        wayPointRecording: false,
+        starRecording: true,
+      },
+      createWayPoint: true,
+      createProjectDisable: true,
     };
   },
   mounted() {
@@ -133,7 +163,6 @@ export default {
     // window.myChart = myChart;
     // const option = GlobalUtil.model.localTeach.chartOption;
     // myChart.setOption(option, true);
-    console.log('aaaa',this.model.localTeach.curProTreeDatas);
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
     GlobalUtil.model.localTeach.setSelectedTreeItem(null);
@@ -142,23 +171,32 @@ export default {
     //   const node = nodes[i];
     //   node.style.color = 'gray';
     // }
-
     CommandsTeachSocket.listProjs((dict) => {
     });
+    console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
   methods: {
-    changePointWay(way) {
-      this.pointWay = way;
+    checkInputText() {
+      if(this.inputText !== ''){
+        this.createProjectDisable = false;
+      }
     },
-    cancelEdit() {
-      this.editState = false;
-    },
-    saveEdit() {
-      this.editState = false;
+    finishRecord (uuid){
+      CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
+        GlobalUtil.model.localTeach.isEditingPoints = false;
+        console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
+      });
+      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      });
+      this.visible.saveDialog = true;
+      this.visible.singlePointRecording = false;
+      this.visible.wayPointRecording = false;
     },
     addDiscontinusRecord() {
     },
     addRecord(isContinus) {
+      this.visible.starRecording = false;
       const dateStr = GlobalUtil.getTimeString();
       let createdUUID = null;
       GlobalUtil.model.localTeach.isContinus = isContinus;
@@ -195,12 +233,13 @@ export default {
     },
     add() {
       console.log(`add add add`);
-      this.dialogVisible = false;
       const text = this.inputText;
       console.log(`text = ${text}`);
       if (this.folderOrFile === 'proj') {
         CommandsTeachSocket.createProj(text, this.radio);
       }
+      this.visible.createProjectDialog = false;
+      this.visible.singlePointRecording = true;
       // if (this.folderOrFile === 'file') {
       //   CommandsTeachSocket.createFile(text);
       // }
@@ -209,14 +248,14 @@ export default {
       this.folderOrFile = 'proj';
       this.title = 'new project name';
       this.inputText = '';
-      this.dialogVisible = true;
+      this.visible.createProjectDialog = true;
+      this.createProjectDisable = true;
     },
     addFile() {
       console.log('add file');
       this.folderOrFile = 'file';
       this.title = 'add file';
       this.inputText = '';
-      this.dialogVisible = true;
     },
     onwinresize() {
       this.clientWidth = document.body.clientWidth;
@@ -280,6 +319,7 @@ export default {
         });
       }
     },
+
     renderContent(createElement, { node, data, store }) {
       console.log(`createElement node.uuid = ${data.uuid}`);
       console.log(`createElement node.type = ${data.type}`);
@@ -316,6 +356,7 @@ export default {
               }
             }},'delete'),
         ]);
+
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -331,23 +372,29 @@ export default {
           break;
       }
     },
+
   },
   beforeDestroy() {
   },
   components: {
-    ElButton,
-OnePointSetting,
+    OnePointSetting,
     ListProj,
     XarmModel,
     DialogTeachProjName,
   },
   computed: {
+    getCurFile(){
+      const tempArr = this.model.localTeach.curEditingFileUUID.split('/');
+      return tempArr[tempArr.length-1];
+    },
   },
 };
 
 </script>
 <style lang="scss" scoped>
 .app-container {
+  display: flex;
+  flex-direction: column;
   .recording-header-wrapper {
     height: 60px;
     line-height: 60px;
@@ -368,25 +415,30 @@ OnePointSetting,
   }
   .main-contain {
     width: 100%;
-    padding: 0 14px;
+    height: 100%;
+    /*padding: 0 14px;*/
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
     .recording-area-wrapper {
       width: 80%;
-      margin: 0 12px;
+      /*margin: 0 12px;*/
       font-size: 14px;
       .top-area {
         box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
         border-radius: 8px;
-        height: 530px;
+        height: 50%;
       }
       .bottom-area {
         display: flex;
-        margin-top: 20px;
+        justify-content: space-between;
+        padding-top: 20px;
+        height: 50%;
       }
       .switch-wrapper {
-        width: 350px;
+        position: relative;
+        width: 30%;
+        background: #F3F3F3;
         text-align: center;
         .switch-btn {
           height: 62px;
@@ -408,7 +460,6 @@ OnePointSetting,
           }
         }
         .recording {
-          background: #F3F3F3;
           .file-name {
             height: 42px;
             line-height: 42px;
@@ -419,8 +470,8 @@ OnePointSetting,
             }
           }
           .recording-btn {
-            padding-top: 120px;
-            height: 270px;
+            /*padding-top: 120px;*/
+            padding-top: 20vh;
             button {
               margin: 18px auto;
               display: block;
@@ -428,16 +479,22 @@ OnePointSetting,
           }
           .start-btn {
             height: 42px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
             line-height: 42px;
             background: #D4D4D4;
             font-size: 22px;
             color: #fff;
-            cursor: pointer;
+            /*cursor: pointer;*/
             transition: all .4s;
+            border: none;
+            outline: 0;
           }
-          .start-btn:hover {
-            background: rgba(212,212,212,0.6);
-          }
+          /*.start-btn:hover {*/
+            /*background: rgba(212,212,212,0.6);*/
+          /*}*/
           .recording-time {
             height: 36px;
             line-height: 36px;
@@ -447,7 +504,9 @@ OnePointSetting,
 
     }
     .projects-list-wrapper {
-      width: 440px;
+      width: 20%;
+      min-width: 300px;
+      max-width: 400px;
       background: #EDEDED;
       border: 1px solid #DFDFDF;
       position: relative;
@@ -465,25 +524,13 @@ OnePointSetting,
           border: none;
           outline: 0;
           cursor: pointer;
+          font-size: 14px;
         }
       }
-      .add-project {
-        width: 100%;
-        height: 62px;
-        line-height: 62px;
-        text-align: center;
-        background: #E2E2E2;
-        font-family: 'Gotham-Book';
-        font-size: 1rem;
-        color: #707274;
-        letter-spacing: -1px;
-        cursor: pointer;
-        transition: all .4s;
-        position: absolute;
-        bottom: 0;
-      }
-      .add-project:hover {
-        background: rgba(226,226,226,0.4);
+      .tree-wrapper {
+        height: inherit;
+        overflow-y: scroll;
+        height: 90%;
       }
     }
   }
@@ -548,4 +595,101 @@ OnePointSetting,
   background-color:#f6f6f6;
   overflow-y: scroll;
 }
+.display-none {
+  display: none;
+}
+.tree-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+}
+.tree-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: #D8D8D8;;
+}
+.tree-wrapper::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(231,231,231,0.4);
+  border-radius: 0;
+  background: rgba(231,231,231,0.4);
+}
+</style>
+<style lang="scss">
+  .recording-project-list {
+    background: #fff;
+  }
+  .recording-project-list .el-tree-node__content {
+    height: 36px;
+  }
+  .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
+    background: #E8E8E8;
+  }
+  .recording-project-list .el-tree-node__expand-icon.is-leaf:before{
+    background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;
+    padding: 10px;
+  }
+  .recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{
+    background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;
+  }
+  .recording-project-list .el-tree-node.is-current>.el-tree-node__content {
+    background-color: #575C62;
+    color: #fff;
+  }
+  .recording-project-list .el-tree-node.is-current>.el-tree-node__content .display-none {
+    display: inline-block;
+  }
+  .save-dialog .el-dialog__title{
+    font-size: 16px;
+    letter-spacing: -0.57px;
+    color: #E27347;
+  }
+  .save-dialog .el-dialog__body {
+    text-align: center;
+  }
+  .save-dialog .el-dialog__body p{
+    font-size: 16px;
+    color: #555;
+    letter-spacing: -0.57px;
+  }
+  .save-dialog .el-dialog__body span {
+    font-size: 12px;
+    letter-spacing: -0.38px;
+  }
+  .save-dialog .el-dialog__body button {
+    width: 168px;
+    height: 40px;
+    margin-top: 50px;
+    background: #444;
+    border-radius: 2px;
+    color: #fff;
+    border: none;
+  }
+  .create-project-dialog {
+    .el-dialog__body {
+      text-align: center;
+    }
+    .select-way {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      .common-box {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f3f3f3;
+        cursor: pointer;
+      }
+      .active {
+        border: 1px solid blue;
+      }
+    }
+    .project-name-input {
+      width: 350px;
+    }
+    .create-project-btn {
+      width: 100%;
+      border: none;
+    }
+  }
 </style>
