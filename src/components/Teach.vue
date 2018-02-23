@@ -320,43 +320,60 @@ export default {
       }
     },
 
-    renderContent(createElement, { node, data, store }) {
-      console.log(`createElement node.uuid = ${data.uuid}`);
-      console.log(`createElement node.type = ${data.type}`);
-      console.log(`createElement node.proType = ${data.proType}`);
+//    renderContent(createElement, { node, data, store }) {
+//      console.log(`createElement node.uuid = ${data.uuid}`);
+//      console.log(`createElement node.type = ${data.type}`);
+//      console.log(`createElement node.proType = ${data.proType}`);
+//      let iconUrl = '';
+//      if (data.proType === 'continuous') {
+//        iconUrl = `background:url('${this.fileIcon.front}')`;
+//      }
+//      if (data.proType === 'discontinuous') {
+//        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+//      }
+//      return createElement(
+//        'span', [
+//          createElement('span',{
+//            attrs:{
+//              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
+//            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
+//          createElement('span',{
+//            attrs:{
+//              style:"color:red;padding-left:5px;"
+//            },
+//            on:{
+//              click: function() {
+//                console.log('rename-button');
+//              }
+//            }},'rename'),
+//          createElement('span',{
+//            attrs:{
+//              style:"color:blue;padding-left:5px;"
+//            },
+//            on:{
+//              click: function() {
+//                console.log('delete-button');
+//              }
+//            }},'delete'),
+//        ]);
+//
+//    },
+    renderContent(h, { node, data, store }) {
       let iconUrl = '';
       if (data.proType === 'continuous') {
-        iconUrl = `background:url('${this.fileIcon.front}')`;
+        iconUrl = `background:url('${this.fileIcon.front}') no-repeat center left;padding-left: 20px;`;
       }
       if (data.proType === 'discontinuous') {
-        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+        iconUrl = `background:url('${this.fileIcon.discontinuous}') no-repeat center left;padding-left: 20px;`;
       }
-      return createElement(
-        'span', [
-          createElement('span',{
-            attrs:{
-              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
-            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
-          createElement('span',{
-            attrs:{
-              style:"color:red;padding-left:5px;"
-            },
-            on:{
-              click: function() {
-                console.log('rename-button');
-              }
-            }},'rename'),
-          createElement('span',{
-            attrs:{
-              style:"color:blue;padding-left:5px;"
-            },
-            on:{
-              click: function() {
-                console.log('delete-button');
-              }
-            }},'delete'),
-        ]);
-
+      return (
+        <span class="tree-list">
+          <span style={iconUrl}>{node.label}</span>
+          <span class="display-none" style="margin-right: 20px">
+            <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
+            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
+          </span>
+      </span>);
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -614,6 +631,12 @@ export default {
 }
 </style>
 <style lang="scss">
+  .tree-list {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
   .recording-project-list {
     background: #fff;
   }
