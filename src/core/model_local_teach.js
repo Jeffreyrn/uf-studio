@@ -54,6 +54,12 @@ self.setSelectedTreeItem = (file) => {
   }
 };
 
+self.getRealFileName = (name) => {
+  name = name.replace("discontinuous_", "");
+  name = name.replace("continuous_", "");
+  return name;
+};
+
 self.createFile = (uuid, superid, proId, type, name, content) => {
   const file = {
     // index: indexCounter += 1,
@@ -130,8 +136,18 @@ self.remoteProjs2Local = (dict) => {
     }
     if (curProj === null) {
       curProj = {};
-      curProj.name = projName;
       curProj.uuid = projPath;
+      let name = projName;
+      // name = name.replace("continuous_", "");
+      // name = name.replace("discontinuous_", "")
+      curProj.name = name;
+      const type = projName.split("_")[0];
+      if (type === 'discontinuous') {
+        curProj.type = 'discontinuous';
+      }
+      else {
+        curProj.type = 'continuous';
+      }
       curProj.files = [];
       projs.push(curProj);
     }
@@ -191,6 +207,14 @@ self.curPro2Tree = () => {
     const aChild = {};
     aChild.label = proj.name;
     aChild.uuid = proj.uuid;
+    aChild.type = 'folder';
+    const type = proj.name.split("_")[0];
+    if (type === 'continuous' || type === 'discontinuous') {
+      aChild.proType = type;
+    }
+    else {
+      aChild.proType = 'continuous';
+    }
     aChild.children = [];
     tempDatas.push(aChild);
     for (let j = 0; j < proj.files.length; j += 1) {
@@ -198,6 +222,7 @@ self.curPro2Tree = () => {
       const bChild = {};
       bChild.label = file.name;
       bChild.uuid = file.uuid;
+      aChild.type = 'file';
       aChild.children.push(bChild);
     }
   }

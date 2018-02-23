@@ -79,6 +79,8 @@
         width="300px"
         center>
         <el-input v-model="inputText" auto-complete="off"></el-input>
+        <el-radio v-model="radio" label="1">连续点</el-radio>
+        <el-radio v-model="radio" label="2">非连续点</el-radio>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible=false">取 消</el-button>
           <el-button type="primary" @click="add()">确 定</el-button>
@@ -114,8 +116,10 @@ export default {
       leftFrameWidth: 250,
       pointWay: false,
       editState: false,
+      radio: '2',
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
+        discontinuous: require('../assets/img/edit/recording/icon_addfile.svg'),
       },
     };
   },
@@ -191,7 +195,7 @@ export default {
       const text = this.inputText;
       console.log(`text = ${text}`);
       if (this.folderOrFile === 'proj') {
-        CommandsTeachSocket.createProj(text);
+        CommandsTeachSocket.createProj(text, this.radio);
       }
       // if (this.folderOrFile === 'file') {
       //   CommandsTeachSocket.createFile(text);
@@ -273,15 +277,25 @@ export default {
       }
     },
     renderContent(createElement, { node, data, store }) {
+      console.log(`createElement node.uuid = ${data.uuid}`);
+      console.log(`createElement node.type = ${data.type}`);
+      console.log(`createElement node.proType = ${data.proType}`);
+      let iconUrl = '';
+      if (data.proType === 'continuous') {
+        iconUrl = `background:url('${this.fileIcon.front}')`;
+      }
+      if (data.proType === 'discontinuous') {
+        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+      }
       return createElement(
         'span', [
           createElement('span',{
             attrs:{
-              style:`background:url('${this.fileIcon.front}') no-repeat center left;padding-left:30px;`,
-            }},node.label),
+              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
+            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
           createElement('span',{
             attrs:{
-              style:"color: red;"
+              style:"color:red;padding-left:5px;"
             },
             on:{
               click: function() {
@@ -289,6 +303,9 @@ export default {
               }
             }},'rename'),
           createElement('span',{
+            attrs:{
+              style:"color:blue;padding-left:5px;"
+            },
             on:{
               click: function() {
                 console.log('delete-button');
