@@ -3,7 +3,7 @@
     <div class="com-back-home-wrapper com-text-center">
       <router-link :to="{name: 'Home'}"><img class="com-icon-back" src="../assets/img/common/icon_back.svg"/></router-link>
       <span class="com-font-GB-24 com-module-name">SETTING</span>
-      <img class="com-icon-module" src="../assets/img/setting/icon_setting.svg" />
+      <img class="com-module-icon" src="../assets/img/setting/icon_setting.svg" />
     </div>
     <section class="section1-wrapper com-font-GB-22 ">
       <div class="box1-wrapper com-text-center">
