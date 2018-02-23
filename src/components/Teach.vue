@@ -87,13 +87,17 @@
         </span>
       </el-dialog>
 
+      <!-- <DialogTeachProjName></DialogTeachProjName> -->
+
   </div>
 </template>
 <script>
 
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import XarmModel from './common/XarmModel'; import ElButton from "../../node_modules/element-ui/packages/button/src/button";
+import XarmModel from './common/XarmModel';
+import ElButton from "../../node_modules/element-ui/packages/button/src/button";
+import DialogTeachProjName from './DialogTeachProjName';
 
 const echarts = require('echarts');
 let t;
@@ -335,6 +339,7 @@ export default {
 OnePointSetting,
     ListProj,
     XarmModel,
+    DialogTeachProjName,
   },
   computed: {
   },
