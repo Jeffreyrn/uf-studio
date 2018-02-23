@@ -202,14 +202,14 @@ self.createFile = (name, isProjFile) => {
   if (isProjFile === true) {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
       self.listProjs(() => {
-        GlobalUtil.model.localProjTree.selectedUI();
+        // GlobalUtil.model.localProjTree.selectedUI();
       });
     });
   }
   else {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
       self.listProjs(() => {
-        GlobalUtil.model.localProjTree.selectedUI();
+        // GlobalUtil.model.localProjTree.selectedUI();
       });
     });
   }
