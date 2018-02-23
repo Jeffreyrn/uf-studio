@@ -1,5 +1,23 @@
+import Vue from 'vue';
 import * as types from '../mutation-types';
+
 // import SocketCom from '../../core/socket_com';
+function getReverseKinematics(data, callback) {
+  window.GlobalUtil.socketCom.sendCmd(
+    'xarm_get_ik',
+    {
+      data: {
+        X: data.info.position.x,
+        Y: data.info.position.y,
+        Z: data.info.position.z,
+        A: data.info.orientation.roll,
+        B: data.info.orientation.yaw,
+        C: data.info.orientation.pitch,
+      },
+    },
+    callback,
+  );
+}
 const state = {
   running: true,
   info: {
@@ -70,7 +88,7 @@ const mutations = {
       }
       if (joint && (joint.length > 0)) {
         // console.table(joint);
-        state.info.axis = joint.map(num => Number(num).toFixed(2)).slice(); // .slice()
+        state.info.axis = joint.map(num => Number(num.toFixed(2))).slice(); // .slice()
         state.info.test = joint[1];
       }
     }
@@ -110,95 +128,63 @@ const mutations = {
   },
   [types.MOVE_END_XY](state, data) {
     // console.log('set position:', data);
+    state.info.position.x += data[0];
+    state.info.position.y += data[1];
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
-        'xarm_move_joint',
-        {
-          data: {
-            X: data[0],
-            Y: data[1],
-            F: state.info.speed,
-            Q: state.info.acceleration,
-          },
-        },
-        (response) => { console.log('xy socket res', response); },
-      );
-    }
-    else { // offline mode
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_get_ik',
-        {
-          data: {
-            X: data[0],
-            Y: data[1],
-            Z: state.info.position.z,
-            A: state.info.orientation.roll,
-            B: state.info.orientation.yaw,
-            C: state.info.orientation.pitch,
-          },
-        },
-        (response) => {
-          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-          console.log('get 7 angle, socket res', response);
-        },
-      );
-    }
-  },
-  [types.MOVE_END_Z](state, data) {
-    // console.log('set position:', data);
-    if (state.info.online) {
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_move_joint',
-        {
-          data: {
-            Z: data,
-            F: state.info.speed,
-            Q: state.info.acceleration,
-          },
-        },
-        (response) => { console.log('xy socket res', response); },
-      );
-    }
-    else { // offline mode
-      console.log({
-        X: state.info.position.x,
-        Y: state.info.position.y,
-        Z: data,
-        A: state.info.orientation.roll,
-        B: state.info.orientation.yaw,
-        C: state.info.orientation.pitch,
-      });
-      window.GlobalUtil.socketCom.sendCmd(
-        'xarm_get_ik',
+        'xarm_move_line',
         {
           data: {
             X: state.info.position.x,
             Y: state.info.position.y,
-            Z: data,
-            A: state.info.orientation.roll,
-            B: state.info.orientation.yaw,
-            C: state.info.orientation.pitch,
+            F: state.info.speed,
+            Q: state.info.acceleration,
           },
         },
-        (response) => {
-          console.log('get 7 angle, socket res', response);
-          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-
-          console.log('set', response.data.map(num => Number(num).toFixed(2)).slice());
-          console.log('get', state.info.axis);
-        },
+        (response) => { console.log('set xy socket res', response); },
       );
+    }
+    else { // offline mode
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
+    }
+  },
+  [types.MOVE_END_Z](state, data) {
+    // console.log('set position:', data);
+    state.info.position.z += data;
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_line',
+        {
+          data: {
+            Z: state.info.position.z,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('set z socket res', response); },
+      );
+    }
+    else { // offline mode
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
     }
   },
   [types.MOVE_YAW_PITCH](state, data) {
     // console.log('set position:', data);
+    state.info.orientation.roll += data[0];
+    state.info.orientation.pitch += data[1];
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
-        'xarm_move_joint',
+        'xarm_move_line',
         {
           data: {
-            B: data[0],
-            C: data[1],
+            B: state.info.orientation.roll,
+            C: state.info.orientation.pitch,
             F: state.info.speed,
             Q: state.info.acceleration,
           },
@@ -207,12 +193,84 @@ const mutations = {
       );
     }
     else { // offline mode
-      if (data.position !== undefined) {
-        Object.assign(state.info.position, data.position.map(num => num.toFixed(2)));
-      }
-      if (data.orientation !== undefined) {
-        Object.assign(state.info.orientation, data.orientation);
-      }
+      // if (data.position !== undefined) {
+      //   Object.assign(state.info.position, data.position.map(num => Number(num.toFixed(2))));
+      // }
+      // if (data.orientation !== undefined) {
+      //   Object.assign(state.info.orientation, data.orientation);
+      // }
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
+    }
+  },
+  [types.MOVE_END_ROLL](state, data) {
+    // console.log('set position:', data);
+    state.info.orientation.yaw += data;
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_line',
+        {
+          data: {
+            A: state.info.orientation.yaw,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('roll yaw socket res', response); },
+      );
+    }
+    else { // offline mode
+      // if (data.position !== undefined) {
+      //   Object.assign(state.info.position, data.position.map(num => Number(num.toFixed(2))));
+      // }
+      // if (data.orientation !== undefined) {
+      //   Object.assign(state.info.orientation, data.orientation);
+      // }
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
+    }
+  },
+  [types.MOVE_END](state, data) {
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_line',
+        {
+          data: {
+            X: data.position.x,
+            Y: data.position.y,
+            Z: data.position.z,
+            A: data.orientation.roll,
+            B: data.orientation.yaw,
+            C: data.orientation.pitch,
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
+        },
+        (response) => { console.log('roll yaw socket res', response); },
+      );
+    }
+    else { // offline mode
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_get_ik',
+        {
+          data: {
+            X: data.position.x,
+            Y: data.position.y,
+            Z: data.position.z,
+            A: data.orientation.roll,
+            B: data.orientation.yaw,
+            C: data.orientation.pitch,
+          },
+        },
+        (response) => {
+          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+          console.log('set end, socket res', response);
+        },
+      );
     }
   },
   // [types.ROBOT_MOVE_JOINT](state, data) {
@@ -245,7 +303,8 @@ const mutations = {
       );
     }
     else { // offline mode
-      state.info.axis[data.index] = Number(data.value);
+      // state.info.axis[data.index] = Number(data.value);
+      Vue.set(state.info.axis, data.index, Number(data.value));
     }
   },
 };

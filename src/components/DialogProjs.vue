@@ -1,7 +1,7 @@
 
 import { setTimeout } from 'timers';
 <template>
-  <div>
+  <div class="noselected">
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
       <div class="dialog-content">
@@ -59,6 +59,7 @@ import { setTimeout } from 'timers';
       addProj() {
         this.model.localProjTree.folderOrFile = 'proj';
         this.model.localProjTree.curDialogTitle = 'new project name';
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         setTimeout(() => {
           document.getElementById('input-text').focus();
@@ -70,19 +71,30 @@ import { setTimeout } from 'timers';
         this.model.localProjTree.projsDialogShow = false;
       },
       onDelete(uuid) {
-        this.projSelectDialog = false;
-        this.$confirm(`Delete project?`, {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'CANCEL',
-          type: 'info',
-          showClose: false,
-          closeOnClickModal: false,
-        }).then(() => {
+        // this.projSelectDialog = false;
+        // this.$confirm(`Delete project?`, {
+        //   confirmButtonText: 'OK',
+        //   cancelButtonText: 'CANCEL',
+        //   type: 'info',
+        //   showClose: false,
+        //   closeOnClickModal: false,
+        // }).then(() => {
+        //   CommandsEditorSocket.delProj(uuid, (dict) => {
+        //     console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
+        //   });
+        // }).catch(() => {
+        // });
+
+        GlobalUtil.model.localProjTree.curDialogTitle = `Delete project?`; 
+        // 'Please insert a folder';
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        GlobalUtil.model.localProjTree.deleteDialogShow = true;
+        GlobalUtil.model.localProjTree.onDeleteDialog = () => {
           CommandsEditorSocket.delProj(uuid, (dict) => {
+            // GlobalUtil.model.localProjTree.deleteDialogShow = false;
             console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
           });
-        }).catch(() => {
-        });
+        };
       },
     }
   }
@@ -132,7 +144,7 @@ import { setTimeout } from 'timers';
   .dialog-content {
     width: 580px;
     position: fixed;
-    height: 330px;
+    height: 340px;
     top: 20%;
     left: 0px;
     right: 0px;
@@ -150,7 +162,7 @@ import { setTimeout } from 'timers';
   .dialog-table {
     /* width: 100%; */
     width: 600px;
-    height: 140px;
+    height: 160px;
     overflow-y: scroll;
   }
   .dialog-table-head {

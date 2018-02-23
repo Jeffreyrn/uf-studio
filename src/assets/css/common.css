@@ -8,10 +8,10 @@
   src: url('../fonts/Hiragino_gb_W3.ttf');
   unicode-range: U+4E00-9FFF;
 }
-@font-face{
+/* @font-face{
   font-family:'Gotham-Black';
   src: url('../fonts/Gotham-Black_0.otf');
-}
+} */
 @font-face{
   font-family:'Gotham-Book';
   src: url('../fonts/Gotham-Book_0.otf');
@@ -45,6 +45,14 @@
   /*src: url('../fonts/gotham-medium.otf');*/
 /*}*/
 
+.noselected {
+  -moz-user-select: none; 
+  -webkit-user-select: none; 
+  -ms-user-select: none; 
+  -khtml-user-select: none; 
+  user-select: none; 
+}
+
 .limitWH {
   position: absolute;
   border:1px;
@@ -73,6 +81,9 @@
 }
 .position-absolute {
   position: absolute;
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 .col2{
   width: 50%;
@@ -159,7 +170,6 @@
 .com-module-name {                    /**组件的模块名**/
   padding: 0 1.5rem 0 3rem;
 }
-
 
 
 

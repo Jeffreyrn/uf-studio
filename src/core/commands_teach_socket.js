@@ -6,16 +6,6 @@ const CommandsTeachSocket = {};
 const self = CommandsTeachSocket;
 window.CommandsTeachSocket = CommandsTeachSocket;
 
-// teach file cmd
-// self.TEACH_ID_LIST_DIR = 'list_dir';
-// self.TEACH_ID_CREATE_DIR = 'create_dir';
-// self.TEACH_ID_CREATE_FILE = 'create_file';
-// self.TEACH_ID_DELETE_DIR = 'delete_dir';
-// self.TEACH_ID_DELETE_FILE = 'delete_file';
-// self.TEACH_ID_CHANGE_NAME = 'change_name';
-// self.TEACH_ID_GET_FILE = 'get_file';
-
-// self.DEBUG_SET_BEART = 'debug_set_beart';
 self.VERSION = GlobalConstant.VERSION;
 
 //
@@ -43,7 +33,15 @@ self.listProjs = (callback) => {
   });
 };
 
-self.createProj = (name) => {
+self.createProj = (name, proType) => {
+  if (proType === '1') {
+    name = `continuous_${name}`;
+  }
+  else {
+    name = `discontinuous_${name}`;
+  }
+  // if (proType === 'discontinuous') {
+  // }
   let filePath = path.join(self.ROOT_DIR, name);
   const params = {
     data: merge(self.VERSION, {
@@ -133,7 +131,7 @@ self.saveOrUpdateFile = (uuid, isContinus, callback) => {
       data: text, // 文件内容
     })
   };
-  self.sendCmd(self.TEACH_ID_CREATE_FILE, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
     // self.listProjs(callback);
     if (callback) {
       callback(dict);

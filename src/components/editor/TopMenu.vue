@@ -1,5 +1,6 @@
 
 import { setTimeout } from 'timers';
+import { setTimeout } from 'timers';
 <template>
   <div>
     <!-- <form id='f_form' v-show='false'>
@@ -157,14 +158,17 @@ export default {
         return;
       }
       GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
+      GlobalUtil.model.localProjTree.runningCmdResult = '';
       GlobalUtil.model.localProjTree.onwinresize();
       CommandsEditorSocket.stopPythonScript(() => {
         GlobalUtil.model.localProjTree.runningCmdResult = '';
+      });
+      setTimeout(() => {
         CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
           // GlobalUtil.model.localProjTree.isCmdRunning = true;
           GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
         });
-      });
+      }, 100);
     },
     stop() {
       CommandsEditorSocket.stopPythonScript((dict) => {
@@ -180,7 +184,7 @@ export default {
       const text = curFile.localContent;
       CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
         if (dict.data === 'success') {
-          curFile.remoteContent = text;
+          // curFile.remoteContent = text;
           GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
         }
         console.log(`update content success`);
@@ -217,6 +221,7 @@ export default {
       //   // console.log(`listProjs dict = ${JSON.stringify(dict)}`);
       // });
       // this.projSelectDialog = true;
+      GlobalUtil.model.localProjTree.dialogErrorTips = '';
       GlobalUtil.model.localProjTree.projsDialogShow = true;
     },
     getCurFile() {
@@ -231,16 +236,25 @@ export default {
       if (curFile === null) {
         return;
       }
-      this.$confirm(`Delete ${curFile.name}?`, {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'CANCEL',
-        type: 'info',
-        showClose: false,
-        closeOnClickModal: false,
-      }).then(() => {
+
+      GlobalUtil.model.localProjTree.curDialogTitle = `Delete ${curFile.name}?`; 
+      // 'Please insert a folder';
+      GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      GlobalUtil.model.localProjTree.deleteDialogShow = true;
+      GlobalUtil.model.localProjTree.onDeleteDialog = () => {
         CommandsEditorSocket.delFiles(this.getCurFile().uuid);
-      }).catch(() => {
-      });
+      };
+
+      // this.$confirm(`Delete ${curFile.name}?`, {
+      //   confirmButtonText: 'OK',
+      //   cancelButtonText: 'CANCEL',
+      //   type: 'info',
+      //   showClose: false,
+      //   closeOnClickModal: false,
+      // }).then(() => {
+      //   CommandsEditorSocket.delFiles(this.getCurFile().uuid);
+      // }).catch(() => {
+      // });
     },
     add(file) {
       const text = this.inputText;
@@ -300,6 +314,7 @@ export default {
 
       this.model.localProjTree.folderOrFile = 'folder';
       this.model.localProjTree.curDialogTitle = 'Please insert a folder';
+      GlobalUtil.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = false;
       setTimeout(() => {
@@ -317,6 +332,9 @@ export default {
 
       this.model.localProjTree.folderOrFile = 'file';
       this.model.localProjTree.curDialogTitle = 'Please insert a file';
+      this.model.localProjTree.fileSelected = '.py';
+      this.model.localProjTree.curDialogInputText = '';
+      GlobalUtil.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = true;
       setTimeout(() => {
@@ -330,6 +348,7 @@ export default {
         this.model.localProjTree.folderOrFile = 'renameproj';
         this.model.localProjTree.curDialogTitle = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
         this.model.localProjTree.curDialogInputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
         setTimeout(() => {
@@ -344,7 +363,8 @@ export default {
       if (curFile.type === 'folder') {
         this.model.localProjTree.folderOrFile = 'rename';
         this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
-        this.model.localProjTree.curDialogInputText = curFile.name;
+        this.model.localProjTree.curDialogInputText = '';//curFile.name;
+        GlobalUtil.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
         setTimeout(() => {
@@ -359,6 +379,7 @@ export default {
       this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
       this.model.localProjTree.curDialogInputText = `${curFile.name}`.split('.')[0];
       // GlobalUtil.model.localProjTree.fileDialogVisible = true;
+      GlobalUtil.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.fileSelected = '.' + `${curFile.name}`.split('.')[1];
       if (`${curFile.name}`.split('.')[1] === undefined ) {
@@ -386,19 +407,31 @@ export default {
       this.projSelectDialog = false;
     },
     onDelete(row) {
-      this.projSelectDialog = false;
-      this.$confirm(`Delete project?`, {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'CANCEL',
-        type: 'info',
-        showClose: false,
-        closeOnClickModal: false,
-      }).then(() => {
-        CommandsEditorSocket.delProj(row.uuid, (dict) => {
-          console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
-        });
-      }).catch(() => {
-      });
+      // this.projSelectDialog = false;
+      // this.$confirm(`Delete project?`, {
+      //   confirmButtonText: 'OK',
+      //   cancelButtonText: 'CANCEL',
+      //   type: 'info',
+      //   showClose: false,
+      //   closeOnClickModal: false,
+      // }).then(() => {
+      //   CommandsEditorSocket.delProj(row.uuid, (dict) => {
+      //     console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
+      //   });
+      // }).catch(() => {
+      // });
+
+      // GlobalUtil.model.localProjTree.curDialogTitle = `Delete project?`; 
+      // // 'Please insert a folder';
+      // GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      // GlobalUtil.model.localProjTree.deleteDialogShow = true;
+      // GlobalUtil.model.localProjTree.onDeleteDialog = () => {
+      //   CommandsEditorSocket.delProj(row.uuid, (dict) => {
+      //     // GlobalUtil.model.localProjTree.deleteDialogShow = false;
+      //     console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
+      //   });
+      // };
+
     },
   },
   beforeDestroy() {

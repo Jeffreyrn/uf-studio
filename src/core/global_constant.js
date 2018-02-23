@@ -15,6 +15,7 @@ self.CMD_ID_GET_STATE = 'xarm_get_state';
 self.FILE_ID_LIST_DIR = 'list_dir';
 self.FILE_ID_CREATE_DIR = 'create_dir';
 self.FILE_ID_CREATE_FILE = 'create_file';
+self.FILE_ID_SAVE_FILE = 'save_file';
 self.FILE_ID_DELETE_DIR = 'delete_dir';
 self.FILE_ID_DELETE_FILE = 'delete_file';
 self.FILE_ID_CHANGE_NAME = 'change_name';

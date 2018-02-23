@@ -74,6 +74,7 @@
         :visible.sync="visible.createProjectDialog"
         width="30%"
         center>
+
         <div class="select-way">
           <div class="common-box" :class="{active: createWayPoint}" @click="createWayPoint=true">
             <span>WayPoint</span>
@@ -83,6 +84,11 @@
           </div>
         </div>
         <el-input class="project-name-input" v-model="inputText" auto-complete="off" @blur="checkInputText()" @focus="checkInputText()"></el-input>
+
+        <el-input v-model="inputText" auto-complete="off"></el-input>
+        <el-radio v-model="radio" label="1">连续点</el-radio>
+        <el-radio v-model="radio" label="2">非连续点</el-radio>
+
         <span slot="footer" class="dialog-footer">
           <!--<el-button @click="visible.createProjectDialog=false">取 消</el-button>-->
           <el-button class="create-project-btn" type="success" @click="add()" :disabled="createProjectDisable">确 定</el-button>
@@ -123,7 +129,12 @@ export default {
       clientWidth: 100,
       clientHeight: 200,
       leftFrameWidth: 250,
+      pointWay: false,
+      editState: false,
+      radio: '2',
       fileIcon: {
+        front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
+        discontinuous: require('../assets/img/edit/recording/icon_addfile.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         rename: require('../assets/img/edit/recording/btn_rename.svg'),
         delete: require('../assets/img/edit/recording/btn_trash_white.svg')
@@ -219,7 +230,7 @@ export default {
       const text = this.inputText;
       console.log(`text = ${text}`);
       if (this.folderOrFile === 'proj') {
-        CommandsTeachSocket.createProj(text);
+        CommandsTeachSocket.createProj(text, this.radio);
       }
       this.visible.createProjectDialog = false;
       this.visible.singlePointRecording = true;
@@ -302,42 +313,44 @@ export default {
         });
       }
     },
-//    renderContent(createElement, { node, data, store }) {
-//      return createElement(
-//        'span', [
-//          createElement('span',{
-//            attrs:{
-//              style:`background:url('${this.fileIcon.front}') no-repeat center left;padding-left:30px;`,
-//            }},node.label),
-//          createElement('span',{
-//            attrs:{
-//              style:"color: red;"
-//            },
-//            on:{
-//              click: function() {
-//                console.log('rename-button');
-//              }
-//            }},'rename'),
-//          createElement('span',{
-//            on:{
-//              click: function() {
-//                console.log('delete-button');
-//              }
-//            }},'delete'),
-//        ]);
-//    },
-    renderContent(h, { node, data, store }) {
-      return(
-        <span style="flex: 1; display: flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-          <span>
-            <span>{node.label}</span>
-          </span>
-          <span class="display-none btn-cover">
-            <el-button  style="font-size: 12px; margin-right: 20px;" type="text" on-click={ () => this.rename(data) }><img src = {this.fileIcon.rename} alt='rename'/></el-button>
-            <el-button style="font-size: 12px;" type="text" on-click={ () => this.delProj() }><img src = {this.fileIcon.delete} alt='delete'/></el-button>
-          </span>
-        </span>
-      );
+
+    renderContent(createElement, { node, data, store }) {
+      console.log(`createElement node.uuid = ${data.uuid}`);
+      console.log(`createElement node.type = ${data.type}`);
+      console.log(`createElement node.proType = ${data.proType}`);
+      let iconUrl = '';
+      if (data.proType === 'continuous') {
+        iconUrl = `background:url('${this.fileIcon.front}')`;
+      }
+      if (data.proType === 'discontinuous') {
+        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+      }
+      return createElement(
+        'span', [
+          createElement('span',{
+            attrs:{
+              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
+            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
+          createElement('span',{
+            attrs:{
+              style:"color:red;padding-left:5px;"
+            },
+            on:{
+              click: function() {
+                console.log('rename-button');
+              }
+            }},'rename'),
+          createElement('span',{
+            attrs:{
+              style:"color:blue;padding-left:5px;"
+            },
+            on:{
+              click: function() {
+                console.log('delete-button');
+              }
+            }},'delete'),
+        ]);
+
     },
     onClick(e) {
       const attr = e.currentTarget.value;

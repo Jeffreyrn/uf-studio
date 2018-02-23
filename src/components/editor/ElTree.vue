@@ -1,19 +1,23 @@
 <template>
   <!-- :default-expanded-keys="model.localProjTree.curProjExpandedKeys" -->
   <!-- :render-content="renderContent" -->
-  <el-tree
+  <Tree
     id="tree-root"
+    style="padding-left:10px;"
     :data="model.localProjTree.curProTreeDatas"
     node-key="uuid"
+    :indent=12
+    :render-content="renderContent"
     :default-expanded-keys="model.localProjTree.curProjExpandedKeys"
     @node-click="handleNodeClick">
-  </el-tree>
+  </Tree>
 </template>
 
 <script>
 
-import ELTreeNode from './ELTreeNode';
-import { setTimeout } from 'timers';
+// import ELTreeNode from './ELTreeNode';
+// import { setTimeout } from 'timers';
+import Tree from './../../lib/tree/src/tree';
 
 export default {
   data() {
@@ -22,11 +26,13 @@ export default {
       // curProTreeDatas: GlobalUtil.model.localProjTree.curProTreeDatas,
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'label',
+        uuid: 'uuid',
       },
     };
   },
   mounted() {
+    console.log(`el tree mounted`);
   },
   created() {
     console.log(`el tree created`);
@@ -37,8 +43,6 @@ export default {
       const treeRoot = document.getElementById('left-frame');
       // console.log(`treeRoot = ${treeRoot.innerHTML}`);
       const uuid = data.uuid;
-      // console.log(`data uuid = ${uuid}`);
-
       const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
       // console.log(`isFile = ${isFile}`);
 
@@ -46,38 +50,35 @@ export default {
       // GlobalUtil.model.localProjTree.addOpenFile(uuid);
       GlobalUtil.model.localProjTree.addOpenTab(uuid);
       GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
+      GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+
+      if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
+        // const inputText = GlobalUtil.model.localProjTree.allCodeEditorVue[uuid].inputText;
+        // console.log(`inputText 2 = ${inputText}`);
+        // GlobalUtil.model.localProjTree.allCodeEditorVue[uuid].inputText = inputText;
+
+        // GlobalUtil.model.localProjTree.editors[uuid].setValue(inputText);
+      }
     },
     renderContent(h, { node, data, store }) {
-      // return ('span', null, 'aabbcc');
+      // console.log(`renderContent data uuid = ${data.uuid}`);
+      const curUUID = GlobalUtil.model.localProjTree.curSelectedFileUUID;
+      const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
+      if (fileInfo !== null && data.uuid === curUUID && fileInfo.type === 'file') {
+        return (
+          <span class="el-tree-node__label" style="color:#4F7597;">
+            { data.label }
+          </span>
+        );  
+      }
       return (
-        '<span class="el-tree-node__label">33445566</span>'
+        <span class="">
+          <span class="el-tree-node__label" style="color:#A6A6A6;">
+            { data.label }
+          </span>  
+        </span>
       );
     },
-    // renderContent(h, { node, data, store }) {
-    //   return (
-    //     <span style="flex: 1; display: flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-    //       <span>
-    //         <span>{node.label}</span>
-    //       </span>
-    //       <span>
-    //         <el-button style="font-size: 12px;" type="text" on-click={ () => this.append(data) }>Append</el-button>
-    //         <el-button style="font-size: 12px;" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-    //       </span>
-    //     </span>);
-    // }
-    // renderContent(h, { node, data, store }) {
-    //   return (
-    //       <span style="flex:1;display:flex;align-items:center;justify-content:space-between;font-size:14px;padding-right:8px;">
-    //         <span>
-    //           <span>{node.label}</span>
-    //         </span>
-    //         <span>
-    //           <el-button style="font-size: 12px;" type="text" on-click={ () => this.append(data) }>Append</el-button>
-    //           <el-button style="font-size: 12px;" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-    //         </span>
-    //     </span>
-    //   );
-    // },
   },
   beforeDestroy() {
   },
@@ -89,11 +90,18 @@ export default {
     // },
   },
   components: {
-    ELTreeNode,
+    Tree,
   },
 };
 </script>
 
 <style scoped>
-
+/* .file-left-icon {
+  width: 12px;
+  height: 12px;
+  background-image: url('./../../assets/img/ide/language_python.svg');
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+} */
 </style>

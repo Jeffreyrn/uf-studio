@@ -6,10 +6,14 @@ export const joints = (state) => {
     const values = arr.map(str => Number(str));
     // console.log('arr posi print:', values.length);
     // console.log('ANGLE_DIFF:', ANGLE_DIFF);
-    console.table(values);
+    // console.table(values);
     this.test = values[1];
     return values;
   }
   return [0, 0, 0, 0, 0, 0, 0];
 };
-export const jointss = () => {};
+
+export const end = state => ({
+  position: state.robot.info.position,
+  orientation: state.robot.info.orientation,
+});

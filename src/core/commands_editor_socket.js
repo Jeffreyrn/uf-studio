@@ -6,28 +6,6 @@ const CommandsEditorSocket = {};
 const self = CommandsEditorSocket;
 window.CommandsEditorSocket = CommandsEditorSocket;
 
-// xArm cmd
-// self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
-// self.CMD_ID_GET_TCP_POSE = 'xarm_get_tcp_pose';
-// self.CMD_ID_GET_VERSION = 'xarm_get_version';
-// self.CMD_ID_GET_STATE = 'xarm_get_state';
-
-// // python file cmd
-// self.FILE_ID_LIST_DIR = 'list_dir';
-// self.FILE_ID_CREATE_DIR = 'create_dir';
-// self.FILE_ID_CREATE_FILE = 'create_file';
-// self.FILE_ID_DELETE_DIR = 'delete_dir';
-// self.FILE_ID_DELETE_FILE = 'delete_file';
-// self.FILE_ID_CHANGE_NAME = 'change_name';
-// self.FILE_ID_GET_FILE = 'get_file';
-
-// self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
-// self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
-// self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
-// self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
-
-// self.DEBUG_SET_BEART = 'debug_set_beart';
-
 self.VERSION = GlobalConstant.VERSION;
 
 //
@@ -129,8 +107,8 @@ self.createProj = (name) => {
   };
   self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
     self.listProjs(() => {
-      const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
-      self.model.localProjTree.changeProj(lastProj.uuid);
+      // const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
+      self.model.localProjTree.changeProj(filePath);
     });
   });
 };
@@ -168,7 +146,7 @@ self.renameProj = (name) => {
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
       console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
-      self.model.localProjTree.setSelectedUI(null);
+      // self.model.localProjTree.setSelectedEditor('');
     });
   });
 };
@@ -176,10 +154,10 @@ self.renameProj = (name) => {
 self.selectedUI = () => {
   const curFile = GlobalUtil.model.localProjTree.curFile;
   if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-    GlobalUtil.model.localProjTree.setSelectedUI(curFile.uuid);
+    // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
   }
   else {
-    GlobalUtil.model.localProjTree.setSelectedUI('');
+    // GlobalUtil.model.localProjTree.setSelectedEditor('');
   }
 };
 
@@ -202,14 +180,14 @@ self.createFile = (name, isProjFile) => {
   if (isProjFile === true) {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
       self.listProjs(() => {
-        GlobalUtil.model.localProjTree.selectedUI();
+        // GlobalUtil.model.localProjTree.selectedUI();
       });
     });
   }
   else {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
       self.listProjs(() => {
-        GlobalUtil.model.localProjTree.selectedUI();
+        // GlobalUtil.model.localProjTree.selectedUI();
       });
     });
   }
@@ -228,7 +206,7 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
       data: text, // 文件内容
     })
   };
-  self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
+  self.sendCmd(GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
     // self.listProjs(callback);
     if (callback) {
       callback(dict);
