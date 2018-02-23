@@ -68,7 +68,7 @@
 
       <!--<OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>-->
 
-      <el-dialog
+      <!-- <el-dialog
         class="create-project-dialog"
         title="title"
         :visible.sync="visible.createProjectDialog"
@@ -90,10 +90,9 @@
         <el-radio v-model="radio" label="2">非连续点</el-radio>
 
         <span slot="footer" class="dialog-footer">
-          <!--<el-button @click="visible.createProjectDialog=false">取 消</el-button>-->
           <el-button class="create-project-btn" type="success" @click="add()" :disabled="createProjectDisable">确 定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
 
       <el-dialog
         class="save-dialog"
@@ -106,7 +105,7 @@
         <el-button>确 定</el-button>
       </el-dialog>
       
-      <!-- <DialogTeachProjName></DialogTeachProjName> -->
+      <DialogTeachProjName v-if="model.localTeach.projTypeSelectedShow"></DialogTeachProjName>
 
   </div>
 </template>
@@ -231,25 +230,9 @@ export default {
       }).catch(() => {
       });
     },
-    add() {
-      console.log(`add add add`);
-      const text = this.inputText;
-      console.log(`text = ${text}`);
-      if (this.folderOrFile === 'proj') {
-        CommandsTeachSocket.createProj(text, this.radio);
-      }
-      this.visible.createProjectDialog = false;
-      this.visible.singlePointRecording = true;
-      // if (this.folderOrFile === 'file') {
-      //   CommandsTeachSocket.createFile(text);
-      // }
-    },
     newProj() {
-      this.folderOrFile = 'proj';
-      this.title = 'new project name';
-      this.inputText = '';
-      this.visible.createProjectDialog = true;
-      this.createProjectDisable = true;
+      GlobalUtil.model.localTeach.curDialogProjInputText = '';
+      GlobalUtil.model.localTeach.projTypeSelectedShow = true;
     },
     addFile() {
       console.log('add file');

@@ -13,6 +13,10 @@ self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];
 self.isContinus = false;
+self.projTypeSelected = '1';
+self.projTypeSelectedShow = false;
+self.curDialogProjInputText = '';
+self.dialogErrorTips = '';
 self.pushFileData = (uuid, datas) => {
   let dict = self.fileDatas[uuid];
   if (dict === null || dict === undefined) {
