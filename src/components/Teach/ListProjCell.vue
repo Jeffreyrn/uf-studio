@@ -1,14 +1,14 @@
 <template lang="html">
-  <div class="float-left" style="border:1px solid lightgray;width:40px;height:50px;" @click='onSelect($event, index)'>
+  <div class="line-block-wrapper" @click='onSelect($event, index)'>
     <!-- button -->
-    <div style="width:40px;height:20px;background-color:yellow;">
+    <div class="line-block">
       <!-- isContinus true -->
-      <div v-if="file.isContinus===true">
-        <div class="float-left" v-if="index % 10 === 0" style="background-color:lightpink;">
+      <div v-if="file.isContinus">
+        <div v-if="index % 10 === 0" style="background-color:lightpink;">
           {{ parseInt(index / 10) }}.0s
         </div>
-        <div v-if="index % 10 !== 0">
-          <div class="float-left" v-if="index < model.localTeach.fileDatas[file.uuid].length">
+        <div v-else>
+          <div v-if="index < model.localTeach.fileDatas[file.uuid].length">
             .{{ index % 10 }}
           </div>
         </div>
@@ -16,14 +16,14 @@
       <!-- isContinus true end -->
 
       <!-- isContinus false -->
-      <div v-if="file.isContinus!==true">
-        <div class="float-left">
+      <div v-else>
+        <div>
           {{ index }}
         </div>
       </div>
       <!-- isContinus false end -->
 
-      <div class="float-left" v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
+      <div v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
     </div>
     <!-- button end -->
   </div>
@@ -60,5 +60,17 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-
+.line-block-wrapper {
+  /*border:1px solid lightgray;*/
+  width:40px;
+  height:20px;
+}
+.line-block {
+  width:40px;
+  height:20px;
+  background-color:rgba(74,144,226,0.50);
+  border-right: 1px solid #444;
+  color: #fff;
+  line-height: 20px;
+}
 </style>
