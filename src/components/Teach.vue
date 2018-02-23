@@ -105,7 +105,7 @@
         <span>The recording file will be saved to my project list</span>
         <el-button>确 定</el-button>
       </el-dialog>
-      
+
       <!-- <DialogTeachProjName></DialogTeachProjName> -->
 
   </div>
@@ -623,13 +623,13 @@ export default {
   .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
     background: #E8E8E8;
   }
-  .recording-project-list .el-tree-node__expand-icon.is-leaf:before{
-    background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;
-    padding: 10px;
-  }
-  .recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{
-    background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;
-  }
+  /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
+    /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
+    /*padding: 10px;*/
+  /*}*/
+  /*.recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{*/
+    /*background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;*/
+  /*}*/
   .recording-project-list .el-tree-node.is-current>.el-tree-node__content {
     background-color: #575C62;
     color: #fff;
