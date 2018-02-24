@@ -2,96 +2,74 @@
   <div class="app-container com-module-wrapper">
     <div class="recording-header-wrapper">
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
-      <div class="edit-btn-wrapper">
-        <el-button class="com-btn" type="primary" v-if="!editState" @click="editState=true">Edit</el-button>
-        <div v-else>
-          <el-button class="com-btn" type="danger" @click="cancelEdit()">Cancel</el-button>
-          <el-button class="com-btn" type="success" @click="saveEdit()">Save Change</el-button>
-        </div>
-      </div>
     </div>
     <div class="main-contain">
-      <div class="recording-area-wrapper">
+      <div class="recording-area-wrapper"  id="left-teach-frame">
         <div class="top-area">
 
         </div>
         <div class="bottom-area">
           <div class="switch-wrapper">
-            <div class="switch-btn">
-              <span :class="{'active': pointWay}" @click="changePointWay(true)">Waypoint</span>
-              <span :class="{'active': !pointWay}" @click="changePointWay(false)">Single Point</span>
-            </div>
             <div class="recording">
-              <div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ model.localTeach.curProj.name }}</span></div>
-              <div class="recording-btn">
-                <el-button class="com-btn" type="success">Finish Recording</el-button>
-                <el-button class="com-btn" type="danger">Press to record</el-button>
+              <div class="recording-time"> {{ model.localTeach.curProj.name }} </div>
+              <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
+
+              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
+                <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
+                <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
+                <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
               </div>
-              <div class="start-btn"><i class="el-icon-caret-right"></i></div>
-              <div class="recording-time">00 : 00 : 00</div>
+              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                <button class="bottom-btn eidt-btn" type="danger" @click=''>Edit</button>
+                <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
+              </div>
+              
             </div>
           </div>
-          <ListProj></ListProj>
+          <ListProj id="bottom-right-frame"></ListProj>
         </div>
       </div>
 
-      <div id="left-teach-frame" class="projects-list-wrapper">
-        <h3>My Projects <button class="add-file" @click='newProj()'><img src="../assets/img/edit/recording/icon_addfile.svg" alt="add file"/></button></h3>
-        <el-tree
-          :data="model.localTeach.curProTreeDatas"
-          node-key="uuid"
-          highlight-current
-          :default-expanded-keys="model.localTeach.curProjExpandedKeys"
-          @node-click="handleNodeClick"
-          :render-content="renderContent"
-          >
-        </el-tree>
-        <div class="add-project"><i class="el-icon-circle-plus"></i>
-          Project
+      <div class="projects-list-wrapper">
+        <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
+        <div class="tree-wrapper">
+          <el-tree
+            class="recording-project-list"
+            :data="model.localTeach.curProTreeDatas"
+            node-key="uuid"
+            :default-expanded-keys="model.localTeach.curProjExpandedKeys"
+            :expand-on-click-node="false"
+            @node-click="handleNodeClick"
+            :render-content="renderContent"
+            >
+          </el-tree>
         </div>
       </div>
 
     </div>
 
-
-      <!--<span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>-->
-
-      <!--<el-button value='new' @click='newProj()'>New</el-button>-->
-      <!--<el-button value='new' @click='delProj()'>Delete</el-button>-->
-
-      <!--<el-button @click='addRecord(true)'>addContinusRecord</el-button>-->
-      <!--<el-button @click='addRecord(false)'>addDiscontinusRecord</el-button>-->
-
-
-
-
-      <!--<div id="total-teach-frame" class="total-frame position-absolute">-->
-        <!--<div id="right-teach-frame" class="right-frame position-absolute">-->
-        <!--</div>-->
-      <!--</div>-->
-
-
-      <!--<OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>-->
-
       <el-dialog
-        :title="title"
-        :visible.sync="dialogVisible"
-        width="300px"
-        center>
-        <el-input v-model="inputText" auto-complete="off"></el-input>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible=false">取 消</el-button>
-          <el-button type="primary" @click="add()">确 定</el-button>
-        </span>
+        class="save-dialog"
+        title="System Notice"
+        width="470px"
+        :visible.sync="visible.saveDialog"
+        >
+        <p>Stop Recording and save automatically.</p>
+        <span>The recording file will be saved to my project list</span>
+        <el-button @click="finishRecordOK">确 定</el-button>
       </el-dialog>
+      
+      <DialogTeachProjName v-if="model.localTeach.projTypeSelectedShow"></DialogTeachProjName>
 
   </div>
 </template>
 <script>
-
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import XarmModel from './common/XarmModel'; import ElButton from "../../node_modules/element-ui/packages/button/src/button";
+import XarmModel from './common/XarmModel';
+import ElButton from "../../node_modules/element-ui/packages/button/src/button";
+import DialogTeachProjName from './DialogTeachProjName';
 
 const echarts = require('echarts');
 let t;
@@ -101,22 +79,37 @@ export default {
     return {
       socketCom: GlobalUtil.socketCom,
       model: GlobalUtil.model,
-      diff: 0,
-      sentCounter: 0,
-      recCounter: 0,
-      // curSelectedIndex: 0,
-      dialogVisible: false,
+      protype: '',
       folderOrFile: '',
       title: '',
       inputText: '',
       clientWidth: 100,
       clientHeight: 200,
-      leftFrameWidth: 250,
+      rightFrameWidth: 320,
+      bottomLeftWidth: 300,
       pointWay: false,
       editState: false,
+      radio: '2',
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
+        discontinuous: require('../assets/img/edit/recording/icon_singlepoint_14x14_dark.svg'),
+        continuous: require('../assets/img/edit/recording/icon_waypoint_14x14_dark.svg'),
+        discontinuous_white: require('../assets/img/edit/recording/icon_singlepoint_14x14_white.svg'),
+        continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
+        pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
+        rename: require('../assets/img/edit/recording/btn_rename.svg'),
+        delete: require('../assets/img/edit/recording/btn_trash_white.svg')
       },
+      visible: {
+        createProjectDialog: false,
+        saveDialog: false,
+        editSinglePointWay: false,
+        singlePointRecording: false,
+        wayPointRecording: false,
+        // starRecording: true,
+      },
+      createWayPoint: true,
+      createProjectDisable: true,
     };
   },
   mounted() {
@@ -125,7 +118,6 @@ export default {
     // window.myChart = myChart;
     // const option = GlobalUtil.model.localTeach.chartOption;
     // myChart.setOption(option, true);
-    console.log('aaaa',this.model.localTeach.curProTreeDatas);
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
     GlobalUtil.model.localTeach.setSelectedTreeItem(null);
@@ -134,41 +126,97 @@ export default {
     //   const node = nodes[i];
     //   node.style.color = 'gray';
     // }
-
     CommandsTeachSocket.listProjs((dict) => {
     });
+    console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
   methods: {
-    changePointWay(way) {
-      this.pointWay = way;
+    checkInputText() {
+      if(this.inputText !== ''){
+        this.createProjectDisable = false;
+      }
     },
-    cancelEdit() {
-      this.editState = false;
+    finishRecord (){
+      // CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
+      //   GlobalUtil.model.localTeach.isEditingPoints = false;
+      //   console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
+      // });
+      // CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      //   GlobalUtil.model.localTeach.visible.starRecording = false;
+      //   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      // });
+      this.visible.saveDialog = true;
+      this.visible.singlePointRecording = false;
+      this.visible.wayPointRecording = false;
     },
-    saveEdit() {
-      this.editState = false;
-    },
-    addDiscontinusRecord() {
-    },
-    addRecord(isContinus) {
+    finishRecordOK() {
+      this.visible.saveDialog = false;
+      GlobalUtil.model.localTeach.visible.starRecording = false;
+
+      const curFileDatas = GlobalUtil.model.localTeach.curFileDatas;
+      console.log(`curFileDatas = ${JSON.stringify(curFileDatas)}`);
+
+      const textDict = {
+        type: GlobalUtil.model.localTeach.curProj.type,
+        points: curFileDatas,
+      };
+      const text = JSON.stringify(textDict);
+
       const dateStr = GlobalUtil.getTimeString();
-      let createdUUID = null;
-      GlobalUtil.model.localTeach.isContinus = isContinus;
-      GlobalUtil.model.localTeach.isEditingPoints = true;
-      CommandsTeachSocket.createFile(dateStr, (dict) => {
-        createdUUID = dict.uuid;
+      CommandsTeachSocket.createFile(dateStr, text, (dict) => {
       }, (dict) => {
-        console.log(`dict = ${JSON.stringify(dict)}`);
-        const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
-        GlobalUtil.model.localTeach.curProj = proj;
-        GlobalUtil.model.localTeach.curEditingFileUUID = createdUUID;
-        setTimeout(() => {
-          GlobalUtil.model.localTeach.showArr = [];
-          const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, createdUUID);
-          GlobalUtil.model.localTeach.setSelectedTreeItem(file);
-          document.getElementById("start-id").click();
-        }, 10);
       });
+
+      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      });
+    },
+    startRecord() {
+      this.visible.starRecording = false;
+      const dateStr = GlobalUtil.getTimeString();
+      const curSelectedTreeItemUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
+      const proj = GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
+      if (proj === null) {
+        return;
+      }
+      const isContinus = proj.type === 'continuous';
+      GlobalUtil.model.localTeach.visible.starRecording = true;
+
+      // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+      GlobalUtil.model.localTeach.curDuration = 0;
+
+      // GlobalUtil.model.localTeach.fileDatas[uuid] = [];
+      GlobalUtil.model.localTeach.curFileDatas = [];
+      CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
+        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+        const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+        GlobalUtil.model.localTeach.lastFileData = testData;
+        if (isContinus === false) {
+          GlobalUtil.model.localTeach.curDuration -= -1;
+          return;
+        }
+        // this.scrollTo(curFileDatas.length);
+        if (GlobalUtil.model.localTeach.curFileDatas.length >= 1800) {
+          this.finishRecordOK();
+        }
+        else {
+          // test data
+          const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+          GlobalUtil.model.localTeach.curFileDatas.push(testData)
+          // GlobalUtil.model.localTeach.pushFileData(uuid, testData);
+          // let tempArr = [];
+          // for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+          //   tempArr.push(i);
+          // }
+          // GlobalUtil.model.localTeach.showArr = tempArr;
+          // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
+        }
+      });
+      GlobalUtil.model.localTeach.curDuration -= -1;      
+    },
+    addRecord() {
+      const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+      GlobalUtil.model.localTeach.curFileDatas.push(testData)
     },
     delProj() {
       const curProj = GlobalUtil.model.localTeach.curProj;
@@ -185,63 +233,40 @@ export default {
       }).catch(() => {
       });
     },
-    add() {
-      console.log(`add add add`);
-      this.dialogVisible = false;
-      const text = this.inputText;
-      console.log(`text = ${text}`);
-      if (this.folderOrFile === 'proj') {
-        CommandsTeachSocket.createProj(text);
-      }
-      // if (this.folderOrFile === 'file') {
-      //   CommandsTeachSocket.createFile(text);
-      // }
-    },
     newProj() {
-      this.folderOrFile = 'proj';
-      this.title = 'new project name';
-      this.inputText = '';
-      this.dialogVisible = true;
+      GlobalUtil.model.localTeach.curDialogProjInputText = '';
+      GlobalUtil.model.localTeach.projTypeSelectedShow = true;
     },
     addFile() {
       console.log('add file');
       this.folderOrFile = 'file';
       this.title = 'add file';
       this.inputText = '';
-      this.dialogVisible = true;
     },
     onwinresize() {
       this.clientWidth = document.body.clientWidth;
       this.clientHeight = document.body.clientHeight;
       const leftFrame = document.getElementById("left-teach-frame");
-      const rightFrame = document.getElementById("right-teach-frame");
-      const totalFrame = document.getElementById("total-teach-frame");
+      const bottomRightFrame = document.getElementById("bottom-right-frame");
       const totalFrameWidth = this.clientWidth - 20;
       const totalFrameHeight = this.clientHeight - 120;
-      if (totalFrame !== null && totalFrame !== undefined) {
-        totalFrame.style.width = `${totalFrameWidth}px`;
-        totalFrame.style.height = `${totalFrameHeight}px`;
+      if (leftFrame !== null && leftFrame !== undefined) {
+        leftFrame.style.width = `${totalFrameWidth - this.rightFrameWidth}px`;
       }
-      if (rightFrame !== null && rightFrame !== undefined) {
-        rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
+        bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
-      // console.log(`totalFrameHeight = ${totalFrameHeight}, totalFrameHeight = ${totalFrame.style.height}, rightFrameWidth = ${rightFrame.style.width}`);
+      console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
       const uuid = data.uuid;
+      GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
-      // console.log(`curFile file = ${JSON.stringify(file)}`);
 
-      //
-      // const myChart = window.myChart;
-      // GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
-      // const option = GlobalUtil.model.localTeach.chartOption;
-      // myChart.setOption(option, true);
+      this.protype = proj.type;
 
-      //
-      // el-tree-node__label
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
@@ -253,7 +278,7 @@ export default {
             }
             else {
               data = JSON.parse(data);
-              const isContinus = data.type === 'continus';
+              const isContinus = data.type === 'continuous';
               const points = data.points;
               const type = data.tpye;
               file.storeType = data.type;
@@ -272,29 +297,70 @@ export default {
         });
       }
     },
-    renderContent(createElement, { node, data, store }) {
-      return createElement(
-        'span', [
-          createElement('span',{
-            attrs:{
-              style:`background:url('${this.fileIcon.front}') no-repeat center left;padding-left:30px;`,
-            }},node.label),
-          createElement('span',{
-            attrs:{
-              style:"color: red;"
-            },
-            on:{
-              click: function() {
-                console.log('rename-button');
-              }
-            }},'rename'),
-          createElement('span',{
-            on:{
-              click: function() {
-                console.log('delete-button');
-              }
-            }},'delete'),
-        ]);
+
+//    renderContent(createElement, { node, data, store }) {
+//      console.log(`createElement node.uuid = ${data.uuid}`);
+//      console.log(`createElement node.type = ${data.type}`);
+//      console.log(`createElement node.proType = ${data.proType}`);
+//      let iconUrl = '';
+//      if (data.proType === 'continuous') {
+//        iconUrl = `background:url('${this.fileIcon.front}')`;
+//      }
+//      if (data.proType === 'discontinuous') {
+//        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+//      }
+//      return createElement(
+//        'span', [
+//          createElement('span',{
+//            attrs:{
+//              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
+//            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
+//          createElement('span',{
+//            attrs:{
+//              style:"color:red;padding-left:5px;"
+//            },
+//            on:{
+//              click: function() {
+//                console.log('rename-button');
+//              }
+//            }},'rename'),
+//          createElement('span',{
+//            attrs:{
+//              style:"color:blue;padding-left:5px;"
+//            },
+//            on:{
+//              click: function() {
+//                console.log('delete-button');
+//              }
+//            }},'delete'),
+//        ]);
+//
+//    },
+    renderContent(h, { node, data, store }) {
+      let iconUrl = '';
+      if (data.proType === 'continuous') {
+        iconUrl = `background:url('${this.fileIcon.continuous}')`;
+        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
+          iconUrl = `background:url('${this.fileIcon.continuous_white}')`;
+        }
+      }
+      if (data.proType === 'discontinuous') {
+        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
+          iconUrl = `background:url('${this.fileIcon.discontinuous_white}')`;
+        }
+      }
+      const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
+
+      const label = GlobalUtil.model.localTeach.getRealFileName(data.label);
+      return (
+        <span class="tree-list">
+          <span style={iconStyle}>{label}</span>
+          <span class="display-none" style="margin-right: 20px">
+            <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
+            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
+          </span>
+      </span>);
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -314,18 +380,30 @@ export default {
   beforeDestroy() {
   },
   components: {
-    ElButton,
-OnePointSetting,
+    OnePointSetting,
     ListProj,
     XarmModel,
+    DialogTeachProjName,
   },
   computed: {
+    getCurFile(){
+      const tempArr = this.model.localTeach.curEditingFileUUID.split('/');
+      return tempArr[tempArr.length-1];
+    },
+    classObject: () => {
+      return {
+        'start-btn': GlobalUtil.model.localTeach.curProj.files.length > 0 && GlobalUtil.model.localTeach.visible.starRecording===false,
+        'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0 || GlobalUtil.model.localTeach.visible.starRecording===true,
+      }
+    },
   },
 };
 
 </script>
 <style lang="scss" scoped>
 .app-container {
+  display: flex;
+  flex-direction: column;
   .recording-header-wrapper {
     height: 60px;
     line-height: 60px;
@@ -346,25 +424,30 @@ OnePointSetting,
   }
   .main-contain {
     width: 100%;
-    padding: 0 14px;
+    height: 100%;
+    /*padding: 0 14px;*/
     margin: 0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     .recording-area-wrapper {
       width: 80%;
-      margin: 0 12px;
+      /*margin: 0 12px;*/
       font-size: 14px;
       .top-area {
         box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
         border-radius: 8px;
-        height: 530px;
+        height: 50%;
       }
       .bottom-area {
         display: flex;
-        margin-top: 20px;
+        justify-content: space-between;
+        padding-top: 20px;
+        height: 50%;
       }
       .switch-wrapper {
+        position: relative;
         width: 350px;
+        background: #F3F3F3;
         text-align: center;
         .switch-btn {
           height: 62px;
@@ -386,7 +469,6 @@ OnePointSetting,
           }
         }
         .recording {
-          background: #F3F3F3;
           .file-name {
             height: 42px;
             line-height: 42px;
@@ -397,25 +479,60 @@ OnePointSetting,
             }
           }
           .recording-btn {
-            padding-top: 120px;
-            height: 270px;
-            button {
-              margin: 18px auto;
-              display: block;
-            }
+            /*padding-top: 120px;*/
+            // padding-top: 20vh;
+            // button {
+            //   margin: 0px auto;
+            //   display: block;
+            // }
+          }
+          .bottom-btn {
+            height: 42px;
+            width: 100%;
+            right: 0px;
+            line-height: 42px;
+            position: absolute;
+            transition: all .4s;
+            border: none;
+            outline: 0;
+            font-family: 'Gotham-Book';
+            font-size: 14px;
+            color: #FFFFFF;
+            letter-spacing: -0.06px;
+          }
+          .start-recording-btn {
+            bottom: 42px;
+            background: #E24D4A;
+            cursor: pointer;
+          }
+          .finish-recording-btn {
+            bottom: 42px;
+            background: #52BF53;
+            cursor: pointer;
+          }
+          .eidt-btn {
+            bottom: 42px;
+            background: #4A90E2;
+            cursor: pointer;
           }
           .start-btn {
-            height: 42px;
-            line-height: 42px;
-            background: #D4D4D4;
-            font-size: 22px;
-            color: #fff;
+            bottom: 0;
+            background: #52BF53;
             cursor: pointer;
-            transition: all .4s;
           }
-          .start-btn:hover {
-            background: rgba(212,212,212,0.6);
+          .press-btn {
+            bottom: 0;
+            background: #E24D4A;
+            z-index: 50px;
+            cursor: pointer;
           }
+          .start-btn-dark {
+            bottom: 0;
+            background: #E3E3E3;;
+          }
+          /*.start-btn:hover {*/
+            /*background: rgba(212,212,212,0.6);*/
+          /*}*/
           .recording-time {
             height: 36px;
             line-height: 36px;
@@ -425,7 +542,9 @@ OnePointSetting,
 
     }
     .projects-list-wrapper {
-      width: 440px;
+      width: 320px;
+      /*min-width: 300px;*/
+      /*max-width: 400px;*/
       background: #EDEDED;
       border: 1px solid #DFDFDF;
       position: relative;
@@ -443,25 +562,18 @@ OnePointSetting,
           border: none;
           outline: 0;
           cursor: pointer;
+          font-size: 14px;
+          color: #8E959D;
+          .el-icon-circle-plus {
+            margin-right: 14px;
+          }
         }
       }
-      .add-project {
-        width: 100%;
-        height: 62px;
-        line-height: 62px;
-        text-align: center;
-        background: #E2E2E2;
-        font-family: 'Gotham-Book';
-        font-size: 1rem;
-        color: #707274;
-        letter-spacing: -1px;
-        cursor: pointer;
-        transition: all .4s;
-        position: absolute;
-        bottom: 0;
-      }
-      .add-project:hover {
-        background: rgba(226,226,226,0.4);
+      .tree-wrapper {
+        height: inherit;
+        overflow-y: scroll;
+        height: 90%;
+        font-size: 14px;
       }
     }
   }
@@ -526,4 +638,107 @@ OnePointSetting,
   background-color:#f6f6f6;
   overflow-y: scroll;
 }
+.display-none {
+  display: none;
+}
+.tree-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+}
+.tree-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: #D8D8D8;;
+}
+.tree-wrapper::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(231,231,231,0.4);
+  border-radius: 0;
+  background: rgba(231,231,231,0.4);
+}
+</style>
+<style lang="scss">
+  .tree-list {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .recording-project-list {
+    background: #fff;
+  }
+  .recording-project-list .el-tree-node__content {
+    height: 36px;
+  }
+  .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
+    background: #E8E8E8;
+  }
+  /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
+    /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
+    /*padding: 10px;*/
+  /*}*/
+  /*.recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{*/
+    /*background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;*/
+  /*}*/
+  .recording-project-list .el-tree-node.is-current>.el-tree-node__content {
+    background-color: #575C62;
+    color: #fff;
+  }
+  .recording-project-list .el-tree-node.is-current>.el-tree-node__content .display-none {
+    display: inline-block;
+  }
+  .save-dialog .el-dialog__title{
+    font-size: 16px;
+    letter-spacing: -0.57px;
+    color: #E27347;
+  }
+  .save-dialog .el-dialog__body {
+    text-align: center;
+  }
+  .save-dialog .el-dialog__body p{
+    font-size: 16px;
+    color: #555;
+    letter-spacing: -0.57px;
+  }
+  .save-dialog .el-dialog__body span {
+    font-size: 12px;
+    letter-spacing: -0.38px;
+  }
+  .save-dialog .el-dialog__body button {
+    width: 168px;
+    height: 40px;
+    margin-top: 50px;
+    background: #444;
+    border-radius: 2px;
+    color: #fff;
+    border: none;
+  }
+  .create-project-dialog {
+    .el-dialog__body {
+      text-align: center;
+    }
+    .select-way {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      .common-box {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f3f3f3;
+        cursor: pointer;
+      }
+      .active {
+        border: 1px solid blue;
+      }
+    }
+    .project-name-input {
+      width: 350px;
+    }
+    .create-project-btn {
+      width: 100%;
+      border: none;
+    }
+  }
 </style>

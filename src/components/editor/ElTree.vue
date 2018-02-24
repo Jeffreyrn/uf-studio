@@ -66,10 +66,8 @@ export default {
       const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
       if (fileInfo !== null && data.uuid === curUUID && fileInfo.type === 'file') {
         return (
-          <span class="">
-            <span class="el-tree-node__label" style="color:#4F7597;">
-              { data.label }
-            </span>  
+          <span class="el-tree-node__label" style="color:#4F7597;">
+            { data.label }
           </span>
         );  
       }

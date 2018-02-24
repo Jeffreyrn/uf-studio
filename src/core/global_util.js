@@ -6,8 +6,6 @@ import NativeCom from './native_com';
 import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
 
-// import CommandsHttp from './commands_http';
-
 const args = {
   // host: '192.168.1.166',
   host: '192.168.1.67',
@@ -20,8 +18,6 @@ window.GlobalUtil = self;
 self.store = {};
 self.model = Model;
 self.socketCom = SocketCom;
-// self.commandsHttp = CommandsHttp;
-// self.CommandsEditorSocket = CommandsEditorSocket;
 CommandsEditorSocket.socketCom = SocketCom;
 CommandsEditorSocket.model = Model;
 window.CommandsEditorSocket = CommandsEditorSocket;
@@ -42,6 +38,7 @@ self.isFileStr = (str) => {
   }
   if (str.length > 10) {
     GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
+    GlobalUtil.model.localTeach.dialogErrorTips = errStr;
     return false;
   }
   const firstChar = str[0];
@@ -52,10 +49,12 @@ self.isFileStr = (str) => {
     const aChar = str[i];
     if ( !(aChar >= 'a' && aChar <= 'z' || aChar >= 'A' && aChar <= 'Z' || aChar === '_' || aChar >= '0' && aChar <= '9') ) {
       GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
+      GlobalUtil.model.localTeach.dialogErrorTips = errStr;
       return false;
     }
   }
   GlobalUtil.model.localProjTree.dialogErrorTips = '';
+  GlobalUtil.model.localTeach.dialogErrorTips = '';
   return true;
 }
 
@@ -82,19 +81,8 @@ self.randomNumber = (begin, end) => {
 
 self.getMinWidth();
 
-// self.onwinresize = () => {
-//   // console.log(`global window width: ${document.body.clientWidth}, height: ${document.body.clientHeight}`);
-//   let store = self.store;
-//   store.clientWidth = document.body.clientWidth;
-//   store.clientHeight = document.body.clientHeight;
-//   console.log(`2 global window width: ${store.clientWidth}, height: ${store.clientHeight}`);
-//   self.store = store;
-// };
-
 self.getScreenWidth = () => {
   self.screen_width = window.screen.width;
-  // self.screen_width = document.body.clientWidth;
-  // console.log(`self.screen_width = ${GlobalUtil.screen_width}`);
   return self.screen_width;
 };
 self.getScreenWidth();
@@ -131,54 +119,6 @@ self.pad = (num, n) => {
    }
    return num;
 };
-
-// self.socketCom.close = () => {
-//   self.socketCom.socket_info.socket.close();
-// };
-
-// self.socketCom.open = () => {
-//   self.socketCom.init_socket(args);
-//   self.socketCom.init_onopen((evt) => {
-//     // console.log('onopen onopen onopen');
-//     self.model.localDeviceStatus.socket_connected = true;
-//     self.model.localDeviceStatus.xarm_connected = true;
-//     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-//     // GlobalUtil.model.localProjTree.getProjsFromArm((dict) => {
-//     //   console.log(`listProjs dict = ${JSON.stringify(dict)}`);
-//     // });
-//     CommandsEditorSocket.listProjs((dict) => {
-
-//     });
-//     CommandsTeachSocket.listProjs((dict) => {
-
-//     });
-//   });
-//   self.socketCom.init_onclose((evt) => {
-//     self.model.localDeviceStatus.socket_connected = false;
-//     self.model.localDeviceStatus.xarm_connected = false;
-//     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-//     // console.log('onclose onclose onclose');
-//   });
-//   self.socketCom.init_onerror((evt) => {
-//     self.model.localDeviceStatus.socket_connected = false;
-//     self.model.localDeviceStatus.xarm_connected = false;
-//     self.model.robot.info.connected = self.model.localDeviceStatus.xarm_connected;
-//     const temp_msg = JSON.parse(evt.data);
-//     // console.log(`onerror onerror onerror = ${evt.data}`);
-//   });
-//   self.socketCom.init_onmessage((evt) => {
-//     const temp_msg = JSON.parse(evt.data);
-//     self.model.localDeviceInfo.onmessage(evt);
-//     self.model.localDeviceStatus.onmessage(evt);
-//     self.model.localParamsSetting.onmessage(evt);
-//     self.socketCom.onmessage(evt);
-//     self.model.robot.onmessage(evt);
-//     if (temp_msg.type === 'response') {
-//       self.socketCom.response = evt.data;
-//     }
-//   });
-// };
-// self.socketCom.open();
 
 self.getUrlParam = (lan) => {
   const reg = new RegExp('(^|&)' + lan + '=([^&]*)(&|$)', 'i');

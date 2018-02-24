@@ -9,10 +9,21 @@ self.curProjList = [];
 self.curProj = {};
 self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
+self.curSelectedTreeItem = {
+  uuid: '',
+  type: '',
+};
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];
 self.isContinus = false;
+self.visible = {
+  starRecording: false,
+}
+self.projTypeSelected = '1';
+self.projTypeSelectedShow = false;
+self.curDialogProjInputText = '';
+self.dialogErrorTips = '';
 self.pushFileData = (uuid, datas) => {
   let dict = self.fileDatas[uuid];
   if (dict === null || dict === undefined) {
@@ -26,6 +37,24 @@ self.pushFileData = (uuid, datas) => {
 
 self.setFileData = (uuid, datas) => {
 
+};
+
+self.setCurSelectedTreeItem = (uuid) => {
+  self.curSelectedTreeItem.uuid = uuid;
+  const aProj = self.getCurProj(uuid);
+  const thisProj = self.getProjInfo(uuid);
+  if (aProj !== null) {
+    self.curSelectedTreeItem.type = 'proj';
+  }
+  else {
+    const aFile = self.getTeachFileInfo(thisProj, uuid);
+    if (aFile !== null) {
+      self.curSelectedTreeItem.type = 'file';
+    }
+    else {
+      self.curSelectedTreeItem.type = '';
+    }
+  }
 };
 
 self.getFileData = (uuid, index) => {
@@ -52,6 +81,22 @@ self.setSelectedTreeItem = (file) => {
       node.style.color = 'gray';
     }
   }
+};
+
+self.getCurProj = (uuid) => {
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const proj = self.curProjList[i];
+    if (proj.uuid === uuid) {
+      return proj;
+    }
+  }
+  return null;
+};
+
+self.getRealFileName = (name) => {
+  name = name.replace("discontinuous_", "");
+  name = name.replace("continuous_", "");
+  return name;
 };
 
 self.createFile = (uuid, superid, proId, type, name, content) => {
@@ -86,6 +131,19 @@ self.getProjInfo = (uuid) => {
     }
   }
   return null;
+};
+
+self.isHasProj = (name) => {
+  const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
+  const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    if (self.curProjList[i].name === `${pre}${name}`) {
+      self.dialogErrorTips = 'Project name is the same';
+      return false;
+    }
+  }
+  self.dialogErrorTips = '';
+  return true;
 };
 
 self.getTeachFileInfo = (proj, uuid) => {
@@ -130,8 +188,18 @@ self.remoteProjs2Local = (dict) => {
     }
     if (curProj === null) {
       curProj = {};
-      curProj.name = projName;
       curProj.uuid = projPath;
+      let name = projName;
+      // name = name.replace("continuous_", "");
+      // name = name.replace("discontinuous_", "")
+      curProj.name = name;
+      const type = projName.split("_")[0];
+      if (type === 'discontinuous') {
+        curProj.type = 'discontinuous';
+      }
+      else {
+        curProj.type = 'continuous';
+      }
       curProj.files = [];
       projs.push(curProj);
     }
@@ -191,6 +259,14 @@ self.curPro2Tree = () => {
     const aChild = {};
     aChild.label = proj.name;
     aChild.uuid = proj.uuid;
+    aChild.type = 'folder';
+    const type = proj.name.split("_")[0];
+    if (type === 'continuous' || type === 'discontinuous') {
+      aChild.proType = type;
+    }
+    else {
+      aChild.proType = 'continuous';
+    }
     aChild.children = [];
     tempDatas.push(aChild);
     for (let j = 0; j < proj.files.length; j += 1) {
@@ -198,6 +274,7 @@ self.curPro2Tree = () => {
       const bChild = {};
       bChild.label = file.name;
       bChild.uuid = file.uuid;
+      aChild.type = 'file';
       aChild.children.push(bChild);
     }
   }

@@ -1,8 +1,7 @@
 <template lang="html">
-  <div>
-    <div v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
+  <div class="list-project-wrapper">
+    <div v-for='(file,index) in model.localTeach.curProj.files' style="color: #fff">
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
-        <div style="background-color:red;height:2px;width:1000px;"></div>
         <div>{{ index }} -- {{ file.uuid }}</div>
         <!-- <div v-if="model.localTeach.curEditingFileUUID === file.uuid"> -->
           <el-button style="display:none;" id="start-id" value='start' @click='onClick($event, file.uuid)'>Start</el-button>
@@ -18,8 +17,8 @@
           <span>Type: {{ file.storeType }}</span>
         <!-- </div> -->
         <!-- scroll timer  -->
-        <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" style="border:1px solid lightblue;font-size:5px;margin-left:50px;width:900px;height:80px;background-color:lightgray;overflow-x:scroll;" @scroll="checkscroll()">
-          <div style="width:81100px;">
+        <div v-if="model.localTeach.curEditingFileUUID === file.uuid" id="scroll-timer" @scroll="checkscroll()">
+          <div class="block-cell">
             <!-- <template v-for='(data,index) in model.localTeach.fileDatas[file.uuid]'> -->
             <div v-for='index in model.localTeach.showArr'>
               <ListProjCell :index='index' :file='file'></ListProjCell>
@@ -198,12 +197,39 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-
+.list-project-wrapper {
+  width: 70%;
+  overflow-x: auto;
+  background: #434343;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.list-project-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 9px;
+}
+.list-project-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: #666;;
+}
+.list-project-wrapper::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px #434343;
+  border-radius: 0;
+  background: #434343;
+}
 .bgcolor0 {
   background-color: transparent;
 }
 .bgcolor1 {
   background-color: green;
 }
-
+.block-cell {
+  display:flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 5px;
+  text-align: center;
+}
 </style>
