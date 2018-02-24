@@ -358,7 +358,7 @@ export default {
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
-          <span class="display-none" style="margin-right: 20px">
+          <span class="display-none" style="margin-right: 12px">
             <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
             <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
           </span>
@@ -433,13 +433,13 @@ export default {
       .top-area {
         box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
         border-radius: 8px;
-        height: 50%;
+        height: 60%;
       }
       .bottom-area {
         display: flex;
         justify-content: space-between;
         padding-top: 20px;
-        height: 50%;
+        height: 40%;
       }
       .switch-wrapper {
         position: relative;
@@ -539,7 +539,7 @@ export default {
       }
       .tree-wrapper {
         height: inherit;
-        overflow-y: scroll;
+        overflow-y: auto;
         height: 90%;
         font-size: 14px;
       }
@@ -630,6 +630,7 @@ export default {
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    padding-left: 8px;
   }
   .recording-project-list {
     background: #fff;
@@ -638,7 +639,8 @@ export default {
     height: 36px;
   }
   .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
-    background: #E8E8E8;
+    /*background: #E8E8E8;*/
+    border-top: 1px solid #E3E3E3;
   }
   /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
     /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
