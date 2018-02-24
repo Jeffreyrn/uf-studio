@@ -19,7 +19,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
         <el-col :span="19" class="model-container">
-          <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive>
+          <!-- <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive> -->
         </el-col>
         <el-col :span="5" class="end-container">
           <div class="container-title">TCP</div>
@@ -61,8 +61,10 @@
               <div class="yaw-wrapper">
                 <!-- <el-button @click="setYaw(true)">Left</el-button>
                 <el-button @click="setYaw(false)">Right</el-button> -->
-                <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
-                  @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw">
+                <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
+                  @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> -->
+                  <canvas id="angle-canvas" width="200" height="50"></canvas>
+                  <div class="data-display" v-text="radianAngle"></div>
               </div>
               <div id="orientation-joystick" class="joystick-wrapper"></div>
             </div>
@@ -110,6 +112,7 @@ export default {
   data() {
     return {
       testindex: 6,
+      radianAngle: -(Math.PI / 2),
       test: null,
       testtest: [],
       config: {
@@ -186,6 +189,108 @@ export default {
     for (let i = 1; i < 8; i += 1) {
       this.rangeColor(`${i}`);
     }
+    // angle canvas start, define values for angle canva;
+    const self = this;
+    const sCanvas = document.getElementById('angle-canvas');
+    const sCtx = sCanvas.getContext('2d');
+    let isDown = false;
+    const cx = 100;
+    const cy = 140;
+    const sRadius = 120;
+    const strokewidth = 15;
+    // const thumbAngle = Math.PI / 100;
+    const value_from = (Math.PI * 4) / 3;
+    const value_to = (Math.PI * 5) / 3;
+    let mouseX;
+    let mouseY;
+    const indicatorSize = 25;
+    // default value
+    // self.cData.r = self.radiansToDegrees(self.radianAngle); // default r value
+    sCtx.lineCap = 'round';
+    sCtx.font = '24px arial';
+    sCtx.lineWidth = 3;
+
+    const indicator = new Image();
+    indicator.src = '../src/assets/img/control/btn_slide02.svg';
+    function drawAngle() { // draw uarm angle select
+      // clear
+      sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+
+      sCtx.save();
+      // circle
+      sCtx.beginPath();
+      sCtx.arc(cx, cy, sRadius, value_from, value_to);
+      sCtx.strokeStyle = '#ffffff';
+      sCtx.lineWidth = strokewidth;
+      sCtx.stroke();
+      let x;
+      let y;
+      if (self.radianAngle >= ((-2 * Math.PI) / 3) && self.radianAngle <= (Math.PI / -2)) {
+        const thelta = self.radianAngle + Math.PI;
+        x = cx - (sRadius * Math.cos(thelta));
+        y = cy - (sRadius * Math.sin(thelta));
+      }
+      else if (self.radianAngle <= (Math.PI / -3) && self.radianAngle > (Math.PI / -2)) {
+        const thelta = -self.radianAngle;
+        x = cx + (sRadius * Math.cos(thelta));
+        y = cy - (sRadius * Math.sin(thelta));
+      }
+      x -= (indicatorSize / 2);
+      y -= (indicatorSize / 2);
+      sCtx.drawImage(indicator, x, y, indicatorSize, indicatorSize);
+      window.requestAnimationFrame(drawAngle); // real time change when let changes
+    }
+
+    if (indicator.complete) {
+      drawAngle();
+    }
+    else {
+      indicator.onload = () => {
+        drawAngle();
+      };
+    }
+
+    function handleMouseDown(e) {
+      e.preventDefault();
+      // Put your mousedown stuff here
+      isDown = true;
+    }
+
+    function handleMouseUp(e) {
+      e.preventDefault();
+      // Put your mouseup stuff here
+      isDown = false;
+    }
+
+    function handleMouseOut(e) {
+      e.preventDefault();
+      // Put your mouseOut stuff here
+      isDown = false;
+    }
+
+    function handleMouseMove(e) {
+      // uncomment if you want to move slider only on drag instead of any mousemove
+      if (!isDown) {
+        return;
+      }
+      e.preventDefault();
+
+      mouseX = parseInt(e.clientX - sCanvas.getBoundingClientRect().left);
+      mouseY = parseInt(e.clientY - sCanvas.getBoundingClientRect().top);
+      const dx = mouseX - cx;
+      const dy = mouseY - cy;
+      const newAngle = Math.atan2(dy, dx);
+      if (newAngle < ((-2 * Math.PI) / 3) || newAngle > (Math.PI / -3)) {
+        return;
+      }
+      self.radianAngle = newAngle;
+      // self.cData.r = self.radiansToDegrees(self.radianAngle);
+    }
+    // angle canvas end
+    sCanvas.addEventListener('mousedown', handleMouseDown);
+    sCanvas.addEventListener('mousemove', handleMouseMove);
+    sCanvas.addEventListener('mouseup', handleMouseUp);
+    sCanvas.addEventListener('mouseout', handleMouseOut);
   },
   methods: {
     createJoyStick() {
@@ -597,11 +702,13 @@ span.text {
         #z-control::-webkit-slider-thumb {
           width: 25px;
           height: 25px;
-          background-image: gradient(right, #222, #eee);
+          background-image: url('~/src/assets/img/control/btn_slide02.svg');
+          background-repeat: no-repeat;
+          background-position: center center;
           -webkit-appearance: none;
           border: none;
           border-radius: 50%;
-          background: #5A93D7;
+        //  background: #5A93D7;
           box-shadow: 0 0 2px 0 rgba(45,73,67,0.17);
         }
       }
@@ -770,6 +877,9 @@ span.text {
     }
   }
 }
-
+.data-display {
+  background: blue;
+  color: yellow;
+}
 
 </style>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="14px" height="24px" viewBox="0 0 14 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_speed</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="xstudio_control_v1.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-151.000000, -1020.000000)">
+        <g id="speed-bar" transform="translate(10.000000, 1000.000000)" fill="#9FEA8E">
+            <g id="bar_speed" transform="translate(63.000000, 9.000000)">
+                <g id="icon_speed" transform="translate(77.000000, 10.000000)">
+                    <path d="M8,1.65124517 C8,0.82547946 7.70474826,0.753967383 7.33161146,1.50959278 L1.13668398,14.0547093 C0.76754319,14.8022425 1.13668398,15.408238 1.97434638,15.408238 L6.49394907,15.408238 C7.32571803,15.408238 8,16.0769129 8,16.9034191 L8,24.3487548 C8,25.1745205 8.29525174,25.2460326 8.66838854,24.4904072 L14.863316,11.9452907 C15.2324568,11.1977575 14.863316,10.591762 14.0256536,10.591762 L9.50605093,10.591762 C8.67428197,10.591762 8,9.92308712 8,9.09658094 L8,1.65124517 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
