@@ -64,7 +64,7 @@
                 <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
                   @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> -->
                   <canvas id="angle-canvas" width="200" height="50"></canvas>
-                  <div class="data-display" v-text="radianAngle"></div>
+                  <!-- <div class="data-display" v-text="joystick.step.orientation.z"></div> -->
               </div>
               <div id="orientation-joystick" class="joystick-wrapper"></div>
             </div>
@@ -254,12 +254,14 @@ export default {
       e.preventDefault();
       // Put your mousedown stuff here
       isDown = true;
+      self.setYaw();
     }
 
     function handleMouseUp(e) {
       e.preventDefault();
       // Put your mouseup stuff here
       isDown = false;
+      self.resetYaw();
     }
 
     function handleMouseOut(e) {
@@ -425,11 +427,13 @@ export default {
     },
     setYaw() {
       this.intervalYaw = setInterval(() => {
+        this.joystick.step.orientation.z = (this.radianAngle + (Math.PI / 2)) * 10;
         this.$store.commit(types.MOVE_END_ROLL, Number(this.joystick.step.orientation.z));
       }, 500);
     },
     resetYaw() {
       this.joystick.step.orientation.z = 0;
+      this.radianAngle = Math.PI / -2;
       clearInterval(this.intervalYaw);
     },
     setPositionZ() {
