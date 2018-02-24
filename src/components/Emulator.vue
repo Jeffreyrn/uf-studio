@@ -72,10 +72,10 @@
         </div>
         <div class="config-wrapper dark-backgroud">
           <div>
-            <span>Speed</span><input type="range" v-model="state.speed" :step="config.step" :max="config.jointMax" :min="config.jointMin">
+            <span>Speed</span><input type="range" v-model="state.speed" @change="setSpeed" :step="config.step" :max="config.jointMax" :min="config.jointMin">
           </div>
           <div>
-            <span>Acceleration</span><input type="range" v-model="state.acceleration" :step="config.step" :max="config.jointMax" :min="config.jointMin">
+            <span>Acceleration</span><input type="range" v-model="state.acceleration" @change="setAcceleration" :step="config.step" :max="config.jointMax" :min="config.jointMin">
           </div>
         </div>
       </el-col>
@@ -389,11 +389,11 @@ export default {
         }
       }
     },
-    setSpeed(value) {
-      this.setRobotState('speed', value);
+    setSpeed(evt) {
+      this.setRobotState('speed', Number(evt.target.value));
     },
-    setAcceleration(value) {
-      this.setRobotState('acceleration', value);
+    setAcceleration(evt) {
+      this.setRobotState('acceleration', Number(evt.target.value));
     },
     setOnline(value) {
       const data = Object.prototype.hasOwnProperty.call(value, 'value') ? value.value : value;
@@ -698,6 +698,7 @@ span.text {
           transform: rotate(-90deg);
           border-radius: 100px;
           border: none;
+          cursor: default;
         }
         #z-control::-webkit-slider-thumb {
           width: 25px;
