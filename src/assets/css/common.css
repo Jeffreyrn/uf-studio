@@ -8,10 +8,10 @@
   src: url('../fonts/Hiragino_gb_W3.ttf');
   unicode-range: U+4E00-9FFF;
 }
-/* @font-face{
+@font-face{
   font-family:'Gotham-Black';
   src: url('../fonts/Gotham-Black_0.otf');
-} */
+}
 @font-face{
   font-family:'Gotham-Book';
   src: url('../fonts/Gotham-Book_0.otf');
