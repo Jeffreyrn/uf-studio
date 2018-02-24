@@ -11,19 +11,22 @@
         <div class="bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
-              <!--<div class="recording-time">00 : 00 : 00</div>-->
+              <div class="recording-time">{{ protype }}</div>
               <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
 
-              <div class="recording-btn" v-if="visible.singlePointRecording">
-                <el-button v-if="visible.starRecording" class="com-btn" type="danger" @click='addRecord(false)'>Press to record</el-button>
+              <div class="recording-btn" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <el-button v-if="model.localTeach.visible.starRecording===false" class="com-btn" type="danger" @click='startRecord()'>Start Recording</el-button>
                 <el-button v-else class="com-btn" type="success" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</el-button>
+                <el-button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="com-btn" type="danger" @click='addRecord()'>Press to record</el-button>
               </div>
-              <div class="recording-btn" v-if="visible.wayPointRecording">
-                <el-button v-if="visible.starRecording" class="com-btn" type="danger" @click='addRecord(true)'>Start Recording</el-button>
-                <el-button v-else class="com-btn" type="success" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</el-button>
+              <div class="recording-btn" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <button class="start-btn"><i class="el-icon-caret-right" v-if="model.localTeach.curProj.files.length>0"></i></button>
               </div>
-
-              <button class="start-btn"><i class="el-icon-caret-right"></i></button>
+              <div class="recording-btn" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                <el-button class="com-btn" type="danger" @click=''>Edit</el-button>
+                <button class="start-btn"><i class="el-icon-caret-right"></i></button>
+              </div>
+              
             </div>
           </div>
           <ListProj id="bottom-right-frame"></ListProj>
@@ -48,52 +51,6 @@
 
     </div>
 
-
-      <!--<span class="float-left">.   current project: {{ model.localTeach.curProj.name }}</span>-->
-
-      <!--<el-button value='new' @click='newProj()'>New</el-button>-->
-      <!--<el-button value='new' @click='delProj()'>Delete</el-button>-->
-
-      <!--<el-button @click='addRecord(true)'>addContinusRecord</el-button>-->
-      <!--<el-button @click='addRecord(false)'>addDiscontinusRecord</el-button>-->
-
-
-
-
-      <!--<div id="total-teach-frame" class="total-frame position-absolute">-->
-        <!--<div id="right-teach-frame" class="right-frame position-absolute">-->
-        <!--</div>-->
-      <!--</div>-->
-
-
-      <!--<OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>-->
-
-      <!-- <el-dialog
-        class="create-project-dialog"
-        title="title"
-        :visible.sync="visible.createProjectDialog"
-        width="30%"
-        center>
-
-        <div class="select-way">
-          <div class="common-box" :class="{active: createWayPoint}" @click="createWayPoint=true">
-            <span>WayPoint</span>
-          </div>
-          <div class="common-box" :class="{active: !createWayPoint}" @click="createWayPoint=false">
-            <span>Single Point</span>
-          </div>
-        </div>
-        <el-input class="project-name-input" v-model="inputText" auto-complete="off" @blur="checkInputText()" @focus="checkInputText()"></el-input>
-
-        <el-input v-model="inputText" auto-complete="off"></el-input>
-        <el-radio v-model="radio" label="1">连续点</el-radio>
-        <el-radio v-model="radio" label="2">非连续点</el-radio>
-
-        <span slot="footer" class="dialog-footer">
-          <el-button class="create-project-btn" type="success" @click="add()" :disabled="createProjectDisable">确 定</el-button>
-        </span>
-      </el-dialog> -->
-
       <el-dialog
         class="save-dialog"
         title="System Notice"
@@ -102,7 +59,7 @@
         >
         <p>Stop Recording and save automatically.</p>
         <span>The recording file will be saved to my project list</span>
-        <el-button>确 定</el-button>
+        <el-button @click="finishRecordOK">确 定</el-button>
       </el-dialog>
       
       <DialogTeachProjName v-if="model.localTeach.projTypeSelectedShow"></DialogTeachProjName>
@@ -124,10 +81,7 @@ export default {
     return {
       socketCom: GlobalUtil.socketCom,
       model: GlobalUtil.model,
-      diff: 0,
-      sentCounter: 0,
-      recCounter: 0,
-      // curSelectedIndex: 0,
+      protype: '',
       folderOrFile: '',
       title: '',
       inputText: '',
@@ -154,7 +108,7 @@ export default {
         editSinglePointWay: false,
         singlePointRecording: false,
         wayPointRecording: false,
-        starRecording: true,
+        // starRecording: true,
       },
       createWayPoint: true,
       createProjectDisable: true,
@@ -184,40 +138,87 @@ export default {
         this.createProjectDisable = false;
       }
     },
-    finishRecord (uuid){
-      CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
-        GlobalUtil.model.localTeach.isEditingPoints = false;
-        console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
-      });
-      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
-        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-      });
+    finishRecord (){
+      // CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
+      //   GlobalUtil.model.localTeach.isEditingPoints = false;
+      //   console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
+      // });
+      // CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      //   GlobalUtil.model.localTeach.visible.starRecording = false;
+      //   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      // });
       this.visible.saveDialog = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
     },
-    addDiscontinusRecord() {
+    finishRecordOK() {
+      this.visible.saveDialog = false;
+      GlobalUtil.model.localTeach.visible.starRecording = false;
+
+      const curFileDatas = GlobalUtil.model.localTeach.curFileDatas;
+      console.log(`curFileDatas = ${JSON.stringify(curFileDatas)}`);
+
+      const textDict = {
+        type: GlobalUtil.model.localTeach.curProj.type,
+        points: curFileDatas,
+      };
+      const text = JSON.stringify(textDict);
+
+      const dateStr = GlobalUtil.getTimeString();
+      CommandsTeachSocket.createFile(dateStr, text, (dict) => {
+      }, (dict) => {
+      });
+
+      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      });
     },
-    addRecord(isContinus) {
+    startRecord() {
       this.visible.starRecording = false;
       const dateStr = GlobalUtil.getTimeString();
-      let createdUUID = null;
-      GlobalUtil.model.localTeach.isContinus = isContinus;
-      GlobalUtil.model.localTeach.isEditingPoints = true;
-      CommandsTeachSocket.createFile(dateStr, (dict) => {
-        createdUUID = dict.uuid;
-      }, (dict) => {
-        console.log(`dict = ${JSON.stringify(dict)}`);
-        const proj = GlobalUtil.model.localTeach.getProjInfo(GlobalUtil.model.localTeach.curProj.uuid);
-        GlobalUtil.model.localTeach.curProj = proj;
-        GlobalUtil.model.localTeach.curEditingFileUUID = createdUUID;
-        setTimeout(() => {
-          GlobalUtil.model.localTeach.showArr = [];
-          const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, createdUUID);
-          GlobalUtil.model.localTeach.setSelectedTreeItem(file);
-          document.getElementById("start-id").click();
-        }, 10);
+      const curSelectedTreeItemUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
+      const proj = GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
+      if (proj === null) {
+        return;
+      }
+      const isContinus = proj.type === 'continuous';
+      GlobalUtil.model.localTeach.visible.starRecording = true;
+
+      // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+      GlobalUtil.model.localTeach.curDuration = 0;
+
+      // GlobalUtil.model.localTeach.fileDatas[uuid] = [];
+      GlobalUtil.model.localTeach.curFileDatas = [];
+      CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
+        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+        const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+        GlobalUtil.model.localTeach.lastFileData = testData;
+        if (isContinus === false) {
+          GlobalUtil.model.localTeach.curDuration -= -1;
+          return;
+        }
+        // this.scrollTo(curFileDatas.length);
+        if (GlobalUtil.model.localTeach.curFileDatas.length >= 1800) {
+          this.finishRecordOK();
+        }
+        else {
+          // test data
+          const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+          GlobalUtil.model.localTeach.curFileDatas.push(testData)
+          // GlobalUtil.model.localTeach.pushFileData(uuid, testData);
+          // let tempArr = [];
+          // for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+          //   tempArr.push(i);
+          // }
+          // GlobalUtil.model.localTeach.showArr = tempArr;
+          // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
+        }
       });
+      GlobalUtil.model.localTeach.curDuration -= -1;      
+    },
+    addRecord() {
+      const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+      GlobalUtil.model.localTeach.curFileDatas.push(testData)
     },
     delProj() {
       const curProj = GlobalUtil.model.localTeach.curProj;
@@ -261,10 +262,12 @@ export default {
     },
     handleNodeClick(data) {
       const uuid = data.uuid;
-      GlobalUtil.model.localTeach.curSelectedUUID = uuid; 
+      GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
+
+      this.protype = proj.type;
 
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
@@ -277,7 +280,7 @@ export default {
             }
             else {
               data = JSON.parse(data);
-              const isContinus = data.type === 'continus';
+              const isContinus = data.type === 'continuous';
               const points = data.points;
               const type = data.tpye;
               file.storeType = data.type;
@@ -339,13 +342,13 @@ export default {
       let iconUrl = '';
       if (data.proType === 'continuous') {
         iconUrl = `background:url('${this.fileIcon.continuous}')`;
-        if (GlobalUtil.model.localTeach.curSelectedUUID === data.uuid) {
+        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
           iconUrl = `background:url('${this.fileIcon.continuous_white}')`;
         }
       }
       if (data.proType === 'discontinuous') {
         iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
-        if (GlobalUtil.model.localTeach.curSelectedUUID === data.uuid) {
+        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
           iconUrl = `background:url('${this.fileIcon.discontinuous_white}')`;
         }
       }
@@ -476,7 +479,7 @@ export default {
             /*padding-top: 120px;*/
             padding-top: 20vh;
             button {
-              margin: 18px auto;
+              margin: 0px auto;
               display: block;
             }
           }
@@ -487,7 +490,7 @@ export default {
             right: 0;
             width: 100%;
             line-height: 42px;
-            background: #D4D4D4;
+            background: #52BF53;
             font-size: 22px;
             color: #fff;
             /*cursor: pointer;*/

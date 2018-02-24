@@ -72,7 +72,7 @@ self.delProj = (proId, callback) => {
   });
 };
 
-self.createFile = (name, callback1, callback2) => {
+self.createFile = (name, content, callback1, callback2) => {
   let curProj = self.model.localTeach.curProj;
   if (curProj === null || curProj === undefined || curProj === {}) {
     return;
@@ -83,7 +83,7 @@ self.createFile = (name, callback1, callback2) => {
       userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
-      data: '', // 文件内容
+      data: content, // 文件内容
     })
   };
   self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {

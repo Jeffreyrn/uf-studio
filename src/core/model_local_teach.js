@@ -9,11 +9,17 @@ self.curProjList = [];
 self.curProj = {};
 self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
-self.curSelectedUUID = '';
+self.curSelectedTreeItem = {
+  uuid: '',
+  type: '',
+};
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];
 self.isContinus = false;
+self.visible = {
+  starRecording: false,
+}
 self.projTypeSelected = '1';
 self.projTypeSelectedShow = false;
 self.curDialogProjInputText = '';
@@ -31,6 +37,24 @@ self.pushFileData = (uuid, datas) => {
 
 self.setFileData = (uuid, datas) => {
 
+};
+
+self.setCurSelectedTreeItem = (uuid) => {
+  self.curSelectedTreeItem.uuid = uuid;
+  const aProj = self.getCurProj(uuid);
+  const thisProj = self.getProjInfo(uuid);
+  if (aProj !== null) {
+    self.curSelectedTreeItem.type = 'proj';
+  }
+  else {
+    const aFile = self.getTeachFileInfo(thisProj, uuid);
+    if (aFile !== null) {
+      self.curSelectedTreeItem.type = 'file';
+    }
+    else {
+      self.curSelectedTreeItem.type = '';
+    }
+  }
 };
 
 self.getFileData = (uuid, index) => {
@@ -57,6 +81,16 @@ self.setSelectedTreeItem = (file) => {
       node.style.color = 'gray';
     }
   }
+};
+
+self.getCurProj = (uuid) => {
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    const proj = self.curProjList[i];
+    if (proj.uuid === uuid) {
+      return proj;
+    }
+  }
+  return null;
 };
 
 self.getRealFileName = (name) => {
