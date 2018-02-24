@@ -19,7 +19,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
         <el-col :span="19" class="model-container">
-          <!-- <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive> -->
+          <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive>
         </el-col>
         <el-col :span="5" class="end-container">
           <div class="container-title">TCP</div>
