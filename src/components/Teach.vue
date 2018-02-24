@@ -139,8 +139,10 @@ export default {
       radio: '2',
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
-        discontinuous: require('../assets/img/edit/recording/icon_singlepoint_16x16.svg'),
-        continuous: require('../assets/img/edit/recording/icon_waypoint_16x16.svg'),
+        discontinuous: require('../assets/img/edit/recording/icon_singlepoint_14x14_dark.svg'),
+        continuous: require('../assets/img/edit/recording/icon_waypoint_14x14_dark.svg'),
+        discontinuous_white: require('../assets/img/edit/recording/icon_singlepoint_14x14_white.svg'),
+        continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         rename: require('../assets/img/edit/recording/btn_rename.svg'),
         delete: require('../assets/img/edit/recording/btn_trash_white.svg')
@@ -260,19 +262,11 @@ export default {
     },
     handleNodeClick(data) {
       const uuid = data.uuid;
+      GlobalUtil.model.localTeach.curSelectedUUID = uuid; 
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
-      // console.log(`curFile file = ${JSON.stringify(file)}`);
 
-      //
-      // const myChart = window.myChart;
-      // GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
-      // const option = GlobalUtil.model.localTeach.chartOption;
-      // myChart.setOption(option, true);
-
-      //
-      // el-tree-node__label
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
@@ -345,15 +339,23 @@ export default {
     renderContent(h, { node, data, store }) {
       let iconUrl = '';
       if (data.proType === 'continuous') {
-        iconUrl = `background:url('${this.fileIcon.continuous}') no-repeat center left;padding-left: 20px;`;
+        iconUrl = `background:url('${this.fileIcon.continuous}')`;
+        if (GlobalUtil.model.localTeach.curSelectedUUID === data.uuid) {
+          iconUrl = `background:url('${this.fileIcon.continuous_white}')`;
+        }
       }
       if (data.proType === 'discontinuous') {
-        iconUrl = `background:url('${this.fileIcon.discontinuous}') no-repeat center left;padding-left: 20px;`;
+        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+        if (GlobalUtil.model.localTeach.curSelectedUUID === data.uuid) {
+          iconUrl = `background:url('${this.fileIcon.discontinuous_white}')`;
+        }
       }
+      const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
+
       const label = GlobalUtil.model.localTeach.getRealFileName(data.label);
       return (
         <span class="tree-list">
-          <span style={iconUrl}>{label}</span>
+          <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
             <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
             <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>

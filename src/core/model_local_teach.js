@@ -9,6 +9,7 @@ self.curProjList = [];
 self.curProj = {};
 self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
+self.curSelectedUUID = '';
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];
