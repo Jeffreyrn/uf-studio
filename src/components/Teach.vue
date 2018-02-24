@@ -20,10 +20,6 @@
                 <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
                 <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
               </div>
-              <!--
-              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
-                <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
-              </div> -->
               <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
                 <button class="bottom-btn eidt-btn" type="danger" @click=''>Edit</button>
                 <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
@@ -396,8 +392,8 @@ export default {
     },
     classObject: () => {
       return {
-        'start-btn': GlobalUtil.model.localTeach.curProj.files.length > 0,
-        'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0,
+        'start-btn': GlobalUtil.model.localTeach.curProj.files.length > 0 && GlobalUtil.model.localTeach.visible.starRecording===false,
+        'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0 || GlobalUtil.model.localTeach.visible.starRecording===true,
       }
     },
   },
