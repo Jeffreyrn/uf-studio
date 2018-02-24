@@ -4,7 +4,7 @@
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
     </div>
     <div class="main-contain">
-      <div class="recording-area-wrapper">
+      <div class="recording-area-wrapper"  id="left-teach-frame">
         <div class="top-area">
 
         </div>
@@ -26,11 +26,11 @@
               <button class="start-btn"><i class="el-icon-caret-right"></i></button>
             </div>
           </div>
-          <ListProj></ListProj>
+          <ListProj id="bottom-right-frame"></ListProj>
         </div>
       </div>
 
-      <div id="left-teach-frame" class="projects-list-wrapper">
+      <div class="projects-list-wrapper">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper">
           <el-tree
@@ -134,7 +134,8 @@ export default {
       inputText: '',
       clientWidth: 100,
       clientHeight: 200,
-      leftFrameWidth: 250,
+      rightFrameWidth: 320,
+      bottomLeftWidth: 300,
       pointWay: false,
       editState: false,
       radio: '2',
@@ -261,18 +262,16 @@ export default {
       this.clientWidth = document.body.clientWidth;
       this.clientHeight = document.body.clientHeight;
       const leftFrame = document.getElementById("left-teach-frame");
-      const rightFrame = document.getElementById("right-teach-frame");
-      const totalFrame = document.getElementById("total-teach-frame");
+      const bottomRightFrame = document.getElementById("bottom-right-frame");
       const totalFrameWidth = this.clientWidth - 20;
       const totalFrameHeight = this.clientHeight - 120;
-      if (totalFrame !== null && totalFrame !== undefined) {
-        totalFrame.style.width = `${totalFrameWidth}px`;
-        totalFrame.style.height = `${totalFrameHeight}px`;
+      if (leftFrame !== null && leftFrame !== undefined) {
+        leftFrame.style.width = `${totalFrameWidth - this.rightFrameWidth}px`;
       }
-      if (rightFrame !== null && rightFrame !== undefined) {
-        rightFrame.style.width = `${totalFrameWidth - this.leftFrameWidth - 2}px`;
+      if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
+        bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
-      // console.log(`totalFrameHeight = ${totalFrameHeight}, totalFrameHeight = ${totalFrame.style.height}, rightFrameWidth = ${rightFrame.style.width}`);
+      console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
       const uuid = data.uuid;
@@ -436,7 +435,7 @@ export default {
     /*padding: 0 14px;*/
     margin: 0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     .recording-area-wrapper {
       width: 80%;
       /*margin: 0 12px;*/
@@ -454,7 +453,7 @@ export default {
       }
       .switch-wrapper {
         position: relative;
-        width: 30%;
+        width: 350px;
         background: #F3F3F3;
         text-align: center;
         .switch-btn {
@@ -521,9 +520,9 @@ export default {
 
     }
     .projects-list-wrapper {
-      width: 20%;
-      min-width: 300px;
-      max-width: 400px;
+      width: 320px;
+      /*min-width: 300px;*/
+      /*max-width: 400px;*/
       background: #EDEDED;
       border: 1px solid #DFDFDF;
       position: relative;
@@ -542,12 +541,17 @@ export default {
           outline: 0;
           cursor: pointer;
           font-size: 14px;
+          color: #8E959D;
+          .el-icon-circle-plus {
+            margin-right: 14px;
+          }
         }
       }
       .tree-wrapper {
         height: inherit;
         overflow-y: scroll;
         height: 90%;
+        font-size: 14px;
       }
     }
   }

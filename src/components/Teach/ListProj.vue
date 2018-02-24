@@ -1,8 +1,7 @@
 <template lang="html">
-  <div>
+  <div class="list-project-wrapper">
     <div v-for='(file,index) in model.localTeach.curProj.files' style="background-color:lightblue;">
       <div v-if="model.localTeach.curEditingFileUUID === file.uuid">
-        <div style="background-color:red;height:2px;width:1000px;"></div>
         <div>{{ index }} -- {{ file.uuid }}</div>
         <!-- <div v-if="model.localTeach.curEditingFileUUID === file.uuid"> -->
           <el-button style="display:none;" id="start-id" value='start' @click='onClick($event, file.uuid)'>Start</el-button>
@@ -198,7 +197,11 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-
+.list-project-wrapper {
+  width: 70%;
+  overflow-x: auto;
+  background: #434343;
+}
 .bgcolor0 {
   background-color: transparent;
 }
