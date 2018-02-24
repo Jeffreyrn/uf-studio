@@ -13,6 +13,7 @@ self.curSelectedTreeItem = {
   uuid: '',
   type: '',
 };
+self.hasChange = false;
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];

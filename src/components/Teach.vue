@@ -5,24 +5,28 @@
     </div>
     <div class="main-contain">
       <div class="recording-area-wrapper"  id="left-teach-frame">
-        <div class="top-area">
-
+        <div class="top-area" id="top-area">
         </div>
-        <div class="bottom-area">
+        <div class="bottom-area" id="bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time"> {{ model.localTeach.curProj.name }} </div>
               <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
-
-              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
-                <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
-                <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
-                <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
-                <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
+              <div v-if="editState===false">
+                <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                  <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
+                  <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
+                  <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
+                  <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
+                </div>
+                <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                  <button class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
+                  <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
+                </div>
               </div>
-              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
-                <button class="bottom-btn eidt-btn" type="danger" @click=''>Edit</button>
-                <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
+              <div v-if="editState===true">
+                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click=''>Save change</button>
+                <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
               
             </div>
@@ -137,14 +141,6 @@ export default {
       }
     },
     finishRecord (){
-      // CommandsTeachSocket.saveOrUpdateFile(uuid, GlobalUtil.model.localTeach.isContinus, (dict) => {
-      //   GlobalUtil.model.localTeach.isEditingPoints = false;
-      //   console.log(`CommandsTeachSocket saveOrUpdateFile = ${JSON.stringify(dict)}`);
-      // });
-      // CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
-      //   GlobalUtil.model.localTeach.visible.starRecording = false;
-      //   console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-      // });
       this.visible.saveDialog = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
@@ -218,6 +214,14 @@ export default {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
       GlobalUtil.model.localTeach.curFileDatas.push(testData)
     },
+    startEdit() {
+      this.editState = true;
+      this.onwinresize();
+    },
+    cancelEdit() {
+      this.editState = false;
+      this.onwinresize();
+    },
     delProj() {
       const curProj = GlobalUtil.model.localTeach.curProj;
       this.$confirm(`Delete ${curProj.name}?`, {
@@ -250,12 +254,17 @@ export default {
       const bottomRightFrame = document.getElementById("bottom-right-frame");
       const totalFrameWidth = this.clientWidth - 20;
       const totalFrameHeight = this.clientHeight - 120;
+      const topArea = document.getElementById('top-area');
+      const bottomArea = document.getElementById('bottom-area');
       if (leftFrame !== null && leftFrame !== undefined) {
         leftFrame.style.width = `${totalFrameWidth - this.rightFrameWidth}px`;
       }
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
         bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
+      const bottomHeight = this.editState ? 200 : 300;
+      bottomArea.style.height = `${bottomHeight}px`;
+      topArea.style.height = `${totalFrameHeight + 50 - bottomHeight}px`;
       console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
@@ -396,6 +405,12 @@ export default {
         'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0 || GlobalUtil.model.localTeach.visible.starRecording===true,
       }
     },
+    saveChangeClassObject: () => {
+      return {
+        'save-change-btn': GlobalUtil.model.localTeach.hasChange === true,
+        'save-change-btn-dark': GlobalUtil.model.localTeach.hasChange === false,
+      }
+    },
   },
 };
 
@@ -436,38 +451,38 @@ export default {
       .top-area {
         box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
         border-radius: 8px;
-        height: 50%;
+        height: 300px;
       }
       .bottom-area {
         display: flex;
         justify-content: space-between;
         padding-top: 20px;
-        height: 50%;
+        height: 100px;
       }
       .switch-wrapper {
         position: relative;
         width: 350px;
         background: #F3F3F3;
         text-align: center;
-        .switch-btn {
-          height: 62px;
-          line-height: 62px;
-          background: #ECECEC;
-          border-radius: 30px;
-          color: #9C9C9C;
-          letter-spacing: -0.78px;
-          text-align: center;
-          display: flex;
-          justify-content: space-around;
-          span {
-            width: 50%;
-            cursor: pointer;
-          }
-          .active {
-            background: #FFF;
-            border-radius: 100px;
-          }
-        }
+        // .switch-btn {
+        //   height: 62px;
+        //   line-height: 62px;
+        //   background: #ECECEC;
+        //   border-radius: 30px;
+        //   color: #9C9C9C;
+        //   letter-spacing: -0.78px;
+        //   text-align: center;
+        //   display: flex;
+        //   justify-content: space-around;
+        //   span {
+        //     width: 50%;
+        //     cursor: pointer;
+        //   }
+        //   .active {
+        //     background: #FFF;
+        //     border-radius: 100px;
+        //   }
+        // }
         .recording {
           .file-name {
             height: 42px;
@@ -513,6 +528,21 @@ export default {
           .eidt-btn {
             bottom: 42px;
             background: #4A90E2;
+            cursor: pointer;
+          }
+          .save-change-btn {
+            bottom: 42px;
+            background: #52BF53;
+            cursor: pointer;
+          }
+          .save-change-btn-dark {
+            bottom: 42px;
+            background: #BCBDBC;
+            cursor: pointer;
+          }
+          .edit-cancel-btn {
+            bottom: 0px;
+            background: #E24D4A;
             cursor: pointer;
           }
           .start-btn {
