@@ -11,20 +11,22 @@
         <div class="bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
-              <div class="recording-time">{{ protype }}</div>
+              <div class="recording-time"> {{ model.localTeach.curProj.name }} </div>
               <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
 
-              <div class="recording-btn" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
-                <el-button v-if="model.localTeach.visible.starRecording===false" class="com-btn" type="danger" @click='startRecord()'>Start Recording</el-button>
-                <el-button v-else class="com-btn" type="success" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</el-button>
-                <el-button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="com-btn" type="danger" @click='addRecord()'>Press to record</el-button>
+              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
+                <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
+                <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
+                <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
               </div>
-              <div class="recording-btn" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
-                <button class="start-btn"><i class="el-icon-caret-right" v-if="model.localTeach.curProj.files.length>0"></i></button>
-              </div>
-              <div class="recording-btn" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
-                <el-button class="com-btn" type="danger" @click=''>Edit</el-button>
-                <button class="start-btn"><i class="el-icon-caret-right"></i></button>
+              <!--
+              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
+              </div> -->
+              <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                <button class="bottom-btn eidt-btn" type="danger" @click=''>Edit</button>
+                <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
               </div>
               
             </div>
@@ -358,7 +360,7 @@ export default {
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
-          <span class="display-none" style="margin-right: 12px">
+          <span class="display-none" style="margin-right: 20px">
             <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
             <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
           </span>
@@ -378,7 +380,6 @@ export default {
           break;
       }
     },
-
   },
   beforeDestroy() {
   },
@@ -392,6 +393,12 @@ export default {
     getCurFile(){
       const tempArr = this.model.localTeach.curEditingFileUUID.split('/');
       return tempArr[tempArr.length-1];
+    },
+    classObject: () => {
+      return {
+        'start-btn': GlobalUtil.model.localTeach.curProj.files.length > 0,
+        'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0,
+      }
     },
   },
 };
@@ -433,13 +440,13 @@ export default {
       .top-area {
         box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
         border-radius: 8px;
-        height: 60%;
+        height: 50%;
       }
       .bottom-area {
         display: flex;
         justify-content: space-between;
         padding-top: 20px;
-        height: 40%;
+        height: 50%;
       }
       .switch-wrapper {
         position: relative;
@@ -477,26 +484,55 @@ export default {
           }
           .recording-btn {
             /*padding-top: 120px;*/
-            padding-top: 20vh;
-            button {
-              margin: 0px auto;
-              display: block;
-            }
+            // padding-top: 20vh;
+            // button {
+            //   margin: 0px auto;
+            //   display: block;
+            // }
           }
-          .start-btn {
+          .bottom-btn {
             height: 42px;
-            position: absolute;
-            bottom: 0;
-            right: 0;
             width: 100%;
+            right: 0px;
             line-height: 42px;
-            background: #52BF53;
-            font-size: 22px;
-            color: #fff;
-            /*cursor: pointer;*/
+            position: absolute;
             transition: all .4s;
             border: none;
             outline: 0;
+            font-family: 'Gotham-Book';
+            font-size: 14px;
+            color: #FFFFFF;
+            letter-spacing: -0.06px;
+          }
+          .start-recording-btn {
+            bottom: 42px;
+            background: #E24D4A;
+            cursor: pointer;
+          }
+          .finish-recording-btn {
+            bottom: 42px;
+            background: #52BF53;
+            cursor: pointer;
+          }
+          .eidt-btn {
+            bottom: 42px;
+            background: #4A90E2;
+            cursor: pointer;
+          }
+          .start-btn {
+            bottom: 0;
+            background: #52BF53;
+            cursor: pointer;
+          }
+          .press-btn {
+            bottom: 0;
+            background: #E24D4A;
+            z-index: 50px;
+            cursor: pointer;
+          }
+          .start-btn-dark {
+            bottom: 0;
+            background: #E3E3E3;;
           }
           /*.start-btn:hover {*/
             /*background: rgba(212,212,212,0.6);*/
@@ -539,7 +575,7 @@ export default {
       }
       .tree-wrapper {
         height: inherit;
-        overflow-y: auto;
+        overflow-y: scroll;
         height: 90%;
         font-size: 14px;
       }
@@ -630,7 +666,6 @@ export default {
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    padding-left: 8px;
   }
   .recording-project-list {
     background: #fff;
@@ -639,8 +674,7 @@ export default {
     height: 36px;
   }
   .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
-    /*background: #E8E8E8;*/
-    border-top: 1px solid #E3E3E3;
+    background: #E8E8E8;
   }
   /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
     /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
