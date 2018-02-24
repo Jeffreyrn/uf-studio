@@ -4,11 +4,10 @@
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
 
-      <div class="dialog-content" @click="contentClick">
+      <div class="dialog-content">
         <div class="position-absolute top-bar">
           <span class="top-title">Please choose the way you want to record with xArm in this project</span>
           <div class="position-absolute dialog-close" @click="closeMyself">
-            X
           </div>
         </div>
         <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
@@ -21,7 +20,11 @@
           <div class="position-absolute single-icon">
           </div>
         </div>
-        <input id="input-text" v-model="model.localTeach.curDialogProjInputText" type="text" class="position-absolute dialog-input" />
+        <input
+          id="input-text"
+          v-model="model.localTeach.curDialogProjInputText"
+          type="text" class="position-absolute dialog-input"
+          placeholder="Please enter a project name"/>
         <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
         <div style="margin-top:230px;">
           <span v-if="isFileNameCorrect">
@@ -30,7 +33,7 @@
             </div>
           </span>
           <span v-if="!isFileNameCorrect">
-            <div class="position-absolute btn-create btn-create-opacity">
+            <div class="position-absolute btn-create-opacity">
               OK
             </div>
           </span>
@@ -43,30 +46,15 @@
 
 <script>
 
-const path = require('path')
-  
-import CustomSelect from './CustomSelect';
-
 export default {
   data () {
     return {
       model: GlobalUtil.model,
-      options: [
-          { text: 'py', value: '.py' },
-          { text: 'txt', value: '.txt' },
-          { text: 'md', value: '.md' },
-          { text: 'none', value: '' },
-      ],
     }
   },
   methods: {
     typeSelect(type) {
       GlobalUtil.model.localTeach.projTypeSelected = type;
-    },
-    contentClick() {
-      console.log(`contentClick contentClick`);
-      const Option = document.getElementsByClassName('option')[0];
-      Option.style.display = 'none';
     },
     closeMyself() {
       GlobalUtil.model.localTeach.projTypeSelectedShow = false;
@@ -78,48 +66,22 @@ export default {
     },
   },
   components: {
-    CustomSelect,
   },
   computed: {
     isFileNameCorrect() {
-      const isFileStr = GlobalUtil.isFileStr(this.model.localTeach.curDialogProjInputText);
-      const text = this.model.localTeach.curDialogProjInputText;
-
-      // if (this.model.localProjTree.folderOrFile === 'proj'
-      //   || this.model.localProjTree.folderOrFile === 'renameproj'
-      //   ) {
-      //   const isHasProj = GlobalUtil.model.localProjTree.isHasProj(text);
-      //   return isFileStr && !isHasProj;
-      // }
-      // if (this.model.localProjTree.folderOrFile === 'file'
-      //   || this.model.localProjTree.folderOrFile === 'rename'
-      //   || this.model.localProjTree.folderOrFile === 'folder') {
-        
-      //   const ext = this.model.localProjTree.fileSelected;
-      //   const getFileSuperid = this.model.localProjTree.getFileSuperid();
-      //   let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
-      //   if (this.model.localProjTree.folderOrFile === 'folder') {
-      //     toAddFile = path.join(getFileSuperid, `${text}`);
-      //   }
-      //   const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
-      //   console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
-      //   if (text === null || text === '') {
-      //     GlobalUtil.model.localProjTree.dialogErrorTips = '';
-      //   }
-      //   return isFileStr && !isRepeatFile;
-      // }
-
       if (text === null || text === '') {
-        // GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        GlobalUtil.model.localTeach.dialogErrorTips = '';
       }
-
-      return isFileStr;
-    },
-    isExtInput() {
-      if (this.model.localProjTree.curDialogIsExtend === false) {
+      const text = this.model.localTeach.curDialogProjInputText;
+      const isHasProj = GlobalUtil.model.localTeach.isHasProj(text);
+      if (!isHasProj) {
         return false;
       }
-      return this.model.localProjTree.folderOrFile === 'file' || this.model.localProjTree.folderOrFile === 'rename';
+      const isFileStr = GlobalUtil.isFileStr(this.model.localTeach.curDialogProjInputText);
+      if (!isFileStr) {
+        return false;
+      }
+      return isFileStr && isHasProj;
     },
     classObject1: () => {
       return {
@@ -168,15 +130,12 @@ export default {
   }
   .top-title {
     position: absolute;
-    left: 24px;
-    top: 25px;
-    /* height: 67px; */
+    left: 25px;
+    top: 30px;
     font-family: 'Gotham-Medium';
-    font-size: 16px;
+    font-size: 14px;
     color: #FFFFFF;
-    letter-spacing: -1px;
-    /* background-color: yellow; */
-    /* line-height: 16px; */
+    letter-spacing: -0.78px;
   }
   .dialog-content {
     width: 580px;
@@ -205,6 +164,10 @@ export default {
     text-align:center;
     line-height: 40px;
     cursor: pointer;
+    background-image: url('./../assets/img/edit/recording/icon_close.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
   }
   .dialog-input {
     width:350px;
@@ -212,24 +175,17 @@ export default {
     top:285px;
     left:118px;
     padding-left: 15px;
-    /* background: #2C2C2C; */
-    /* background: yellow; */
-    /* color: white; */
-    /* border: 0; */
-    /* outline:none; */
-    border: 1 solid #4E4C4C;
-    /* background-image: url('./../assets/img/pop/frame01.svg'); */
-    /* background-position: center; */
-    /* background-repeat: no-repeat; */
-    /* background-size: 288px 34px; */
+    border: 1px solid #575C62;
+    outline:none;
   }
   .dialog-error {
-    left:35px;
-    top:155px;
-    width: 288px;
-    font-size: 7.8px;
-    color: #878787;
+    left:120px;
+    top:335px;
+    width: 400px;
     font-family: 'Gotham-Book';
+    font-size: 9px;
+    color: #B2B2B2;
+    letter-spacing: -0.56px;
   }
   .point-selected-bg {
     background: #ECECEC;
@@ -274,31 +230,49 @@ export default {
   .point-selected-selected0 {
     border: 0px;
   }
-  .opacity0 {
-    opacity: 0;
-  }
   .btn-create-opacity {
-    opacity: 0.5;
-  }
-  .dialog-add {
     width: 100%;
-    height: 100px;
-    /* background-color: yellow; */
+    height: 40px;
+    bottom: 0px;
+    text-align: center;
+    font-family: 'Gotham-Book';
+    font-size: 14px;
+    color: #BABABA;
+    letter-spacing: -0.78px;
+    line-height: 40px;
+    background: #ECECEC;
   }
   .btn-create {
     width: 100%;
     height: 40px;
     bottom: 0px;
-    /* margin-top: 230px; */
-    /* margin-left: 178px; */
-    /* background-color: green; */
     background: #52BF53;
     text-align: center;
     font-family: 'Gotham-Book';
     font-size: 14px;
     color: #FFFFFF;
-    letter-spacing: -0.88px;
+    letter-spacing: -0.78px;
     line-height: 40px;
-    /* cursor: pointer; */
+  }
+  input::-webkit-input-placeholder{ /*WebKit browsers*/
+    font-family: Gotham-Book;
+    font-size: 12px;
+    color: #D4D4D4;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+  input::-moz-input-placeholder{ /*Mozilla Firefox*/
+    font-family: Gotham-Book;
+    font-size: 12px;
+    color: #D4D4D4;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+  input::-ms-input-placeholder{ /*Internet Explorer*/ 
+    font-family: Gotham-Book;
+    font-size: 12px;
+    color: #D4D4D4;
+    letter-spacing: -0.5px;
+    text-align: center;
   }
 </style>

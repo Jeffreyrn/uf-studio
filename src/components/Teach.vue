@@ -139,7 +139,8 @@ export default {
       radio: '2',
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
-        discontinuous: require('../assets/img/edit/recording/icon_addfile.svg'),
+        discontinuous: require('../assets/img/edit/recording/icon_singlepoint_16x16.svg'),
+        continuous: require('../assets/img/edit/recording/icon_waypoint_16x16.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         rename: require('../assets/img/edit/recording/btn_rename.svg'),
         delete: require('../assets/img/edit/recording/btn_trash_white.svg')
@@ -303,43 +304,61 @@ export default {
       }
     },
 
-    renderContent(createElement, { node, data, store }) {
-      console.log(`createElement node.uuid = ${data.uuid}`);
-      console.log(`createElement node.type = ${data.type}`);
-      console.log(`createElement node.proType = ${data.proType}`);
+//    renderContent(createElement, { node, data, store }) {
+//      console.log(`createElement node.uuid = ${data.uuid}`);
+//      console.log(`createElement node.type = ${data.type}`);
+//      console.log(`createElement node.proType = ${data.proType}`);
+//      let iconUrl = '';
+//      if (data.proType === 'continuous') {
+//        iconUrl = `background:url('${this.fileIcon.front}')`;
+//      }
+//      if (data.proType === 'discontinuous') {
+//        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+//      }
+//      return createElement(
+//        'span', [
+//          createElement('span',{
+//            attrs:{
+//              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
+//            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
+//          createElement('span',{
+//            attrs:{
+//              style:"color:red;padding-left:5px;"
+//            },
+//            on:{
+//              click: function() {
+//                console.log('rename-button');
+//              }
+//            }},'rename'),
+//          createElement('span',{
+//            attrs:{
+//              style:"color:blue;padding-left:5px;"
+//            },
+//            on:{
+//              click: function() {
+//                console.log('delete-button');
+//              }
+//            }},'delete'),
+//        ]);
+//
+//    },
+    renderContent(h, { node, data, store }) {
       let iconUrl = '';
       if (data.proType === 'continuous') {
-        iconUrl = `background:url('${this.fileIcon.front}')`;
+        iconUrl = `background:url('${this.fileIcon.continuous}') no-repeat center left;padding-left: 20px;`;
       }
       if (data.proType === 'discontinuous') {
-        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+        iconUrl = `background:url('${this.fileIcon.discontinuous}') no-repeat center left;padding-left: 20px;`;
       }
-      return createElement(
-        'span', [
-          createElement('span',{
-            attrs:{
-              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
-            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
-          createElement('span',{
-            attrs:{
-              style:"color:red;padding-left:5px;"
-            },
-            on:{
-              click: function() {
-                console.log('rename-button');
-              }
-            }},'rename'),
-          createElement('span',{
-            attrs:{
-              style:"color:blue;padding-left:5px;"
-            },
-            on:{
-              click: function() {
-                console.log('delete-button');
-              }
-            }},'delete'),
-        ]);
-
+      const label = GlobalUtil.model.localTeach.getRealFileName(data.label);
+      return (
+        <span class="tree-list">
+          <span style={iconUrl}>{label}</span>
+          <span class="display-none" style="margin-right: 20px">
+            <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
+            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
+          </span>
+      </span>);
     },
     onClick(e) {
       const attr = e.currentTarget.value;
@@ -597,6 +616,12 @@ export default {
 }
 </style>
 <style lang="scss">
+  .tree-list {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
   .recording-project-list {
     background: #fff;
   }
@@ -606,13 +631,13 @@ export default {
   .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
     background: #E8E8E8;
   }
-  .recording-project-list .el-tree-node__expand-icon.is-leaf:before{
-    background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;
-    padding: 10px;
-  }
-  .recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{
-    background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;
-  }
+  /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
+    /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
+    /*padding: 10px;*/
+  /*}*/
+  /*.recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{*/
+    /*background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;*/
+  /*}*/
   .recording-project-list .el-tree-node.is-current>.el-tree-node__content {
     background-color: #575C62;
     color: #fff;

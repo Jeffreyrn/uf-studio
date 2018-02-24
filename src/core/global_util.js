@@ -38,6 +38,7 @@ self.isFileStr = (str) => {
   }
   if (str.length > 10) {
     GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
+    GlobalUtil.model.localTeach.dialogErrorTips = errStr;
     return false;
   }
   const firstChar = str[0];
@@ -48,10 +49,12 @@ self.isFileStr = (str) => {
     const aChar = str[i];
     if ( !(aChar >= 'a' && aChar <= 'z' || aChar >= 'A' && aChar <= 'Z' || aChar === '_' || aChar >= '0' && aChar <= '9') ) {
       GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
+      GlobalUtil.model.localTeach.dialogErrorTips = errStr;
       return false;
     }
   }
   GlobalUtil.model.localProjTree.dialogErrorTips = '';
+  GlobalUtil.model.localTeach.dialogErrorTips = '';
   return true;
 }
 

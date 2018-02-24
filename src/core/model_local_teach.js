@@ -98,6 +98,19 @@ self.getProjInfo = (uuid) => {
   return null;
 };
 
+self.isHasProj = (name) => {
+  const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
+  const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
+  for (let i = 0; i < self.curProjList.length; i += 1) {
+    if (self.curProjList[i].name === `${pre}${name}`) {
+      self.dialogErrorTips = 'Project name is the same';
+      return false;
+    }
+  }
+  self.dialogErrorTips = '';
+  return true;
+};
+
 self.getTeachFileInfo = (proj, uuid) => {
   const files = proj.files;
   for (let i = 0; i < files.length; i += 1) {
