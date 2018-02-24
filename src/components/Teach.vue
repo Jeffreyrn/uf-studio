@@ -68,7 +68,7 @@
 
       <!--<OnePointSetting style="position:absolute;right:10px;top:10px;"></OnePointSetting>-->
 
-      <el-dialog
+      <!-- <el-dialog
         class="create-project-dialog"
         title="title"
         :visible.sync="visible.createProjectDialog"
@@ -90,10 +90,9 @@
         <el-radio v-model="radio" label="2">非连续点</el-radio>
 
         <span slot="footer" class="dialog-footer">
-          <!--<el-button @click="visible.createProjectDialog=false">取 消</el-button>-->
           <el-button class="create-project-btn" type="success" @click="add()" :disabled="createProjectDisable">确 定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
 
       <el-dialog
         class="save-dialog"
@@ -105,8 +104,8 @@
         <span>The recording file will be saved to my project list</span>
         <el-button>确 定</el-button>
       </el-dialog>
-
-      <!-- <DialogTeachProjName></DialogTeachProjName> -->
+      
+      <DialogTeachProjName v-if="model.localTeach.projTypeSelectedShow"></DialogTeachProjName>
 
   </div>
 </template>
@@ -141,7 +140,10 @@ export default {
       radio: '2',
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
-        discontinuous: require('../assets/img/edit/recording/icon_addfile.svg'),
+        discontinuous: require('../assets/img/edit/recording/icon_singlepoint_14x14_dark.svg'),
+        continuous: require('../assets/img/edit/recording/icon_waypoint_14x14_dark.svg'),
+        discontinuous_white: require('../assets/img/edit/recording/icon_singlepoint_14x14_white.svg'),
+        continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         rename: require('../assets/img/edit/recording/btn_rename.svg'),
         delete: require('../assets/img/edit/recording/btn_trash_white.svg')
@@ -232,25 +234,9 @@ export default {
       }).catch(() => {
       });
     },
-    add() {
-      console.log(`add add add`);
-      const text = this.inputText;
-      console.log(`text = ${text}`);
-      if (this.folderOrFile === 'proj') {
-        CommandsTeachSocket.createProj(text, this.radio);
-      }
-      this.visible.createProjectDialog = false;
-      this.visible.singlePointRecording = true;
-      // if (this.folderOrFile === 'file') {
-      //   CommandsTeachSocket.createFile(text);
-      // }
-    },
     newProj() {
-      this.folderOrFile = 'proj';
-      this.title = 'new project name';
-      this.inputText = '';
-      this.visible.createProjectDialog = true;
-      this.createProjectDisable = true;
+      GlobalUtil.model.localTeach.curDialogProjInputText = '';
+      GlobalUtil.model.localTeach.projTypeSelectedShow = true;
     },
     addFile() {
       console.log('add file');
@@ -275,19 +261,11 @@ export default {
     },
     handleNodeClick(data) {
       const uuid = data.uuid;
+      GlobalUtil.model.localTeach.curSelectedUUID = uuid; 
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
       GlobalUtil.model.localTeach.curProj = proj;
       const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
-      // console.log(`curFile file = ${JSON.stringify(file)}`);
 
-      //
-      // const myChart = window.myChart;
-      // GlobalUtil.model.localTeach.fileData2ChartSeries(uuid);
-      // const option = GlobalUtil.model.localTeach.chartOption;
-      // myChart.setOption(option, true);
-
-      //
-      // el-tree-node__label
       if (file !== null && file !== undefined) {
         GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
@@ -360,14 +338,23 @@ export default {
     renderContent(h, { node, data, store }) {
       let iconUrl = '';
       if (data.proType === 'continuous') {
-        iconUrl = `background:url('${this.fileIcon.front}') no-repeat center left;padding-left: 20px;`;
+        iconUrl = `background:url('${this.fileIcon.continuous}')`;
+        if (GlobalUtil.model.localTeach.curSelectedUUID === data.uuid) {
+          iconUrl = `background:url('${this.fileIcon.continuous_white}')`;
+        }
       }
       if (data.proType === 'discontinuous') {
-        iconUrl = `background:url('${this.fileIcon.discontinuous}') no-repeat center left;padding-left: 20px;`;
+        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
+        if (GlobalUtil.model.localTeach.curSelectedUUID === data.uuid) {
+          iconUrl = `background:url('${this.fileIcon.discontinuous_white}')`;
+        }
       }
+      const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
+
+      const label = GlobalUtil.model.localTeach.getRealFileName(data.label);
       return (
         <span class="tree-list">
-          <span style={iconUrl}>{node.label}</span>
+          <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
             <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
             <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>

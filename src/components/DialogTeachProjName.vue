@@ -4,15 +4,28 @@
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
 
-      <div class="dialog-content" @click="contentClick">
+      <div class="dialog-content">
         <div class="position-absolute top-bar">
+          <span class="top-title">Please choose the way you want to record with xArm in this project</span>
           <div class="position-absolute dialog-close" @click="closeMyself">
-            X
           </div>
         </div>
-        <span class="top-title">Please choose the way you want to record with xArm in this project</span>
-        <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
-        <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div>
+        <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
+          Waypoint
+          <div class="position-absolute waypoint-icon">
+          </div>
+        </div>
+        <div class="position-absolute point-selected-bg" v-bind:class="classObject2" style="right:110px;" @click="typeSelect('2')">
+          Single Point
+          <div class="position-absolute single-icon">
+          </div>
+        </div>
+        <input
+          id="input-text"
+          v-model="model.localTeach.curDialogProjInputText"
+          type="text" class="position-absolute dialog-input"
+          placeholder="Please enter a project name"/>
+        <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
         <div style="margin-top:230px;">
           <span v-if="isFileNameCorrect">
             <div class="position-absolute btn-create cursor-pointer" @click="oncreate">
@@ -20,7 +33,7 @@
             </div>
           </span>
           <span v-if="!isFileNameCorrect">
-            <div class="position-absolute btn-create btn-create-opacity">
+            <div class="position-absolute btn-create-opacity">
               OK
             </div>
           </span>
@@ -33,115 +46,54 @@
 
 <script>
 
-const path = require('path')
-  
-import CustomSelect from './CustomSelect';
-
 export default {
   data () {
     return {
       model: GlobalUtil.model,
-      // inputText: '',
-      // selected: '.py',
-      options: [
-          { text: 'py', value: '.py' },
-          { text: 'txt', value: '.txt' },
-          { text: 'md', value: '.md' },
-          { text: 'none', value: '' },
-      ],
     }
   },
   methods: {
-    contentClick() {
-      console.log(`contentClick contentClick`);
-      const Option = document.getElementsByClassName('option')[0];
-      Option.style.display = 'none';
+    typeSelect(type) {
+      GlobalUtil.model.localTeach.projTypeSelected = type;
     },
     closeMyself() {
-      // this.$emit('on-close')
-      // this.model.localProjTree.projsDialogShow = false;
-      this.model.localProjTree.fileDialogShow = false;
+      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
-  //   addProj() {
-  //     GlobalUtil.model.localProjTree.dialogVisible = true;
-  //   },
     oncreate() {
-      const text = this.model.localProjTree.curDialogInputText;
-      console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
-      console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
-      if (this.model.localProjTree.folderOrFile === 'folder') {
-        CommandsEditorSocket.createFile(text, false);
-        // const folder = GlobalUtil.model.localProjTree.createFolder(text);
-        // GlobalUtil.model.localProjTree.curProj.files.push(folder);
-      }
-      if (this.model.localProjTree.folderOrFile === 'file') {
-        CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
-        // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
-        // GlobalUtil.model.localProjTree.curProj.files.push(file);
-        // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
-      }
-      if (this.model.localProjTree.folderOrFile === 'proj') {
-        CommandsEditorSocket.createProj(text);
-        // const proj = GlobalUtil.model.localProjTree.createProj(text);
-        // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
-      }
-      if (this.model.localProjTree.folderOrFile === 'rename') {
-        // GlobalUtil.model.localProjTree.renameFile(text);
-        const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-        CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
-      }
-      if (this.model.localProjTree.folderOrFile === 'renameproj') {
-        // GlobalUtil.model.localProjTree.renameProj(text);
-        CommandsEditorSocket.renameProj(text);
-      }
-      this.model.localProjTree.projsDialogShow = false;
-      this.model.localProjTree.fileDialogShow = false;
-      this.model.localProjTree.deleteDialogShow = false;
+      const text = this.model.localTeach.curDialogProjInputText
+      CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
+      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
   },
   components: {
-    CustomSelect,
   },
   computed: {
     isFileNameCorrect() {
-      const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
-      const text = this.model.localProjTree.curDialogInputText;
-
-      if (this.model.localProjTree.folderOrFile === 'proj'
-        || this.model.localProjTree.folderOrFile === 'renameproj'
-        ) {
-        const isHasProj = GlobalUtil.model.localProjTree.isHasProj(text);
-        return isFileStr && !isHasProj;
-      }
-      if (this.model.localProjTree.folderOrFile === 'file'
-        || this.model.localProjTree.folderOrFile === 'rename'
-        || this.model.localProjTree.folderOrFile === 'folder') {
-        
-        const ext = this.model.localProjTree.fileSelected;
-        const getFileSuperid = this.model.localProjTree.getFileSuperid();
-        let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
-        if (this.model.localProjTree.folderOrFile === 'folder') {
-          toAddFile = path.join(getFileSuperid, `${text}`);
-        }
-        const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
-        console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
-        if (text === null || text === '') {
-          GlobalUtil.model.localProjTree.dialogErrorTips = '';
-        }
-        return isFileStr && !isRepeatFile;
-      }
-
       if (text === null || text === '') {
-        GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        GlobalUtil.model.localTeach.dialogErrorTips = '';
       }
-
-      return isFileStr;
-    },
-    isExtInput() {
-      if (this.model.localProjTree.curDialogIsExtend === false) {
+      const text = this.model.localTeach.curDialogProjInputText;
+      const isHasProj = GlobalUtil.model.localTeach.isHasProj(text);
+      if (!isHasProj) {
         return false;
       }
-      return this.model.localProjTree.folderOrFile === 'file' || this.model.localProjTree.folderOrFile === 'rename';
+      const isFileStr = GlobalUtil.isFileStr(this.model.localTeach.curDialogProjInputText);
+      if (!isFileStr) {
+        return false;
+      }
+      return isFileStr && isHasProj;
+    },
+    classObject1: () => {
+      return {
+        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
+        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
+      }
+    },
+    classObject2: () => {
+      return {
+        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected === '1',
+        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected !== '1',
+      }
     },
   },
 }
@@ -178,15 +130,12 @@ export default {
   }
   .top-title {
     position: absolute;
-    left: 24px;
-    top: 25px;
-    /* height: 67px; */
+    left: 25px;
+    top: 30px;
     font-family: 'Gotham-Medium';
-    font-size: 16px;
+    font-size: 14px;
     color: #FFFFFF;
-    letter-spacing: -1px;
-    /* background-color: yellow; */
-    /* line-height: 16px; */
+    letter-spacing: -0.78px;
   }
   .dialog-content {
     width: 580px;
@@ -215,6 +164,10 @@ export default {
     text-align:center;
     line-height: 40px;
     cursor: pointer;
+    background-image: url('./../assets/img/edit/recording/icon_close.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
   }
   .dialog-input {
     width:350px;
@@ -222,50 +175,104 @@ export default {
     top:285px;
     left:118px;
     padding-left: 15px;
-    /* background: #2C2C2C; */
-    /* background: yellow; */
-    /* color: white; */
-    /* border: 0; */
-    /* outline:none; */
-    border: 1 solid #4E4C4C;
-    /* background-image: url('./../assets/img/pop/frame01.svg'); */
-    /* background-position: center; */
-    /* background-repeat: no-repeat; */
-    /* background-size: 288px 34px; */
+    border: 1px solid #575C62;
+    outline:none;
   }
   .dialog-error {
-    left:35px;
-    top:155px;
-    width: 288px;
-    font-size: 7.8px;
-    color: #878787;
+    left:120px;
+    top:335px;
+    width: 400px;
     font-family: 'Gotham-Book';
+    font-size: 9px;
+    color: #B2B2B2;
+    letter-spacing: -0.56px;
   }
-  .opacity0 {
-    opacity: 0;
+  .point-selected-bg {
+    background: #ECECEC;
+    width: 130px;
+    height: 130px;
+    top: 110px;
+    font-family: Gotham-Medium;
+    font-size: 14px;
+    color: #444444;
+    letter-spacing: -0.78px;
+    padding-top: 75px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .waypoint-icon {
+    top: 48px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 16px;
+    height: 16px;
+    background-image: url('./../assets/img/edit/recording/icon_waypoint_16x16.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+  }
+  .single-icon {
+    top: 48px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 16px;
+    height: 16px;
+    background-image: url('./../assets/img/edit/recording/icon_singlepoint_16x16.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+  }
+  .point-selected-selected1 {
+    border: 2px solid #5A93D7;
+  }
+  .point-selected-selected0 {
+    border: 0px;
   }
   .btn-create-opacity {
-    opacity: 0.5;
-  }
-  .dialog-add {
     width: 100%;
-    height: 100px;
-    /* background-color: yellow; */
+    height: 40px;
+    bottom: 0px;
+    text-align: center;
+    font-family: 'Gotham-Book';
+    font-size: 14px;
+    color: #BABABA;
+    letter-spacing: -0.78px;
+    line-height: 40px;
+    background: #ECECEC;
   }
   .btn-create {
     width: 100%;
     height: 40px;
     bottom: 0px;
-    /* margin-top: 230px; */
-    /* margin-left: 178px; */
-    /* background-color: green; */
     background: #52BF53;
     text-align: center;
     font-family: 'Gotham-Book';
     font-size: 14px;
     color: #FFFFFF;
-    letter-spacing: -0.88px;
+    letter-spacing: -0.78px;
     line-height: 40px;
-    /* cursor: pointer; */
+  }
+  input::-webkit-input-placeholder{ /*WebKit browsers*/
+    font-family: Gotham-Book;
+    font-size: 12px;
+    color: #D4D4D4;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+  input::-moz-input-placeholder{ /*Mozilla Firefox*/
+    font-family: Gotham-Book;
+    font-size: 12px;
+    color: #D4D4D4;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+  input::-ms-input-placeholder{ /*Internet Explorer*/ 
+    font-family: Gotham-Book;
+    font-size: 12px;
+    color: #D4D4D4;
+    letter-spacing: -0.5px;
+    text-align: center;
   }
 </style>
