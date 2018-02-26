@@ -5,9 +5,19 @@
     </div>
     <div class="main-contain">
       <div class="recording-area-wrapper"  id="left-teach-frame">
-        <div class="top-area" id="top-area">
+        <div class="left-top-area" id="left-top-area">
+          <!-- <div style="position:relative;">
+          </div> -->
+          <div class="left-emulator" id="left-emulator">
+          </div>
+          <div v-if="editState===true" class="left-show" id="left-show">
+          </div>
+          <div v-if="editState===true" class="left-control" id="left-control">
+          </div>
+          <!-- <div v-if="editState===false" style="background:gray;width:100%;height:100%;">
+          </div> -->
         </div>
-        <div class="bottom-area" id="bottom-area">
+        <div class="left-bottom-area" id="left-bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time">
@@ -87,6 +97,7 @@ import ListProj from './Teach/ListProj';
 import XarmModel from './common/XarmModel';
 import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
+import { setTimeout } from 'timers';
 const path = require('path');
 
 const echarts = require('echarts');
@@ -252,6 +263,9 @@ export default {
     startEdit() {
       this.editState = true;
       this.onwinresize();
+      setTimeout(() => {
+        this.onwinresize();
+      });
     },
     cancelEdit() {
       this.editState = false;
@@ -289,17 +303,39 @@ export default {
       const bottomRightFrame = document.getElementById("bottom-right-frame");
       const totalFrameWidth = this.clientWidth - 20;
       const totalFrameHeight = this.clientHeight - 120;
-      const topArea = document.getElementById('top-area');
-      const bottomArea = document.getElementById('bottom-area');
+      const leftTopArea = document.getElementById('left-top-area');
+      const leftBottomArea = document.getElementById('left-bottom-area');
+
+      const leftControl = document.getElementById('left-control');
+      const leftEmulator = document.getElementById('left-emulator');
+      const leftShow = document.getElementById('left-show');
+
+      const leftFrameWidth = totalFrameWidth - this.rightFrameWidth;
       if (leftFrame !== null && leftFrame !== undefined) {
-        leftFrame.style.width = `${totalFrameWidth - this.rightFrameWidth}px`;
+        leftFrame.style.width = `${leftFrameWidth}px`;
       }
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
         bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
       const bottomHeight = this.editState ? 200 : 300;
-      bottomArea.style.height = `${bottomHeight}px`;
-      topArea.style.height = `${totalFrameHeight + 50 - bottomHeight}px`;
+      leftBottomArea.style.height = `${bottomHeight}px`;
+      const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
+      leftTopArea.style.height = `${leftTopHeight}px`;
+      if (this.editState) {
+        const emulatorHeight = leftTopHeight - 200 - 0;
+        if (leftShow !== null) {
+          leftShow.style.height = `${emulatorHeight}px`;
+        }
+        leftEmulator.style.height = `${emulatorHeight}px`; 
+        leftEmulator.style.width = `${leftFrameWidth - 210}px`;
+      }
+      else {
+        leftEmulator.style.height = `100%`;
+        leftEmulator.style.width = `100%`;
+        if (leftShow !== null) {
+          leftShow.style.height = `100%`;
+        }
+      }
       console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
@@ -487,16 +523,40 @@ export default {
       width: 80%;
       /*margin: 0 12px;*/
       font-size: 14px;
-      .top-area {
+      .left-top-area {
         box-shadow: 0 0 6px 0 rgba(205,205,205,0.50);
         border-radius: 8px;
         height: 300px;
       }
-      .bottom-area {
+      .left-bottom-area {
         display: flex;
         justify-content: space-between;
         padding-top: 20px;
         height: 100px;
+      }
+      .left-emulator {
+        float: left;
+        width: 100%;
+        height: 100%;
+        background: lightcyan;
+        // background: yellow;
+        // padding-bottom:5px;
+      }
+      .left-show {
+        float: right;
+        width: 200px;
+        height:200px;
+        background: lightgray;
+      }
+      .left-control {
+        float: left;
+        // margin-top: 10px;
+        width: 100%;
+        height:200px;
+        // height: 100%;
+        // bottom: 0px;
+        background: gray;
+        // background: transparent;
       }
       .switch-wrapper {
         position: relative;
