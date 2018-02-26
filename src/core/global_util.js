@@ -107,7 +107,7 @@ self.getTimeString = () => {
   const min = date.getMinutes();
   const sec = date.getSeconds();
   const mill = date.getMilliseconds();
-  const allStr = `${year}${self.pad(month + 1, 2)}${self.pad(day + 1, 2)}${self.pad(hour + 1, 2)}${self.pad(min + 1, 2)}${self.pad(sec + 1, 2)}${mill}`;
+  const allStr = `${year}${self.pad(month + 1, 2)}${self.pad(day, 2)}${self.pad(hour, 2)}${self.pad(min, 2)}${self.pad(sec, 2)}${mill}`;
   return allStr;
 };
 

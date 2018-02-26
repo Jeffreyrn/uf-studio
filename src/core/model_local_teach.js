@@ -71,18 +71,18 @@ self.PROJ_TREE_TYPE = {
   FILE: 'file',
 };
 
-self.setSelectedTreeItem = (file) => {
-  const nodes = document.getElementsByClassName('el-tree-node__label');
-  for (let i = 0; i < nodes.length; i += 1) {
-    const node = nodes[i];
-    if (file !== null && file.name === node.innerHTML) {
-      node.style.color = 'blue';
-    }
-    else {
-      node.style.color = 'gray';
-    }
-  }
-};
+// self.setSelectedTreeItem = (file) => {
+//   const nodes = document.getElementsByClassName('el-tree-node__label');
+//   for (let i = 0; i < nodes.length; i += 1) {
+//     const node = nodes[i];
+//     if (file !== null && file.name === node.innerHTML) {
+//       node.style.color = 'blue';
+//     }
+//     else {
+//       node.style.color = 'gray';
+//     }
+//   }
+// };
 
 self.getCurProj = (uuid) => {
   for (let i = 0; i < self.curProjList.length; i += 1) {
@@ -94,10 +94,22 @@ self.getCurProj = (uuid) => {
   return null;
 };
 
-self.getRealFileName = (name) => {
+self.getRealProjFileName = (name) => {
   name = name.replace("discontinuous_", "");
   name = name.replace("continuous_", "");
   return name;
+};
+
+self.getRealFileFileName = (name) => {
+  name = path.basename(name);
+  name = name.split('.')[0];
+  const year = name.substring(0, 4);
+  const month = name.substring(4, 6)
+  const day = name.substring(6, 8);
+  const hour = name.substring(8, 10);
+  const min = name.substring(10, 12);
+  const sec = name.substring(12, 14);
+  return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 };
 
 self.createFile = (uuid, superid, proId, type, name, content) => {
@@ -213,7 +225,7 @@ self.remoteProjs2Local = (dict) => {
       if (superpath === projPath || superpath === CommandsTeachSocket.ROOT_DIR) {
         superpath = '';
       }
-      const name = path.basename(tempPath);
+      const name = self.getRealFileFileName(tempPath);
       const superid = superpath; //Base64.btoa(superpath); //
       const isProFile = path.basename(tempPath).indexOf('.') > 0;
       let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
@@ -273,7 +285,7 @@ self.curPro2Tree = () => {
     for (let j = 0; j < proj.files.length; j += 1) {
       const file = proj.files[j];
       const bChild = {};
-      bChild.label = file.name.split('.')[0];
+      bChild.label = file.name;
       bChild.uuid = file.uuid;
       aChild.type = 'file';
       aChild.children.push(bChild);

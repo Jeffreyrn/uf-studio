@@ -31,7 +31,7 @@
                   <img src="./../assets/img/edit/recording/icon_waypoint_16x16.svg" width="12px" height="12px" />
                 </span>
                 <span>
-                  {{ basename(model.localTeach.curSelectedTreeItem.uuid) }}
+                  {{ model.localTeach.getRealFileFileName(model.localTeach.curSelectedTreeItem.uuid) }}
                 </span>
               </div>
               <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
@@ -149,7 +149,7 @@ export default {
     // myChart.setOption(option, true);
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
-    GlobalUtil.model.localTeach.setSelectedTreeItem(null);
+    // GlobalUtil.model.localTeach.setSelectedTreeItem(null);
     // const nodes = document.getElementsByClassName('el-tree-node__label');
     // for (let i = 0; i < nodes.length; i += 1) {
     //   const node = nodes[i];
@@ -160,11 +160,11 @@ export default {
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
   methods: {
-    basename(name) {
-      name = path.basename(name);
-      name = name.split('.')[0];
-      return name;
-    },
+    // basename(name) {
+    //   name = path.basename(name);
+    //   name = name.split('.')[0];
+    //   return name;
+    // },
     fileLength(uuid) {
       if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
         if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
@@ -352,7 +352,7 @@ export default {
       this.protype = proj.type;
 
       if (file !== null && file !== undefined) {
-        GlobalUtil.model.localTeach.setSelectedTreeItem(file);
+        // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
@@ -398,7 +398,7 @@ export default {
 //          createElement('span',{
 //            attrs:{
 //              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
-//            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
+//            }}, GlobalUtil.model.localTeach.getRealProjFileName(data.label)),
 //          createElement('span',{
 //            attrs:{
 //              style:"color:red;padding-left:5px;"
@@ -436,7 +436,7 @@ export default {
       }
       const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
 
-      const label = GlobalUtil.model.localTeach.getRealFileName(data.label);
+      const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
