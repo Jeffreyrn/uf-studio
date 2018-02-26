@@ -81,6 +81,7 @@ export default {
           color: #444;
           /*padding: .8rem 0;*/
           cursor: pointer;
+          transition: all .2s;
           img {
             width: 2.6rem;
             padding-bottom: 2rem;
@@ -88,6 +89,10 @@ export default {
         }
         &>a:last-child{
           border-right: none;
+        }
+        a:hover {
+          /*transform: scale(1.1,1.1);*/
+          color: #4a90e2;
         }
       }
     }

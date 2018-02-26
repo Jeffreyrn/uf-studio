@@ -43,6 +43,7 @@ export default {
           justify-content: center;
           color: #444;
           cursor: pointer;
+          transition: all .2s;
           img {
             width: 2.6rem;
             margin-right: 2rem;
@@ -50,6 +51,9 @@ export default {
         }
         &>a:last-child{
           border-bottom: none;
+        }
+        a:hover {
+          color: #4a90e2;
         }
       }
     }
