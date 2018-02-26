@@ -126,7 +126,7 @@ export default {
         discontinuous_white: require('../assets/img/edit/recording/icon_singlepoint_14x14_white.svg'),
         continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
-        rename: require('../assets/img/edit/recording/btn_rename.svg'),
+        rename: require('../assets/img/edit/recording/icon_rename_white.svg'),
         delete: require('../assets/img/edit/recording/btn_trash_white.svg')
       },
       visible: {
@@ -435,13 +435,15 @@ export default {
         }
       }
       const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
-
       const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
+      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0;
+      const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
+      console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
-            <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
+            <el-button style="" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
             <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
           </span>
       </span>);

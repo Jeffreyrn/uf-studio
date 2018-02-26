@@ -272,7 +272,7 @@ self.curPro2Tree = () => {
     const aChild = {};
     aChild.label = proj.name;
     aChild.uuid = proj.uuid;
-    aChild.type = 'folder';
+    // aChild.type = 'folder';
     const type = proj.name.split("_")[0];
     if (type === 'continuous' || type === 'discontinuous') {
       aChild.proType = type;
@@ -287,7 +287,7 @@ self.curPro2Tree = () => {
       const bChild = {};
       bChild.label = file.name;
       bChild.uuid = file.uuid;
-      aChild.type = 'file';
+      // aChild.type = 'file';
       aChild.children.push(bChild);
     }
   }
