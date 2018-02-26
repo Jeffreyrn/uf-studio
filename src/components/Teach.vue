@@ -10,7 +10,20 @@
         <div class="bottom-area" id="bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
-              <div class="recording-time"> {{ model.localTeach.curProj.name }} </div>
+              <div class="recording-time">
+                {{ fileLength(model.localTeach.curEditingFileUUID) }}
+              </div>
+              <div class="recording-name" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                <span class="file-proj-icon" v-if="model.localTeach.curProj.type==='discontinuous'">
+                  <img src="./../assets/img/edit/recording/icon_singlepoint_16x16.svg" width="12px" height="12px" />
+                </span>
+                <span class="file-proj-icon" v-if="model.localTeach.curProj.type==='continuous'">
+                  <img src="./../assets/img/edit/recording/icon_waypoint_16x16.svg" width="12px" height="12px" />
+                </span>
+                <span>
+                  {{ basename(model.localTeach.curSelectedTreeItem.uuid) }}
+                </span>
+              </div>
               <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
               <div v-if="editState===false">
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
@@ -74,6 +87,7 @@ import ListProj from './Teach/ListProj';
 import XarmModel from './common/XarmModel';
 import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
+const path = require('path');
 
 const echarts = require('echarts');
 let t;
@@ -135,6 +149,27 @@ export default {
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
   methods: {
+    basename(name) {
+      name = path.basename(name);
+      name = name.split('.')[0];
+      return name;
+    },
+    fileLength(uuid) {
+      if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
+        if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
+          return GlobalUtil.model.localTeach.fileDatas[uuid].length;
+        }
+        if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
+          const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
+          const msec = length % 10;
+          const sec = Math.floor(length / 10) % 60;
+          const min = Math.floor(Math.floor(length / 10) / 60) % 60;
+          const str = `${min}:${sec}.${msec}00`;
+          return str;
+        }
+      }
+      return 0;
+    },
     checkInputText() {
       if(this.inputText !== ''){
         this.createProjectDisable = false;
@@ -268,6 +303,10 @@ export default {
       console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
+      // if (this.editState) {
+      //   return;
+      // }
+      this.cancelEdit();
       const uuid = data.uuid;
       GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
       const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
@@ -296,11 +335,11 @@ export default {
               // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
               GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
-            GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             let tempArr = [];
             for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
               tempArr.push(i);
             }
+            GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
           }
         });
@@ -566,10 +605,23 @@ export default {
           .recording-time {
             height: 36px;
             line-height: 36px;
+            font-family: 'Gotham-Book';
+            font-size: 14px;
+            color: #444444;
+            letter-spacing: -0.78px;
+            background: #E5E5E5;
+          }
+          .recording-name {
+            height: 43px;
+            line-height: 43px;
+            font-family: 'Gotham-Book';
+            font-size: 14px;
+            color: #6D7175;
+            letter-spacing: -0.78px;
+            background: #FFFFFF;
           }
         }
       }
-
     }
     .projects-list-wrapper {
       width: 320px;
@@ -608,10 +660,6 @@ export default {
     }
   }
 }
-
-
-
-
 .com-btn {
   width: 168px;
   height: 40px;
@@ -770,5 +818,8 @@ export default {
       width: 100%;
       border: none;
     }
+  }
+  .file-proj-icon {
+    // padding-left: 5px; 
   }
 </style>
