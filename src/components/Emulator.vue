@@ -19,7 +19,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
         <el-col :span="19" class="model-container">
-          <keep-alive><xarm-model :size="emulatorSize"></xarm-model></keep-alive>
+          <xarm-model :size="emulatorSize"></xarm-model>
         </el-col>
         <el-col :span="5" class="end-container">
           <div class="container-title">TCP</div>
@@ -297,7 +297,7 @@ export default {
   methods: {
     createJoyStick() {
       // const NIPPLE_OPTION = {};
-      const size = 110;
+      const size = 120;
       const color = 'white';
       const mode = 'static';
       const restOpacity = 1;
@@ -530,7 +530,14 @@ export default {
   computed: {
     end: {
       get() {
-        return this.$store.getters.end;
+        const end = this.$store.getters.end;
+        Object.keys(end.position).forEach((key) => {
+          this.state.position[key] = Number(end.position[key].toFixed(2));
+        });
+        Object.keys(end.orientation).forEach((key) => {
+          this.state.orientation[key] = Number(end.orientation[key].toFixed(2));
+        });
+        return end;
       },
       set(value) {
         console.log('SET');
