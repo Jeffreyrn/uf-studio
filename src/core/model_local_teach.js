@@ -13,6 +13,7 @@ self.curSelectedTreeItem = {
   uuid: '',
   type: '',
 };
+self.hasChange = false;
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];
@@ -272,7 +273,7 @@ self.curPro2Tree = () => {
     for (let j = 0; j < proj.files.length; j += 1) {
       const file = proj.files[j];
       const bChild = {};
-      bChild.label = file.name;
+      bChild.label = file.name.split('.')[0];
       bChild.uuid = file.uuid;
       aChild.type = 'file';
       aChild.children.push(bChild);
