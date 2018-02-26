@@ -229,8 +229,10 @@ const mutations = {
       //   Object.assign(state.info.orientation, data.orientation);
       // }
       getReverseKinematics(state, (response) => {
-        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
         console.log('get 7 angle, socket res', response);
+        if (typeof response.data === 'object') {
+          state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        }
       });
     }
   },

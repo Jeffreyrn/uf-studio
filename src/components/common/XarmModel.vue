@@ -129,7 +129,7 @@ export default {
         jointMax: 180,
         jointMin: -180,
         step: 0.1,
-        offsetY: -7,
+        offsetY: -5,
       },
       options: [0, 1, 2, 3, 4, 5, 6, 7],
       select: 7,
