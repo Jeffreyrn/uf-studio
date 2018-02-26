@@ -1,4 +1,5 @@
 <!-- 传递参数control（数组，index: 0-6）, 离线模式下控制机械臂, <keep-alive> 
+     默认高度为窗口宽度的52%
      传递参数size = {width: xx, heigth: xx}, 数值为百分比（0.01-0.99）窗口宽高占当前总窗口的百分比-->
 <template>
   <div class="hello" id="model-wrapper">
@@ -328,12 +329,15 @@ export default {
       window.addEventListener('resize', onWindowResize, false);
     },
     getCameraAspect() {
-      const ratio = this.size ? (this.size.width / this.size.height) : (0.8 / 0.45);
-      return (window.innerWidth / window.innerHeight) * ratio;
+      if (this.size) {
+        return (window.innerWidth / window.innerHeight) * (this.size.width / this.size.height);
+      }
+      return 1 / 0.52; // default
     },
     getRenderSize() {
       const rootDiv = document.getElementById('model-wrapper');
       const height = rootDiv.clientWidth / this.getCameraAspect();
+      // const height = rootDiv.clientWidth * 0.52;
       return [rootDiv.clientWidth, height];
     },
     setDiff(mesh) {

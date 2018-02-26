@@ -2,13 +2,13 @@
   <el-container class="hello emulator-container">
     <el-header height="50px">
       <el-row :gutter="20" class="header-wrapper">
-        <el-col :span="19">
+        <el-col :span="18">
           <router-link :to="{ name: 'Home'}">
             <img src="./../assets/img/control/icon_back.svg" alt="back home">
           </router-link>
           <span class="title-ide">Control</span>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="6">
           <div class="title-online">Live Control</div>
           <toggle-button v-model="state.online" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
             :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
@@ -18,24 +18,27 @@
     </el-header>
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
-        <el-col :span="19" class="model-container">
-          <xarm-model :size="emulatorSize"></xarm-model>
+        <el-col :span="18" class="model-container">
+          <xarm-model></xarm-model>
         </el-col>
-        <el-col :span="5" class="end-container">
-          <div class="container-title">TCP</div>
-          <ul class="position-set">
-            <li><div>X</div><input v-model.number="state.position.x" type="number"><span>mm</span></li>
-            <li><div>Y</div><input v-model.number="state.position.y" type="number"><span>mm</span></li>
-            <li><div>Z</div><input v-model.number="state.position.z" type="number"><span>mm</span></li>
-            <li><div>Roll</div><input v-model.number="state.orientation.roll" type="number"><span>&deg;</span></li>
-            <li><div>Yaw</div><input v-model.number="state.orientation.yaw" type="number"><span>&deg;</span></li>
-            <li><div>Pitch</div><input v-model.number="state.orientation.pitch" type="number"><span>&deg;</span></li>
-            <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
-          </ul>
-          <div class="set-button">
-            <button class="confirm" @click="setEnd">Apply</button>
-            <button class="cancel" @click="resetEnd">Reset</button>
+        <el-col :span="6" class="end-col">
+          <div class="end-container">
+            <div class="container-title">TCP</div>
+            <ul class="position-set">
+              <li><div>X</div><input v-model.number="state.position.x" type="number"><span>mm</span></li>
+              <li><div>Y</div><input v-model.number="state.position.y" type="number"><span>mm</span></li>
+              <li><div>Z</div><input v-model.number="state.position.z" type="number"><span>mm</span></li>
+              <li><div>Roll</div><input v-model.number="state.orientation.roll" type="number"><span>&deg;</span></li>
+              <li><div>Yaw</div><input v-model.number="state.orientation.yaw" type="number"><span>&deg;</span></li>
+              <li><div>Pitch</div><input v-model.number="state.orientation.pitch" type="number"><span>&deg;</span></li>
+              <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
+            </ul>
+            <div class="set-button">
+              <button class="confirm" @click="setEnd">Apply</button>
+              <button class="cancel" @click="resetEnd">Reset</button>
+            </div>
           </div>
+          
         </el-col>
       </el-row>
     </el-main>
@@ -72,16 +75,25 @@
         </div>
         <div class="config-wrapper dark-backgroud">
           <div>
-            <span>Speed</span><input type="range" v-model="state.speed" @change="setSpeed" :step="config.step" :max="config.jointMax" :min="config.jointMin">
+            <span class="config-title">Speed</span>
+            <img src="./../assets/img/control/icon_speed.svg" alt="">
+            <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="1000" :min="100">
+            <img src="./../assets/img/control/icon_speed2.svg" alt="">
+            <span class="config-value" v-text="state.speed"></span>
           </div>
           <div>
-            <span>Acceleration</span><input type="range" v-model="state.acceleration" @change="setAcceleration" :step="config.step" :max="config.jointMax" :min="config.jointMin">
+            <span class="config-title">Acceleration</span>
+            <img src="./../assets/img/control/icon_speed.svg" alt="">
+            <input type="range" v-model="state.acceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
+            <img src="./../assets/img/control/icon_speed2.svg" alt="">
+            <span class="config-value" v-text="state.acceleration"></span>
           </div>
         </div>
       </el-col>
       <el-col :span="8">
         <div class="dark-backgroud joint-control">
           <div class="header-text" id="testtest">Joints Control</div>
+          <div class="degree-text">Degree</div>
           <div class="block joint-range" v-for="j in 7" :key="j">
             <span class="text">J{{j}}</span>
             <div class="range-wrapper">
@@ -141,8 +153,8 @@ export default {
         },
       },
       state: {
-        speed: 50,
-        acceleration: 50,
+        speed: 500,
+        acceleration: 500,
         online: false,
         joint: {
           0: 0,
@@ -175,7 +187,7 @@ export default {
       },
       emulatorSize: {
         width: 1452 / 1872,
-        height: 530 / 1030,
+        height: 525 / 1030,
       },
       msg: 'Emulator',
       interval: null,
@@ -594,9 +606,10 @@ input[type=range]:focus {
       .model-container{
         border-radius: 0px;
       }
-      .end-container {
+      .end-col .end-container {
         background: white;
         border-radius: 8px;
+        height: 38vw;
         .container-title {
           padding: 2vw 1vw;
           font-size: 1.5rem;
@@ -685,7 +698,7 @@ span.text {
     position: relative;
     justify-content: space-around;
     & > div {
-      margin: 2.5% 0;
+      margin: 3.8% 0;
       .joystick-wrapper {
         padding: 20% 0;
         margin: 0;
@@ -750,7 +763,7 @@ span.text {
       //   left: 10%;
       // }
       .yaw-wrapper {
-        padding-bottom: 50%;
+        padding-bottom: 40%;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
@@ -780,15 +793,18 @@ span.text {
   justify-content: space-around;
   & > div {
     width: 50%;
-    padding: 1% 5%;
+    padding: 1% 4%;
     color: white;
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    img {
+      padding: 0 3%;
+      height: 80%;
+    }
     input[type=range] {
       height: 8px;
       width: 100%;
-      margin-left: 7%;
       border-radius: 100px;
       background-image: linear-gradient(90deg, #8FFF94 0%, #FF6868 100%);
     }
@@ -800,6 +816,17 @@ span.text {
       border-radius: 50%;
       background: #FEFEFE;
       box-shadow: 0 0 8px 0 rgba(214,214,214,0.50);
+    }
+    .config-value {
+      padding: 2%;
+      background: #565656;
+      border-radius: 6px;
+      font-family: Gotham-Book;
+      font-size: 13px;
+      color: #FFFFFF;
+      letter-spacing: -0.75px;
+      width: 6vw;
+      text-align: center;
     }
   }
 }
@@ -829,6 +856,13 @@ span.text {
 }
 .joint-control {
   padding-bottom: 1vw;
+  .degree-text {
+    color: white;
+    padding: 0 3vw;
+    padding-top: 1vw;
+    text-align: right;
+    font-size: 14px;
+  }
   .joint-range {
     color: white;
     padding: 0.8vw 1vw;
@@ -886,6 +920,7 @@ span.text {
       color: #666;
       letter-spacing: -0.67px;
       font-size: 1rem;
+      padding: 0.2vw 0;
     }
   }
 }
