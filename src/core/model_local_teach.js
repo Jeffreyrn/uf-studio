@@ -151,7 +151,7 @@ self.isHasProj = (name) => {
   const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
   for (let i = 0; i < self.curProjList.length; i += 1) {
     if (self.curProjList[i].name === `${pre}${name}`) {
-      self.dialogErrorTips = 'Project name is the same';
+      self.dialogErrorTips = 'Project name can not be the same';
       return false;
     }
   }

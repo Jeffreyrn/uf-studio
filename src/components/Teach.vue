@@ -87,7 +87,10 @@
         <el-button @click="finishRecordOK">确 定</el-button>
       </el-dialog>
       
-      <DialogTeachProjName v-if="model.localTeach.projTypeSelectedShow"></DialogTeachProjName>
+      <DialogTeachProjName
+        title="Please choose the way you want to record with xArm in this project"
+        v-if="model.localTeach.projTypeSelectedShow">
+      </DialogTeachProjName>
 
   </div>
 </template>
@@ -165,6 +168,9 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
+    rename(data) {
+      console.log(`rename data uuid = ${data.uuid}`)
+    },
     fileLength(uuid) {
       if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
         if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
@@ -351,6 +357,13 @@ export default {
 
       this.protype = proj.type;
 
+      const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
+      if (curProj !== null && curProj !== undefined) {
+        CommandsTeachSocket.getProjFiles(uuid, (dict) => {
+          console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
+        });
+      }
+
       if (file !== null && file !== undefined) {
         // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
@@ -439,12 +452,13 @@ export default {
       const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0;
       const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
       console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
+      const deleteIcon = isProj ? this.fileIcon.delete : '';
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
             <el-button style="" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
-            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
+            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={deleteIcon} /></el-button>
           </span>
       </span>);
     },

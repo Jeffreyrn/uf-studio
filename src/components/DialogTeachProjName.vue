@@ -3,10 +3,9 @@
   <div id="root-dialog1" class="noselected">
     <div class="dialog-wrap">
       <div class="dialog-cover" @click="closeMyself"></div>
-
-      <div class="dialog-content">
+      <div class="dialog-content" id="dialog-content">
         <div class="position-absolute top-bar">
-          <span class="top-title">Please choose the way you want to record with xArm in this project</span>
+          <span class="top-title">{{ title }}</span>
           <div class="position-absolute dialog-close" @click="closeMyself">
           </div>
         </div>
@@ -47,10 +46,24 @@
 <script>
 
 export default {
+  props: ['width', 'height', 'title'],
   data () {
     return {
       model: GlobalUtil.model,
     }
+  },
+  mounted() {
+    const dialogContent = document.getElementById('dialog-content');
+    if (this.width !== undefined) {
+      dialogContent.style.width = `${this.width}px`;
+    }
+    if (this.height !== undefined) {
+      dialogContent.style.height = `${this.height}px`;
+    }
+    // if (this.title !== undefined) {
+    //   dialogContent.style.height = `${this.height}px`;
+    // }
+    console.log(`dialogContent width = ${this.width}, height = ${this.height}`);
   },
   methods: {
     typeSelect(type) {

@@ -20,6 +20,7 @@ self.FILE_ID_DELETE_DIR = 'delete_dir';
 self.FILE_ID_DELETE_FILE = 'delete_file';
 self.FILE_ID_CHANGE_NAME = 'change_name';
 self.FILE_ID_GET_FILE = 'get_file';
+self.FILE_ID_GET_PROJ_FILES = 'get_project_files';
 
 self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
 self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';

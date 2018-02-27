@@ -158,6 +158,24 @@ self.getFile = (uuid, callback) => {
   });
 };
 
+self.getProjFiles = (uuid, callback) => {
+  let filePath = uuid;
+  // console.log(`getFile filePath = ${filePath}`);
+  // return;
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: filePath, // 文件夹的父目录，必须
+    })
+  };
+  self.sendCmd(GlobalConstant.FILE_ID_GET_PROJ_FILES, params, (dict) => {
+    // console.log(`get file = ${JSON.stringify(dict)}`);
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
 self.debugSetBeart = (isOpen, sleepTime, callback) => {
   const params = {
     data: merge(self.VERSION, {
