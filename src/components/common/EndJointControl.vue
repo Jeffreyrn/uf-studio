@@ -33,7 +33,7 @@
         <div>
           <span class="config-title">Speed</span>
           <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="1000" :min="100">
+          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="100" :min="5">
           <img src="./../../assets/img/control/icon_speed2.svg" alt="">
           <span class="config-value" v-text="state.speed"></span>
         </div>
@@ -57,7 +57,7 @@
             @input="setJoint(j-1)" @change="setJointOnline(j-1)">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model="state.joint[j-1]">
+          <input :id="'joint-input' + j" type="number" v-model.number="state.joint[j-1]" @input="setJoint(j-1)" @change="setJointOnline(j-1)">
           <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
@@ -103,7 +103,7 @@ export default {
         },
       },
       state: {
-        speed: 500,
+        speed: 50,
         acceleration: 500,
         online: false,
         joint: {
@@ -370,19 +370,19 @@ export default {
     setJoint(index) {
       // console.log('test', index, value);
       if (!this.state.online) {
-        this.$store.commit(types.MOVE_ONE_JOINT, {
-          index,
-          value: this.state.joint[index],
-        });
+        this.setJointCmd(index);
       }
     },
     setJointOnline(index) {
       if (this.state.online) {
-        this.$store.commit(types.MOVE_ONE_JOINT, {
-          index,
-          value: this.state.joint[index],
-        });
+        this.setJointCmd(index);
       }
+    },
+    setJointCmd(index) {
+      this.$store.commit(types.MOVE_ONE_JOINT, {
+        index,
+        value: this.state.joint[index],
+      });
     },
     setYaw() {
       this.intervalYaw = setInterval(() => {
