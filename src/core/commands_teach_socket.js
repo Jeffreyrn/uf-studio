@@ -57,6 +57,27 @@ self.createProj = (name, proType) => {
   });
 };
 
+self.renameProj = (name, callback) => {
+  const originName = self.model.localTeach.curProj.name;
+  const newProjUUID = path.join(self.ROOT_DIR, name);
+  const newname = name;
+  const params = {
+    data: merge(self.VERSION, {
+      userId: self.userId, // 默认是test，用来区分不同用户
+      root: self.ROOT_DIR, // 文件的父目录，必须
+      old_name: originName, // 原文件（夹）名称
+      new_name: name, // 新文件（夹）名称
+    })
+  };
+  self.sendCmd(GlobalConstant.FILE_ID_CHANGE_NAME, params, (dict) => {
+    self.listProjs(() => {
+      // self.model.localProjTree.changeProj(newProjUUID);
+      // console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
+      // self.model.localProjTree.setSelectedEditor('');
+    });
+  });
+};
+
 self.delProj = (proId, callback) => {
   let filePath = proId; //path.join(self.ROOT_DIR, name);
   console.log(`filePath = ${filePath}`);

@@ -9,25 +9,27 @@
           <div class="position-absolute dialog-close" @click="closeMyself">
           </div>
         </div>
-        <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
-          Waypoint
-          <div class="position-absolute waypoint-icon">
+        <span v-if="showSelected===true">
+          <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
+            Waypoint
+            <div class="position-absolute waypoint-icon">
+            </div>
           </div>
-        </div>
-        <div class="position-absolute point-selected-bg" v-bind:class="classObject2" style="right:110px;" @click="typeSelect('2')">
-          Single Point
-          <div class="position-absolute single-icon">
+          <div class="position-absolute point-selected-bg" v-bind:class="classObject2" style="right:110px;" @click="typeSelect('2')">
+            Single Point
+            <div class="position-absolute single-icon">
+            </div>
           </div>
-        </div>
+        </span>
         <input
-          id="input-text"
+          id="teach-input-text"
           v-model="model.localTeach.curDialogProjInputText"
           type="text" class="position-absolute dialog-input"
           placeholder="Please enter a project name"/>
         <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
         <div style="margin-top:230px;">
           <span v-if="isFileNameCorrect">
-            <div class="position-absolute btn-create cursor-pointer" @click="oncreate">
+            <div class="position-absolute btn-create cursor-pointer" @click="onok">
               OK
             </div>
           </span>
@@ -46,23 +48,29 @@
 <script>
 
 export default {
-  props: ['width', 'height', 'title'],
+  props: ['width', 'height', 'title', 'show_selected', 'input_top', 'onok'],
   data () {
     return {
       model: GlobalUtil.model,
+      showSelected: true,
     }
   },
   mounted() {
     const dialogContent = document.getElementById('dialog-content');
+    const inputText = document.getElementById('teach-input-text');
     if (this.width !== undefined) {
       dialogContent.style.width = `${this.width}px`;
     }
     if (this.height !== undefined) {
       dialogContent.style.height = `${this.height}px`;
     }
-    // if (this.title !== undefined) {
-    //   dialogContent.style.height = `${this.height}px`;
-    // }
+    if (this.input_top !== undefined) {
+      inputText.style.top = `${this.input_top}px`;
+    }
+    this.showSelected = true;
+    if (this.show_selected === false || this.show_selected === 'false') {
+      this.showSelected = false;
+    }
     console.log(`dialogContent width = ${this.width}, height = ${this.height}`);
   },
   methods: {
@@ -71,11 +79,7 @@ export default {
     },
     closeMyself() {
       GlobalUtil.model.localTeach.projTypeSelectedShow = false;
-    },
-    oncreate() {
-      const text = this.model.localTeach.curDialogProjInputText
-      CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
-      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+      GlobalUtil.model.localTeach.projRenameShow = false;
     },
   },
   components: {
@@ -186,14 +190,18 @@ export default {
     width:350px;
     height:40px;
     top:285px;
-    left:118px;
+    /* left:118px; */
+    left: 0px;
+    right: 0px;
+    margin: auto;
     padding-left: 15px;
     border: 1px solid #575C62;
     outline:none;
   }
   .dialog-error {
     left:120px;
-    top:335px;
+    /* top:335px; */
+    bottom: 50px;
     width: 400px;
     font-family: 'Gotham-Book';
     font-size: 9px;

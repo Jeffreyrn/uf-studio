@@ -89,7 +89,18 @@
       
       <DialogTeachProjName
         title="Please choose the way you want to record with xArm in this project"
+        :onok='oncreate'
         v-if="model.localTeach.projTypeSelectedShow">
+      </DialogTeachProjName>
+
+      <DialogTeachProjName
+        title="Please rename your project"
+        :onok='onrename'
+        width='400'
+        height='200'
+        input_top='90'
+        show_selected='false'
+        v-if="model.localTeach.projRenameShow">
       </DialogTeachProjName>
 
   </div>
@@ -168,8 +179,35 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
+    oncreate() {
+      const text = this.model.localTeach.curDialogProjInputText
+      CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
+      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+    },
+    onrename() {
+      let text = this.model.localTeach.curDialogProjInputText;
+      GlobalUtil.model.localTeach.projRenameShow = false;
+      const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
+      const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
+      text = `${pre}${text}`;
+      console.log(`onrename text = ${text}`);
+      CommandsTeachSocket.renameProj(text, () => {
+
+      });
+    },
     rename(data) {
       console.log(`rename data uuid = ${data.uuid}`)
+      GlobalUtil.model.localTeach.projRenameShow = true;
+      GlobalUtil.model.localTeach.curDialogProjInputText = GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
+      if (data.uuid.indexOf('discontinuous_') >= 0) {
+        GlobalUtil.model.localTeach.projTypeSelected = '2';
+      }
+      else {
+        GlobalUtil.model.localTeach.projTypeSelected = '1';
+      }
+      setTimeout(() => {
+        document.getElementById('teach-input-text').focus();
+      }, 100);
     },
     fileLength(uuid) {
       if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
@@ -264,7 +302,7 @@ export default {
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-      GlobalUtil.model.localTeach.curFileDatas.push(testData)
+      GlobalUtil.model.localTeach.curFileDatas.push(testData);
     },
     startEdit() {
       this.editState = true;
@@ -295,6 +333,9 @@ export default {
     newProj() {
       GlobalUtil.model.localTeach.curDialogProjInputText = '';
       GlobalUtil.model.localTeach.projTypeSelectedShow = true;
+      setTimeout(() => {
+        document.getElementById('teach-input-text').focus();
+      }, 100);
     },
     addFile() {
       console.log('add file');
@@ -452,7 +493,7 @@ export default {
 //      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
       const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
       const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
-      console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
+      // console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
       const deleteIcon = isProj ? this.fileIcon.delete : '';
       return (
         <span class="tree-list">

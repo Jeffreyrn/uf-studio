@@ -23,6 +23,7 @@ self.visible = {
 }
 self.projTypeSelected = '1';
 self.projTypeSelectedShow = false;
+self.projRenameShow = false;
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
 self.pushFileData = (uuid, datas) => {
