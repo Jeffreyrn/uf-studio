@@ -79,12 +79,21 @@ const mutations = {
       if (end && (end.length > 0)) {
         console.log('table posi print:');
         console.table(end);
-        state.info.position.x = Number(end[0]);
-        state.info.position.y = Number(end[1]);
-        state.info.position.z = Number(end[2]);
-        state.info.orientation.roll = Number(end[3]);
-        state.info.orientation.yaw = Number(end[4]);
-        state.info.orientation.pitch = Number(end[5]);
+        state.info.position = {
+          x: Number(end[0]),
+          y: Number(end[1]),
+          z: Number(end[2]),
+        };
+        state.info.orientation = {
+          roll: Number(end[3]),
+          yaw: Number(end[4]),
+          pitch: Number(end[5]),
+        };
+        // state.info.position.y = Number(end[1]);
+        // state.info.position.z = Number(end[2]);
+        // state.info.orientation.roll = Number(end[3]);
+        // state.info.orientation.yaw = Number(end[4]);
+        // state.info.orientation.pitch = Number(end[5]);
       }
       if (joint && (joint.length > 0)) {
         // console.table(joint);

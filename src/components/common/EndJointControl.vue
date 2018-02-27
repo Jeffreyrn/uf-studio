@@ -1,111 +1,76 @@
 <template>
-  <el-container class="hello emulator-container">
-    <el-header height="50px">
-      <el-row :gutter="20" class="header-wrapper">
-        <el-col :span="18">
-          <router-link :to="{ name: 'Home'}">
-            <img src="./../assets/img/control/icon_back.svg" alt="back home">
-          </router-link>
-          <span class="title-ide">Control</span>
-        </el-col>
-        <el-col :span="6">
-          <div class="title-online">Live Control</div>
-          <toggle-button v-model="state.online" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
-            :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
-            :width="71" :height="36"/>
-        </el-col>
-      </el-row>
-    </el-header>
-    <el-main class="main-wrapper">
-      <el-row :gutter="20" class="main-view">
-        <el-col :span="18" class="model-container">
-          <xarm-model></xarm-model>
-        </el-col>
-        <el-col :span="6" class="end-col">
-          <end-set :state="state"></end-set>
-        </el-col>
-      </el-row>
-    </el-main>
-    <el-footer>
-    <el-row :gutter="20">
-      <el-col :span="16">
-        <div class="control-wrapper dark-backgroud">
-          <div class="control-header">
-            <div class="header-text">Position Control</div>
-            <div class="header-text">Orientation Control</div>
+  <el-row :gutter="20">
+    <el-col :span="16">
+      <div class="control-wrapper dark-backgroud">
+        <div class="control-header">
+          <div class="header-text">Position Control</div>
+          <div class="header-text">Orientation Control</div>
+        </div>
+        <div class="control-body">
+          <div class="control-left">
+            <div class="height-wrapper">
+              <!-- <el-button @click="setPositionZ(true)">Up</el-button>
+              <el-button @click="setPositionZ(false)">Down</el-button> -->
+              <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control" 
+                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
+            </div>
+            <div id="position-joystick" class="joystick-wrapper"></div>
           </div>
-          <div class="control-body">
-            <div class="control-left">
-              <div class="height-wrapper">
-                <!-- <el-button @click="setPositionZ(true)">Up</el-button>
-                <el-button @click="setPositionZ(false)">Down</el-button> -->
-                <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control" 
-                  @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
-              </div>
-              <div id="position-joystick" class="joystick-wrapper"></div>
+          <div class="control-right">
+            <div class="yaw-wrapper">
+              <!-- <el-button @click="setYaw(true)">Left</el-button>
+              <el-button @click="setYaw(false)">Right</el-button> -->
+              <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
+                @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> -->
+                <canvas id="angle-canvas" width="200" height="50"></canvas>
+                <!-- <div class="data-display" v-text="joystick.step.orientation.z"></div> -->
             </div>
-            <div class="control-right">
-              <div class="yaw-wrapper">
-                <!-- <el-button @click="setYaw(true)">Left</el-button>
-                <el-button @click="setYaw(false)">Right</el-button> -->
-                <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
-                  @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> -->
-                  <canvas id="angle-canvas" width="200" height="50"></canvas>
-                  <!-- <div class="data-display" v-text="joystick.step.orientation.z"></div> -->
-              </div>
-              <div id="orientation-joystick" class="joystick-wrapper"></div>
-            </div>
+            <div id="orientation-joystick" class="joystick-wrapper"></div>
           </div>
         </div>
-        <div class="config-wrapper dark-backgroud">
-          <div>
-            <span class="config-title">Speed</span>
-            <img src="./../assets/img/control/icon_speed.svg" alt="">
-            <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="1000" :min="100">
-            <img src="./../assets/img/control/icon_speed2.svg" alt="">
-            <span class="config-value" v-text="state.speed"></span>
-          </div>
-          <div>
-            <span class="config-title">Acceleration</span>
-            <img src="./../assets/img/control/icon_speed.svg" alt="">
-            <input type="range" v-model="state.acceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
-            <img src="./../assets/img/control/icon_speed2.svg" alt="">
-            <span class="config-value" v-text="state.acceleration"></span>
-          </div>
+      </div>
+      <div class="config-wrapper dark-backgroud">
+        <div>
+          <span class="config-title">Speed</span>
+          <img src="./../../assets/img/control/icon_speed.svg" alt="">
+          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="1000" :min="100">
+          <img src="./../../assets/img/control/icon_speed2.svg" alt="">
+          <span class="config-value" v-text="state.speed"></span>
         </div>
-      </el-col>
-      <el-col :span="8">
-        <div class="dark-backgroud joint-control">
-          <div class="header-text" id="testtest">Joints Control</div>
-          <div class="degree-text">Degree</div>
-          <div class="block joint-range" v-for="j in 7" :key="j">
-            <span class="text">J{{j}}</span>
-            <div class="range-wrapper">
-              <input :id="'joint' + j" v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
-              @input="setJoint(j-1)" @change="setJointOnline(j-1)">
-              <p :id="'mask' + j" class="mask-bar"></p>
-            </div>
-            <input :id="'joint-input' + j" type="number" v-model="state.joint[j-1]">
-            <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
-          </div>
+        <div>
+          <span class="config-title">Acceleration</span>
+          <img src="./../../assets/img/control/icon_speed.svg" alt="">
+          <input type="range" v-model="state.acceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
+          <img src="./../../assets/img/control/icon_speed2.svg" alt="">
+          <span class="config-value" v-text="state.acceleration"></span>
         </div>
-      </el-col>
-    </el-row>
-    </el-footer>
-  </el-container>
+      </div>
+    </el-col>
+    <el-col :span="8">
+      <div class="dark-backgroud joint-control">
+        <div class="header-text" id="testtest">Joints Control</div>
+        <div class="degree-text">Degree</div>
+        <div class="block joint-range" v-for="j in 7" :key="j">
+          <span class="text">J{{j}}</span>
+          <div class="range-wrapper">
+            <input :id="'joint' + j" v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            @input="setJoint(j-1)" @change="setJointOnline(j-1)">
+            <p :id="'mask' + j" class="mask-bar"></p>
+          </div>
+          <input :id="'joint-input' + j" type="number" v-model="state.joint[j-1]">
+          <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
+        </div>
+      </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-import Vue from 'vue';
 import Nipple from 'nipplejs';
-import ToggleButton from 'vue-js-toggle-button';
-import * as types from '../store/mutation-types';
-import XarmModel from './common/XarmModel';
-import EndSet from './common/EndSet';
+import * as types from '../../store/mutation-types';
 
-Vue.use(ToggleButton);
 export default {
-  name: 'Emulator',
+  name: 'EmulatorControl',
   data() {
     return {
       testindex: 6,
@@ -395,10 +360,6 @@ export default {
     setAcceleration(evt) {
       this.setRobotState('acceleration', Number(evt.target.value));
     },
-    setOnline(value) {
-      const data = Object.prototype.hasOwnProperty.call(value, 'value') ? value.value : value;
-      this.setRobotState('online', data);
-    },
     setRobotState(index, value) {
       const data = {
         index,
@@ -538,50 +499,15 @@ export default {
     //   },
     // },
   },
-  components: {
-    XarmModel,
-    EndSet,
-  },
 };
 </script>
 
 <style scoped lang="scss">
-.hello {
-  font-family:'Gotham-Medium';
-  display: flex;
-  flex-direction: column;
-}
 input[type=range] {
   cursor: pointer;
 }
 input[type=range]:focus {
   outline: none;
-}
-.emulator-container {
-  background-color: #F8F8F8;
-  .header-wrapper{
-    display: flex;
-    align-items: center;
-    height: 100%;
-    & > div {
-      display: flex;
-      align-items: center;
-    }
-  }
-  .main-wrapper{
-    padding: 10px 20px;
-    .main-view {
-      display: flex;
-      align-items: flex-start;
-      overflow: hidden;
-      .model-container{
-        border-radius: 0px;
-      }
-    }
-  }
-}
-.hello-row {
-  display: inline-block;
 }
 .block {
   padding: 0.2vw 1vw;
@@ -743,19 +669,6 @@ span.text {
 .dark-backgroud {
   background: #434343;
   border-radius: 8px;
-}
-.title-ide {
-  font-family: 'Gotham-Bold';
-  font-size: 36px;
-  color: #444;
-  letter-spacing: -1px;
-  padding-left: 2%;
-}
-.title-online {
-  margin-right: 5%;
-  font-size: 1.2rem;
-  color: #434343;
-  letter-spacing: -0.75px;
 }
 .header-text {
   font-size: 1.6rem;
