@@ -492,9 +492,6 @@ export default {
       const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
 //      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
       const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
-      const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
-      // console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
-      const deleteIcon = isProj ? this.fileIcon.delete : '';
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
