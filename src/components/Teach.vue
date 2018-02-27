@@ -436,15 +436,16 @@ export default {
       }
       const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
       const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
-      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0;
+//      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
+      const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
       const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
       console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
-            <el-button style="" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
-            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
+          {isProj?<el-button style="mini" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>:<span style="display:none">1</span>}
+            <el-button size="mini" type="text" on-click={ () => this.delProj() }><img src={this.fileIcon.delete} /></el-button>
           </span>
       </span>);
     },
