@@ -635,6 +635,7 @@ self.curPro2Tree = () => {
   aChild.uuid = self.curProj.uuid;
   aChild.icon = '';
   aChild.children = [];
+  aChild.type = 'folder'
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
   self.findFolder(fileDatas, '');
