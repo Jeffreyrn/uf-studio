@@ -31,7 +31,7 @@
                   <img src="./../assets/img/edit/recording/icon_waypoint_16x16.svg" width="12px" height="12px" />
                 </span>
                 <span>
-                  {{ basename(model.localTeach.curSelectedTreeItem.uuid) }}
+                  {{ model.localTeach.getRealFileFileName(model.localTeach.curSelectedTreeItem.uuid) }}
                 </span>
               </div>
               <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
@@ -87,7 +87,21 @@
         <el-button @click="finishRecordOK">确 定</el-button>
       </el-dialog>
       
-      <DialogTeachProjName v-if="model.localTeach.projTypeSelectedShow"></DialogTeachProjName>
+      <DialogTeachProjName
+        title="Please choose the way you want to record with xArm in this project"
+        :onok='oncreate'
+        v-if="model.localTeach.projTypeSelectedShow">
+      </DialogTeachProjName>
+
+      <DialogTeachProjName
+        title="Please rename your project"
+        :onok='onrename'
+        width='400'
+        height='200'
+        input_top='90'
+        show_selected='false'
+        v-if="model.localTeach.projRenameShow">
+      </DialogTeachProjName>
 
   </div>
 </template>
@@ -126,7 +140,7 @@ export default {
         discontinuous_white: require('../assets/img/edit/recording/icon_singlepoint_14x14_white.svg'),
         continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
-        rename: require('../assets/img/edit/recording/btn_rename.svg'),
+        rename: require('../assets/img/edit/recording/icon_rename_white.svg'),
         delete: require('../assets/img/edit/recording/btn_trash_white.svg')
       },
       visible: {
@@ -149,7 +163,7 @@ export default {
     // myChart.setOption(option, true);
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
-    GlobalUtil.model.localTeach.setSelectedTreeItem(null);
+    // GlobalUtil.model.localTeach.setSelectedTreeItem(null);
     // const nodes = document.getElementsByClassName('el-tree-node__label');
     // for (let i = 0; i < nodes.length; i += 1) {
     //   const node = nodes[i];
@@ -160,10 +174,40 @@ export default {
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
   methods: {
-    basename(name) {
-      name = path.basename(name);
-      name = name.split('.')[0];
-      return name;
+    // basename(name) {
+    //   name = path.basename(name);
+    //   name = name.split('.')[0];
+    //   return name;
+    // },
+    oncreate() {
+      const text = this.model.localTeach.curDialogProjInputText
+      CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
+      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+    },
+    onrename() {
+      let text = this.model.localTeach.curDialogProjInputText;
+      GlobalUtil.model.localTeach.projRenameShow = false;
+      const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
+      const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
+      text = `${pre}${text}`;
+      console.log(`onrename text = ${text}`);
+      CommandsTeachSocket.renameProj(text, () => {
+
+      });
+    },
+    rename(data) {
+      console.log(`rename data uuid = ${data.uuid}`)
+      GlobalUtil.model.localTeach.projRenameShow = true;
+      GlobalUtil.model.localTeach.curDialogProjInputText = GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
+      if (data.uuid.indexOf('discontinuous_') >= 0) {
+        GlobalUtil.model.localTeach.projTypeSelected = '2';
+      }
+      else {
+        GlobalUtil.model.localTeach.projTypeSelected = '1';
+      }
+      setTimeout(() => {
+        document.getElementById('teach-input-text').focus();
+      }, 100);
     },
     fileLength(uuid) {
       if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
@@ -258,7 +302,7 @@ export default {
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-      GlobalUtil.model.localTeach.curFileDatas.push(testData)
+      GlobalUtil.model.localTeach.curFileDatas.push(testData);
     },
     startEdit() {
       this.editState = true;
@@ -289,6 +333,9 @@ export default {
     newProj() {
       GlobalUtil.model.localTeach.curDialogProjInputText = '';
       GlobalUtil.model.localTeach.projTypeSelectedShow = true;
+      setTimeout(() => {
+        document.getElementById('teach-input-text').focus();
+      }, 100);
     },
     addFile() {
       console.log('add file');
@@ -351,8 +398,15 @@ export default {
 
       this.protype = proj.type;
 
+      const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
+      if (curProj !== null && curProj !== undefined) {
+        CommandsTeachSocket.getProjFiles(uuid, (dict) => {
+          console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
+        });
+      }
+
       if (file !== null && file !== undefined) {
-        GlobalUtil.model.localTeach.setSelectedTreeItem(file);
+        // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
@@ -398,7 +452,7 @@ export default {
 //          createElement('span',{
 //            attrs:{
 //              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
-//            }}, GlobalUtil.model.localTeach.getRealFileName(data.label)),
+//            }}, GlobalUtil.model.localTeach.getRealProjFileName(data.label)),
 //          createElement('span',{
 //            attrs:{
 //              style:"color:red;padding-left:5px;"
@@ -435,14 +489,18 @@ export default {
         }
       }
       const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
-
-      const label = GlobalUtil.model.localTeach.getRealFileName(data.label);
+      const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
+//      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
+      const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
+      const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
+      // console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
+      const deleteIcon = isProj ? this.fileIcon.delete : '';
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
-            <el-button size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>
-            <el-button size="mini" type="text" on-click={ () => this.delete(node, data) }><img src={this.fileIcon.delete} /></el-button>
+            {isProj?<el-button style="mini" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>:<span style="display:none">1</span>}
+            <el-button size="mini" type="text" on-click={ () => this.delProj() }><img src={this.fileIcon.delete} /></el-button>
           </span>
       </span>);
     },
