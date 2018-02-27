@@ -10,10 +10,13 @@
           </div> -->
           <div class="left-emulator" id="left-emulator">
           </div>
-          <div v-if="editState===true" class="left-show" id="left-show">
+          <!-- <div v-if="editState===true" class="left-show" id="left-show">
           </div>
-          <div v-if="editState===true" class="left-control" id="left-control">
-          </div>
+          <div v-if="editState===true" class="left-control" id="left-control" style="overflow-y:scroll">
+            <XarmModel></XarmModel>
+            <EndSet></EndSet>
+            <EndJointControl></EndJointControl>
+          </div> -->
           <!-- <div v-if="editState===false" style="background:gray;width:100%;height:100%;">
           </div> -->
         </div>
@@ -58,7 +61,7 @@
         </div>
       </div>
 
-      <div class="projects-list-wrapper">
+      <div class="projects-list-wrapper" v-if="editState===false">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper">
           <el-tree
@@ -73,45 +76,57 @@
           </el-tree>
         </div>
       </div>
-
+      <div class="control-wrapper" v-if="editState===true">
+        <!-- <XarmModel></XarmModel> -->
+        <div>
+          <EndSet></EndSet>
+        </div>
+        <div>
+          <EndJointControl></EndJointControl>
+        </div>
+      </div>
     </div>
 
-      <el-dialog
-        class="save-dialog"
-        title="System Notice"
-        width="470px"
-        :visible.sync="visible.saveDialog"
-        >
-        <p>Stop Recording and save automatically.</p>
-        <span>The recording file will be saved to my project list</span>
-        <el-button @click="finishRecordOK">确 定</el-button>
-      </el-dialog>
+    <el-dialog
+      class="save-dialog"
+      title="System Notice"
+      width="470px"
+      :visible.sync="visible.saveDialog"
+      >
+      <p>Stop Recording and save automatically.</p>
+      <span>The recording file will be saved to my project list</span>
+      <el-button @click="finishRecordOK">确 定</el-button>
+    </el-dialog>
       
-      <DialogTeachProjName
-        title="Please choose the way you want to record with xArm in this project"
-        :onok='oncreate'
-        v-if="model.localTeach.projTypeSelectedShow">
-      </DialogTeachProjName>
+    <DialogTeachProjName
+      title="Please choose the way you want to record with xArm in this project"
+      :onok='oncreate'
+      v-if="model.localTeach.projTypeSelectedShow">
+    </DialogTeachProjName>
 
-      <DialogTeachProjName
-        title="Please rename your project"
-        :onok='onrename'
-        width='400'
-        height='200'
-        input_top='90'
-        show_selected='false'
-        v-if="model.localTeach.projRenameShow">
-      </DialogTeachProjName>
+    <DialogTeachProjName
+      title="Please rename your project"
+      :onok='onrename'
+      width='400'
+      height='200'
+      input_top='90'
+      show_selected='false'
+      v-if="model.localTeach.projRenameShow">
+    </DialogTeachProjName>
 
   </div>
 </template>
 <script>
+
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import XarmModel from './common/XarmModel';
 import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
 import { setTimeout } from 'timers';
+import XarmModel from './common/XarmModel';
+import EndSet from './common/EndSet';
+import EndJointControl from './common/EndJointControl';
+
 const path = require('path');
 
 const echarts = require('echarts');
@@ -353,9 +368,9 @@ export default {
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
 
-      const leftControl = document.getElementById('left-control');
-      const leftEmulator = document.getElementById('left-emulator');
-      const leftShow = document.getElementById('left-show');
+      // const leftControl = document.getElementById('left-control');
+      // const leftEmulator = document.getElementById('left-emulator');
+      // const leftShow = document.getElementById('left-show');
 
       const leftFrameWidth = totalFrameWidth - this.rightFrameWidth;
       if (leftFrame !== null && leftFrame !== undefined) {
@@ -364,24 +379,24 @@ export default {
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
         bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
-      const bottomHeight = this.editState ? 200 : 300;
+      const bottomHeight = 300 //this.editState ? 200 : 300;
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
       if (this.editState) {
-        const emulatorHeight = leftTopHeight - 200 - 0;
-        if (leftShow !== null) {
-          leftShow.style.height = `${emulatorHeight}px`;
-        }
-        leftEmulator.style.height = `${emulatorHeight}px`; 
-        leftEmulator.style.width = `${leftFrameWidth - 210}px`;
+        // const emulatorHeight = leftTopHeight - 200 - 0;
+        // if (leftShow !== null) {
+        //   leftShow.style.height = `${emulatorHeight}px`;
+        // }
+        // leftEmulator.style.height = `${emulatorHeight}px`; 
+        // leftEmulator.style.width = `${leftFrameWidth - 210}px`;
       }
       else {
-        leftEmulator.style.height = `100%`;
-        leftEmulator.style.width = `100%`;
-        if (leftShow !== null) {
-          leftShow.style.height = `100%`;
-        }
+        // leftEmulator.style.height = `100%`;
+        // leftEmulator.style.width = `100%`;
+        // if (leftShow !== null) {
+        //   leftShow.style.height = `100%`;
+        // }
       }
       console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
@@ -523,6 +538,9 @@ export default {
     ListProj,
     XarmModel,
     DialogTeachProjName,
+    XarmModel,
+    EndSet,
+    EndJointControl,
   },
   computed: {
     getCurFile(){
@@ -737,6 +755,9 @@ export default {
           }
         }
       }
+    }
+    .control-wrapper {
+      width: 300px;
     }
     .projects-list-wrapper {
       width: 320px;
