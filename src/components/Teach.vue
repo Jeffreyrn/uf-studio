@@ -46,7 +46,7 @@
                   <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
                 </div>
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
-                  <button class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
+                  <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
                   <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
                 </div>
               </div>
@@ -330,7 +330,23 @@ export default {
       this.editState = false;
       this.onwinresize();
     },
-    delProj() {
+    delProj(uuid) {
+      const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
+      if (uuid.indexOf('.json') >=0 ) {
+        this.$confirm(`Delete ${realName}?`, {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'CANCEL',
+          type: 'info',
+          showClose: false,
+          closeOnClickModal: false,
+        }).then(() => {
+          CommandsTeachSocket.delFiles(uuid, (dict) => {
+            // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+          });
+        }).catch(() => {
+        });        
+        return;
+      }
       const curProj = GlobalUtil.model.localTeach.curProj;
       this.$confirm(`Delete ${curProj.name}?`, {
         confirmButtonText: 'OK',
@@ -512,7 +528,7 @@ export default {
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
             {isProj?<el-button style="mini" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>:<span style="display:none">1</span>}
-            <el-button size="mini" type="text" on-click={ () => this.delProj() }><img src={this.fileIcon.delete} /></el-button>
+            <el-button size="mini" type="text" on-click={ () => this.delProj(data.uuid) }><img src={this.fileIcon.delete} /></el-button>
           </span>
       </span>);
     },

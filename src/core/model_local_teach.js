@@ -13,6 +13,10 @@ self.curSelectedTreeItem = {
   uuid: '',
   type: '',
 };
+self.PROJ_TREE_TYPE = {
+  FOLDER: 'folder',
+  FILE: 'file',
+};
 self.hasChange = false;
 self.curEditingFileUUID = '';
 self.fileDatas = {};
@@ -26,6 +30,7 @@ self.projTypeSelectedShow = false;
 self.projRenameShow = false;
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
+self.curProTreeDatas = [];
 self.pushFileData = (uuid, datas) => {
   let dict = self.fileDatas[uuid];
   if (dict === null || dict === undefined) {
@@ -65,11 +70,6 @@ self.getFileData = (uuid, index) => {
 
 self.updateFileData = (uuid, index, ch, value) => {
   self.fileDatas[uuid][index][ch] = value;
-};
-
-self.PROJ_TREE_TYPE = {
-  FOLDER: 'folder',
-  FILE: 'file',
 };
 
 // self.setSelectedTreeItem = (file) => {
@@ -265,7 +265,6 @@ self.onSelect = (e, index) => {
   // GlobalUtil.model.localTeach.curPoint.a6 = point[6];
 };
 
-self.curProTreeDatas = [];
 self.curPro2Tree = () => {
   let tempDatas = [];
   for (let i = 0; i < self.curProjList.length; i += 1) {
