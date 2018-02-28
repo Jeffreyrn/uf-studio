@@ -29,8 +29,7 @@
         </div>
       </div>
       <!-- isContinus false end -->
-
-      <div v-if="index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
+      <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
     </div>
     <!-- button end -->
   </div>
@@ -49,7 +48,9 @@ export default {
   },
   methods: {
     onSelect(e, index) {
-      GlobalUtil.model.localTeach.onSelect(e, index);
+      if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
+        GlobalUtil.model.localTeach.onSelect(e, index);
+      }
     },
   },
   beforeDestroy() {

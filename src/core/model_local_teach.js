@@ -264,6 +264,7 @@ self.remoteProjs2Local = (dict) => {
 self.onSelect = (e, index) => {
   const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
   if (point === null || point === undefined) {
+    // GlobalUtil.model.localTeach.curSelectedIndex = -1;
     console.log(`point null null null`);
     return;
   }

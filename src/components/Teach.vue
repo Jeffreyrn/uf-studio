@@ -474,6 +474,7 @@ export default {
 
       if (file !== null && file !== undefined) {
         // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
+        // GlobalUtil.model.localTeach.onSelect(null, 0);
         CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
@@ -498,6 +499,7 @@ export default {
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
+            GlobalUtil.model.localTeach.onSelect(null, 0);
           }
         });
       }
