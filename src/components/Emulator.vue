@@ -22,7 +22,7 @@
           <xarm-model></xarm-model>
         </el-col>
         <el-col :span="6" class="end-col">
-          <end-set :state="state"></end-set>
+          <end-set></end-set>
         </el-col>
       </el-row>
     </el-main>

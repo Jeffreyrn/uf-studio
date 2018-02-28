@@ -2,12 +2,12 @@
   <div class="end-container">
     <div class="container-title">TCP</div>
     <ul class="position-set">
-      <li><div>X</div><input v-model.number="state.position.x" type="number"><span>mm</span></li>
-      <li><div>Y</div><input v-model.number="state.position.y" type="number"><span>mm</span></li>
-      <li><div>Z</div><input v-model.number="state.position.z" type="number"><span>mm</span></li>
-      <li><div>Roll</div><input v-model.number="state.orientation.roll" type="number"><span>&deg;</span></li>
-      <li><div>Yaw</div><input v-model.number="state.orientation.yaw" type="number"><span>&deg;</span></li>
-      <li><div>Pitch</div><input v-model.number="state.orientation.pitch" type="number"><span>&deg;</span></li>
+      <li><div>X</div><input v-model.number="position.x" type="number"><span>mm</span></li>
+      <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
+      <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li>
+      <li><div>Roll</div><input v-model.number="orientation.roll" type="number"><span>&deg;</span></li>
+      <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><span>&deg;</span></li>
+      <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><span>&deg;</span></li>
       <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
     </ul>
     <div class="set-button">
@@ -20,7 +20,6 @@
 import * as types from '../../store/mutation-types';
 
 export default {
-  props: ['state'],
   methods: {
     resetEnd() {
       // vuex reset position&orientation
@@ -34,10 +33,44 @@ export default {
     },
     setEnd() {
       this.$store.commit(types.MOVE_END, {
-        position: this.state.position,
-        orientation: this.state.orientation,
+        position: this.position,
+        orientation: this.orientation,
       });
     },
+  },
+  computed: {
+    position() {
+      const position = this.$store.getters.end.position;
+      Object.keys(position).forEach((key) => {
+        position[key] = position[key] ? Number(position[key].toFixed(2)) : 0;
+      });
+      return position;
+    },
+    orientation() {
+      const orientation = this.$store.getters.end.orientation;
+      console.log(orientation, 'xxorientation');
+      Object.keys(orientation).forEach((key) => {
+        orientation[key] = orientation[key] ? Number(orientation[key].toFixed(2)) : 0;
+      });
+      return orientation;
+    },
+    // end: {
+    //   get() {
+    //     const end = this.$store.getters.end;
+    //     Object.keys(end.position).forEach((key) => {
+    //       this.state.position[key] = Number(end.position[key].toFixed(2));
+    //     });
+    //     Object.keys(end.orientation).forEach((key) => {
+    //       this.state.orientation[key] = Number(end.orientation[key].toFixed(2));
+    //     });
+    //     return end;
+    //   },
+    //   set(value) {
+    //     console.log('SET');
+    //     console.table(value);
+    //     // this.$store.commit();
+    //   },
+    // },
   },
 };
 </script>

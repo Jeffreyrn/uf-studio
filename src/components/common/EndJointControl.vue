@@ -472,23 +472,6 @@ export default {
     // },
   },
   computed: {
-    end: {
-      get() {
-        const end = this.$store.getters.end;
-        Object.keys(end.position).forEach((key) => {
-          this.state.position[key] = Number(end.position[key].toFixed(2));
-        });
-        Object.keys(end.orientation).forEach((key) => {
-          this.state.orientation[key] = Number(end.orientation[key].toFixed(2));
-        });
-        return end;
-      },
-      set(value) {
-        console.log('SET');
-        console.table(value);
-        // this.$store.commit();
-      },
-    },
     stateOnline() {
       return this.$store.state.robot.info.online;
     },
