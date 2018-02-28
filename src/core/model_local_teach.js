@@ -7,6 +7,7 @@ const self = LocalTeach;
 self.showArr = [];
 self.curProjList = [];
 self.curProj = {};
+self.curProj.files = [];
 self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
 self.curSelectedTreeItem = {
@@ -66,6 +67,17 @@ self.setCurSelectedTreeItem = (uuid) => {
 
 self.getFileData = (uuid, index) => {
   return self.fileDatas[uuid][index];
+};
+
+self.getFileInfo = (uuid) => {
+  const files = self.curProj.files;
+  for (let i = 0; i < files.length; i += 1) {
+    const file = files[i];
+    if (file.uuid === uuid) {
+      return file;
+    }
+  }
+  return null;
 };
 
 self.updateFileData = (uuid, index, ch, value) => {
@@ -233,6 +245,7 @@ self.remoteProjs2Local = (dict) => {
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
+        file.isContinus = curProj.type === 'continuous';
         curProj.files.push(file);
         self.curProjExpandedKeys.push(uuid);
       }

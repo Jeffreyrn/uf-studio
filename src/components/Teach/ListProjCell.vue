@@ -3,13 +3,20 @@
     <!-- button -->
     <div class="line-block">
       <!-- isContinus true -->
-      <div v-if="file.isContinus">
+      <div v-if="model.localTeach.curProj.type==='continuous'">
         <div v-if="index % 10 === 0" style="background-color:lightpink;">
           {{ parseInt(index / 10) }}.0s
         </div>
         <div v-else>
-          <div v-if="index < model.localTeach.fileDatas[file.uuid].length">
-            .{{ index % 10 }}
+          <div v-if="model.localTeach.curEditingFileUUID===''">
+            <div v-if="index < model.localTeach.fileDatas['temp'].length">
+              .{{ index % 10 }}
+            </div>
+          </div>
+          <div v-else>
+            <div v-if="index < model.localTeach.fileDatas[file.uuid].length">
+              .{{ index % 10 }}
+            </div>
           </div>
         </div>
       </div>
@@ -38,6 +45,7 @@ export default {
     };
   },
   mounted() {
+    console.log(`cell mounted index = ${this.index}`);
   },
   methods: {
     onSelect(e, index) {

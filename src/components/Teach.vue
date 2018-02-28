@@ -266,7 +266,7 @@ export default {
       this.visible.saveDialog = false;
       GlobalUtil.model.localTeach.visible.starRecording = false;
 
-      const curFileDatas = GlobalUtil.model.localTeach.curFileDatas;
+      const curFileDatas = GlobalUtil.model.localTeach.fileDatas['temp']; //GlobalUtil.model.localTeach.curFileDatas;
       console.log(`curFileDatas = ${JSON.stringify(curFileDatas)}`);
 
       const textDict = {
@@ -293,6 +293,7 @@ export default {
       });
     },
     startRecord() {
+      GlobalUtil.model.localTeach.curEditingFileUUID = '';
       this.visible.starRecording = false;
       const dateStr = GlobalUtil.getTimeString();
       const curSelectedTreeItemUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
@@ -306,8 +307,8 @@ export default {
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
       GlobalUtil.model.localTeach.curDuration = 0;
 
-      // GlobalUtil.model.localTeach.fileDatas[uuid] = [];
-      GlobalUtil.model.localTeach.curFileDatas = [];
+      GlobalUtil.model.localTeach.fileDatas['temp'] = [];
+      // GlobalUtil.model.localTeach.curFileDatas = [];
       CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
         const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -316,28 +317,40 @@ export default {
           GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
-        // this.scrollTo(curFileDatas.length);
-        if (GlobalUtil.model.localTeach.curFileDatas.length >= 1800) {
+        
+        if (GlobalUtil.model.localTeach.fileDatas['temp'].length >= 1800) {
           this.finishRecordOK();
         }
         else {
           // test data
           const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-          GlobalUtil.model.localTeach.curFileDatas.push(testData)
-          // GlobalUtil.model.localTeach.pushFileData(uuid, testData);
-          // let tempArr = [];
-          // for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
-          //   tempArr.push(i);
-          // }
-          // GlobalUtil.model.localTeach.showArr = tempArr;
+          // GlobalUtil.model.localTeach.curFileDatas.push(testData)
+          GlobalUtil.model.localTeach.pushFileData('temp', testData);
+          let tempArr = [];
+          for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+            tempArr.push(i);
+          }
+          // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+          GlobalUtil.model.localTeach.showArr = tempArr;
           // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
         }
+        this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
       });
       GlobalUtil.model.localTeach.curDuration -= -1;      
     },
+    scrollTo(time) {
+      document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
+    },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-      GlobalUtil.model.localTeach.curFileDatas.push(testData);
+      // GlobalUtil.model.localTeach.curFileDatas.push(testData);
+      GlobalUtil.model.localTeach.pushFileData('temp', testData);
+      let tempArr = [];
+      for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+        tempArr.push(i);
+      }
+      // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+      GlobalUtil.model.localTeach.showArr = tempArr;
     },
     startEdit() {
       this.editState = true;
@@ -434,7 +447,7 @@ export default {
         //   leftShow.style.height = `100%`;
         // }
       }
-      console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
+      // console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
       // if (this.editState) {
@@ -451,6 +464,7 @@ export default {
 
       const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
       if (curProj !== null && curProj !== undefined) {
+        GlobalUtil.model.localTeach.showArr = [];
         CommandsTeachSocket.getProjFiles(uuid, (dict) => {
           const total = dict.data.total;
           this.curProjTotal = total;
@@ -554,20 +568,20 @@ export default {
           </span>
       </span>);
     },
-    onClick(e) {
-      const attr = e.currentTarget.value;
-      console.log(`attr = ${attr}`);
-      switch (attr) {
-        case 'scroll':
-          {
-            const time = GlobalUtil.model.localTeach.curDuration;
-            document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
-            break;
-          }
-        default:
-          break;
-      }
-    },
+    // onClick(e) {
+    //   const attr = e.currentTarget.value;
+    //   console.log(`attr = ${attr}`);
+    //   switch (attr) {
+    //     case 'scroll':
+    //       {
+    //         const time = GlobalUtil.model.localTeach.curDuration;
+    //         document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
+    //         break;
+    //       }
+    //     default:
+    //       break;
+    //   }
+    // },
   },
   beforeDestroy() {
   },
