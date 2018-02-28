@@ -24,7 +24,12 @@
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time">
-                {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                  {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                </div>
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                  {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
+                </div>
               </div>
               <div class="recording-name" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
                 <span class="file-proj-icon" v-if="model.localTeach.curProj.type==='discontinuous'">
@@ -127,6 +132,7 @@ import { setTimeout } from 'timers';
 import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 import EndJointControl from './common/EndJointControl';
+// import { constants } from 'perf_hooks';
 
 const path = require('path');
 
@@ -148,7 +154,7 @@ export default {
       bottomLeftWidth: 300,
       pointWay: false,
       editState: false,
-      radio: '2',
+      curProjTotal: 0,
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         discontinuous: require('../assets/img/edit/recording/icon_singlepoint_14x14_dark.svg'),
@@ -226,6 +232,9 @@ export default {
       }, 100);
     },
     fileLength(uuid) {
+      if (uuid.indexOf('.json') < 0) {
+        return;
+      }
       if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
         if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
           return GlobalUtil.model.localTeach.fileDatas[uuid].length;
@@ -233,9 +242,11 @@ export default {
         if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
           const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
           const msec = length % 10;
-          const sec = Math.floor(length / 10) % 60;
-          const min = Math.floor(Math.floor(length / 10) / 60) % 60;
-          const str = `${min}:${sec}.${msec}00`;
+          const sec = Math.floor(length / 10);
+          const str = `${sec}.${msec}`;
+          // const sec = Math.floor(length / 10) % 60;
+          // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
+          // const str = `${min}:${sec}.${msec}00`;
           return str;
         }
       }
@@ -246,7 +257,7 @@ export default {
         this.createProjectDisable = false;
       }
     },
-    finishRecord (){
+    finishRecord () {
       this.visible.saveDialog = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
@@ -260,6 +271,7 @@ export default {
 
       const textDict = {
         type: GlobalUtil.model.localTeach.curProj.type,
+        total: curFileDatas.length,
         points: curFileDatas,
       };
       const text = JSON.stringify(textDict);
@@ -440,6 +452,8 @@ export default {
       const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
       if (curProj !== null && curProj !== undefined) {
         CommandsTeachSocket.getProjFiles(uuid, (dict) => {
+          const total = dict.data.total;
+          this.curProjTotal = total;
           console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
         });
       }
