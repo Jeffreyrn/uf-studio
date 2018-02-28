@@ -92,6 +92,7 @@
       title="System Notice"
       width="470px"
       :visible.sync="visible.saveDialog"
+      :before-close="finishRecordCancle"
       >
       <p>Stop Recording and save automatically.</p>
       <span>The recording file will be saved to my project list</span>
@@ -270,6 +271,13 @@ export default {
 
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      });
+    },
+    finishRecordCancle() {
+      this.visible.saveDialog = false;
+      GlobalUtil.model.localTeach.visible.starRecording = false;
+      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
     },
     startRecord() {
