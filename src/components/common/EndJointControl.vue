@@ -369,12 +369,12 @@ export default {
     },
     setJoint(index) {
       // console.log('test', index, value);
-      if (!this.state.online) {
+      if (!this.stateOnline) {
         this.setJointCmd(index);
       }
     },
     setJointOnline(index) {
-      if (this.state.online) {
+      if (this.stateOnline) {
         this.setJointCmd(index);
       }
     },
@@ -450,7 +450,6 @@ export default {
     removeRangeColor(index) {
       const dom = document.getElementById(`joint${index}`);
       const domInput = document.getElementById(`joint-input${index}`);
-      console.log('remove', dom, domInput);
       if (dom || domInput) {
         dom.removeEventListener('input', this.setMask);
         domInput.removeEventListener('input', this.setMaskInput);
@@ -489,6 +488,9 @@ export default {
         console.table(value);
         // this.$store.commit();
       },
+    },
+    stateOnline() {
+      return this.$store.state.robot.info.online;
     },
     // testtest: {
     //   get() {

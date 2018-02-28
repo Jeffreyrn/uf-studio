@@ -40,7 +40,7 @@ const state = {
     axis: [],
     test: null,
     socket: null,
-    speed: 500,
+    speed: 50,
     acceleration: 500,
     online: false,
   },

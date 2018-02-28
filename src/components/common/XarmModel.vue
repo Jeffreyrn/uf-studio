@@ -99,7 +99,7 @@ export default {
     joints: {
       get() {
         const arr = this.$store.getters.joints;
-        console.log('get ax', arr);
+        // console.log('get ax', arr);
         if (arr && (arr.length > 0)) {
           const values = arr.map(str => Number(str));
           // console.log('arr posi print:', values.length);
@@ -200,7 +200,7 @@ export default {
         hex = 0xffffff;
         materialList.push(new THREE.MeshPhongMaterial({ color: hex }));
       });
-      console.log(materialList);
+      // console.log(materialList);
       const scene = new THREE.Scene();
       const SCENE_ZOOM = 64;
       // console.log(this.three.scene, scene);
@@ -213,10 +213,10 @@ export default {
       // camera.up = new THREE.Vector3(-1, -1, -1);
       camera.position.set(3, 1, 3); // camera position
       camera.lookAt(scene.position); // camera look at
-      const light = new THREE.PointLight(0xcccccc, 1, 100); // light
+      const light = new THREE.PointLight(0xeeeeee, 1, 100); // light
       light.position.set(10, 14, 10);
-      const lightBottomBack = new THREE.PointLight(0xcccccc, 1, 100); // light
-      const lightBottomFront = new THREE.PointLight(0xffffff, 1, 100); // light
+      const lightBottomBack = new THREE.PointLight(0xeeeeee, 1, 100); // light
+      const lightBottomFront = new THREE.PointLight(0xeeeeee, 1, 100); // light
       lightBottomBack.position.set(-12, 0, 0);
       lightBottomFront.position.set(22, 0, -10);
       scene.add(lightBottomBack);
@@ -281,7 +281,7 @@ export default {
       const loadModel = (index) => { // model index: 1-6
         if (index < 8) {
           loader.load(JOINT_MODEL_SRC[index], (geometry) => {
-            console.log(index, 'model loaded:');
+            console.log(`NO.${index} model loaded.`);
             joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
             joints[index].position.set(...JOINT_POSITION[index]);
             if (index < 7) {
@@ -306,8 +306,8 @@ export default {
       loadModel(1);
       const gridplaneSize = 50;
       const gridstep = 30;
-      // const gridcolor = 0xCCCCCC; // e27347
-      const gridHelper_xy = new THREE.GridHelper(gridplaneSize, gridstep);
+      const gridcolor = 0xdddddd; // e27347
+      const gridHelper_xy = new THREE.GridHelper(gridplaneSize, gridstep, gridcolor, gridcolor);
       gridHelper_xy.position.set(0, this.config.offsetY, 0);
       // gridHelper_xy.setColors(new THREE.Color(gridcolor), new THREE.Color(gridcolor));
       scene.add(gridHelper_xy);
