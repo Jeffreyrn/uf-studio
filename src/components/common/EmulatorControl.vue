@@ -134,13 +134,14 @@ export default {
       }
     },
     setJointCmd(index) {
+      GlobalUtil.model.localTeach.hasChange = true;
+      GlobalUtil.model.localTeach.curPoint = this.joints;
       this.$store.commit(types.MOVE_ONE_JOINT, {
         index,
         value: this.joints[index],
       });
     },
     setEndOffline() {
-      // console.log('test', index, value);
       if (!this.stateOnline) {
         this.setEndCmd();
       }

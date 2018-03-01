@@ -56,7 +56,7 @@
                 </div>
               </div>
               <div v-if="editState===true">
-                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click=''>Save change</button>
+                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='onSaveChange'>Save change</button>
                 <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
               
@@ -202,6 +202,31 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
+    onSaveChange() {
+      console.log(`on Save Change`);
+      const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
+      const index = GlobalUtil.model.localTeach.curSelectedIndex;
+      const point = GlobalUtil.model.localTeach.curPoint;
+      const points = GlobalUtil.model.localTeach.fileDatas[uuid];
+      points[index] = point;
+
+      const textDict = {
+        type: GlobalUtil.model.localTeach.curProj.type,
+        total: points.length,
+        points: points,
+      };
+      const text = JSON.stringify(textDict);
+
+      // const dateStr = GlobalUtil.getTimeString();
+      // CommandsTeachSocket.createFile(dateStr, text, (dict) => {
+      // }, (dict) => {
+      // });
+
+      CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
+        GlobalUtil.model.localTeach.hasChange = false;
+      });
+
+    },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
@@ -355,6 +380,7 @@ export default {
     },
     startEdit() {
       this.editState = true;
+      GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
@@ -365,6 +391,7 @@ export default {
     },
     cancelEdit() {
       this.editState = false;
+      GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       // document.getElementById("scroll-timer").scrollLeft = 0;
@@ -776,7 +803,7 @@ export default {
           .save-change-btn-dark {
             bottom: 42px;
             background: #BCBDBC;
-            cursor: pointer;
+            // cursor: pointer;
           }
           .edit-cancel-btn {
             bottom: 0px;
