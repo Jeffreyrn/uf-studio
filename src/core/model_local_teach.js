@@ -66,6 +66,9 @@ self.setCurSelectedTreeItem = (uuid) => {
 };
 
 self.getFileData = (uuid, index) => {
+  if (self.fileDatas[uuid] === undefined) {
+    self.fileDatas[uuid] = [];
+  }
   return self.fileDatas[uuid][index];
 };
 

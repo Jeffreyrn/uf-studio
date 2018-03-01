@@ -1,9 +1,9 @@
 <template lang="html">
-  <div class="line-block-wrapper" @click='onSelect($event, index)'>
+  <div class="line-block-wrapper" :id="'cell_id_' + index" @click='onSelect($event, index)'>
     <!-- button -->
-    <div class="line-block">
+    <div class="">
       <!-- isContinus true -->
-      <div v-if="model.localTeach.curProj.type==='continuous'">
+      <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block">
         <div v-if="index % 10 === 0" style="background-color:lightpink;">
           {{ parseInt(index / 10) }}.0s
         </div>
@@ -23,13 +23,20 @@
       <!-- isContinus true end -->
 
       <!-- isContinus false -->
-      <div v-else>
-        <div>
-          {{ index }}
+      <div v-else class="line-block-single">
+        <div class="line-single" style="">
+        </div>
+        <div v-if="index===model.localTeach.curSelectedIndex">
+          <div class="line-single-ball-selected" style="">
+          </div>
+        </div>
+        <div v-else>
+          <div class="line-single-ball" style="">
+          </div>
         </div>
       </div>
       <!-- isContinus false end -->
-      <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:60px;height:1px;background-color:red;"></div>
+      <!-- <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:60px;height:1px;background-color:red;"></div> -->
     </div>
     <!-- button end -->
   </div>
@@ -45,6 +52,8 @@ export default {
   },
   mounted() {
     // console.log(`cell mounted index = ${this.index}`);
+    const cell = document.getElementById(`cell_id_${this.index}`);
+    // cell.style.left = `${250 + 60 * this.index}px`;
   },
   methods: {
     onSelect(e, index) {
@@ -71,6 +80,7 @@ export default {
 <style lang="scss" scoped>
 .line-block-wrapper {
   /*border:1px solid lightgray;*/
+  // position: absolute;
   width:60px;
   height:30px;
 }
@@ -81,5 +91,38 @@ export default {
   border-right: 1px solid #444;
   color: #fff;
   line-height: 30px;
+}
+.line-block-single {
+  // position: absolute;
+  width:60px;
+  height:30px;
+  padding-top: 14px;
+  // line-height: 30px;
+  // background-color: yellow;
+}
+.line-single {
+  width: 60px;
+  height: 2px;
+  // position: absolute;
+  top: 15px;
+  // transform: translateY(-50%);
+  background-color: #50E3C2;
+}
+.line-single-ball {
+  margin-left:25px;
+  margin-top:-4px;
+  width:6px;
+  height:6px;
+  background:white;
+  border-radius:3px
+}
+.line-single-ball-selected {
+  margin-left:23px;
+  margin-top:-6px;
+  width:10px;
+  height:10px;
+  background:white;
+  border: 1px solid blue;
+  border-radius:5px
 }
 </style>

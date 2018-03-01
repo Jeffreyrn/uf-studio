@@ -149,7 +149,7 @@ export default {
       clientWidth: 100,
       clientHeight: 200,
       rightFrameWidth: 320,
-      bottomLeftWidth: 300,
+      bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
       curProjTotal: 0,
@@ -687,7 +687,7 @@ export default {
       }
       .switch-wrapper {
         position: relative;
-        width: 350px;
+        width: 250px;
         background: #F3F3F3;
         text-align: center;
         // .switch-btn {
@@ -893,7 +893,7 @@ export default {
   left: 100px;*/
 }
 .left-frame {
-  width:250px;
+  width:200px;
   height: 100%;
   overflow: scroll;
 }
