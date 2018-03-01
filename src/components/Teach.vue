@@ -355,6 +355,7 @@ export default {
     startEdit() {
       this.editState = true;
       GlobalUtil.model.localTeach.onSelect(null, 0);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       this.onwinresize();
       setTimeout(() => {
         // document.getElementById("scroll-timer").scrollLeft = 0;
@@ -364,6 +365,7 @@ export default {
     cancelEdit() {
       this.editState = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       // document.getElementById("scroll-timer").scrollLeft = 0;
       this.onwinresize();
     },
@@ -505,6 +507,7 @@ export default {
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
             GlobalUtil.model.localTeach.onSelect(null, 0);
+            this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
       }
