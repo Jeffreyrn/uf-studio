@@ -5,17 +5,17 @@
       <!-- isContinus true -->
       <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block">
         <div v-if="index % 10 === 0" style="background-color:lightpink;">
-          {{ parseInt(index / 10) }}.0s
+          <!-- {{ parseInt(index / 10) }}.0s -->
         </div>
         <div v-else>
           <div v-if="model.localTeach.curEditingFileUUID===''">
             <div v-if="index < model.localTeach.fileDatas['temp'].length">
-              .{{ index % 10 }}
+              <!-- .{{ index % 10 }} -->
             </div>
           </div>
           <div v-else>
             <div v-if="index < model.localTeach.fileDatas[file.uuid].length">
-              .{{ index % 10 }}
+              <!-- .{{ index % 10 }} -->
             </div>
           </div>
         </div>
