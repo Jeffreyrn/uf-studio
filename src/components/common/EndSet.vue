@@ -48,7 +48,6 @@ export default {
     },
     orientation() {
       const orientation = this.$store.getters.end.orientation;
-      console.log(orientation, 'xxorientation');
       Object.keys(orientation).forEach((key) => {
         orientation[key] = orientation[key] ? Number(orientation[key].toFixed(2)) : 0;
       });

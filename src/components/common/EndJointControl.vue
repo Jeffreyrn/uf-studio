@@ -53,11 +53,11 @@
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
-            <input :id="'joint' + j" v-model.number="state.joint[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
-            @input="setJoint(j-1)" @change="setJointOnline(j-1)">
+            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="state.joint[j-1]" @input="setJoint(j-1)" @change="setJointOnline(j-1)">
+          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
           <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
@@ -106,6 +106,7 @@ export default {
         speed: 50,
         acceleration: 500,
         online: false,
+        joints: [],
         joint: {
           0: 0,
           1: 0,
@@ -142,6 +143,16 @@ export default {
       msg: 'Emulator',
       interval: null,
       intervalYaw: null,
+      jointRangeMoved: {
+        state: false,
+        index: null,
+        value: null,
+      },
+      rangeMask: {
+        maskBar: [],
+        inputWidth: [],
+        rangeLength: [],
+      },
     };
   },
   mounted() {
@@ -149,7 +160,7 @@ export default {
     // console.log(document.getElementById('joint1'));
     // console.log(document.getElementById('joint1').parentNode);
     for (let i = 1; i < 8; i += 1) {
-      this.rangeColor(`${i}`);
+      this.initRangeMask(`${i}`);
     }
     // angle canvas start, define values for angle canva;
     const self = this;
@@ -322,7 +333,7 @@ export default {
     },
     setJoystickStep(nipple, type) {
       if (nipple.direction) {
-        const speed = nipple.force * 0.5;
+        const speed = nipple.force * 7; // max 20
         let stepX = speed;
         let stepY = speed;
         if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
@@ -367,7 +378,7 @@ export default {
       };
       this.$store.commit(types.SET_ROBOT_STATE, data);
     },
-    setJoint(index) {
+    setJointOffline(index) {
       // console.log('test', index, value);
       if (!this.stateOnline) {
         this.setJointCmd(index);
@@ -375,13 +386,18 @@ export default {
     },
     setJointOnline(index) {
       if (this.stateOnline) {
+        this.jointRangeMoved = {
+          state: true,
+          index,
+          value: this.joints[index],
+        };
         this.setJointCmd(index);
       }
     },
     setJointCmd(index) {
       this.$store.commit(types.MOVE_ONE_JOINT, {
         index,
-        value: this.state.joint[index],
+        value: this.joints[index],
       });
     },
     setYaw() {
@@ -404,76 +420,137 @@ export default {
       this.joystick.step.position.z = 0;
       clearInterval(this.interval);
     },
-    setMask(e) {
-      const dom = e.target;
-      const maskBar = dom.nextElementSibling;
-
-      const inputWidth = Number(dom.clientWidth);
-      const rangeLength = Number(dom.max) - Number(dom.min);
-      const getWidth = inputWidth * (Math.abs(Number(dom.value)) / rangeLength);
-
-      if (dom.value > 0) {
-        maskBar.style.transform = 'none';
-      }
-      else {
-        maskBar.style.transform = 'rotate(180deg)';
-      }
-      maskBar.style.width = `${getWidth}px`;
-    },
-    setMaskInput(e) {
-      const dom = e.target.previousElementSibling.childNodes[0];
-      const maskBar = dom.nextElementSibling;
-
-      const inputWidth = Number(dom.clientWidth);
-      const rangeLength = Number(dom.max) - Number(dom.min);
-      const getWidth = inputWidth * (Math.abs(Number(dom.value)) / rangeLength);
-
-      if (dom.value > 0) {
-        maskBar.style.transform = 'none';
-      }
-      else {
-        maskBar.style.transform = 'rotate(180deg)';
-      }
-      maskBar.style.width = `${getWidth}px`;
-    },
-    rangeColor(index) {
+    initRangeMask(index) {
       // TODO: use $refs instead of getElementById
       const dom = document.getElementById(`joint${index}`);
-      const domInput = document.getElementById(`joint-input${index}`);
-      const maskBar = document.getElementById(`mask${index}`);
-      const rangeLength = Number(dom.max) - Number(dom.min);
-      maskBar.style.left = `${((-Number(dom.min) * 100) / rangeLength)}%`;
-      dom.addEventListener('input', this.setMask);
-      domInput.addEventListener('input', this.setMaskInput);
-      domInput.addEventListener('keyup', this.setMaskInput);
+      this.rangeMask.maskBar[index - 1] = document.getElementById(`mask${index}`);
+      this.rangeMask.rangeLength[index - 1] = Number(dom.max) - Number(dom.min);
+      this.rangeMask.inputWidth[index - 1] = Number(dom.clientWidth);
+      this.rangeMask.maskBar[index - 1].style.left = `${((-Number(dom.min) * 100) / this.rangeMask.rangeLength[index - 1])}%`;
     },
-    removeRangeColor(index) {
-      const dom = document.getElementById(`joint${index}`);
-      const domInput = document.getElementById(`joint-input${index}`);
-      if (dom || domInput) {
-        dom.removeEventListener('input', this.setMask);
-        domInput.removeEventListener('input', this.setMaskInput);
-        domInput.removeEventListener('keyup', this.setMaskInput);
+    setRangeMask(index, value) {
+      // const dom = document.getElementById(`joint${index}`);
+      // const maskBar = document.getElementById(`mask${index}`);
+      if (this.rangeMask.maskBar.length === 0) {
+        console.log('dom not get');
+        return;
       }
+      const inputWidth = this.rangeMask.inputWidth[index];
+      const rangeLength = this.rangeMask.rangeLength[index];
+      const getWidth = inputWidth * (Math.abs(Number(value)) / rangeLength);
+      if (value > 0) {
+        this.rangeMask.maskBar[index].style.transform = 'none';
+      }
+      else {
+        this.rangeMask.maskBar[index].style.transform = 'rotate(180deg)';
+      }
+      this.rangeMask.maskBar[index].style.width = `${getWidth}px`;
     },
+    // setMask(e) {
+    //   const dom = e.target;
+    //   const maskBar = dom.nextElementSibling;
+
+    //   const inputWidth = Number(dom.clientWidth);
+    //   const rangeLength = Number(dom.max) - Number(dom.min);
+    //   const getWidth = inputWidth * (Math.abs(Number(dom.value)) / rangeLength);
+
+    //   if (dom.value > 0) {
+    //     maskBar.style.transform = 'none';
+    //   }
+    //   else {
+    //     maskBar.style.transform = 'rotate(180deg)';
+    //   }
+    //   maskBar.style.width = `${getWidth}px`;
+    // },
+    // setMaskInput(e) {
+    //   const dom = e.target.previousElementSibling.childNodes[0];
+    //   const maskBar = dom.nextElementSibling;
+
+    //   const inputWidth = Number(dom.clientWidth);
+    //   const rangeLength = Number(dom.max) - Number(dom.min);
+    //   const getWidth = inputWidth * (Math.abs(Number(dom.value)) / rangeLength);
+
+    //   if (dom.value > 0) {
+    //     maskBar.style.transform = 'none';
+    //   }
+    //   else {
+    //     maskBar.style.transform = 'rotate(180deg)';
+    //   }
+    //   maskBar.style.width = `${getWidth}px`;
+    // },
+    // rangeColor(index) {
+    //   // TODO: use $refs instead of getElementById
+    //   const dom = document.getElementById(`joint${index}`);
+    //   const domInput = document.getElementById(`joint-input${index}`);
+    //   const maskBar = document.getElementById(`mask${index}`);
+    //   const rangeLength = Number(dom.max) - Number(dom.min);
+    //   maskBar.style.left = `${((-Number(dom.min) * 100) / rangeLength)}%`;
+    //   dom.addEventListener('input', this.setMask);
+    //   domInput.addEventListener('input', this.setMaskInput);
+    //   domInput.addEventListener('keyup', this.setMaskInput);
+    // },
+    // removeRangeColor(index) {
+    //   const dom = document.getElementById(`joint${index}`);
+    //   const domInput = document.getElementById(`joint-input${index}`);
+    //   if (dom || domInput) {
+    //     dom.removeEventListener('input', this.setMask);
+    //     domInput.removeEventListener('input', this.setMaskInput);
+    //     domInput.removeEventListener('keyup', this.setMaskInput);
+    //   }
+    // },
   },
   beforeDestroy() {
-    for (let i = 1; i < 8; i += 1) {
-      this.removeRangeColor(i);
-    }
+    // for (let i = 1; i < 8; i += 1) {
+    //   this.removeRangeColor(i);
+    // }
   },
   watch: {
-    'state.joints': (newValue) => {
-      console.log('watch posi print:');
-      console.table(newValue);
-    },
+    // 'state.joint': (newValue) => {
+    //   console.log('watch posi print:');
+    //   console.table(newValue);
+    // },
     // robotJointsAngle() {
     //   this.$set(this.robotJointsAngle, 0, this.robotJointsAngle[0]);
     // },
+    joints(newValue) {
+      newValue.forEach((value, index) => {
+        this.setRangeMask(index, value);
+      });
+    },
   },
   computed: {
     stateOnline() {
       return this.$store.state.robot.info.online;
+    },
+    joints: {
+      get() {
+        const arr = this.$store.getters.joints;
+        console.log('get ax', arr, this.state.joints);
+        const values = arr.map(str => Number(str));
+
+        if (this.jointRangeMoved.state && this.stateOnline) {
+          if (arr[this.jointRangeMoved.index] === this.jointRangeMoved.value) {
+            this.jointRangeMoved.state = false;
+            console.log('get final joint angle');
+          }
+          else {
+            values[this.jointRangeMoved.index] = this.jointRangeMoved.value;
+          }
+          return values.slice();
+        }
+        else if (arr && (arr.length > 0)) {
+          // console.log('arr posi print:', values.length);
+          // console.table(values);
+          // this.test = values[1];
+          return values.slice();
+        }
+        return [0, 0, 0, 0, 0, 0, 0];
+      },
+      set(value) {
+        console.log('SET');
+        console.table(value);
+        // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
+      },
     },
     // testtest: {
     //   get() {
