@@ -7,9 +7,9 @@
     </div>
     <section class="section1-wrapper com-font-GB-22">
       <div class="box1-wrapper com-text-center">
-        <router-link class="com-text-center"  :to="{ name: 'Teach'}"><img src="../assets/img/home/icon_shopping.svg" alt="shopping" />RECORDING</router-link>
-        <router-link class="com-text-center" :to="{ name: 'Editor'}"><img src="../assets/img/home/icon_developers.svg" alt="developers"/>APP EDITOR</router-link>
-        <router-link class="com-text-center"  :to="{ name: 'Editor'}"><img src="../assets/img/home/icon_setting.svg" alt="setting"/>IDE</router-link>
+        <router-link class="com-text-center"  :to="{ name: 'Teach'}">RECORDING</router-link>
+        <router-link class="com-text-center" :to="{ name: 'Blockly'}">APP EDITOR</router-link>
+        <router-link class="com-text-center"  :to="{ name: 'Editor'}">IDE</router-link>
       </div>
     </section>
   </div>
