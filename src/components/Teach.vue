@@ -217,15 +217,9 @@ export default {
       };
       const text = JSON.stringify(textDict);
 
-      // const dateStr = GlobalUtil.getTimeString();
-      // CommandsTeachSocket.createFile(dateStr, text, (dict) => {
-      // }, (dict) => {
-      // });
-
       CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
         GlobalUtil.model.localTeach.hasChange = false;
       });
-
     },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
@@ -365,7 +359,7 @@ export default {
       GlobalUtil.model.localTeach.curDuration -= -1;      
     },
     scrollTo(time) {
-      document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
+      document.getElementById("bottom-right-frame").scrollLeft = 60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -377,6 +371,7 @@ export default {
       }
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
       GlobalUtil.model.localTeach.showArr = tempArr;
+      this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
     },
     startEdit() {
       this.editState = true;
@@ -384,7 +379,7 @@ export default {
       GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
-        // document.getElementById("scroll-timer").scrollLeft = 0;
+        document.getElementById("bottom-right-frame").scrollLeft = 0;
         this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
         this.onwinresize();
       });
@@ -394,7 +389,7 @@ export default {
       GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
-      // document.getElementById("scroll-timer").scrollLeft = 0;
+      document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
     },
     delProj(uuid) {
