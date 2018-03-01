@@ -86,7 +86,8 @@
         <!-- <div>
           <EndSet></EndSet>
         </div> -->
-        <EndJointControl></EndJointControl>
+        <!-- <EndJointControl></EndJointControl> -->
+        <EmulatorControl></EmulatorControl>
       </div>
     </div>
 
@@ -129,7 +130,8 @@ import DialogTeachProjName from './DialogTeachProjName';
 import { setTimeout } from 'timers';
 import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
-import EndJointControl from './common/EndJointControl';
+// import EndJointControl from './common/EndJointControl';
+import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
 
 const path = require('path');
@@ -597,7 +599,8 @@ export default {
     DialogTeachProjName,
     XarmModel,
     EndSet,
-    EndJointControl,
+    // EndJointControl,
+    EmulatorControl,
   },
   computed: {
     getCurFile(){

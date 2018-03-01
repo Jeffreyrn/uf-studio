@@ -43,6 +43,8 @@
 </template>
 <script>
 
+import * as types from './../../store/mutation-types';
+
 export default {
   props: ['file', 'index'],
   data() {
