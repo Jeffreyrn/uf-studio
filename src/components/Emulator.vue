@@ -22,13 +22,14 @@
           <xarm-model></xarm-model>
         </el-col>
         <el-col :span="6" class="end-col">
-          <end-set></end-set>
+          <!-- <end-set></end-set> -->
+          <emulator-control></emulator-control>
         </el-col>
       </el-row>
     </el-main>
-    <el-footer>
+    <!-- <el-footer>
       <end-joint-control></end-joint-control>
-    </el-footer>
+    </el-footer> -->
   </el-container>
 </template>
 
@@ -38,6 +39,7 @@ import ToggleButton from 'vue-js-toggle-button';
 import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 import EndJointControl from './common/EndJointControl';
+import EmulatorControl from './common/EmulatorControl';
 import * as types from '../store/mutation-types';
 
 Vue.use(ToggleButton);
@@ -123,6 +125,7 @@ export default {
     XarmModel,
     EndSet,
     EndJointControl,
+    EmulatorControl,
   },
 };
 </script>
