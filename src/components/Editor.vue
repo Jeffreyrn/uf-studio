@@ -1,7 +1,7 @@
 <template>
   <div class="main-wrapper editor-wrapper">
     <div class="top-style">
-      <router-link :to="{ name: 'Home'}">
+      <router-link :to="{ name: 'EditHome'}">
         <div class="back-icon"></div>
       </router-link>
       <span class="title-ide">IDE</span>
