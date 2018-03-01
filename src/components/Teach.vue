@@ -133,6 +133,7 @@ import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
 import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
+import * as types from './../store/mutation-types';
 
 const path = require('path');
 
@@ -355,17 +356,17 @@ export default {
     startEdit() {
       this.editState = true;
       GlobalUtil.model.localTeach.onSelect(null, 0);
-      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       this.onwinresize();
       setTimeout(() => {
         // document.getElementById("scroll-timer").scrollLeft = 0;
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
         this.onwinresize();
       });
     },
     cancelEdit() {
       this.editState = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
-      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       // document.getElementById("scroll-timer").scrollLeft = 0;
       this.onwinresize();
     },
@@ -438,7 +439,9 @@ export default {
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
-      rightFrame.style.height = `${totalFrameHeight}px`
+      if (rightFrame !== null && rightFrame !== undefined) {
+        rightFrame.style.height = `${totalFrameHeight}px`;
+      }
       if (this.editState) {
         // const emulatorHeight = leftTopHeight - 200 - 0;
         // if (leftShow !== null) {
