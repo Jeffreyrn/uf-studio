@@ -10,10 +10,13 @@
           </div> -->
           <div class="left-emulator" id="left-emulator">
           </div>
-          <div v-if="editState===true" class="left-show" id="left-show">
+          <!-- <div v-if="editState===true" class="left-show" id="left-show">
           </div>
-          <div v-if="editState===true" class="left-control" id="left-control">
-          </div>
+          <div v-if="editState===true" class="left-control" id="left-control" style="overflow-y:scroll">
+            <XarmModel></XarmModel>
+            <EndSet></EndSet>
+            <EndJointControl></EndJointControl>
+          </div> -->
           <!-- <div v-if="editState===false" style="background:gray;width:100%;height:100%;">
           </div> -->
         </div>
@@ -21,7 +24,12 @@
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time">
-                {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                  {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                </div>
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                  {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
+                </div>
               </div>
               <div class="recording-name" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
                 <span class="file-proj-icon" v-if="model.localTeach.curProj.type==='discontinuous'">
@@ -43,7 +51,7 @@
                   <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
                 </div>
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
-                  <button class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
+                  <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
                   <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
                 </div>
               </div>
@@ -58,9 +66,9 @@
         </div>
       </div>
 
-      <div class="projects-list-wrapper">
+      <div class="projects-list-wrapper" v-if="editState===false">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
-        <div class="tree-wrapper">
+        <div class="tree-wrapper" id="tree-wrapper">
           <el-tree
             class="recording-project-list"
             :data="model.localTeach.curProTreeDatas"
@@ -73,45 +81,57 @@
           </el-tree>
         </div>
       </div>
-
+      <div class="control-wrapper" v-else>
+        <!-- <XarmModel></XarmModel> -->
+        <!-- <div>
+          <EndSet></EndSet>
+        </div> -->
+        <EndJointControl></EndJointControl>
+      </div>
     </div>
 
-      <el-dialog
-        class="save-dialog"
-        title="System Notice"
-        width="470px"
-        :visible.sync="visible.saveDialog"
-        >
-        <p>Stop Recording and save automatically.</p>
-        <span>The recording file will be saved to my project list</span>
-        <el-button @click="finishRecordOK">确 定</el-button>
-      </el-dialog>
+    <el-dialog
+      class="save-dialog"
+      title="System Notice"
+      width="470px"
+      :visible.sync="visible.saveDialog"
+      :before-close="finishRecordCancle"
+      >
+      <p>Stop Recording and save automatically.</p>
+      <span>The recording file will be saved to my project list</span>
+      <el-button @click="finishRecordOK">确 定</el-button>
+    </el-dialog>
       
-      <DialogTeachProjName
-        title="Please choose the way you want to record with xArm in this project"
-        :onok='oncreate'
-        v-if="model.localTeach.projTypeSelectedShow">
-      </DialogTeachProjName>
+    <DialogTeachProjName
+      title="Please choose the way you want to record with xArm in this project"
+      :onok='oncreate'
+      v-if="model.localTeach.projTypeSelectedShow">
+    </DialogTeachProjName>
 
-      <DialogTeachProjName
-        title="Please rename your project"
-        :onok='onrename'
-        width='400'
-        height='200'
-        input_top='90'
-        show_selected='false'
-        v-if="model.localTeach.projRenameShow">
-      </DialogTeachProjName>
+    <DialogTeachProjName
+      title="Please rename your project"
+      :onok='onrename'
+      width='400'
+      height='200'
+      input_top='90'
+      show_selected='false'
+      v-if="model.localTeach.projRenameShow">
+    </DialogTeachProjName>
 
   </div>
 </template>
 <script>
+
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import XarmModel from './common/XarmModel';
 import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
 import { setTimeout } from 'timers';
+import XarmModel from './common/XarmModel';
+import EndSet from './common/EndSet';
+import EndJointControl from './common/EndJointControl';
+// import { constants } from 'perf_hooks';
+
 const path = require('path');
 
 const echarts = require('echarts');
@@ -129,10 +149,10 @@ export default {
       clientWidth: 100,
       clientHeight: 200,
       rightFrameWidth: 320,
-      bottomLeftWidth: 300,
+      bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
-      radio: '2',
+      curProjTotal: 0,
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         discontinuous: require('../assets/img/edit/recording/icon_singlepoint_14x14_dark.svg'),
@@ -210,6 +230,9 @@ export default {
       }, 100);
     },
     fileLength(uuid) {
+      if (uuid.indexOf('.json') < 0) {
+        return;
+      }
       if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
         if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
           return GlobalUtil.model.localTeach.fileDatas[uuid].length;
@@ -217,9 +240,11 @@ export default {
         if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
           const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
           const msec = length % 10;
-          const sec = Math.floor(length / 10) % 60;
-          const min = Math.floor(Math.floor(length / 10) / 60) % 60;
-          const str = `${min}:${sec}.${msec}00`;
+          const sec = Math.floor(length / 10);
+          const str = `${sec}.${msec}`;
+          // const sec = Math.floor(length / 10) % 60;
+          // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
+          // const str = `${min}:${sec}.${msec}00`;
           return str;
         }
       }
@@ -230,7 +255,7 @@ export default {
         this.createProjectDisable = false;
       }
     },
-    finishRecord (){
+    finishRecord () {
       this.visible.saveDialog = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
@@ -239,11 +264,12 @@ export default {
       this.visible.saveDialog = false;
       GlobalUtil.model.localTeach.visible.starRecording = false;
 
-      const curFileDatas = GlobalUtil.model.localTeach.curFileDatas;
+      const curFileDatas = GlobalUtil.model.localTeach.fileDatas['temp']; //GlobalUtil.model.localTeach.curFileDatas;
       console.log(`curFileDatas = ${JSON.stringify(curFileDatas)}`);
 
       const textDict = {
         type: GlobalUtil.model.localTeach.curProj.type,
+        total: curFileDatas.length,
         points: curFileDatas,
       };
       const text = JSON.stringify(textDict);
@@ -257,7 +283,15 @@ export default {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
     },
+    finishRecordCancle() {
+      this.visible.saveDialog = false;
+      GlobalUtil.model.localTeach.visible.starRecording = false;
+      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
+      });
+    },
     startRecord() {
+      GlobalUtil.model.localTeach.curEditingFileUUID = '';
       this.visible.starRecording = false;
       const dateStr = GlobalUtil.getTimeString();
       const curSelectedTreeItemUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
@@ -271,8 +305,8 @@ export default {
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
       GlobalUtil.model.localTeach.curDuration = 0;
 
-      // GlobalUtil.model.localTeach.fileDatas[uuid] = [];
-      GlobalUtil.model.localTeach.curFileDatas = [];
+      GlobalUtil.model.localTeach.fileDatas['temp'] = [];
+      // GlobalUtil.model.localTeach.curFileDatas = [];
       CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
         const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -281,41 +315,73 @@ export default {
           GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
-        // this.scrollTo(curFileDatas.length);
-        if (GlobalUtil.model.localTeach.curFileDatas.length >= 1800) {
+        
+        if (GlobalUtil.model.localTeach.fileDatas['temp'].length >= 1800) {
           this.finishRecordOK();
         }
         else {
           // test data
           const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-          GlobalUtil.model.localTeach.curFileDatas.push(testData)
-          // GlobalUtil.model.localTeach.pushFileData(uuid, testData);
-          // let tempArr = [];
-          // for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
-          //   tempArr.push(i);
-          // }
-          // GlobalUtil.model.localTeach.showArr = tempArr;
+          // GlobalUtil.model.localTeach.curFileDatas.push(testData)
+          GlobalUtil.model.localTeach.pushFileData('temp', testData);
+          let tempArr = [];
+          for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+            tempArr.push(i);
+          }
+          // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+          GlobalUtil.model.localTeach.showArr = tempArr;
           // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
         }
+        this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
       });
       GlobalUtil.model.localTeach.curDuration -= -1;      
     },
+    scrollTo(time) {
+      document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
+    },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-      GlobalUtil.model.localTeach.curFileDatas.push(testData);
+      // GlobalUtil.model.localTeach.curFileDatas.push(testData);
+      GlobalUtil.model.localTeach.pushFileData('temp', testData);
+      let tempArr = [];
+      for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+        tempArr.push(i);
+      }
+      // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+      GlobalUtil.model.localTeach.showArr = tempArr;
     },
     startEdit() {
       this.editState = true;
+      GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
+        document.getElementById("scroll-timer").scrollLeft = 0;
         this.onwinresize();
       });
     },
     cancelEdit() {
       this.editState = false;
+      GlobalUtil.model.localTeach.onSelect(null, 0);
+      document.getElementById("scroll-timer").scrollLeft = 0;
       this.onwinresize();
     },
-    delProj() {
+    delProj(uuid) {
+      const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
+      if (uuid.indexOf('.json') >=0 ) {
+        this.$confirm(`Delete ${realName}?`, {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'CANCEL',
+          type: 'info',
+          showClose: false,
+          closeOnClickModal: false,
+        }).then(() => {
+          CommandsTeachSocket.delFiles(uuid, (dict) => {
+            // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+          });
+        }).catch(() => {
+        });        
+        return;
+      }
       const curProj = GlobalUtil.model.localTeach.curProj;
       this.$confirm(`Delete ${curProj.name}?`, {
         confirmButtonText: 'OK',
@@ -352,10 +418,10 @@ export default {
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
-
-      const leftControl = document.getElementById('left-control');
-      const leftEmulator = document.getElementById('left-emulator');
-      const leftShow = document.getElementById('left-show');
+      const rightFrame = document.getElementById('tree-wrapper');
+      // const leftControl = document.getElementById('left-control');
+      // const leftEmulator = document.getElementById('left-emulator');
+      // const leftShow = document.getElementById('left-show');
 
       const leftFrameWidth = totalFrameWidth - this.rightFrameWidth;
       if (leftFrame !== null && leftFrame !== undefined) {
@@ -364,26 +430,27 @@ export default {
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
         bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
-      const bottomHeight = this.editState ? 200 : 300;
+      const bottomHeight = 300 //this.editState ? 200 : 300;
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
+      rightFrame.style.height = `${totalFrameHeight}px`
       if (this.editState) {
-        const emulatorHeight = leftTopHeight - 200 - 0;
-        if (leftShow !== null) {
-          leftShow.style.height = `${emulatorHeight}px`;
-        }
-        leftEmulator.style.height = `${emulatorHeight}px`; 
-        leftEmulator.style.width = `${leftFrameWidth - 210}px`;
+        // const emulatorHeight = leftTopHeight - 200 - 0;
+        // if (leftShow !== null) {
+        //   leftShow.style.height = `${emulatorHeight}px`;
+        // }
+        // leftEmulator.style.height = `${emulatorHeight}px`; 
+        // leftEmulator.style.width = `${leftFrameWidth - 210}px`;
       }
       else {
-        leftEmulator.style.height = `100%`;
-        leftEmulator.style.width = `100%`;
-        if (leftShow !== null) {
-          leftShow.style.height = `100%`;
-        }
+        // leftEmulator.style.height = `100%`;
+        // leftEmulator.style.width = `100%`;
+        // if (leftShow !== null) {
+        //   leftShow.style.height = `100%`;
+        // }
       }
-      console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
+      // console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
       // if (this.editState) {
@@ -400,13 +467,17 @@ export default {
 
       const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
       if (curProj !== null && curProj !== undefined) {
+        GlobalUtil.model.localTeach.showArr = [];
         CommandsTeachSocket.getProjFiles(uuid, (dict) => {
+          const total = dict.data.total;
+          this.curProjTotal = total;
           console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
         });
       }
 
       if (file !== null && file !== undefined) {
         // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
+        // GlobalUtil.model.localTeach.onSelect(null, 0);
         CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
@@ -431,6 +502,7 @@ export default {
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
+            GlobalUtil.model.localTeach.onSelect(null, 0);
           }
         });
       }
@@ -492,32 +564,29 @@ export default {
       const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
 //      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
       const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
-      const renameDisplayStyle = isProj ? 'display:block;float:right;' : 'display:none;float:right;';
-      // console.log(`data.uuid = ${data.uuid}, data.proType = ${data.proType}, renameDisplayStyle = ${renameDisplayStyle}`);
-      const deleteIcon = isProj ? this.fileIcon.delete : '';
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
             {isProj?<el-button style="mini" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>:<span style="display:none">1</span>}
-            <el-button size="mini" type="text" on-click={ () => this.delProj() }><img src={this.fileIcon.delete} /></el-button>
+            <el-button size="mini" type="text" on-click={ () => this.delProj(data.uuid) }><img src={this.fileIcon.delete} /></el-button>
           </span>
       </span>);
     },
-    onClick(e) {
-      const attr = e.currentTarget.value;
-      console.log(`attr = ${attr}`);
-      switch (attr) {
-        case 'scroll':
-          {
-            const time = GlobalUtil.model.localTeach.curDuration;
-            document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
-            break;
-          }
-        default:
-          break;
-      }
-    },
+    // onClick(e) {
+    //   const attr = e.currentTarget.value;
+    //   console.log(`attr = ${attr}`);
+    //   switch (attr) {
+    //     case 'scroll':
+    //       {
+    //         const time = GlobalUtil.model.localTeach.curDuration;
+    //         document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
+    //         break;
+    //       }
+    //     default:
+    //       break;
+    //   }
+    // },
   },
   beforeDestroy() {
   },
@@ -526,6 +595,9 @@ export default {
     ListProj,
     XarmModel,
     DialogTeachProjName,
+    XarmModel,
+    EndSet,
+    EndJointControl,
   },
   computed: {
     getCurFile(){
@@ -618,7 +690,7 @@ export default {
       }
       .switch-wrapper {
         position: relative;
-        width: 350px;
+        width: 250px;
         background: #F3F3F3;
         text-align: center;
         // .switch-btn {
@@ -741,6 +813,9 @@ export default {
         }
       }
     }
+    .control-wrapper {
+      width: 300px;
+    }
     .projects-list-wrapper {
       width: 320px;
       /*min-width: 300px;*/
@@ -821,7 +896,7 @@ export default {
   left: 100px;*/
 }
 .left-frame {
-  width:250px;
+  width:200px;
   height: 100%;
   overflow: scroll;
 }
@@ -865,9 +940,9 @@ export default {
   .recording-project-list .el-tree-node__content {
     height: 36px;
   }
-  .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
-    background: #E8E8E8;
-  }
+  /*.recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {*/
+    /*background: #E8E8E8;*/
+  /*}*/
   /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
     /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
     /*padding: 10px;*/

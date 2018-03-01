@@ -7,11 +7,16 @@ const self = LocalTeach;
 self.showArr = [];
 self.curProjList = [];
 self.curProj = {};
+self.curProj.files = [];
 self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
 self.curSelectedTreeItem = {
   uuid: '',
   type: '',
+};
+self.PROJ_TREE_TYPE = {
+  FOLDER: 'folder',
+  FILE: 'file',
 };
 self.hasChange = false;
 self.curEditingFileUUID = '';
@@ -26,6 +31,7 @@ self.projTypeSelectedShow = false;
 self.projRenameShow = false;
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
+self.curProTreeDatas = [];
 self.pushFileData = (uuid, datas) => {
   let dict = self.fileDatas[uuid];
   if (dict === null || dict === undefined) {
@@ -60,16 +66,25 @@ self.setCurSelectedTreeItem = (uuid) => {
 };
 
 self.getFileData = (uuid, index) => {
+  if (self.fileDatas[uuid] === undefined) {
+    self.fileDatas[uuid] = [];
+  }
   return self.fileDatas[uuid][index];
+};
+
+self.getFileInfo = (uuid) => {
+  const files = self.curProj.files;
+  for (let i = 0; i < files.length; i += 1) {
+    const file = files[i];
+    if (file.uuid === uuid) {
+      return file;
+    }
+  }
+  return null;
 };
 
 self.updateFileData = (uuid, index, ch, value) => {
   self.fileDatas[uuid][index][ch] = value;
-};
-
-self.PROJ_TREE_TYPE = {
-  FOLDER: 'folder',
-  FILE: 'file',
 };
 
 // self.setSelectedTreeItem = (file) => {
@@ -233,6 +248,7 @@ self.remoteProjs2Local = (dict) => {
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
+        file.isContinus = curProj.type === 'continuous';
         curProj.files.push(file);
         self.curProjExpandedKeys.push(uuid);
       }
@@ -251,6 +267,7 @@ self.remoteProjs2Local = (dict) => {
 self.onSelect = (e, index) => {
   const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
   if (point === null || point === undefined) {
+    // GlobalUtil.model.localTeach.curSelectedIndex = -1;
     console.log(`point null null null`);
     return;
   }
@@ -265,7 +282,6 @@ self.onSelect = (e, index) => {
   // GlobalUtil.model.localTeach.curPoint.a6 = point[6];
 };
 
-self.curProTreeDatas = [];
 self.curPro2Tree = () => {
   let tempDatas = [];
   for (let i = 0; i < self.curProjList.length; i += 1) {

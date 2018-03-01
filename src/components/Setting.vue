@@ -7,10 +7,10 @@
     </div>
     <section class="section1-wrapper com-font-GB-22 ">
       <div class="box1-wrapper com-text-center">
-        <a class="com-text-center"><img src="../assets/img/home/icon_shopping.svg" />General</a>
-        <router-link class="com-text-center" :to="{ name: 'Editor'}"><img src="../assets/img/home/icon_developers.svg" />Studio info</router-link>
-        <a class="com-text-center "><img src="../assets/img/home/icon_setting.svg" />System Log</a>
-        <a class="com-text-center "><img src="../assets/img/home/icon_setting.svg" />Software Update</a>
+        <a class="com-text-center">General</a>
+        <router-link class="com-text-center">Studio info</router-link>
+        <a class="com-text-center ">System Log</a>
+        <a class="com-text-center ">Software Update</a>
       </div>
     </section>
   </div>

@@ -1,5 +1,8 @@
 <template>
 <div class="blockly-wrapper">
+  <div class="blockly-header-wrapper">
+    <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Blockly</span></div>
+  </div>
   <div id="blockly-area" class="blockly-workspace" tabindex="0">
     <div id="tab-blocks"></div>
   </div>
@@ -172,6 +175,24 @@ export default {
   min-height: 500px;
 }
   /*==========*/
+  .blockly-header-wrapper {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 2rem;
+    background: #F8F8F8;
+    display: flex;
+    justify-content: space-between;
+    img {
+      width: 1.6rem;
+    }
+    span {
+      margin-left: 1rem;
+      font-family: 'Gotham-Bold';
+      font-size: 2rem;
+      color: #444;
+      letter-spacing: -1px;
+    }
+  }
   .blockly-wrapper {
     width: 100%;
     height: 100%;

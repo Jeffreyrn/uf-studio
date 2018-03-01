@@ -1,7 +1,7 @@
 <template>
   <div class="main-wrapper editor-wrapper">
     <div class="top-style">
-      <router-link :to="{ name: 'Home'}">
+      <router-link :to="{ name: 'EditHome'}">
         <div class="back-icon"></div>
       </router-link>
       <span class="title-ide">IDE</span>
@@ -178,13 +178,24 @@ body {
 
 .left-frame {
   /* width:200px; */
-  width: 215px;
+  width: 200px;
   height: 100%;
   overflow-y: scroll;
   /* overflow-x: scroll; */
   background: #3C3F41;
   /* scrollbar-track-color: #3C3F41; */
   /* SCROLLBAR-TRACK-COLOR: aquamarine; */
+}
+
+.left-frame::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+}
+.left-frame::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  background: #87939A;
+}
+.left-frame::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  background: #2F2F2F;
 }
 
 .right-frame {
