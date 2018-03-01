@@ -2,3 +2,4 @@
 - init state when online mode active
 - remove console.log
 - position value match visual model
+- handle unreachable position

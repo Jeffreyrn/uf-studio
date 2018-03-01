@@ -6,7 +6,7 @@
           <router-link :to="{ name: 'Home'}">
             <img src="./../assets/img/control/icon_back.svg" alt="back home">
           </router-link>
-          <span class="title-ide">Control</span>
+          <span class="title-ide">Dev Control</span>
         </el-col>
         <el-col :span="6">
           <div class="title-online">Live Control</div>
@@ -22,13 +22,14 @@
           <xarm-model></xarm-model>
         </el-col>
         <el-col :span="6" class="end-col">
-          <end-set></end-set>
+          <!-- <end-set></end-set> -->
+          <emulator-control></emulator-control>
         </el-col>
       </el-row>
     </el-main>
-    <el-footer>
+    <!-- <el-footer>
       <end-joint-control></end-joint-control>
-    </el-footer>
+    </el-footer> -->
   </el-container>
 </template>
 

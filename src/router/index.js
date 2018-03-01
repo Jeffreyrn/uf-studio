@@ -5,6 +5,7 @@ import Control from '@/components/Control';
 import Editor from '@/components/Editor';
 import Paint from '@/components/Paint';
 import Emulator from '@/components/Emulator';
+import EmulatorEdit from '@/components/EmulatorEdit';
 import Blockly from '@/components/Blockly';
 import Params from '@/components/Params';
 import Teach from '@/components/Teach';
@@ -61,6 +62,11 @@ export default new Router({
       path: '/emulator',
       name: 'Emulator',
       component: Emulator,
+    },
+    {
+      path: '/emulator-edit',
+      name: 'EmulatorEdit',
+      component: EmulatorEdit,
     },
     {
       path: '/blockly',

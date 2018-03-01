@@ -284,13 +284,30 @@ const mutations = {
       );
     }
   },
-  // [types.ROBOT_MOVE_JOINT](state, data) {
-  //   state.info.axis = data.slice();
-  //   console.log('set joint:', data);
-  //   if (state.info.online) {
-  //     window.GlobalUtil.socketCom.socket_info.socket.send();
-  //   }
-  // },
+  [types.ROBOT_MOVE_JOINT](state, data) {
+    console.log('set 7 joint:', data);
+    if (state.info.online) {
+      const JOINT_LIST = ['I', 'J', 'K', 'L', 'M', 'N', 'O'];
+      const sendData = {};
+      JOINT_LIST.forEach((value, index) => {
+        sendData[value] = data[index];
+      });
+      Object.assign(sendData, {
+        F: state.info.speed,
+        Q: state.info.acceleration,
+      });
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_joint',
+        {
+          data: sendData,
+        },
+        (response) => { console.log('socket res', response); },
+      );
+    }
+    else {
+      state.info.axis = data.slice();
+    }
+  },
   [types.SET_ROBOT_STATE](state, data) {
     state.info[data.index] = data.value;
   },

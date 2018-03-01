@@ -7,10 +7,11 @@
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
-            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" >
+            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" >
+          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
         </div>
       </div>
     </div>
@@ -20,20 +21,20 @@
         <div class="block end-range" v-for="(value, index) in position" :key="index">
           <span class="text">{{index}}</span>
           <div class="range-wrapper">
-            <input :id="'end' + index" v-model.number="position[index]" type="range" :step="config.step" :max="config.end.max" :min="config.end.min" 
-            >
+            <input :id="'end' + index" v-model.number="position[index]" type="range" :step="config.step" :max="config.position.max" :min="config.position.min" 
+            @input="setEndOffline()" @change="setEndOnline(index, 'position')">
             <p :id="'mask' + index" class="mask-bar"></p>
           </div>
-          <input :id="'end-input' + index" type="number" v-model.number="position[index]" >
+          <input :id="'end-input' + index" type="number" v-model.number="position[index]" @input="setEndOffline()" @change="setEndOnline(index, 'position')">
         </div>
         <div class="block end-range" v-for="(value, index) in orientation" :key="index">
           <span class="text">{{index}}</span>
           <div class="range-wrapper">
-            <input :id="'end' + index" v-model.number="orientation[index]" type="range" :step="config.step" :max="config.end.max" :min="config.end.min" 
-            >
+            <input :id="'end' + index" v-model.number="orientation[index]" type="range" :step="config.step" :max="config.orientation.max" :min="config.orientation.min" 
+            @input="setEndOffline()" @change="setEndOnline(index, 'orientation')">
             <p :id="'mask' + index" class="mask-bar"></p>
           </div>
-          <input :id="'end-input' + index" type="number" v-model.number="orientation[index]" >
+          <input :id="'end-input' + index" type="number" v-model.number="orientation[index]" @input="setEndOffline()" @change="setEndOnline(index, 'orientation')">
         </div>
       </div>
     </div>
@@ -94,9 +95,13 @@ export default {
           max: [179.9, 30, 34.8, 7.2, 50.4, 102.1, 179.9],
           min: [-179.9, -120, -179.9, -220, -118.6, -99.9, -179.9],
         },
-        end: {
+        position: {
           max: 1000,
           min: -1000,
+        },
+        orientation: {
+          max: 180,
+          min: -180,
         },
       },
       jointRangeMoved: {
@@ -104,20 +109,55 @@ export default {
         index: null,
         value: null,
       },
+      endRangeMoved: {
+        state: false,
+        index: null,
+        value: null,
+      },
     };
   },
   methods: {
-    resetEnd() {
-      // vuex reset position&orientation
-      console.log('reset action');
-      // Object.keys(this.state.position).forEach((index) => {
-      //   this.state.position[index] = 0;
-      // });
-      // Object.keys(this.state.orientation).forEach((index) => {
-      //   this.state.orientation[index] = 0;
-      // });
+    setJointOffline(index) {
+      // console.log('test', index, value);
+      if (!this.stateOnline) {
+        this.setJointCmd(index);
+      }
     },
-    setEnd() {
+    setJointOnline(index) {
+      if (this.stateOnline) {
+        this.jointRangeMoved = {
+          state: true,
+          index,
+          value: this.joints[index],
+        };
+        this.setJointCmd(index);
+      }
+    },
+    setJointCmd(index) {
+      this.$store.commit(types.MOVE_ONE_JOINT, {
+        index,
+        value: this.joints[index],
+      });
+    },
+    setEndOffline() {
+      // console.log('test', index, value);
+      if (!this.stateOnline) {
+        this.setEndCmd();
+      }
+    },
+    setEndOnline(index, category) {
+      if (this.stateOnline) {
+        this.endRangeMoved = {
+          category,
+          state: true,
+          index,
+          value: this[category][index],
+        };
+        console.log('end end', this.endRangeMoved);
+        this.setEndCmd();
+      }
+    },
+    setEndCmd() {
       this.$store.commit(types.MOVE_END, {
         position: this.position,
         orientation: this.orientation,
@@ -138,19 +178,53 @@ export default {
     },
   },
   computed: {
-    position() {
-      const position = this.$store.getters.end.position;
-      Object.keys(position).forEach((key) => {
-        position[key] = position[key] ? Number(position[key].toFixed(2)) : 0;
-      });
-      return position;
+    position: {
+      get() {
+        const position = this.$store.getters.end.position;
+        Object.keys(position).forEach((key) => {
+          position[key] = position[key] ? Number(position[key].toFixed(2)) : 0;
+        });
+        if (this.endRangeMoved.state && this.stateOnline && this.endRangeMoved.category === 'position') {
+          if (position[this.endRangeMoved.index] === this.endRangeMoved.value) {
+            this.endRangeMoved.state = false;
+          }
+          else {
+            position[this.endRangeMoved.index] = this.endRangeMoved.value;
+          }
+        }
+        const data = {};
+        Object.assign(data, position);
+        return data;
+      },
+      set(value) {
+        console.log('SET');
+        console.table(value);
+        // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
+      },
     },
-    orientation() {
-      const orientation = this.$store.getters.end.orientation;
-      Object.keys(orientation).forEach((key) => {
-        orientation[key] = orientation[key] ? Number(orientation[key].toFixed(2)) : 0;
-      });
-      return orientation;
+    orientation: {
+      get() {
+        const orientation = this.$store.getters.end.orientation;
+        Object.keys(orientation).forEach((key) => {
+          orientation[key] = orientation[key] ? Number(orientation[key].toFixed(2)) : 0;
+        });
+        if (this.endRangeMoved.state && this.stateOnline && this.endRangeMoved.category === 'orientation') {
+          if (orientation[this.endRangeMoved.index] === this.endRangeMoved.value) {
+            this.endRangeMoved.state = false;
+          }
+          else {
+            orientation[this.endRangeMoved.index] = this.endRangeMoved.value;
+          }
+        }
+        const data = {};
+        Object.assign(data, orientation);
+        return data;
+      },
+      set(value) {
+        console.log('SET');
+        console.table(value);
+        // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
+      },
     },
     stateOnline() {
       return this.$store.state.robot.info.online;
