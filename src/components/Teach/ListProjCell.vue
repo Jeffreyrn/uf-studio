@@ -4,18 +4,18 @@
     <div class="">
       <!-- isContinus true -->
       <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block">
-        <div v-if="index % 10 === 0" style="background-color:lightpink;">
-          <!-- {{ parseInt(index / 10) }}.0s -->
+        <div v-if="index % 10 === 0" style="background-color:green;">
+          {{ parseInt(index / 10) }}.0s
         </div>
         <div v-else>
           <div v-if="model.localTeach.curEditingFileUUID===''">
             <div v-if="index < model.localTeach.fileDatas['temp'].length">
-              <!-- .{{ index % 10 }} -->
+              .{{ index % 10 }}
             </div>
           </div>
           <div v-else>
             <div v-if="index < model.localTeach.fileDatas[file.uuid].length">
-              <!-- .{{ index % 10 }} -->
+              .{{ index % 10 }}
             </div>
           </div>
         </div>
@@ -94,12 +94,14 @@ export default {
   border-right: 1px solid #444;
   color: #fff;
   line-height: 30px;
+  font-size: 15px;
 }
 .line-block-single {
   // position: absolute;
   width:60px;
   height:30px;
   padding-top: 14px;
+  font-size: 15px;
   cursor: pointer;
   // line-height: 30px;
   // background-color: yellow;
