@@ -3,3 +3,5 @@
 - remove console.log
 - position value match visual model
 - handle unreachable position
+- roll yaw pitch match
+- reset gohome

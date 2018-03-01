@@ -284,6 +284,18 @@ const mutations = {
       );
     }
   },
+  [types.GO_HOME](state) {
+    window.GlobalUtil.socketCom.sendCmd(
+      'xarm_move_gohome',
+      {
+        data: {
+          F: state.info.speed,
+          Q: state.info.acceleration,
+        },
+      },
+      (response) => { console.log('socket res', response); },
+    );
+  },
   [types.ROBOT_MOVE_JOINT](state, data) {
     console.log('set 7 joint:', data);
     if (state.info.online) {

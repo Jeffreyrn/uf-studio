@@ -23,6 +23,7 @@ export default {
   methods: {
     resetEnd() {
       // vuex reset position&orientation
+      this.$store.commit(types.GO_HOME);
       console.log('reset action');
       // Object.keys(this.state.position).forEach((index) => {
       //   this.state.position[index] = 0;
