@@ -70,7 +70,7 @@ import Nipple from 'nipplejs';
 import * as types from '../../store/mutation-types';
 
 export default {
-  name: 'EmulatorControl',
+  name: 'EmulatorAppControl',
   data() {
     return {
       testindex: 6,
@@ -717,7 +717,7 @@ span.text {
     }
     .config-value {
       padding: 2%;
-      background: #565656;
+      background: #444;
       border-radius: 6px;
       font-family: Gotham-Book;
       font-size: 13px;

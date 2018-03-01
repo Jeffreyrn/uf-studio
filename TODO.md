@@ -1,3 +1,4 @@
 - disable input when robot move in online mode
 - init state when online mode active
 - remove console.log
+- position value match visual model
