@@ -68,7 +68,7 @@
 
       <div class="projects-list-wrapper" v-if="editState===false">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
-        <div class="tree-wrapper">
+        <div class="tree-wrapper" id="tree-wrapper">
           <el-tree
             class="recording-project-list"
             :data="model.localTeach.curProTreeDatas"
@@ -416,7 +416,7 @@ export default {
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
-
+      const rightFrame = document.getElementById('tree-wrapper');
       // const leftControl = document.getElementById('left-control');
       // const leftEmulator = document.getElementById('left-emulator');
       // const leftShow = document.getElementById('left-show');
@@ -432,6 +432,7 @@ export default {
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
+      rightFrame.style.height = `${totalFrameHeight}px`
       if (this.editState) {
         // const emulatorHeight = leftTopHeight - 200 - 0;
         // if (leftShow !== null) {
