@@ -937,9 +937,9 @@ export default {
   .recording-project-list .el-tree-node__content {
     height: 36px;
   }
-  .recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {
-    background: #E8E8E8;
-  }
+  /*.recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {*/
+    /*background: #E8E8E8;*/
+  /*}*/
   /*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
     /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
     /*padding: 10px;*/
