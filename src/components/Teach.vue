@@ -355,12 +355,14 @@ export default {
       GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
+        document.getElementById("scroll-timer").scrollLeft = 0;
         this.onwinresize();
       });
     },
     cancelEdit() {
       this.editState = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
+      document.getElementById("scroll-timer").scrollLeft = 0;
       this.onwinresize();
     },
     delProj(uuid) {
