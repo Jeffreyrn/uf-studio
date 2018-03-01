@@ -59,6 +59,7 @@ export default {
     onSelect(e, index) {
       if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
         GlobalUtil.model.localTeach.onSelect(e, index);
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       }
     },
   },

@@ -17,9 +17,24 @@
       <!-- </div> -->
     <!-- </div> -->
     <!-- scroll timer -->
+
+    <!-- <div v-for='index in model.localTeach.showArr'>
+    </div> -->
+
+    <!-- <div class="" style="float:left;">
+      <div v-for='index in model.localTeach.showArr'>
+        <span style="width:60px;height:10px;background:yellow;">
+        </span>
+      </div>
+    </div> -->
+
     <div v-if="model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)!==null || model.localTeach.curEditingFileUUID===''">
       <div class="block-cell">
         <!-- <template v-for='(data,index) in model.localTeach.fileDatas[file.uuid]'> -->
+        <!-- <div v-for='index in model.localTeach.showArr'>
+          <div style="width:60px;height:20px;background:yellow;">
+          </div>
+        </div> -->
         <div v-for='index in model.localTeach.showArr'>
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
         </div>
