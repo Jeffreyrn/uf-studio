@@ -81,14 +81,12 @@
           </el-tree>
         </div>
       </div>
-      <div class="control-wrapper" v-if="editState===true">
+      <div class="control-wrapper" v-else>
         <!-- <XarmModel></XarmModel> -->
-        <div>
+        <!-- <div>
           <EndSet></EndSet>
-        </div>
-        <div>
-          <EndJointControl></EndJointControl>
-        </div>
+        </div> -->
+        <EndJointControl></EndJointControl>
       </div>
     </div>
 
@@ -339,7 +337,7 @@ export default {
       GlobalUtil.model.localTeach.curDuration -= -1;      
     },
     scrollTo(time) {
-      document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
+      document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -354,6 +352,7 @@ export default {
     },
     startEdit() {
       this.editState = true;
+      GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
         this.onwinresize();
@@ -361,6 +360,7 @@ export default {
     },
     cancelEdit() {
       this.editState = false;
+      GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
     },
     delProj(uuid) {
@@ -577,7 +577,7 @@ export default {
     //     case 'scroll':
     //       {
     //         const time = GlobalUtil.model.localTeach.curDuration;
-    //         document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
+    //         document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
     //         break;
     //       }
     //     default:

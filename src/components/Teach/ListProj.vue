@@ -47,10 +47,9 @@ export default {
     // GlobalUtil.model.localTeach.chartOption.xAxis.data = this.showArr;
   },
   methods: {
-    scrollTo(time) {
-      document.getElementById("scroll-timer").scrollLeft = 40 * (parseInt(time / 10) * 10);
-    },
-
+    // scrollTo(time) {
+    //   document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
+    // },
     test_get_pos() {
       const self = this;
       // const startTime = new Date().getTime();
@@ -173,7 +172,7 @@ export default {
     },
     checkscroll() {
       // const scrollLeft = document.getElementById("scroll-timer").scrollLeft;
-      // console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 40)}`);
+      // console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 60)}`);
     },
     onSelect(e, index) {
       GlobalUtil.model.localTeach.onSelect(e, index);

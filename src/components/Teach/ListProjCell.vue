@@ -29,7 +29,7 @@
         </div>
       </div>
       <!-- isContinus false end -->
-      <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:40px;height:1px;background-color:red;"></div>
+      <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:60px;height:1px;background-color:red;"></div>
     </div>
     <!-- button end -->
   </div>
@@ -44,7 +44,7 @@ export default {
     };
   },
   mounted() {
-    console.log(`cell mounted index = ${this.index}`);
+    // console.log(`cell mounted index = ${this.index}`);
   },
   methods: {
     onSelect(e, index) {
@@ -71,15 +71,15 @@ export default {
 <style lang="scss" scoped>
 .line-block-wrapper {
   /*border:1px solid lightgray;*/
-  width:40px;
-  height:20px;
+  width:60px;
+  height:30px;
 }
 .line-block {
-  width:40px;
-  height:20px;
+  width:60px;
+  height:30px;
   background-color:rgba(74,144,226,0.50);
   border-right: 1px solid #444;
   color: #fff;
-  line-height: 20px;
+  line-height: 30px;
 }
 </style>
