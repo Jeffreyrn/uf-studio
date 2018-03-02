@@ -54,10 +54,10 @@
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
             <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
-            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
+            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
+          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
           <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
@@ -519,6 +519,9 @@ export default {
     },
   },
   computed: {
+    rangeDisable() {
+      return this.jointRangeMoved.state && this.stateOnline;
+    },
     stateOnline() {
       return this.$store.state.robot.info.online;
     },
@@ -567,6 +570,9 @@ export default {
 <style scoped lang="scss">
 input[type=range] {
   cursor: pointer;
+}
+input:disabled {
+  cursor:not-allowed;
 }
 input[type=range]:focus {
   outline: none;
