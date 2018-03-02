@@ -4,7 +4,7 @@
     <div class="">
       <!-- isContinus true -->
       <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block">
-        <div v-if="index % 10 === 0" style="background-color:lightpink;">
+        <div v-if="index % 10 === 0" style="background-color:green;">
           {{ parseInt(index / 10) }}.0s
         </div>
         <div v-else>
@@ -43,6 +43,8 @@
 </template>
 <script>
 
+import * as types from './../../store/mutation-types';
+
 export default {
   props: ['file', 'index'],
   data() {
@@ -59,6 +61,7 @@ export default {
     onSelect(e, index) {
       if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
         GlobalUtil.model.localTeach.onSelect(e, index);
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       }
     },
   },
@@ -91,12 +94,14 @@ export default {
   border-right: 1px solid #444;
   color: #fff;
   line-height: 30px;
+  font-size: 15px;
 }
 .line-block-single {
   // position: absolute;
   width:60px;
   height:30px;
   padding-top: 14px;
+  font-size: 15px;
   cursor: pointer;
   // line-height: 30px;
   // background-color: yellow;

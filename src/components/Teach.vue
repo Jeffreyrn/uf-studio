@@ -56,10 +56,10 @@
                 </div>
               </div>
               <div v-if="editState===true">
-                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click=''>Save change</button>
+                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='onSaveChange'>Save change</button>
                 <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
-              
+
             </div>
           </div>
           <ListProj id="bottom-right-frame"></ListProj>
@@ -86,7 +86,8 @@
         <!-- <div>
           <EndSet></EndSet>
         </div> -->
-        <EndJointControl></EndJointControl>
+        <!-- <EndJointControl></EndJointControl> -->
+        <EmulatorControl></EmulatorControl>
       </div>
     </div>
 
@@ -101,7 +102,7 @@
       <span>The recording file will be saved to my project list</span>
       <el-button @click="finishRecordOK">确 定</el-button>
     </el-dialog>
-      
+
     <DialogTeachProjName
       title="Please choose the way you want to record with xArm in this project"
       :onok='oncreate'
@@ -129,8 +130,10 @@ import DialogTeachProjName from './DialogTeachProjName';
 import { setTimeout } from 'timers';
 import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
-import EndJointControl from './common/EndJointControl';
+// import EndJointControl from './common/EndJointControl';
+import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
+import * as types from './../store/mutation-types';
 
 const path = require('path');
 
@@ -148,7 +151,7 @@ export default {
       inputText: '',
       clientWidth: 100,
       clientHeight: 200,
-      rightFrameWidth: 320,
+      rightFrameWidth: 360,
       bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
@@ -199,6 +202,25 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
+    onSaveChange() {
+      console.log(`on Save Change`);
+      const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
+      const index = GlobalUtil.model.localTeach.curSelectedIndex;
+      const point = GlobalUtil.model.localTeach.curPoint;
+      const points = GlobalUtil.model.localTeach.fileDatas[uuid];
+      points[index] = point;
+
+      const textDict = {
+        type: GlobalUtil.model.localTeach.curProj.type,
+        total: points.length,
+        points: points,
+      };
+      const text = JSON.stringify(textDict);
+
+      CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
+        GlobalUtil.model.localTeach.hasChange = false;
+      });
+    },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
@@ -315,7 +337,7 @@ export default {
           GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
-        
+
         if (GlobalUtil.model.localTeach.fileDatas['temp'].length >= 1800) {
           this.finishRecordOK();
         }
@@ -334,10 +356,10 @@ export default {
         }
         this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
       });
-      GlobalUtil.model.localTeach.curDuration -= -1;      
+      GlobalUtil.model.localTeach.curDuration -= -1;
     },
     scrollTo(time) {
-      document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
+      document.getElementById("bottom-right-frame").scrollLeft = 60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -349,20 +371,25 @@ export default {
       }
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
       GlobalUtil.model.localTeach.showArr = tempArr;
+      this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
     },
     startEdit() {
       this.editState = true;
+      GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
-        document.getElementById("scroll-timer").scrollLeft = 0;
+        document.getElementById("bottom-right-frame").scrollLeft = 0;
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
         this.onwinresize();
       });
     },
     cancelEdit() {
       this.editState = false;
+      GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
-      document.getElementById("scroll-timer").scrollLeft = 0;
+      // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
     },
     delProj(uuid) {
@@ -379,7 +406,7 @@ export default {
             // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
           });
         }).catch(() => {
-        });        
+        });
         return;
       }
       const curProj = GlobalUtil.model.localTeach.curProj;
@@ -414,7 +441,7 @@ export default {
       this.clientHeight = document.body.clientHeight;
       const leftFrame = document.getElementById("left-teach-frame");
       const bottomRightFrame = document.getElementById("bottom-right-frame");
-      const totalFrameWidth = this.clientWidth - 20;
+      const totalFrameWidth = this.clientWidth - 13;
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
@@ -434,13 +461,15 @@ export default {
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
-      rightFrame.style.height = `${totalFrameHeight}px`
+      if (rightFrame !== null && rightFrame !== undefined) {
+        rightFrame.style.height = `${totalFrameHeight}px`;
+      }
       if (this.editState) {
         // const emulatorHeight = leftTopHeight - 200 - 0;
         // if (leftShow !== null) {
         //   leftShow.style.height = `${emulatorHeight}px`;
         // }
-        // leftEmulator.style.height = `${emulatorHeight}px`; 
+        // leftEmulator.style.height = `${emulatorHeight}px`;
         // leftEmulator.style.width = `${leftFrameWidth - 210}px`;
       }
       else {
@@ -503,6 +532,7 @@ export default {
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
             GlobalUtil.model.localTeach.onSelect(null, 0);
+            this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
       }
@@ -597,7 +627,8 @@ export default {
     DialogTeachProjName,
     XarmModel,
     EndSet,
-    EndJointControl,
+    // EndJointControl,
+    EmulatorControl,
   },
   computed: {
     getCurFile(){
@@ -649,6 +680,7 @@ export default {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
+    background: #F8F8F8;
     .recording-area-wrapper {
       width: 80%;
       /*margin: 0 12px;*/
@@ -767,7 +799,7 @@ export default {
           .save-change-btn-dark {
             bottom: 42px;
             background: #BCBDBC;
-            cursor: pointer;
+            // cursor: pointer;
           }
           .edit-cancel-btn {
             bottom: 0px;
@@ -814,10 +846,10 @@ export default {
       }
     }
     .control-wrapper {
-      width: 300px;
+      width: 360px;
     }
     .projects-list-wrapper {
-      width: 320px;
+      width: 360px;
       /*min-width: 300px;*/
       /*max-width: 400px;*/
       background: #EDEDED;
@@ -847,7 +879,7 @@ export default {
       .tree-wrapper {
         height: inherit;
         overflow-y: scroll;
-        height: 90%;
+        height: 92%;
         font-size: 14px;
       }
     }
@@ -1013,6 +1045,6 @@ export default {
     }
   }
   .file-proj-icon {
-    // padding-left: 5px; 
+    // padding-left: 5px;
   }
 </style>

@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="list-project-wrapper" id="scroll-timer" @scroll="checkscroll()">
+  <div class="list-project-wrapper" @scroll="checkscroll()">
     <!-- <div v-for='(file,index) in model.localTeach.curProj.files' style="color: #fff"> -->
       <!-- <div>{{ index }} -- {{ file.uuid }}</div> -->
       <!-- <div v-if="model.localTeach.curEditingFileUUID === file.uuid"> -->
@@ -17,9 +17,24 @@
       <!-- </div> -->
     <!-- </div> -->
     <!-- scroll timer -->
+
+    <!-- <div v-for='index in model.localTeach.showArr'>
+    </div> -->
+
+    <!-- <div class="" style="float:left;">
+      <div v-for='index in model.localTeach.showArr'>
+        <span style="width:60px;height:10px;background:yellow;">
+        </span>
+      </div>
+    </div> -->
+
     <div v-if="model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)!==null || model.localTeach.curEditingFileUUID===''">
       <div class="block-cell">
         <!-- <template v-for='(data,index) in model.localTeach.fileDatas[file.uuid]'> -->
+        <!-- <div v-for='index in model.localTeach.showArr'>
+          <div style="width:60px;height:20px;background:yellow;">
+          </div>
+        </div> -->
         <div v-for='index in model.localTeach.showArr'>
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
         </div>
@@ -171,7 +186,7 @@ export default {
       // }
     },
     checkscroll() {
-      const scrollLeft = document.getElementById("scroll-timer").scrollLeft;
+      const scrollLeft = document.getElementById("bottom-right-frame").scrollLeft;
       console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 60)}`);
     },
     onSelect(e, index) {
