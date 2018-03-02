@@ -5,9 +5,9 @@
       <li><div>X</div><input v-model.number="position.x" type="number"><span>mm</span></li>
       <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
       <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li>
-      <li><div>Roll</div><input v-model.number="orientation.roll" type="number"><span>&deg;</span></li>
-      <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><span>&deg;</span></li>
-      <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><span>&deg;</span></li>
+      <li><div>Roll</div><input v-model.number="orientation.roll" type="number"><sup>&deg;</sup></li>
+      <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><sup>&deg;</sup></li>
+      <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><sup>&deg;</sup></li>
       <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
     </ul>
     <div class="set-button">
