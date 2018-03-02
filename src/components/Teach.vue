@@ -150,7 +150,7 @@ export default {
       inputText: '',
       clientWidth: 100,
       clientHeight: 200,
-      rightFrameWidth: 320,
+      rightFrameWidth: 360,
       bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
@@ -416,11 +416,10 @@ export default {
       this.clientHeight = document.body.clientHeight;
       const leftFrame = document.getElementById("left-teach-frame");
       const bottomRightFrame = document.getElementById("bottom-right-frame");
-      const totalFrameWidth = this.clientWidth - 20;
+      const totalFrameWidth = this.clientWidth - 13;
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
-      const rightFrame = document.getElementById('tree-wrapper');
       // const leftControl = document.getElementById('left-control');
       // const leftEmulator = document.getElementById('left-emulator');
       // const leftShow = document.getElementById('left-show');
@@ -436,7 +435,6 @@ export default {
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
-      rightFrame.style.height = `${totalFrameHeight}px`
       if (this.editState) {
         // const emulatorHeight = leftTopHeight - 200 - 0;
         // if (leftShow !== null) {
@@ -652,6 +650,7 @@ export default {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
+    background: #F8F8F8;
     .recording-area-wrapper {
       width: 80%;
       /*margin: 0 12px;*/
@@ -817,10 +816,10 @@ export default {
       }
     }
     .control-wrapper {
-      width: 300px;
+      width: 360px;
     }
     .projects-list-wrapper {
-      width: 320px;
+      width: 360px;
       /*min-width: 300px;*/
       /*max-width: 400px;*/
       background: #EDEDED;
@@ -850,7 +849,7 @@ export default {
       .tree-wrapper {
         height: inherit;
         overflow-y: scroll;
-        height: 90%;
+        height: 92%;
         font-size: 14px;
       }
     }
