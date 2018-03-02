@@ -56,10 +56,10 @@
                 </div>
               </div>
               <div v-if="editState===true">
-                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click=''>Save change</button>
+                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='onSaveChange'>Save change</button>
                 <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
-              
+
             </div>
           </div>
           <ListProj id="bottom-right-frame"></ListProj>
@@ -102,7 +102,7 @@
       <span>The recording file will be saved to my project list</span>
       <el-button @click="finishRecordOK">确 定</el-button>
     </el-dialog>
-      
+
     <DialogTeachProjName
       title="Please choose the way you want to record with xArm in this project"
       :onok='oncreate'
@@ -133,6 +133,7 @@ import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
 import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
+import * as types from './../store/mutation-types';
 
 const path = require('path');
 
@@ -201,6 +202,25 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
+    onSaveChange() {
+      console.log(`on Save Change`);
+      const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
+      const index = GlobalUtil.model.localTeach.curSelectedIndex;
+      const point = GlobalUtil.model.localTeach.curPoint;
+      const points = GlobalUtil.model.localTeach.fileDatas[uuid];
+      points[index] = point;
+
+      const textDict = {
+        type: GlobalUtil.model.localTeach.curProj.type,
+        total: points.length,
+        points: points,
+      };
+      const text = JSON.stringify(textDict);
+
+      CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
+        GlobalUtil.model.localTeach.hasChange = false;
+      });
+    },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
@@ -317,7 +337,7 @@ export default {
           GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
-        
+
         if (GlobalUtil.model.localTeach.fileDatas['temp'].length >= 1800) {
           this.finishRecordOK();
         }
@@ -336,10 +356,10 @@ export default {
         }
         this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
       });
-      GlobalUtil.model.localTeach.curDuration -= -1;      
+      GlobalUtil.model.localTeach.curDuration -= -1;
     },
     scrollTo(time) {
-      document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
+      document.getElementById("bottom-right-frame").scrollLeft = 60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -351,20 +371,25 @@ export default {
       }
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
       GlobalUtil.model.localTeach.showArr = tempArr;
+      this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
     },
     startEdit() {
       this.editState = true;
+      GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
       this.onwinresize();
       setTimeout(() => {
-        // document.getElementById("scroll-timer").scrollLeft = 0;
+        document.getElementById("bottom-right-frame").scrollLeft = 0;
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
         this.onwinresize();
       });
     },
     cancelEdit() {
       this.editState = false;
+      GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
-      // document.getElementById("scroll-timer").scrollLeft = 0;
+      // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
     },
     delProj(uuid) {
@@ -381,7 +406,7 @@ export default {
             // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
           });
         }).catch(() => {
-        });        
+        });
         return;
       }
       const curProj = GlobalUtil.model.localTeach.curProj;
@@ -420,6 +445,7 @@ export default {
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
+      const rightFrame = document.getElementById('tree-wrapper');
       // const leftControl = document.getElementById('left-control');
       // const leftEmulator = document.getElementById('left-emulator');
       // const leftShow = document.getElementById('left-show');
@@ -435,12 +461,15 @@ export default {
       leftBottomArea.style.height = `${bottomHeight}px`;
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       leftTopArea.style.height = `${leftTopHeight}px`;
+      if (rightFrame !== null && rightFrame !== undefined) {
+        rightFrame.style.height = `${totalFrameHeight}px`;
+      }
       if (this.editState) {
         // const emulatorHeight = leftTopHeight - 200 - 0;
         // if (leftShow !== null) {
         //   leftShow.style.height = `${emulatorHeight}px`;
         // }
-        // leftEmulator.style.height = `${emulatorHeight}px`; 
+        // leftEmulator.style.height = `${emulatorHeight}px`;
         // leftEmulator.style.width = `${leftFrameWidth - 210}px`;
       }
       else {
@@ -503,6 +532,7 @@ export default {
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
             GlobalUtil.model.localTeach.onSelect(null, 0);
+            this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
       }
@@ -769,7 +799,7 @@ export default {
           .save-change-btn-dark {
             bottom: 42px;
             background: #BCBDBC;
-            cursor: pointer;
+            // cursor: pointer;
           }
           .edit-cancel-btn {
             bottom: 0px;
@@ -1015,6 +1045,6 @@ export default {
     }
   }
   .file-proj-icon {
-    // padding-left: 5px; 
+    // padding-left: 5px;
   }
 </style>
