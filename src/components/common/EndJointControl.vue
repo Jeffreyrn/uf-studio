@@ -391,6 +391,9 @@ export default {
           index,
           value: this.joints[index],
         };
+        // window.setTimeout(() => {
+        //   this.jointRangeMoved.state = false;
+        // }, 5000);
         this.setJointCmd(index);
       }
     },
@@ -528,7 +531,7 @@ export default {
     joints: {
       get() {
         const arr = this.$store.getters.joints;
-        console.log('get ax', arr, this.state.joints);
+        // console.log('get ax', arr, this.state.joints);
         const values = arr.map(str => Number(str));
 
         if (this.jointRangeMoved.state && this.stateOnline) {

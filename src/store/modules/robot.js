@@ -71,7 +71,49 @@ const mutations = {
   test(state, data) {
     state.info.test = data;
   },
-  [types.GET_ROBOT_STATUS](state, data) {
+  [types.GET_ROBOT_STATUS](state) {
+    window.GlobalUtil.socketCom.sendCmd(
+      'xarm_get_tcp_pose',
+      {
+        data: '',
+      },
+      (response) => {
+        const end = response.data;
+        if (end && (end.length > 0)) {
+          state.info.position = {
+            x: Number(end[0]),
+            y: Number(end[1]),
+            z: Number(end[2]),
+          };
+          state.info.orientation = {
+            roll: Number(end[3]),
+            yaw: Number(end[4]),
+            pitch: Number(end[5]),
+          };
+        }
+        else {
+          console.log('[response]get get_tcp_pose FAIL', response);
+        }
+      },
+    );
+    window.GlobalUtil.socketCom.sendCmd(
+      'xarm_get_joint_pose',
+      {
+        data: '',
+      },
+      (response) => {
+        const joint = response.data;
+        if (joint && (joint.length > 0)) {
+          state.info.axis = joint.map(num => Number(num.toFixed(2))).slice(); // .slice()
+          state.info.test = joint[1];
+        }
+        else {
+          console.log('[response]get_joint_pose FAIL', response);
+        }
+      },
+    );
+  },
+  [types.SET_ROBOT_STATUS](state, data) {
     const end = data.xarm_tcp_pose;
     const joint = data.xarm_joint_pose;
     const error = data.xarm_error_code;

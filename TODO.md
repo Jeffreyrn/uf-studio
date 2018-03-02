@@ -1,7 +1,7 @@
-- disable input when robot move in online mode
-- init state when online mode active
-- remove console.log
+- **done** disable input when robot move in online mode
+- **done** init state when online mode active
+- **hold** remove console.log
 - position value match visual model
 - handle unreachable position
 - roll yaw pitch match
-- reset gohome
+- **done** reset gohome

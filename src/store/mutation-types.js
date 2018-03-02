@@ -1,4 +1,5 @@
 // robot.is
+export const SET_ROBOT_STATUS = 'SET_ROBOT_STATUS';
 export const GET_ROBOT_STATUS = 'GET_ROBOT_STATUS';
 export const GET_ROBOT_INFO = 'GET_ROBOT_INFO';
 export const ROBOT_BROADCAST = 'ROBOT_BROADCAST';

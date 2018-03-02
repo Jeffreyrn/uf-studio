@@ -12,7 +12,7 @@
     </ul>
     <div class="set-button">
       <button class="confirm" @click="setEnd">Apply</button>
-      <button class="cancel" @click="resetEnd">Reset</button>
+      <button class="confirm" @click="resetEnd">Reset</button>
     </div>
   </div>
 </template>

@@ -55,7 +55,7 @@ export const openWebsocket = ({ commit }) => {
     // Model.robot.onmessage(evt);
     if (temp_msg.type === 'report') {
       if (temp_msg.cmd === 'devices_status_report') {
-        commit(types.GET_ROBOT_STATUS, temp_msg.data);
+        commit(types.SET_ROBOT_STATUS, temp_msg.data);
       }
       else if (temp_msg.cmd === 'devices_info_report') {
         commit(types.GET_ROBOT_INFO, temp_msg.data);
