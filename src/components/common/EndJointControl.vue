@@ -657,7 +657,7 @@ span.text {
         #z-control::-webkit-slider-thumb {
           width: 25px;
           height: 25px;
-          background-image: url('~/src/assets/img/control/btn_slide02.svg');
+          background-image: url('./../../assets/img/control/btn_slide02.svg');
           background-repeat: no-repeat;
           background-position: center center;
           -webkit-appearance: none;

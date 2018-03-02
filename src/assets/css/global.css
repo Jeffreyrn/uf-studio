@@ -51,7 +51,7 @@ html, body {
   html {font-size: 16px}
 }
 .vue-js-switch .v-switch-core .v-switch-button {
-  background-image: url('~/src/assets/img/control/btn_slider03.svg');
+  background-image: url('./../img/control/btn_slider03.svg');
 }
 .nipple .back {
   opacity: 0.9 !important;
