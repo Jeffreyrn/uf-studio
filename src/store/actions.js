@@ -32,6 +32,7 @@ export const openWebsocket = ({ commit }) => {
     window.CommandsTeachSocket.listProjs((dict) => {
       console.log(dict);
     });
+    commit(types.SET_ERROR, false);
   });
   GlobalUtil.socketCom.init_onclose((evt) => {
     GlobalUtil.model.localDeviceStatus.socket_connected = false;
@@ -44,6 +45,7 @@ export const openWebsocket = ({ commit }) => {
     GlobalUtil.model.localDeviceStatus.xarm_connected = false;
     GlobalUtil.model.robot.info.connected = GlobalUtil.model.localDeviceStatus.xarm_connected;
     // const temp_msg = JSON.parse(evt.data);
+    commit(types.SET_ERROR, true);
     console.log(`onerror onerror onerror = ${evt.data}`);
   });
   GlobalUtil.socketCom.init_onmessage((evt) => {
@@ -59,10 +61,12 @@ export const openWebsocket = ({ commit }) => {
       }
       else if (temp_msg.cmd === 'devices_info_report') {
         commit(types.GET_ROBOT_INFO, temp_msg.data);
+        commit(types.SET_ERROR, false);
       }
     }
     else if (temp_msg.type === 'response') {
       GlobalUtil.socketCom.response = evt.data;
+      commit(types.SET_ERROR, temp_msg.code);
     }
     else if (temp_msg.type === 'broadcast') {
       commit(types.ROBOT_BROADCAST, temp_msg.data);

@@ -66,10 +66,16 @@ const actions = {
   setAcceleration: ({ state }, value) => {
     state.info.acceleration = (value < 0) ? 50 : value;
   },
+  setError: ({ state }, value) => {
+    state.status.error = value;
+  },
 };
 const mutations = {
   test(state, data) {
     state.info.test = data;
+  },
+  [types.SET_ERROR](state, data) {
+    state.status.error = data;
   },
   [types.GET_ROBOT_STATUS](state) {
     window.GlobalUtil.socketCom.sendCmd(

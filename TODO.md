@@ -2,6 +2,8 @@
 - **done** init state when online mode active
 - **hold** remove console.log
 - position value match visual model
-- handle unreachable position
+- **hold** handle unreachable position
 - roll yaw pitch match
+- write 'get/set state function' in actions instead of mutations in robot.js
 - **done** reset gohome
+- handle robot.status.error when disconnected or reconnected

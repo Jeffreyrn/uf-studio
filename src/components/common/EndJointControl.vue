@@ -508,6 +508,26 @@ export default {
     // }
   },
   watch: {
+    stateError(newValue) {
+      this.jointRangeMoved.state = false;
+      if (newValue === -6) {
+        this.$message('unable to move.');
+      }
+      else if (newValue < 0) {
+        this.$alert('Response Error', 'Fail to move', {
+          confirmButtonText: 'OK',
+          callback: (action) => {
+            this.$message({
+              type: 'info',
+              message: `TODO: ${action}`,
+            });
+          },
+        });
+      }
+      else {
+        this.$message('Connected.');
+      }
+    },
     // 'state.joint': (newValue) => {
     //   console.log('watch posi print:');
     //   console.table(newValue);
@@ -522,8 +542,11 @@ export default {
     },
   },
   computed: {
+    stateError() {
+      return this.$store.state.robot.status.error;
+    },
     rangeDisable() {
-      return this.jointRangeMoved.state && this.stateOnline;
+      return this.jointRangeMoved.state && this.stateOnline && !this.stateError;
     },
     stateOnline() {
       return this.$store.state.robot.info.online;

@@ -92,7 +92,9 @@ export default {
     setOnline(value) {
       const data = Object.prototype.hasOwnProperty.call(value, 'value') ? value.value : value;
       this.setRobotState('online', data);
-      this.$store.commit(types.GET_ROBOT_STATUS, data);
+      if (data) {
+        this.$store.commit(types.GET_ROBOT_STATUS, data);
+      }
     },
     setRobotState(index, value) {
       const data = {
