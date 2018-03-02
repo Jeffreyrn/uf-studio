@@ -183,18 +183,12 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)',
       });
       const RAINBOW_COLOR_LIST = [0x4B0082, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x9400D3];
-      const MODEL_DIR = '../../src/assets/three-stl/';
-      const FILE_FORMAT = '.stl';
-      const JOINT_MODEL_SRC = [
-        `${MODEL_DIR}1${FILE_FORMAT}`,
-        `${MODEL_DIR}2${FILE_FORMAT}`,
-        `${MODEL_DIR}3${FILE_FORMAT}`,
-        `${MODEL_DIR}4${FILE_FORMAT}`,
-        `${MODEL_DIR}5${FILE_FORMAT}`,
-        `${MODEL_DIR}6${FILE_FORMAT}`,
-        `${MODEL_DIR}7${FILE_FORMAT}`,
-        `${MODEL_DIR}8${FILE_FORMAT}`,
-      ];
+      const JOINT_MODEL_SRC = [];
+      for (let i = 0; i < 8; i += 1) {
+        // const src = `${MODEL_DIR + (i + 1) + FILE_FORMAT}`;
+        // console.log('sss', src);
+        JOINT_MODEL_SRC[i] = require(`../../assets/three-stl/${(i + 1)}.stl`);
+      }
       const materialList = [];
       RAINBOW_COLOR_LIST.forEach((hex) => {
         hex = 0xffffff;

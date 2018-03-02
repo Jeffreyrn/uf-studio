@@ -81,6 +81,14 @@ module.exports = {
         }
       },
       {
+        test: /\.stl/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('stl/[name].[hash:7].[ext]')
+        }
+      },
+      {
         test: /\.xml/,
         loader: 'raw-loader',
       }

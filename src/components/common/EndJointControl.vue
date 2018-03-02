@@ -184,7 +184,7 @@ export default {
     sCtx.lineWidth = 3;
 
     const indicator = new Image();
-    indicator.src = '../src/assets/img/control/btn_slide02.svg';
+    indicator.src = require('../../assets/img/control/btn_slide02.svg');
     function drawAngle() { // draw uarm angle select
       // clear
       sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
