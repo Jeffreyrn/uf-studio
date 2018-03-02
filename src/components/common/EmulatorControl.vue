@@ -96,8 +96,8 @@ export default {
           min: [-179.9, -120, -179.9, -220, -118.6, -99.9, -179.9],
         },
         position: {
-          max: 1000,
-          min: -1000,
+          max: 800,
+          min: -800,
         },
         orientation: {
           max: 180,
