@@ -2,7 +2,7 @@
   <div class="control-container">
     <div class="container-title">Control Panel</div>
     <div class="control-block">
-      <div class="block-title">joints</div>
+      <div class="block-title">Joints Control</div>
       <div class="control-wrapper">
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
@@ -11,12 +11,12 @@
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
+          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)"><sup>°</sup>
         </div>
       </div>
     </div>
     <div class="control-block">
-      <div class="block-title">position orientation</div>
+      <div class="block-title">Position and Attitude Control</div>
       <div class="control-wrapper">
         <div class="block end-range" v-for="(value, index) in position" :key="index">
           <span class="text">{{index}}</span>
@@ -25,7 +25,7 @@
             @input="setEndOffline()" @change="setEndOnline(index, 'position')">
             <p :id="'mask' + index" class="mask-bar"></p>
           </div>
-          <input :id="'end-input' + index" type="number" v-model.number="position[index]" @input="setEndOffline()" @change="setEndOnline(index, 'position')">
+          <input :id="'end-input' + index" type="number" v-model.number="position[index]" @input="setEndOffline()" @change="setEndOnline(index, 'position')"><em class="mm-unit">mm</em>
         </div>
         <div class="block end-range" v-for="(value, index) in orientation" :key="index">
           <span class="text">{{index}}</span>
@@ -34,7 +34,7 @@
             @input="setEndOffline()" @change="setEndOnline(index, 'orientation')">
             <p :id="'mask' + index" class="mask-bar"></p>
           </div>
-          <input :id="'end-input' + index" type="number" v-model.number="orientation[index]" @input="setEndOffline()" @change="setEndOnline(index, 'orientation')">
+          <input :id="'end-input' + index" type="number" v-model.number="orientation[index]" @input="setEndOffline()" @change="setEndOnline(index, 'orientation')"><sup>°</sup>
         </div>
       </div>
     </div>
@@ -283,39 +283,49 @@ export default {
 
 $fontColor : #444;
 .control-container {
-  background-color: #D9D9D9;
+  background-color: #EDEDED;
   color: #444;
+  height: 100%;
   .container-title {
-    font-size: 1.8rem;
+    font-family: 'Gotham-Bold';
+    font-size: 1.4rem;
+    height: 58px;
+    line-height: 58px;
+    padding: 0 22px;
+    letter-spacing: -1.33px;
   }
   .control-block {
-    padding-bottom: 1vw;
+    padding: 8px 0;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    margin:0 6px 10px;
     .block-title {
       font-size: 1rem;
       color: $fontColor;
       width: 100%;
       letter-spacing: -1px;
-      padding: 0 1vw;
-      padding-top: 1vw;
+      padding: 10px;
       text-align: left;
+      font-family: "Gotham-Book";
     }
     .control-wrapper .block {
       color: $fontColor;
-      padding: 0.8vw 1vw;
+      padding: 8px 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       span {
-        width: 2vw;
-        font-size: 1rem;
+        /*width: 70px;*/
+        font-size: 12px;
         font-family: "Gotham-Book";
+        padding-right: 6px;
       }
       .range-wrapper {
         position: relative;
         width: 20vw;
         margin-right: 0.5vw;
-        background: $fontColor;
-        height: 2px;
+        background: #7b7878;
+        height: 1px;
         input[type=range] {
           height: 2px;
           background: transparent;
@@ -325,10 +335,11 @@ $fontColor : #444;
           padding: 0;
           margin: 0;
           position: absolute;
+          outline: none;
         }
         input[type=range]::-webkit-slider-thumb {
-          width: 24px;
-          height: 24px;
+          width: 20px;
+          height: 20px;
           -webkit-appearance: none;
           border: none;
           border-radius: 50%;
@@ -348,24 +359,40 @@ $fontColor : #444;
           z-index: 2;
         }
       }
-      
+
       input[type=number] {
-        width: 5.5vw;
+        width: 60px;
         border: none;
-        border-radius: 100px;
+        border-radius: 10px;
         text-align: center;
         color: #666;
         letter-spacing: -0.67px;
-        font-size: 1rem;
-        padding: 0.2vw 0;
+        font-size: 12px;
+        padding: 2px 0;
+        outline: none;
       }
 
-      
+
+    }
+    .mm-unit,.end-range sup {
+      color: $fontColor;
+      font-size: 12px;
+      width: 40px;
+      text-align: right;
+    }
+    sup {
+      margin-top: -12px;
+      text-align: left !important;
     }
     .config-wrapper {
+      .config-title {
+        width: 152px !important;
+        text-align: right !important;
+        padding: 0 !important;
+      }
       img {
-        padding: 0 3%;
-        height: 80%;
+        padding: 0 6px;
+        width: 10%;
       }
       input[type=range] {
         height: 8px;
@@ -383,14 +410,14 @@ $fontColor : #444;
         box-shadow: 0 0 8px 0 rgba(214,214,214,0.50);
       }
       .config-value {
-        padding: 2%;
+        width: 74px !important;
+        padding:6px 0;
         background: #565656;
-        border-radius: 6px;
+        border-radius: 2px;
         font-family: Gotham-Book;
-        font-size: 13px;
-        color: #FFFFFF;
+        font-size: 12px;
+        color: #FFF;
         letter-spacing: -0.75px;
-        width: 3vw;
         text-align: center;
       }
     }
