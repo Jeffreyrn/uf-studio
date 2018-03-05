@@ -56,5 +56,6 @@ module.exports = {
     "no-underscore-dangle":0,
     "no-return-assign":0,
     "linebreak-style":0,
+    "semi": 0,
   }
 }

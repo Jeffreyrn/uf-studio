@@ -320,7 +320,7 @@ export default {
         // camera.aspect = this.getCameraAspect();
         camera.updateProjectionMatrix();
       };
-      window.addEventListener('resize', onWindowResize, false);
+      window.addEventListener('resize', onWindowResize, false)
     },
     getCameraAspect() {
       if (this.size) {

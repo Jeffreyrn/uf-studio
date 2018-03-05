@@ -109,7 +109,7 @@ export default {
   computed: {
     stateOnline: {
       get() {
-        return this.$store.state.robot.info.online;
+        return this.$store.state.robot.info.online
       },
       set(value) {
         this.setRobotState('online', value);

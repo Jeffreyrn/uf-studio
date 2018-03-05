@@ -388,20 +388,33 @@ export default {
     setJointOffline(index) {
       // console.log('test', index, value);
       if (!this.stateOnline) {
+        console.log('offline')
         this.setJointCmd(index);
       }
     },
     setJointOnline(index) {
       if (this.stateOnline) {
-        this.jointRangeMoved = {
-          state: true,
-          index,
-          value: this.joints[index],
-        };
-        // window.setTimeout(() => {
-        //   this.jointRangeMoved.state = false;
-        // }, 5000);
-        this.setJointCmd(index);
+        let data = this.joints[index];
+        console.log('online')
+        console.log(this.joints[index]);
+        if (!this.checkNumber(data)) {
+          console.log('not nnnnn')
+          const beforeValue = this.$store.getters.joints[index]
+          this.$set(this.joints, index, beforeValue);
+          data = beforeValue;
+          this.jointRangeMoved.state = false
+        }
+        else {
+          this.jointRangeMoved = {
+            state: true,
+            index,
+            value: data,
+          };
+          // window.setTimeout(() => {
+          //   this.jointRangeMoved.state = false;
+          // }, 5000);
+          this.setJointCmd(index);
+        }
       }
     },
     setJointCmd(index) {
@@ -455,6 +468,12 @@ export default {
         this.rangeMask.maskBar[index].style.transform = 'rotate(180deg)';
       }
       this.rangeMask.maskBar[index].style.width = `${getWidth}px`;
+    },
+    checkNumber(num) {
+      if (!/^[-]?[0-9]*\.?[0-9]+(eE?[0-9]+)?$/.test(num)) {
+        return false
+      }
+      return true
     },
     // setMask(e) {
     //   const dom = e.target;
@@ -570,7 +589,7 @@ export default {
             console.log('get final joint angle');
           }
           else {
-            values[this.jointRangeMoved.index] = this.jointRangeMoved.value;
+            values[this.jointRangeMoved.index] = Number(this.jointRangeMoved.value);
           }
           return values.slice();
         }
