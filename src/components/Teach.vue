@@ -98,9 +98,11 @@
       :visible.sync="visible.saveDialog"
       :before-close="finishRecordCancle"
       >
-      <p>Stop Recording and save automatically.</p>
-      <span>The recording file will be saved to my project list</span>
-      <el-button @click="finishRecordOK">确 定</el-button>
+      <div class="save-dialog-text">
+        <p>Stop Recording and save automatically.</p>
+        <span>The recording file will be saved to my project list</span>
+      </div>
+      <el-button @click="finishRecordOK">Ok</el-button>
     </el-dialog>
 
     <DialogTeachProjName
@@ -997,18 +999,21 @@ export default {
     font-size: 16px;
     letter-spacing: -0.57px;
     color: #E27347;
+    font-family: 'Gotham-Medium';
   }
   .save-dialog .el-dialog__body {
     text-align: center;
   }
-  .save-dialog .el-dialog__body p{
+  .save-dialog .save-dialog-text p{
     font-size: 16px;
     color: #555;
     letter-spacing: -0.57px;
+    font-family: 'Gotham-Medium';
   }
-  .save-dialog .el-dialog__body span {
+  .save-dialog .save-dialog-text span {
     font-size: 12px;
     letter-spacing: -0.38px;
+    font-family: 'Gotham-Book';
   }
   .save-dialog .el-dialog__body button {
     width: 168px;
