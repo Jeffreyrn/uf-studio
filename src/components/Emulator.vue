@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="6">
           <div class="title-online">Live Control</div>
-          <toggle-button v-model="state.online" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
+          <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
             :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
             :width="71" :height="36"/>
         </el-col>
@@ -114,6 +114,9 @@ export default {
     // },
   },
   computed: {
+    stateOnline() {
+      return this.$store.state.robot.info.online;
+    },
     // testtest: {
     //   get() {
     //     return this.$store.state.robot.info.test;
