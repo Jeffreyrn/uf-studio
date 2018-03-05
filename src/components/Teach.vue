@@ -440,7 +440,7 @@ export default {
       this.clientWidth = document.body.clientWidth;
       this.clientHeight = document.body.clientHeight;
       const leftFrame = document.getElementById("left-teach-frame");
-//      const bottomRightFrame = document.getElementById("bottom-right-frame");
+      const bottomRightFrame = document.getElementById("bottom-right-frame");
       const totalFrameWidth = this.clientWidth - 13;
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
@@ -454,9 +454,9 @@ export default {
       if (leftFrame !== null && leftFrame !== undefined) {
         leftFrame.style.width = `${leftFrameWidth}px`;
       }
-//      if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
-//        bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
-//      }
+      if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
+        bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
+      }
       const bottomHeight = 300 //this.editState ? 200 : 300;
       if (leftBottomArea !== null && leftBottomArea !== undefined) {
         leftBottomArea.style.height = `${bottomHeight}px`;
