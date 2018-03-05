@@ -398,6 +398,7 @@ $fontColor : #444;
       input[type=range] {
         height: 8px;
         width: 100%;
+        outline: none;
         border-radius: 100px;
         background-image: linear-gradient(90deg, #FFFEAD 0%, #FF6868 100%);
       }

@@ -458,9 +458,13 @@ export default {
         bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
       const bottomHeight = 300 //this.editState ? 200 : 300;
-      leftBottomArea.style.height = `${bottomHeight}px`;
+      if (leftBottomArea !== null && leftBottomArea !== undefined) {
+        leftBottomArea.style.height = `${bottomHeight}px`;
+      }
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
-      leftTopArea.style.height = `${leftTopHeight}px`;
+      if(leftTopArea !== null && leftTopArea !== undefined){
+        leftTopArea.style.height = `${leftTopHeight}px`;
+      }
       if (rightFrame !== null && rightFrame !== undefined) {
         rightFrame.style.height = `${totalFrameHeight}px`;
       }
