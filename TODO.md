@@ -7,3 +7,4 @@
 - write 'get/set state function' in actions instead of mutations in robot.js
 - **done** reset gohome
 - handle robot.status.error when disconnected or reconnected
+- loading model progress percentage show

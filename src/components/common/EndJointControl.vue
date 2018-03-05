@@ -149,6 +149,7 @@ export default {
         value: null,
       },
       rangeMask: {
+        dom: [],
         maskBar: [],
         inputWidth: [],
         rangeLength: [],
@@ -266,6 +267,12 @@ export default {
     sCanvas.addEventListener('mousemove', handleMouseMove);
     sCanvas.addEventListener('mouseup', handleMouseUp);
     sCanvas.addEventListener('mouseout', handleMouseOut);
+    const onWindowResize = () => {
+      this.joints.forEach((value, index) => {
+        this.setRangeMask(index, value);
+      });
+    };
+    window.addEventListener('resize', onWindowResize, false);
   },
   methods: {
     createJoyStick() {
@@ -426,9 +433,9 @@ export default {
     initRangeMask(index) {
       // TODO: use $refs instead of getElementById
       const dom = document.getElementById(`joint${index}`);
+      this.rangeMask.dom[index - 1] = dom;
       this.rangeMask.maskBar[index - 1] = document.getElementById(`mask${index}`);
       this.rangeMask.rangeLength[index - 1] = Number(dom.max) - Number(dom.min);
-      this.rangeMask.inputWidth[index - 1] = Number(dom.clientWidth);
       this.rangeMask.maskBar[index - 1].style.left = `${((-Number(dom.min) * 100) / this.rangeMask.rangeLength[index - 1])}%`;
     },
     setRangeMask(index, value) {
@@ -438,7 +445,7 @@ export default {
         console.log('dom not get');
         return;
       }
-      const inputWidth = this.rangeMask.inputWidth[index];
+      const inputWidth = Number(this.rangeMask.dom[index].clientWidth);
       const rangeLength = this.rangeMask.rangeLength[index];
       const getWidth = inputWidth * (Math.abs(Number(value)) / rangeLength);
       if (value > 0) {

@@ -11,7 +11,7 @@
         <el-col :span="6">
           <div class="title-online">Live Control</div>
           <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
-            :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
+            :labels="{checked: 'ON', unchecked: 'OFF'}"
             :width="71" :height="36"/>
         </el-col>
       </el-row>
@@ -19,7 +19,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
         <el-col :span="18" class="model-container">
-          <xarm-model></xarm-model>
+          <keep-alive> <xarm-model></xarm-model></keep-alive> 
         </el-col>
         <el-col :span="6" class="end-col">
           <end-set></end-set>
@@ -89,13 +89,6 @@ export default {
     };
   },
   methods: {
-    setOnline(value) {
-      const data = Object.prototype.hasOwnProperty.call(value, 'value') ? value.value : value;
-      this.setRobotState('online', data);
-      if (data) {
-        this.$store.commit(types.GET_ROBOT_STATUS, data);
-      }
-    },
     setRobotState(index, value) {
       const data = {
         index,
@@ -114,17 +107,18 @@ export default {
     // },
   },
   computed: {
-    stateOnline() {
-      return this.$store.state.robot.info.online;
+    stateOnline: {
+      get() {
+        return this.$store.state.robot.info.online;
+      },
+      set(value) {
+        this.setRobotState('online', value);
+        if (value) {
+          this.$store.commit(types.GET_ROBOT_STATUS, value);
+        }
+        // this.$store.commit('test', value);
+      },
     },
-    // testtest: {
-    //   get() {
-    //     return this.$store.state.robot.info.test;
-    //   },
-    //   set(value) {
-    //     this.$store.commit('test', value);
-    //   },
-    // },
   },
   components: {
     XarmModel,
