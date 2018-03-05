@@ -207,9 +207,9 @@ export default {
       // camera.up = new THREE.Vector3(-1, -1, -1);
       camera.position.set(3, 1, 3); // camera position
       camera.lookAt(scene.position); // camera look at
-      const light = new THREE.PointLight(0xeeeeee, 1, 100); // light
-      light.position.set(10, 14, 10);
-      const lightBottomBack = new THREE.PointLight(0xeeeeee, 1, 100); // light
+      const light = new THREE.PointLight(0xffffff, 1, 100); // light
+      light.position.set(5, 14, 20);
+      const lightBottomBack = new THREE.PointLight(0xffffff, 1, 100); // light
       const lightBottomFront = new THREE.PointLight(0xeeeeee, 1, 100); // light
       lightBottomBack.position.set(-12, 0, 0);
       lightBottomFront.position.set(22, 0, -10);
