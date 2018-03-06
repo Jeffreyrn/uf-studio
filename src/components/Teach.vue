@@ -289,6 +289,9 @@ export default {
       this.visible.saveDialog = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
+      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+        console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
+      });
     },
     finishRecordOK() {
       const self = this;
@@ -321,9 +324,9 @@ export default {
     finishRecordCancle() {
       this.visible.saveDialog = false;
       GlobalUtil.model.localTeach.visible.starRecording = false;
-      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
-        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
-      });
+//      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+//        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
+//      });
     },
     startRecord() {
       GlobalUtil.model.localTeach.curEditingFileUUID = '';
