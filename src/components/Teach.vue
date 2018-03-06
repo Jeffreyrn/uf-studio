@@ -77,6 +77,7 @@
             class="recording-project-list"
             :data="model.localTeach.curProTreeDatas"
             node-key="uuid"
+            ref="tree"
             :default-expanded-keys="model.localTeach.curProjExpandedKeys"
             :expand-on-click-node="false"
             @node-click="handleNodeClick"
@@ -308,13 +309,8 @@ export default {
       }, (dict) => {
         let curProj = self.model.localTeach.curProj;
         const filePath = path.join(curProj.uuid, `${dateStr}.json`);
-        // const data = {};
-        // data.uuid = filePath;
-        // self.handleNodeClick(data);
-        // GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
         setTimeout(() => {
-          // this.$refs.myEditor.codemirror;
-          // self.$refs.tree.setCurrentKey(filePath);
+          self.$refs.tree.setCurrentKey(filePath);
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
