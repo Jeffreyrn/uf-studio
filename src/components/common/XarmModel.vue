@@ -91,6 +91,12 @@ export default {
       console.log('watch posi print:');
       console.table(newValue);
     },
+    size() {
+      const sizeArray = this.getRenderSize()
+      if (this.three.renderer) {
+        this.three.renderer.setSize(...sizeArray)
+      }
+    },
     // robotJointsAngle() {
     //   this.$set(this.robotJointsAngle, 0, this.robotJointsAngle[0]);
     // },
@@ -161,6 +167,7 @@ export default {
       three: {
         scene: null,
         groups: null,
+        render: null,
       },
     };
   },
@@ -201,6 +208,7 @@ export default {
       scene.background = new THREE.Color(0xffffff); // c0c0c0
       // const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 0.1, 1000);
       const sizeArray = this.getRenderSize();
+      console.log('get size', sizeArray)
       const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
       const camera = new THREE.OrthographicCamera(-halfSize[0], halfSize[0], halfSize[1], -halfSize[1], -50, 50);
       // camera.position.z = -50;
@@ -218,13 +226,14 @@ export default {
       scene.add(light);
       // camera.position.set(25, 25, 25);
       const renderer = new THREE.WebGLRenderer();
+      this.three.renderer = renderer
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.25;
       controls.enableZoom = true;
       controls.enablePan = false; // disable keyboard camera control
       controls.update();
-      renderer.setSize(...this.getRenderSize());
+      renderer.setSize(...sizeArray);
       document.getElementById('emulator-container').appendChild(renderer.domElement);
       // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
       const STLLoader = new THREESTLLoader(THREE);
@@ -322,15 +331,23 @@ export default {
       };
       window.addEventListener('resize', onWindowResize, false)
     },
-    getCameraAspect() {
-      if (this.size) {
-        return (window.innerWidth / window.innerHeight) * (this.size.width / this.size.height);
-      }
-      return 1 / 0.52; // default
-    },
+    // getCameraAspect() {
+    //   if (this.size) {
+    //     return (window.innerWidth / window.innerHeight) * (this.size.width / this.size.height);
+    //   }
+    //   return 1 / 0.52; // default
+    // },
     getRenderSize() {
       const rootDiv = document.getElementById('model-wrapper');
-      const height = rootDiv.clientWidth / this.getCameraAspect();
+      let height;
+      console.log('size', this.size, rootDiv.clientHeight, rootDiv.clientWidth)
+      if (this.size) {
+        height = this.size;
+      }
+      else {
+        height = rootDiv.clientWidth * 0.52;
+      }
+      // const height = rootDiv.clientWidth / this.getCameraAspect();
       // const height = rootDiv.clientWidth * 0.52;
       return [rootDiv.clientWidth, height];
     },
@@ -369,10 +386,12 @@ export default {
 <style scoped>
 .hello {
   display: flex;
-  flex-direction: column;    
+  flex-direction: column;
+  height: 100%;    
 }
 .hello-row {
   display: inline-block;
+  height: 100%;
 }
 .block {
   width: 30%;

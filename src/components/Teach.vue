@@ -9,7 +9,7 @@
           <!-- <div style="position:relative;">
           </div> -->
           <div class="left-emulator" id="left-emulator">
-            <XarmModel></XarmModel>
+            <XarmModel :size="emulatorHeight"></XarmModel>
           </div>
           <!-- <div v-if="editState===true" class="left-show" id="left-show">
           </div>
@@ -184,6 +184,7 @@ export default {
       },
       createWayPoint: true,
       createProjectDisable: true,
+      emulatorHeight: null,
     };
   },
   mounted() {
@@ -480,6 +481,7 @@ export default {
       const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
       if(leftTopArea !== null && leftTopArea !== undefined){
         leftTopArea.style.height = `${leftTopHeight}px`;
+        this.emulatorHeight = leftTopHeight
       }
       if (rightFrame !== null && rightFrame !== undefined) {
         rightFrame.style.height = `${totalFrameHeight}px`;
