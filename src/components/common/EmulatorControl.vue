@@ -1,6 +1,6 @@
 <template>
   <div class="control-container">
-    <div class="container-title">Control Panel</div>
+    <!--<div class="container-title">Control Panel</div>-->
     <div class="control-block">
       <div class="block-title">Joints Control</div>
       <div class="control-wrapper">
