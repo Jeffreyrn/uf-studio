@@ -48,6 +48,11 @@ self.setFileData = (uuid, datas) => {
 };
 
 self.setCurSelectedTreeItem = (uuid) => {
+  if (uuid === null || uuid === '') {
+    self.curSelectedTreeItem.uuid = ''
+    self.curSelectedTreeItem.type = '';
+    return;
+  }
   self.curSelectedTreeItem.uuid = uuid;
   const aProj = self.getCurProj(uuid);
   const thisProj = self.getProjInfo(uuid);

@@ -89,6 +89,7 @@ self.delProj = (proId, callback) => {
     })
   };
   self.sendCmd(GlobalConstant.FILE_ID_DELETE_DIR, params, (dict) => {
+    GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
     self.listProjs(callback);
   });
 };
@@ -129,6 +130,7 @@ self.delFiles = (uuid, callback) => {
     })
   };
   self.sendCmd(GlobalConstant.FILE_ID_DELETE_FILE, params, (dict) => {
+    GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
     self.listProjs(callback);
   });
 };

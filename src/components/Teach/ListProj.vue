@@ -1,40 +1,11 @@
 <template lang="html">
   <div class="list-project-wrapper" @scroll="checkscroll()">
-    <!-- <div v-for='(file,index) in model.localTeach.curProj.files' style="color: #fff"> -->
-      <!-- <div>{{ index }} -- {{ file.uuid }}</div> -->
-      <!-- <div v-if="model.localTeach.curEditingFileUUID === file.uuid"> -->
-        <!-- <el-button style="display:none;" id="start-id" value='start' @click='onClick($event, file.uuid)'>Start</el-button> -->
-        <!-- <el-button style="display:none;" id="save-id" value='save' @click='onClick($event, file.uuid)'>Save</el-button> -->
-        <!-- <el-button value='delete' @click='onClick($event, file.uuid)'>Delete</el-button> -->
-        <!-- <el-button value='pause' @click='onClick($event)'>Pause</el-button> -->
-        <!-- <span v-if="model.localTeach.isEditingPoints===true">
-          <el-button v-if="model.localTeach.isContinus===false" value='cut' @click='onClick($event, file.uuid)'>Cut</el-button>
-          <el-button value='stop' @click='onClick($event, file.uuid)'>Stop</el-button>
-        </span> -->
-        <!-- <el-button value='scroll' @click='scrollTo(model.localTeach.fileDatas[file.uuid].length)'>ScrollTo {{ model.localTeach.fileDatas[file.uuid].length }}</el-button> -->
-        <!-- <span>Total count: {{ model.localTeach.fileDatas[file.uuid].length }}</span> -->
-        <!-- <span>Type: {{ file.storeType }}</span> -->
-      <!-- </div> -->
-    <!-- </div> -->
-    <!-- scroll timer -->
-
-    <!-- <div v-for='index in model.localTeach.showArr'>
-    </div> -->
-
-    <!-- <div class="" style="float:left;">
-      <div v-for='index in model.localTeach.showArr'>
-        <span style="width:60px;height:10px;background:yellow;">
-        </span>
-      </div>
-    </div> -->
-
     <div v-if="model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)!==null || model.localTeach.curEditingFileUUID===''">
-      <div class="block-cell">
-        <!-- <template v-for='(data,index) in model.localTeach.fileDatas[file.uuid]'> -->
-        <!-- <div v-for='index in model.localTeach.showArr'>
-          <div style="width:60px;height:20px;background:yellow;">
-          </div>
-        </div> -->
+      <!-- <div v-for='index in model.localTeach.showArr'>
+        <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
+        {{ index }}
+      </div> -->
+      <div class="block-cell" v-if="model.localTeach.curSelectedTreeItem.uuid!==''">
         <div v-for='index in model.localTeach.showArr'>
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
         </div>
@@ -216,7 +187,7 @@ export default {
   background: #434343;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  // align-items: center;
 }
 .list-project-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
   width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
@@ -240,9 +211,9 @@ export default {
 }
 .block-cell {
   display:flex;
-  justify-content: flex-start;
-  align-items: center;
+  // justify-content: flex-start;
+  // align-items: center;
   font-size: 5px;
-  text-align: center;
+  // text-align: center;
 }
 </style>

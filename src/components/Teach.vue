@@ -24,6 +24,9 @@
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time">
+                <!-- curSelectedTreeItem.uuid == -->
+                <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
+                </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
                 </div>
@@ -38,7 +41,7 @@
                 <span class="file-proj-icon" v-if="model.localTeach.curProj.type==='continuous'">
                   <img src="./../assets/img/edit/recording/icon_waypoint_16x16.svg" width="12px" height="12px" />
                 </span>
-                <span>
+                <span v-if="model.localTeach.curSelectedTreeItem.uuid!==''">
                   {{ model.localTeach.getRealFileFileName(model.localTeach.curSelectedTreeItem.uuid) }}
                 </span>
               </div>
@@ -69,6 +72,7 @@
       <div class="projects-list-wrapper" v-if="editState===false">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper" id="tree-wrapper">
+          <!-- :ref="tree" -->
           <el-tree
             class="recording-project-list"
             :data="model.localTeach.curProTreeDatas"
@@ -285,6 +289,7 @@ export default {
       this.visible.wayPointRecording = false;
     },
     finishRecordOK() {
+      const self = this;
       this.visible.saveDialog = false;
       GlobalUtil.model.localTeach.visible.starRecording = false;
 
@@ -301,8 +306,17 @@ export default {
       const dateStr = GlobalUtil.getTimeString();
       CommandsTeachSocket.createFile(dateStr, text, (dict) => {
       }, (dict) => {
+        let curProj = self.model.localTeach.curProj;
+        const filePath = path.join(curProj.uuid, `${dateStr}.json`);
+        // const data = {};
+        // data.uuid = filePath;
+        // self.handleNodeClick(data);
+        // GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+        setTimeout(() => {
+          // this.$refs.myEditor.codemirror;
+          // self.$refs.tree.setCurrentKey(filePath);
+        });
       });
-
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
