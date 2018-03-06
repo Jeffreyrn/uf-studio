@@ -323,8 +323,8 @@ $fontColor : #444;
       }
       .range-wrapper {
         position: relative;
-        width: 20vw;
-        margin-right: 0.5vw;
+        width: 300px;
+        margin-right: 6px;
         background: #7b7878;
         height: 1px;
         input[type=range] {

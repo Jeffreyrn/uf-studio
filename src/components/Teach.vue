@@ -159,7 +159,7 @@ export default {
       inputText: '',
       clientWidth: 100,
       clientHeight: 200,
-      rightFrameWidth: 360,
+      rightFrameWidth: 320,
       bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
@@ -866,10 +866,10 @@ export default {
       }
     }
     .control-wrapper {
-      width: 360px;
+      width: 320px;
     }
     .projects-list-wrapper {
-      width: 360px;
+      width: 320px;
       /*min-width: 300px;*/
       /*max-width: 400px;*/
       background: #EDEDED;
@@ -1012,7 +1012,7 @@ export default {
   .save-dialog .el-dialog__title{
     font-size: 16px;
     letter-spacing: -0.57px;
-    color: #E27347;
+    color: #575C62;
     font-family: 'Gotham-Medium';
   }
   .save-dialog .el-dialog__body {
