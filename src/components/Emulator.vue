@@ -19,7 +19,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
         <el-col :span="18" class="model-container">
-          <keep-alive> <xarm-model></xarm-model></keep-alive> 
+          <xarm-model></xarm-model>
         </el-col>
         <el-col :span="6" class="end-col">
           <end-set></end-set>
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       test: null,
-      testtest: [],
+      testtest: 0,
       state: {
         speed: 500,
         acceleration: 500,

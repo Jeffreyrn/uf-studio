@@ -6,7 +6,9 @@
       </router-link> -->
     </div>
     <div class="main-container">
-      <router-view/>
+      <keep-alive include="xarmsmodel">
+        <router-view/>
+      </keep-alive>
     </div>
   </div>
 </template>

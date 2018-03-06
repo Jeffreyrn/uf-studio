@@ -45,6 +45,8 @@
     </div> -->
     <div class="hello-row">
       <div id="emulator-overlay">
+
+          <input v-model="testtest"/>
         <!-- <span v-for="j in 7" :key="j" class="text">#{{j-1}}:{{joints[j-1]}}</span> -->
         <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
       </div>
@@ -84,7 +86,7 @@ const GROUP_POSITION = [
 ];
 
 export default {
-  name: 'xarm-model',
+  name: 'XarmModel',
   props: ['control', 'size'],
   watch: {
     control(newValue) {
@@ -128,7 +130,7 @@ export default {
   data() {
     return {
       test: null,
-      testtest: [],
+      testtest: 0,
       config: {
         debugMax: 200,
         debugMin: -300,
