@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="line-block-wrapper" :id="'cell_id_' + index" @click='onSelect($event, index)'>
     <!-- button -->
-    <div style="margin-top:150px;">
+    <div style="margin-top:130px;">
       <!-- <div style="width:60px;height:30px;font-size:15px;margin-top:100px;">
         <div v-for='index in [0,1,2,3,4,5,6,7,8,9]'>
           <span v-if="index===0" class="rule-style" style="height:20px;margin-left:0px;"></span>
@@ -10,7 +10,7 @@
       </div> -->
       <!-- isContinus true -->
       <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block">
-        <div v-if="index % 10 === 0" style="background-color:green;">
+        <div v-if="index % 10 === 0" style="background:#52BF53;">
           {{ parseInt(index / 10) }}.0s
         </div>
         <div v-else>
@@ -32,14 +32,16 @@
       <div v-else class="line-block-single">
         <div class="line-single" style="">
         </div>
-        <div v-if="index===model.localTeach.curSelectedIndex">
+        <div class="line-single-ball" style="">
+        </div>
+        <!-- <div v-if="index===model.localTeach.curSelectedIndex">
           <div class="line-single-ball-selected" style="">
           </div>
         </div>
         <div v-else>
           <div class="line-single-ball" style="">
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- isContinus false end -->
       <!-- <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:60px;height:1px;background-color:red;"></div> -->
@@ -113,7 +115,9 @@ export default {
   border-right: 1px solid #444;
   color: #fff;
   line-height: 30px;
-  font-size: 15px;
+  font-family: Gotham-Book;
+  font-size: 14px;
+  color: #FFFFFF;
 }
 .line-block-single {
   // position: absolute;
@@ -126,28 +130,30 @@ export default {
   // background-color: yellow;
 }
 .line-single {
-  width: 60px;
+  width: 100%;
   height: 2px;
   // position: absolute;
   top: 15px;
   // transform: translateY(-50%);
-  background-color: #50E3C2;
+  background: #4A90E2;
+  border-radius:4px;
+  // border: 1px solid #4A90E2;
 }
 .line-single-ball {
-  margin-left:25px;
-  margin-top:-4px;
-  width:6px;
-  height:6px;
+  margin-left:50px;
+  margin-top:-40px;
+  width:20px;
+  height:25px;
   background:white;
-  border-radius:3px
+  // border-radius:3px;
 }
 .line-single-ball-selected {
-  margin-left:23px;
-  margin-top:-6px;
-  width:10px;
-  height:10px;
-  background:white;
-  border: 1px solid blue;
-  border-radius:5px
+  // margin-left:23px;
+  // margin-top:-6px;
+  // width:10px;
+  // height:10px;
+  // background:white;
+  // border: 1px solid blue;
+  // border-radius:5px
 }
 </style>
