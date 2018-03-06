@@ -9,6 +9,7 @@
           <!-- <div style="position:relative;">
           </div> -->
           <div class="left-emulator" id="left-emulator">
+            <XarmModel></XarmModel>
           </div>
           <!-- <div v-if="editState===true" class="left-show" id="left-show">
           </div>
