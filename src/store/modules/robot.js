@@ -333,16 +333,31 @@ const mutations = {
     }
   },
   [types.GO_HOME](state) {
-    window.GlobalUtil.socketCom.sendCmd(
-      'xarm_move_gohome',
-      {
-        data: {
-          F: state.info.speed,
-          Q: state.info.acceleration,
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_gohome',
+        {
+          data: {
+            F: state.info.speed,
+            Q: state.info.acceleration,
+          },
         },
-      },
-      (response) => { console.log('socket res', response); },
-    );
+        (response) => { console.log('socket res', response); },
+      );
+    }
+    else {
+      state.info.axis = [0, 0, 0, 0, 0, 0, 0];
+      state.info.position = {
+        x: 201.5,
+        y: 0,
+        z: 140.5,
+      }
+      state.info.orientation = {
+        roll: -180,
+        yaw: 0,
+        pitch: 0,
+      }
+    }
   },
   [types.ROBOT_MOVE_JOINT](state, data) {
     console.log('set 7 joint:', data);

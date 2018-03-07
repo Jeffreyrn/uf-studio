@@ -46,7 +46,7 @@
     <div class="hello-row">
       <div id="emulator-overlay">
 
-          <input v-model="testtest"/>
+          <!-- <input v-model="testtest"/> -->
         <!-- <span v-for="j in 7" :key="j" class="text">#{{j-1}}:{{joints[j-1]}}</span> -->
         <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
       </div>

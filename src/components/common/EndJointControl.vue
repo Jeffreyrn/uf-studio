@@ -242,6 +242,7 @@ export default {
       e.preventDefault();
       // Put your mouseOut stuff here
       isDown = false;
+      self.resetYaw();
     }
 
     function handleMouseMove(e) {
@@ -424,15 +425,19 @@ export default {
       });
     },
     setYaw() {
+      console.log('set yaw interval')
+      let i = 0
       this.intervalYaw = setInterval(() => {
         this.joystick.step.orientation.z = (this.radianAngle + (Math.PI / 2)) * 10;
         this.$store.commit(types.MOVE_END_ROLL, Number(this.joystick.step.orientation.z));
+        console.log('set yaw interval', i += 1)
       }, 500);
     },
     resetYaw() {
       this.joystick.step.orientation.z = 0;
       this.radianAngle = Math.PI / -2;
       clearInterval(this.intervalYaw);
+      console.log('cleared')
     },
     setPositionZ() {
       this.interval = setInterval(() => {
