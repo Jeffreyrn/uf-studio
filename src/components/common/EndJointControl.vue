@@ -53,11 +53,14 @@
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
-            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" 
+            :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
+          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" 
+          @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
+          :max="config.joint.max[j-1]" :min="config.joint.min[j-1]">
           <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
@@ -388,6 +391,12 @@ export default {
     },
     setJointOffline(index) {
       // console.log('test', index, value);
+      if (this.joints[index] > this.config.joint.max[index]) {
+        this.$set(this.joints, index, this.config.joint.max[index])
+      }
+      if (this.joints[index] < this.config.joint.min[index]) {
+        this.$set(this.joints, index, this.config.joint.min[index])
+      }
       if (!this.stateOnline) {
         console.log('offline')
         this.setJointCmd(index);
