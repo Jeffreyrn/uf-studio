@@ -221,17 +221,17 @@ export default {
 .line-number {
   position: absolute;
   width: 20px;
-  top: 2px;
-  font-size: 12px;
+  top: 3px;
+  font-size: 10px;
   text-align: center;
   color: #fff;
 }
 .line-number-selected {
   position: absolute;
-  font-size: 12px;
+  font-size: 10px;
   width: 24px;
   height: 30px;
-  line-height: 28px;
+  line-height: 26px;
   color: #444;
   text-align: center;
   /*left: 6px;*/
