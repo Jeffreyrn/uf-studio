@@ -28,11 +28,14 @@
                 <!-- curSelectedTreeItem.uuid == -->
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
-                <div v-if="model.localTeach.curProj.type==='discontinuous'">
-                  {{ model.localTeach.showArr.length}}
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
+                  {{ fileLength(model.localTeach.curEditingFileUUID) }}
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                </div>
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='discontinuous'">
+                  {{ curProjTotal }}
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
                   {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
@@ -204,7 +207,12 @@ export default {
     //   const node = nodes[i];
     //   node.style.color = 'gray';
     // }
+    const self = this;
     CommandsTeachSocket.listProjs((dict) => {
+      setTimeout(() => {
+        self.$refs.tree.setCurrentKey('');
+        GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
+      });
     });
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
@@ -320,6 +328,7 @@ export default {
         const filePath = path.join(curProj.uuid, `${dateStr}.json`);
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
+          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
@@ -558,7 +567,7 @@ export default {
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
             GlobalUtil.model.localTeach.onSelect(null, 0);
-            this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+            // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
       }

@@ -46,7 +46,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="editState"  @click='onSelect($event, index)'>
+        <div v-else-if="editState"  @click='onSelect($event, index)' style="cursor:pointer;">
           <div v-if="index===model.localTeach.curSelectedIndex">
             <div class="line-single-ball-selected" style="position: relative">
               <span class="line-number-selected">{{index+1}}</span>
@@ -151,7 +151,7 @@ export default {
   height:30px;
   padding-top: 14px;
   font-size: 15px;
-  cursor: pointer;
+  // cursor: pointer;
   // line-height: 30px;
   // background-color: yellow;
 }
