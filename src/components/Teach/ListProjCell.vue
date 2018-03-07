@@ -25,7 +25,12 @@
             </div>
           </div>
         </div>
+        <!-- <div v-if="index===model.localTeach.fileDatas[file.uuid].length-1" style="float:left;">
+          {{ parseInt((index + 1) / 10) }}.0s
+        </div> -->
       </div>
+      <!-- <div v-if="model.localTeach.curProj.type==='continuous' && index===model.localTeach.fileDatas[file.uuid].length-1" class="line-block">
+      </div> -->
       <!-- isContinus true end -->
 
       <!-- isContinus false -->

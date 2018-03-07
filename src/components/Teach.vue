@@ -248,6 +248,7 @@ export default {
       GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onrename() {
+      const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
       GlobalUtil.model.localTeach.projRenameShow = false;
       const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
@@ -255,7 +256,11 @@ export default {
       text = `${pre}${text}`;
       console.log(`onrename text = ${text}`);
       CommandsTeachSocket.renameProj(text, () => {
-
+        setTimeout(() => {
+          const filePath = path.join(CommandsTeachSocket.ROOT_DIR, text);
+          self.$refs.tree.setCurrentKey(filePath);
+          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+        });
       });
     },
     rename(data) {
