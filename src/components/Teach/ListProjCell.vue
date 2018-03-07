@@ -2,35 +2,35 @@
   <div class="line-block-wrapper" :id="'cell_id_' + index" >
     <!-- button -->
     <div style="margin-top:130px;">
-      <!-- <div style="width:60px;height:30px;font-size:15px;margin-top:100px;">
+      <!--
+      <div style="width:60px;height:30px;font-size:15px;margin-top:100px;">
         <div v-for='index in [0,1,2,3,4,5,6,7,8,9]'>
           <span v-if="index===0" class="rule-style" style="height:20px;margin-left:0px;"></span>
           <span v-else class="rule-style"></span>
         </div>
-      </div> -->
+      </div>
+      -->
       <!-- isContinus true -->
-      <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block">
+      <div v-if="model.localTeach.curProj.type==='continuous'" class="line-block line-block-color">
         <div v-if="index % 10 === 0" style="background:#52BF53;">
-          {{ parseInt(index / 10) }}.0s
+          <div class="line-block-text-left"> {{ parseInt(index / 10) }}.0s </div>
+          <ListProjCellLastText :index="index" :file='file'></ListProjCellLastText>
         </div>
         <div v-else>
           <div v-if="model.localTeach.curEditingFileUUID===''">
             <div v-if="index < model.localTeach.fileDatas['temp'].length">
-              .{{ index % 10 }}
+              <div class="line-block-text-left"> .{{ index % 10 }} </div>
+              <ListProjCellLastText :index="index" :file='file'></ListProjCellLastText>
             </div>
           </div>
           <div v-else>
             <div v-if="index < model.localTeach.fileDatas[file.uuid].length">
-              .{{ index % 10 }}
+              <div class="line-block-text-left"> .{{ index % 10 }} </div>
+              <ListProjCellLastText :index="index" :file='file'></ListProjCellLastText>
             </div>
           </div>
         </div>
-        <!-- <div v-if="index===model.localTeach.fileDatas[file.uuid].length-1" style="float:left;">
-          {{ parseInt((index + 1) / 10) }}.0s
-        </div> -->
       </div>
-      <!-- <div v-if="model.localTeach.curProj.type==='continuous' && index===model.localTeach.fileDatas[file.uuid].length-1" class="line-block">
-      </div> -->
       <!-- isContinus true end -->
 
       <!-- isContinus false -->
@@ -83,6 +83,7 @@
 <script>
 
 import * as types from './../../store/mutation-types';
+import ListProjCellLastText from './ListProjCellLastText';
 
 export default {
   props: ['file', 'index','editState'],
@@ -108,6 +109,7 @@ export default {
   beforeDestroy() {
   },
   components: {
+    ListProjCellLastText,
   },
   computed: {
     classObject: () => {
@@ -116,12 +118,12 @@ export default {
         'bgcolor1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
       }
     },
-    // classObject: () => {
-      // return {
-        // 'heightLength': GlobalUtil.model.localProjTree.curSelectedFileUUID!==this.data.uuid,
-        // 'opacity1': GlobalUtil.model.localProjTree.curSelectedFileUUID===this.data.uuid,
-      // }
-    // },
+    lineBlockColor: () => {
+      return {
+        'line-block-color': this.index % 10 !== 0,
+        'line-block-color-selected': this.index % 10 === 0,
+      }
+    },
   },
 };
 
@@ -143,14 +145,36 @@ export default {
 .line-block {
   width:60px;
   height:30px;
-  background-color:rgba(74,144,226,0.50);
   border-right: 1px solid #444;
   color: #fff;
   line-height: 30px;
-  font-family: Gotham-Book;
+  // overflow: hidden;
+}
+.line-block-color {
+  background:rgba(74,144,226,0.50);
+}
+.line-block-color-selected {
+  background:#52BF53;
+}
+.line-block-text-left {
+  width:60px;
+  height:30px;
+  font-family: 'Gotham-Book';
   font-size: 14px;
   color: #FFFFFF;
+  text-align: right;
+  margin-left: -65px;
 }
+// .line-block-text-right {
+//   width:60px;
+//   height:30px;
+//   font-family: 'Gotham-Book';
+//   font-size: 14px;
+//   color: #FFFFFF;
+//   text-align: right;
+//   margin-left: -2px;
+//   margin-top: -30px;
+// }
 .line-block-single {
   // position: absolute;
   width:60px;

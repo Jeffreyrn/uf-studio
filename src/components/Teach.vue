@@ -334,8 +334,7 @@ export default {
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
           GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
-          const data = {uuid: filePath};
-          self.handleNodeClick(data);
+          self.handleNodeClick({uuid: filePath});
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
