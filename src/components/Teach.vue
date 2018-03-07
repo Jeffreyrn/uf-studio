@@ -334,6 +334,8 @@ export default {
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
           GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          const data = {uuid: filePath};
+          self.handleNodeClick(data);
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
@@ -409,6 +411,7 @@ export default {
       this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
     },
     startEdit() {
+      // GlobalUtil.model.localTeach.curEditingFileUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       this.editState = true;
       GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
@@ -577,7 +580,6 @@ export default {
         });
       }
     },
-
 //    renderContent(createElement, { node, data, store }) {
 //      console.log(`createElement node.uuid = ${data.uuid}`);
 //      console.log(`createElement node.type = ${data.type}`);

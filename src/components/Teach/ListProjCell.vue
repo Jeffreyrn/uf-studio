@@ -98,6 +98,7 @@ export default {
   },
   methods: {
     onSelect(e, index) {
+      console.log(`onSelect index = ${index}, type= ${GlobalUtil.model.localTeach.curProj.type}`);
       if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
         GlobalUtil.model.localTeach.onSelect(e, index);
         this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
@@ -171,7 +172,7 @@ export default {
   // border: 1px solid #4A90E2;
 }
 .line-single-ball, .line-single-ball-recording, .line-single-ball-end {
-  margin-left:50px;
+  margin-left:20px;
   margin-top:-40px;
   width:20px;
   height:20px;
@@ -211,8 +212,9 @@ export default {
   border-top-color: #FF5469 ;
 }
 .line-single-ball-selected {
-  margin-left:50px;
-  margin-top:-40px;
+  // margin-left:50px;
+  margin-left:18px;
+  margin-top:-42px;
   width:24px;
   position: relative;
 }
