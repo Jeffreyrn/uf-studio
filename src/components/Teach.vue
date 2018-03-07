@@ -28,10 +28,13 @@
                 <!-- curSelectedTreeItem.uuid == -->
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
-                <div v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                <div v-if="model.localTeach.curProj.type==='discontinuous'">
+                  {{ model.localTeach.showArr.length}}
+                </div>
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
                 </div>
-                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
                   {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
                 </div>
               </div>
@@ -66,7 +69,7 @@
 
             </div>
           </div>
-          <ListProj id="bottom-right-frame"></ListProj>
+          <ListProj id="bottom-right-frame" :editState='editState'></ListProj>
         </div>
       </div>
 
@@ -229,6 +232,7 @@ export default {
       CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
         GlobalUtil.model.localTeach.hasChange = false;
       });
+      this.editState = false;
     },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText

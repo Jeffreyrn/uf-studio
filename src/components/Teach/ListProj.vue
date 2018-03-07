@@ -7,7 +7,7 @@
       </div> -->
       <div class="block-cell" v-if="model.localTeach.curSelectedTreeItem.uuid!==''">
         <div v-for='index in model.localTeach.showArr'>
-          <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
+          <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)' :editState='editState'></ListProjCell>
         </div>
       </div>
     </div>
@@ -18,6 +18,7 @@
 import ListProjCell from './ListProjCell';
 
 export default {
+  props:['editState'],
   data() {
     return {
       model: GlobalUtil.model,
