@@ -273,7 +273,7 @@ self.onSelect = (e, index) => {
   const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
   if (point === null || point === undefined) {
     // GlobalUtil.model.localTeach.curSelectedIndex = -1;
-    console.log(`point null null null`);
+    console.log(`point null null null cur id = ${GlobalUtil.model.localTeach.curEditingFileUUID}`);
     return;
   }
   GlobalUtil.model.localTeach.curSelectedIndex = index;

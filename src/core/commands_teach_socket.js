@@ -71,6 +71,9 @@ self.renameProj = (name, callback) => {
   };
   self.sendCmd(GlobalConstant.FILE_ID_CHANGE_NAME, params, (dict) => {
     self.listProjs(() => {
+      if (callback) {
+        callback();
+      }
       // self.model.localProjTree.changeProj(newProjUUID);
       // console.log(`rename change proj = ${JSON.stringify(self.model.localProjTree.curProj)}`);
       // self.model.localProjTree.setSelectedEditor('');
@@ -79,7 +82,7 @@ self.renameProj = (name, callback) => {
 };
 
 self.delProj = (proId, callback) => {
-  let filePath = proId; //path.join(self.ROOT_DIR, name);
+  let filePath = proId; // path.join(self.ROOT_DIR, name);
   console.log(`filePath = ${filePath}`);
   const params = {
     data: merge(self.VERSION, {

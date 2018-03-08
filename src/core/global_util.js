@@ -29,14 +29,14 @@ self.nativeCom = NativeCom;
 self.autoSizeScale = 0;
 
 self.isFileStr = (str) => {
-  const errStr = `'Name contains "only letter, numbers, '_' and no more than 10 characters in total.`;
+  const errStr = `'Name contains "only letter, numbers, '_' and no more than 15 characters in total.`;
   if (str === null || str === undefined) {
     return false;
   }
   if (str.length === 0) {
     return false;
   }
-  if (str.length > 10) {
+  if (str.length > 15) {
     GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
     GlobalUtil.model.localTeach.dialogErrorTips = errStr;
     return false;

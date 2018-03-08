@@ -28,10 +28,16 @@
                 <!-- curSelectedTreeItem.uuid == -->
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
-                <div v-if="model.localTeach.curSelectedTreeItem.type==='file'">
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
                 </div>
-                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
+                  {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                </div>
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='discontinuous'">
+                  {{ curProjTotal }}
+                </div>
+                <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
                   {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
                 </div>
               </div>
@@ -66,7 +72,7 @@
 
             </div>
           </div>
-          <ListProj id="bottom-right-frame"></ListProj>
+          <ListProj id="bottom-right-frame" :editState='editState'></ListProj>
         </div>
       </div>
 
@@ -201,7 +207,12 @@ export default {
     //   const node = nodes[i];
     //   node.style.color = 'gray';
     // }
+    const self = this;
     CommandsTeachSocket.listProjs((dict) => {
+      setTimeout(() => {
+        self.$refs.tree.setCurrentKey('');
+        GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
+      });
     });
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
@@ -229,6 +240,7 @@ export default {
       CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
         GlobalUtil.model.localTeach.hasChange = false;
       });
+      this.editState = false;
     },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
@@ -236,6 +248,7 @@ export default {
       GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onrename() {
+      const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
       GlobalUtil.model.localTeach.projRenameShow = false;
       const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
@@ -243,7 +256,11 @@ export default {
       text = `${pre}${text}`;
       console.log(`onrename text = ${text}`);
       CommandsTeachSocket.renameProj(text, () => {
-
+        setTimeout(() => {
+          const filePath = path.join(CommandsTeachSocket.ROOT_DIR, text);
+          self.$refs.tree.setCurrentKey(filePath);
+          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+        });
       });
     },
     rename(data) {
@@ -316,6 +333,8 @@ export default {
         const filePath = path.join(curProj.uuid, `${dateStr}.json`);
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
+          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          self.handleNodeClick({uuid: filePath});
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
@@ -391,6 +410,7 @@ export default {
       this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
     },
     startEdit() {
+      // GlobalUtil.model.localTeach.curEditingFileUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       this.editState = true;
       GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, 0);
@@ -554,12 +574,11 @@ export default {
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
             GlobalUtil.model.localTeach.onSelect(null, 0);
-            this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+            // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
       }
     },
-
 //    renderContent(createElement, { node, data, store }) {
 //      console.log(`createElement node.uuid = ${data.uuid}`);
 //      console.log(`createElement node.type = ${data.type}`);
