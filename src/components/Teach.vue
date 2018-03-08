@@ -302,7 +302,7 @@ export default {
       const sec = allsec % 60;
       const min = Math.floor(allsec / 60) % 60;
       const hour = Math.floor(Math.floor(allsec / 60) / 60) % 24;
-      const str = `${GlobalUtil.pad(hour,2)}:${GlobalUtil.pad(min,2)}:${GlobalUtil.pad(sec,2)}.${msec}00`;
+      const str = `${GlobalUtil.pad(hour,2)} : ${GlobalUtil.pad(min,2)} : ${GlobalUtil.pad(sec,2)} . ${msec}00`;
       // const sec = Math.floor(length / 10) % 60;
       // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
       // const str = `${min}:${sec}.${msec}00`;
