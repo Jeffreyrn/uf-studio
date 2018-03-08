@@ -5,13 +5,15 @@
         <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
         {{ index }}
       </div> -->
-      <div class="block-cell" v-if="model.localTeach.curSelectedTreeItem.uuid!==''">
-        <div style="width:40px;">
+      <div class="block-cell" v-if="model.localTeach.curSelectedTreeItem.uuid!==''" v-bind:class="isMarginLeft" style="">
+        <div v-if="model.localTeach.curProj.type==='continuous'" style="width:40px;">
         </div>
+        <!-- <div v-if="model.localTeach.curProj.type==='discontinuous'" style="width:0px;">
+        </div> -->
         <div v-for='index in model.localTeach.showArr'>
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)' :editState='editState'></ListProjCell>
         </div>
-        <div style="width:20px;">
+        <div style="width:50px;">
         </div>
         <!-- <div v-if='model.localTeach.curProj.type==='continuous''>
           <ListProjCell :editState='editState'></ListProjCell>
@@ -185,6 +187,11 @@ export default {
         'bgcolor1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
       }
     },
+    isMarginLeft: () => {
+      return {
+        'listMarginLeft': GlobalUtil.model.localTeach.curProj.type==='discontinuous',
+      }
+    }
   },
 };
 
@@ -200,17 +207,20 @@ export default {
 }
 .list-project-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
   width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
-  height: 30px;
+  height: 15px;
 }
 .list-project-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
   border-radius: 5px;
   -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-  background: #666;;
+  background: #7E7E7E;
 }
 .list-project-wrapper::-webkit-scrollbar-track {/*滚动条里面轨道*/
   -webkit-box-shadow: inset 0 0 5px #434343;
   border-radius: 0;
   background: #434343;
+}
+.listMarginLeft {
+  margin-left:-30px;
 }
 .bgcolor0 {
   background-color: transparent;

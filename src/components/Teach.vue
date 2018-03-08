@@ -344,7 +344,7 @@ export default {
     },
     finishRecordCancle() {
       this.visible.saveDialog = false;
-      GlobalUtil.model.localTeach.visible.starRecording = false;
+      // GlobalUtil.model.localTeach.visible.starRecording = false;
 //      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
 //        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
 //      });
@@ -396,7 +396,7 @@ export default {
       GlobalUtil.model.localTeach.curDuration -= -1;
     },
     scrollTo(time) {
-      document.getElementById("bottom-right-frame").scrollLeft = 60 * (parseInt(time / 10) * 10);
+      document.getElementById("bottom-right-frame").scrollLeft = 1800 * 60; //60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);

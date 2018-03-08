@@ -35,7 +35,10 @@
 
       <!-- isContinus false -->
       <div v-else class="line-block-single">
-        <div class="line-single" style="">
+
+        <div v-if="index!==0" class="line-single" style="background: #4A90E2;">
+        </div>
+        <div v-else class="line-single" style="">
         </div>
         <!--<div class="line-single-ball">-->
         <!--</div>-->
@@ -196,7 +199,6 @@ export default {
   // position: absolute;
   top: 15px;
   // transform: translateY(-50%);
-  background: #4A90E2;
   /*border-radius:4px;*/
   // border: 1px solid #4A90E2;
 }
