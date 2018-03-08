@@ -55,14 +55,14 @@
             </div>
           </div>
         </div>
-        <div v-else @click='onSelect($event, index)' style="">
+        <div v-else>
           <div v-if="index===model.localTeach.curSelectedIndex">
-            <div class="line-single-ball-selected cursor-pointer" style="position: relative">
+            <div @click='onSelect($event, index)' class="line-single-ball-selected cursor-pointer" style="position: relative">
               <span class="line-number-selected">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball cursor-pointer" style="position:relative;">
+            <div @click='onSelect($event, index)' class="line-single-ball cursor-pointer" style="position:relative;">
               <span class="line-number">{{index+1}}</span>
             </div>
           </div>
@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     onSelect(e, index) {
-      console.log(`onSelect index = ${index}, type= ${GlobalUtil.model.localTeach.curProj.type}`);
+      // console.log(`onSelect index = ${index}, type= ${GlobalUtil.model.localTeach.curProj.type}`);
       if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
         if (GlobalUtil.model.localTeach.hasChange === true) {
           GlobalUtil.model.localTeach.willOnSelectIndex = index;
