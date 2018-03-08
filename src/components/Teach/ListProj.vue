@@ -13,7 +13,7 @@
         <div v-for='index in model.localTeach.showArr'>
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)' :editState='editState'></ListProjCell>
         </div>
-        <div style="width:50px;">
+        <div style="width:100px;">
         </div>
         <!-- <div v-if='model.localTeach.curProj.type==='continuous''>
           <ListProjCell :editState='editState'></ListProjCell>

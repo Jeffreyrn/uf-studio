@@ -39,7 +39,8 @@
                   {{ curProjTotal }}
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
-                  {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
+                  <!-- {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }} -->
+                  {{ getTimeLongStr(curProjTotal) }}
                 </div>
               </div>
               <div class="recording-name" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
@@ -288,16 +289,22 @@ export default {
         }
         if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
           const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
-          const msec = length % 10;
-          const sec = Math.floor(length / 10);
-          const str = `${sec}.${msec}`;
-          // const sec = Math.floor(length / 10) % 60;
-          // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
-          // const str = `${min}:${sec}.${msec}00`;
-          return str;
+          return this.getTimeLongStr(length);
         }
       }
       return 0;
+    },
+    getTimeLongStr(length) {
+      const msec = length % 10;
+      const allsec = Math.floor(length / 10);
+      const sec = allsec % 60;
+      const min = Math.floor(allsec / 60) % 60;
+      const hour = Math.floor(Math.floor(allsec / 60) / 60) % 24;
+      const str = `${GlobalUtil.pad(hour,2)}:${GlobalUtil.pad(min,2)}:${GlobalUtil.pad(sec,2)}.${msec}00`;
+      // const sec = Math.floor(length / 10) % 60;
+      // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
+      // const str = `${min}:${sec}.${msec}00`;
+      return str;
     },
     checkInputText() {
       if(this.inputText !== ''){
@@ -391,7 +398,12 @@ export default {
           GlobalUtil.model.localTeach.showArr = tempArr;
           // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
         }
-        this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+        this.curProjTotal = GlobalUtil.model.localTeach.showArr.length;
+        setTimeout(() => {
+          console.log(`wait for 5 sec`);
+          this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+        }, 1000);
+        
       });
       GlobalUtil.model.localTeach.curDuration -= -1;
     },
