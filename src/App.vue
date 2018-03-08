@@ -6,19 +6,21 @@
       </router-link> -->
     </div>
     <div class="main-container">
-      <keep-alive include="xarmsmodel">
-        <router-view/>
-      </keep-alive>
+      <keep-alive><router-view/></keep-alive>
     </div>
   </div>
 </template>
 
 <script>
+import XarmModel from './components/common/XarmModel';
 
 export default {
   name: 'app',
   mounted() {
     this.$store.dispatch('openWebsocket');
+  },
+  components: {
+    XarmModel,
   },
 };
 </script>

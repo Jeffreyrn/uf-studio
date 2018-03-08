@@ -8,4 +8,4 @@
 - **done** reset gohome
 - handle robot.status.error when disconnected or reconnected
 - loading model progress percentage show
-- degree input limit max/min
+- position input limit max/min

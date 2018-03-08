@@ -17,3 +17,11 @@ export const end = state => ({
   position: state.robot.info.position,
   orientation: state.robot.info.orientation,
 });
+
+export const geometry = (state) => {
+  const func = (type, index) => {
+    const gm = state.geometry[type][index]
+    return gm
+  }
+  return func
+}

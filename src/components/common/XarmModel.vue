@@ -64,6 +64,7 @@ import * as THREE from 'three';
 import * as THREESTLLoader from 'three-stl-loader';
 import OrbitControls from 'three-orbitcontrols';
 // import * as types from '../../store/mutation-types';
+THREE.Cache.enabled = true;
 
 const JOINT_POSITION = [
   null,
@@ -171,6 +172,7 @@ export default {
         groups: null,
         render: null,
       },
+      loading: null,
     };
   },
   mounted() {
@@ -185,7 +187,7 @@ export default {
   },
   methods: {
     createRobotModel() {
-      const loading = this.$loading({
+      this.loading = this.$loading({
         lock: true,
         text: 'Loading',
         spinner: 'el-icon-loading',
@@ -241,13 +243,30 @@ export default {
       const STLLoader = new THREESTLLoader(THREE);
       const loader = new STLLoader();
       let base;
-      loader.load(JOINT_MODEL_SRC[0], (geometry) => {
-        base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
-        const position = [7.66, 0.04 + this.config.offsetY, -0.86];
-        base.position.set(...position);
-        this.setDiff(base);
-        scene.add(base);
-      });
+      // const cache = this.$store.getters.geometry('xarm', 0)
+      const cache = null
+      if (cache) {
+        console.log('NO.0 cache loaded.', cache);
+        // base = new THREE.Mesh(cache, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+        // const position = [7.66, 0.04 + this.config.offsetY, -0.86];
+        // base.position.set(...position);
+        // this.setDiff(base);
+        // scene.add(base);
+      }
+      else {
+        loader.load(JOINT_MODEL_SRC[0], (geometry) => {
+          // this.$setItem('geometry0', geometry)
+          // this.$store.commit(types.SET_XARM_SRC, {
+          //   index: 0,
+          //   geometry,
+          // })
+          base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+          const position = [7.66, 0.04 + this.config.offsetY, -0.86];
+          base.position.set(...position);
+          this.setDiff(base);
+          scene.add(base);
+        });
+      }
       const groups = [];
       const joints = [];
       // const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
@@ -283,29 +302,47 @@ export default {
         //   joints[this.select + 1].position.set(this.state.test.jx, this.state.test.jy, this.state.test.jz);
         // }
       };
+      const addMesh = (index, geometry) => {
+        // joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
+        joints[index] = geometry;
+        joints[index].position.set(...JOINT_POSITION[index]);
+        if (index < 7) {
+          groups[index - 1].add(joints[index], groups[index]);
+        }
+        else {
+          groups[index - 1].add(joints[index]);
+        }
+        groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
+      }
       const loadModel = (index) => { // model index: 1-6
         if (index < 8) {
-          loader.load(JOINT_MODEL_SRC[index], (geometry) => {
-            console.log(`NO.${index} model loaded.`);
-            joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
-            joints[index].position.set(...JOINT_POSITION[index]);
-            if (index < 7) {
-              groups[index - 1].add(joints[index], groups[index]);
-            }
-            else {
-              groups[index - 1].add(joints[index]);
-            }
-            groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
+          const cache = null; // this.$store.getters.geometry('xarm', index)
+          if (cache) {
+            console.log(`NO.${index} cache loaded.`);
+            addMesh(index, cache)
             loadModel(index + 1); // load next model
-          });
+          }
+          else {
+            loader.load(JOINT_MODEL_SRC[index], (geometry) => {
+              console.log(`NO.${index} model loaded.`);
+              const mesh = new THREE.Mesh(geometry, materialList[index - 1]);
+              // this.$store.commit(types.SET_XARM_SRC, {
+              //   index,
+              //   geometry: mesh,
+              // })
+              addMesh(index, mesh)
+              loadModel(index + 1); // load next model
+            });
+          }
         }
         else {
           console.log('loading all');
           this.setDiff(groups[0]);
           groups[0].position.y += this.config.offsetY;
+          // window.GlobalUtil.xarm = groups[0];
           scene.add(groups[0]);
           animate();
-          loading.close(); // hide loading overlay
+          this.loading.close(); // hide loading overlay
         }
       };
       loadModel(1);
@@ -347,7 +384,7 @@ export default {
         height = this.size;
       }
       else {
-        height = rootDiv.clientWidth * 0.52;
+        height = rootDiv.clientHeight; // rootDiv.clientWidth * 0.52;
       }
       // const height = rootDiv.clientWidth / this.getCameraAspect();
       // const height = rootDiv.clientWidth * 0.52;

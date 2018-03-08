@@ -82,9 +82,9 @@ $liInputWidth : 70%;
 .end-container {
   background: white;
   border-radius: 8px;
-  height: 38vw;
+  height: 100%;
   .container-title {
-    padding: 2vw 1vw;
+    padding: 2vh 1vw;
     font-size: 1.5rem;
     color: #444444;
     letter-spacing: -1px;
@@ -92,16 +92,15 @@ $liInputWidth : 70%;
   .set-button {
     margin-left: $liDivWidth;
     width: $liInputWidth;
-    padding-bottom: 6vw;
     button {
       border: none;
       background: #E9E9E9;
       box-shadow: inset 0 0 1px 0 rgba(177,177,177,0.50);
       border-radius: 100px;
       cursor: pointer;
-      height: 3vw;
+      height: 5vh;
       width: 45%;
-      margin: 5% 1%;
+      margin: 1vh 1%;
       color: #6C6A6A;
       letter-spacing: -0.75px;
       font-family: "Gotham-Book";
@@ -115,7 +114,7 @@ $liInputWidth : 70%;
 }
 
 ul.position-set li{
-  margin-bottom: 4%;
+  margin-bottom: 1vh;
   div {
     width: $liDivWidth;
     font-family: "Gotham-Book";
@@ -123,11 +122,11 @@ ul.position-set li{
     color: #909293;
     letter-spacing: -0.67px;
     display: inline-block;
-    padding: 4% 0;
+    padding: 1vh 0;
     text-align: center;
   }
   input[type=number] {
-    height: 2.5vw;
+    height: 3.5vh;
     width: $liInputWidth;
     background: #F2F3F5;
     border: none;

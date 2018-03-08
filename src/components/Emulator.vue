@@ -1,6 +1,6 @@
 <template>
   <el-container class="hello emulator-container">
-    <el-header height="50px">
+    <header height="50px">
       <el-row :gutter="20" class="header-wrapper">
         <el-col :span="18">
           <router-link :to="{ name: 'Home'}">
@@ -15,20 +15,20 @@
             :width="71" :height="36"/>
         </el-col>
       </el-row>
-    </el-header>
-    <el-main class="main-wrapper">
-      <el-row :gutter="20" class="main-view">
-        <el-col :span="18" class="model-container">
+    </header>
+    <div class="main-wrapper">
+      <div class="main-view">
+        <div class="model-container">
           <xarm-model></xarm-model>
-        </el-col>
-        <el-col :span="6" class="end-col">
+        </div>
+        <div class="end-col">
           <end-set></end-set>
-        </el-col>
-      </el-row>
-    </el-main>
-    <el-footer>
+        </div>
+      </div>
+    </div>
+    <footer>
       <end-joint-control></end-joint-control>
-    </el-footer>
+    </footer>
   </el-container>
 </template>
 
@@ -130,12 +130,26 @@ export default {
 </script>
 
 <style scoped lang="scss">
+header {
+  height: 50px;
+  flex: 0 0 auto;
+  padding-left: 2vw;
+  padding-top: 1vh;
+}
+footer{
+  flex: 0 0 auto;
+  padding: 1.5vw;
+}
 .hello {
   font-family:'Gotham-Medium';
   display: flex;
   flex-direction: column;
 }
 .emulator-container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background-color: #F8F8F8;
   .header-wrapper{
     display: flex;
@@ -147,13 +161,25 @@ export default {
     }
   }
   .main-wrapper{
+    flex: 1 0 auto;
     padding: 10px 20px;
+    position: relative;
     .main-view {
       display: flex;
       align-items: flex-start;
       overflow: hidden;
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      .end-col {
+        width: 27vw;
+        height: 100%;
+      }
       .model-container{
+        padding-right: 1vw;
         border-radius: 0px;
+        width: 70vw;
+        height: 100%;
       }
     }
   }
