@@ -8,7 +8,7 @@
         <span class="top-tips">Your changes will be lost if you don’t save them.</span>
         <div style="margin-top:224px;">
           <div class="float-left btn-cancel font-style cursor-pointer" @click="closeMyself">
-            Cancel
+            Discard
           </div>
           <div class="float-left btn-ok font-style cursor-pointer" @click="onsave">
             Save Change
