@@ -29,7 +29,8 @@
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
-                  {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                  <span v-if="model.localTeach.curSelectedIndex>=0"> {{ model.localTeach.curSelectedIndex+1 }} / {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>
+                  <span v-if="model.localTeach.curSelectedIndex<0"> {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>            
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
