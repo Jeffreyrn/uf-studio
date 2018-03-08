@@ -47,18 +47,19 @@
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">{{index+1}}
+            <div class="line-single-ball" style="position:relative;">
+              <span class="line-number">{{index+1}}</span>
             </div>
           </div>
         </div>
-        <div @click='onSelect($event, index)' style="cursor:pointer;">
+        <div v-else @click='onSelect($event, index)' style="cursor:pointer;">
           <div v-if="index===model.localTeach.curSelectedIndex">
             <div class="line-single-ball-selected" style="position: relative">
               <span class="line-number-selected">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="position:relative;">
               <span class="line-number">{{index+1}}</span>
             </div>
           </div>
@@ -225,7 +226,7 @@ export default {
   background:white;
   color: #444;
   font-size: 10px;
-  text-align: center;
+  // text-align: center;
   padding-top: 3px;
 }
 .line-single-ball:after {
