@@ -85,6 +85,7 @@ const GROUP_POSITION = [
   [35.47, 27.6, -0.05],
   [-34.6, 6.4, -60.8],
 ];
+const SCENE_ZOOM = 64;
 
 export default {
   name: 'XarmModel',
@@ -94,10 +95,20 @@ export default {
       console.log('watch posi print:');
       console.table(newValue);
     },
-    size() {
+    size(newValue) {
       const sizeArray = this.getRenderSize()
+      console.log('watch new size', newValue, sizeArray)
       if (this.three.renderer) {
         this.three.renderer.setSize(...sizeArray)
+      }
+      if (this.three.camera) {
+        const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
+        this.three.camera.left = -halfSize[0];
+        this.three.camera.right = halfSize[0];
+        this.three.camera.top = halfSize[1];
+        this.three.camera.bottom = -halfSize[1];
+        // camera.aspect = this.getCameraAspect();
+        this.three.camera.updateProjectionMatrix();
       }
     },
     // robotJointsAngle() {
@@ -171,6 +182,7 @@ export default {
         scene: null,
         groups: null,
         render: null,
+        camera: null,
       },
       loading: null,
     };
@@ -178,6 +190,10 @@ export default {
   mounted() {
     this.createRobotModel();
   },
+  // activated() {
+  //   const sizeArray = this.getRenderSize();
+  //   this.three.renderer.setSize(...sizeArray);
+  // },
   beforeDestroy() {
     if (this.three.scene) {
       this.three.scene.remove();
@@ -207,7 +223,6 @@ export default {
       });
       // console.log(materialList);
       const scene = new THREE.Scene();
-      const SCENE_ZOOM = 64;
       // console.log(this.three.scene, scene);
       scene.background = new THREE.Color(0xffffff); // c0c0c0
       // const camera = new THREE.PerspectiveCamera(105, this.getCameraAspect(), 0.1, 1000);
@@ -215,6 +230,7 @@ export default {
       console.log('get size', sizeArray)
       const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
       const camera = new THREE.OrthographicCamera(-halfSize[0], halfSize[0], halfSize[1], -halfSize[1], -50, 50);
+      this.three.camera = camera
       // camera.position.z = -50;
       // camera.up = new THREE.Vector3(-1, -1, -1);
       camera.position.set(3, 1, 3); // camera position
@@ -237,7 +253,7 @@ export default {
       controls.enableZoom = true;
       controls.enablePan = false; // disable keyboard camera control
       controls.update();
-      renderer.setSize(...sizeArray);
+      // renderer.setSize(...sizeArray);
       document.getElementById('emulator-container').appendChild(renderer.domElement);
       // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
       const STLLoader = new THREESTLLoader(THREE);
@@ -368,6 +384,7 @@ export default {
         // camera.aspect = this.getCameraAspect();
         camera.updateProjectionMatrix();
       };
+      onWindowResize()
       window.addEventListener('resize', onWindowResize, false)
     },
     // getCameraAspect() {
