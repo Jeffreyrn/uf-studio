@@ -822,7 +822,7 @@ span.text {
   }
   .joint-range {
     color: white;
-    padding: 0.8vw 1vw;
+    padding: 0.9vw 1vw;
     display: flex;
     align-items: center;
     span {

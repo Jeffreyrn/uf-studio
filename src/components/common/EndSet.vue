@@ -76,8 +76,8 @@ export default {
 </script>
 <style scoped lang="scss">
 
-$liDivWidth : 17%;
-$liInputWidth : 70%;
+$liDivWidth : 25%;
+$liInputWidth : 50%;
 
 .end-container {
   background: white;
@@ -98,7 +98,7 @@ $liInputWidth : 70%;
       box-shadow: inset 0 0 1px 0 rgba(177,177,177,0.50);
       border-radius: 100px;
       cursor: pointer;
-      height: 5vh;
+      height: 4vh;
       width: 45%;
       margin: 1vh 1%;
       color: #6C6A6A;
@@ -114,7 +114,7 @@ $liInputWidth : 70%;
 }
 
 ul.position-set li{
-  margin-bottom: 1vh;
+  margin-bottom: 0.5vh;
   div {
     width: $liDivWidth;
     font-family: "Gotham-Book";
@@ -126,7 +126,7 @@ ul.position-set li{
     text-align: center;
   }
   input[type=number] {
-    height: 3.5vh;
+    height: 3vh;
     width: $liInputWidth;
     background: #F2F3F5;
     border: none;

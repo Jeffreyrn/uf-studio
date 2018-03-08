@@ -138,7 +138,7 @@ header {
 }
 footer{
   flex: 0 0 auto;
-  padding: 1.5vw;
+  padding: 1.5vh 1vw;
 }
 .hello {
   font-family:'Gotham-Medium';
@@ -172,13 +172,13 @@ footer{
       position: absolute;
       width: 100%;
       .end-col {
-        width: 27vw;
+        width: 24vw;
         height: 100%;
       }
       .model-container{
         padding-right: 1vw;
         border-radius: 0px;
-        width: 70vw;
+        width: 73vw;
         height: 100%;
       }
     }
