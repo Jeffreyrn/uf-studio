@@ -35,7 +35,10 @@
 
       <!-- isContinus false -->
       <div v-else class="line-block-single">
-        <div class="line-single" style="">
+
+        <div v-if="index!==0" class="line-single" style="background: #4A90E2;">
+        </div>
+        <div v-else class="line-single" style="">
         </div>
         <!--<div class="line-single-ball">-->
         <!--</div>-->
@@ -47,32 +50,37 @@
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="position:relative;">
+              <span class="line-number">{{index+1}}</span>
             </div>
           </div>
         </div>
-        <div v-else-if="editState"  @click='onSelect($event, index)' style="cursor:pointer;">
+        <div v-else @click='onSelect($event, index)' style="cursor:pointer;">
           <div v-if="index===model.localTeach.curSelectedIndex">
             <div class="line-single-ball-selected" style="position: relative">
               <span class="line-number-selected">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="position:relative;">
+              <span class="line-number">{{index+1}}</span>
             </div>
           </div>
         </div>
-        <div v-else>
-          <div v-if="index===model.localTeach.showArr.length-1">
+        <!-- <div v-else> -->
+          <!-- <div class="line-single-ball" style="position: relative">
+            <span class="line-number">{{index+1}}</span>
+          </div> -->
+          <!-- <div v-if="index===model.localTeach.showArr.length-1">
             <div class="line-single-ball-end" style="position: relative">
               <span class="line-number">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="">{{index+1}}
             </div>
-          </div>
-        </div>
+          </div> -->
+        <!-- </div> -->
       </div>
       <!-- isContinus false end -->
       <!-- <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:60px;height:1px;background-color:red;"></div> -->
@@ -191,12 +199,11 @@ export default {
   // position: absolute;
   top: 15px;
   // transform: translateY(-50%);
-  background: #4A90E2;
   /*border-radius:4px;*/
   // border: 1px solid #4A90E2;
 }
 .line-single-ball, .line-single-ball-recording, .line-single-ball-end {
-  margin-left:20px;
+  margin-left:50px;
   margin-top:-40px;
   width:20px;
   height:20px;
@@ -219,6 +226,10 @@ export default {
 }
 .line-single-ball {
   background:white;
+  color: #444;
+  font-size: 10px;
+  // text-align: center;
+  padding-top: 3px;
 }
 .line-single-ball:after {
   border-top-color: #fff;
@@ -234,10 +245,11 @@ export default {
 }
 .line-single-ball-end:after {
   border-top-color: #FF5469 ;
+
 }
 .line-single-ball-selected {
   // margin-left:50px;
-  margin-left:18px;
+  margin-left:48px;
   margin-top:-42px;
   width:24px;
   position: relative;
@@ -248,7 +260,8 @@ export default {
   top: 3px;
   font-size: 10px;
   text-align: center;
-  color: #fff;
+  // color: #fff;
+  color: black;
 }
 .line-number-selected {
   position: absolute;

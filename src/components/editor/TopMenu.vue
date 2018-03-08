@@ -23,9 +23,9 @@ import { setTimeout } from 'timers';
     </el-button> -->
     <div class="proj-icon float-left" @click="allProjs()" title='Projects'>
     </div>
-    <div class="folder-icon float-left" @click="addFolder()" title='Add folder'>
-    </div>
     <div class="file-icon float-left" @click="addFile()" title='Add file'>
+    </div>
+    <div class="folder-icon float-left" @click="addFolder()" title='Add folder'>
     </div>
     <div class="rename-icon float-left" @click="rename()" title='Rename'>
     </div>
@@ -487,7 +487,7 @@ export default {
 }
 
 .folder-icon {
-  margin-left: 10px;
+  margin-left: 20px;
   margin-top: 6px;
   width: 24px;
   height: 24px;
@@ -496,11 +496,11 @@ export default {
 }
 
 .file-icon {
-  margin-left: 15px;
-  margin-top: 5px;
+  margin-left: 10px;
+  margin-top: 6px;
   width: 24px;
   height: 24px;
-  background-image: url('./../../assets/img/ide/btn_addfile.svg');
+  background-image: url('./../../assets/img/ide/icon_addfile.svg');
   cursor: pointer;
 }
 

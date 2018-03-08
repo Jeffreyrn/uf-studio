@@ -29,7 +29,8 @@
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
-                  {{ fileLength(model.localTeach.curEditingFileUUID) }}
+                  <span v-if="model.localTeach.curSelectedIndex>=0"> {{ model.localTeach.curSelectedIndex+1 }} / {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>
+                  <span v-if="model.localTeach.curSelectedIndex<0"> {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>            
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
@@ -38,7 +39,8 @@
                   {{ curProjTotal }}
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
-                  {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }}
+                  <!-- {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }} -->
+                  {{ getTimeLongStr(curProjTotal) }}
                 </div>
               </div>
               <div class="recording-name" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
@@ -76,7 +78,15 @@
         </div>
       </div>
 
-      <div class="projects-list-wrapper" v-if="editState===false">
+      <div class="control-wrapper" v-if="model.localTeach.visible.starRecording===true || editState===true">
+        <!-- <XarmModel></XarmModel> -->
+        <!-- <div>
+          <EndSet></EndSet>
+        </div> -->
+        <!-- <EndJointControl></EndJointControl> -->
+        <EmulatorControl></EmulatorControl>
+      </div>
+      <div v-else class="projects-list-wrapper">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper" id="tree-wrapper">
           <!-- :ref="tree" -->
@@ -92,14 +102,6 @@
             >
           </el-tree>
         </div>
-      </div>
-      <div class="control-wrapper" v-else>
-        <!-- <XarmModel></XarmModel> -->
-        <!-- <div>
-          <EndSet></EndSet>
-        </div> -->
-        <!-- <EndJointControl></EndJointControl> -->
-        <EmulatorControl></EmulatorControl>
       </div>
     </div>
 
@@ -240,7 +242,7 @@ export default {
       CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
         GlobalUtil.model.localTeach.hasChange = false;
       });
-      this.editState = false;
+      // this.editState = false;
     },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
@@ -287,16 +289,22 @@ export default {
         }
         if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
           const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
-          const msec = length % 10;
-          const sec = Math.floor(length / 10);
-          const str = `${sec}.${msec}`;
-          // const sec = Math.floor(length / 10) % 60;
-          // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
-          // const str = `${min}:${sec}.${msec}00`;
-          return str;
+          return this.getTimeLongStr(length);
         }
       }
       return 0;
+    },
+    getTimeLongStr(length) {
+      const msec = length % 10;
+      const allsec = Math.floor(length / 10);
+      const sec = allsec % 60;
+      const min = Math.floor(allsec / 60) % 60;
+      const hour = Math.floor(Math.floor(allsec / 60) / 60) % 24;
+      const str = `${GlobalUtil.pad(hour,2)}:${GlobalUtil.pad(min,2)}:${GlobalUtil.pad(sec,2)}.${msec}00`;
+      // const sec = Math.floor(length / 10) % 60;
+      // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
+      // const str = `${min}:${sec}.${msec}00`;
+      return str;
     },
     checkInputText() {
       if(this.inputText !== ''){
@@ -343,7 +351,7 @@ export default {
     },
     finishRecordCancle() {
       this.visible.saveDialog = false;
-      GlobalUtil.model.localTeach.visible.starRecording = false;
+      // GlobalUtil.model.localTeach.visible.starRecording = false;
 //      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
 //        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
 //      });
@@ -390,12 +398,17 @@ export default {
           GlobalUtil.model.localTeach.showArr = tempArr;
           // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
         }
-        this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+        this.curProjTotal = GlobalUtil.model.localTeach.showArr.length;
+        setTimeout(() => {
+          console.log(`wait for 5 sec`);
+          this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+        }, 1000);
+        
       });
       GlobalUtil.model.localTeach.curDuration -= -1;
     },
     scrollTo(time) {
-      document.getElementById("bottom-right-frame").scrollLeft = 60 * (parseInt(time / 10) * 10);
+      document.getElementById("bottom-right-frame").scrollLeft = 1800 * 60; //60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
       const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
@@ -413,21 +426,24 @@ export default {
       // GlobalUtil.model.localTeach.curEditingFileUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       this.editState = true;
       GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, 0);
+      // GlobalUtil.model.localTeach.onSelect(null, -1);
       this.onwinresize();
       setTimeout(() => {
-        document.getElementById("bottom-right-frame").scrollLeft = 0;
-        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+        // document.getElementById("bottom-right-frame").scrollLeft = 0;
+        // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
         this.onwinresize();
       });
     },
     cancelEdit() {
-      this.editState = false;
+      this.editState = false;      
       GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, 0);
+      GlobalUtil.model.localTeach.onSelect(null, -1);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
+      setTimeout(() => {
+        this.$refs.tree.setCurrentKey(GlobalUtil.model.localTeach.curSelectedTreeItem.uuid);
+      });
     },
     delProj(uuid) {
       const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
@@ -563,7 +579,7 @@ export default {
               const type = data.tpye;
               file.storeType = data.type;
               file.isContinus = isContinus;
-              GlobalUtil.model.localTeach.isContinus = isContinus;
+              // GlobalUtil.model.localTeach.isContinus = isContinus;
               // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
               GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
@@ -573,7 +589,7 @@ export default {
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
-            GlobalUtil.model.localTeach.onSelect(null, 0);
+            GlobalUtil.model.localTeach.onSelect(null, -1);
             // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
@@ -684,8 +700,8 @@ export default {
     },
     saveChangeClassObject: () => {
       return {
-        'save-change-btn': GlobalUtil.model.localTeach.hasChange === true,
-        'save-change-btn-dark': GlobalUtil.model.localTeach.hasChange === false,
+        'save-change-btn': GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0,
+        'save-change-btn-dark': !(GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0),
       }
     },
   },

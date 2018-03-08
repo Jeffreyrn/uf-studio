@@ -22,7 +22,7 @@ self.hasChange = false;
 self.curEditingFileUUID = '';
 self.fileDatas = {};
 self.lastFileData = [];
-self.isContinus = false;
+// self.isContinus = false;
 self.visible = {
   starRecording: false,
 }
@@ -270,6 +270,7 @@ self.remoteProjs2Local = (dict) => {
 };
 
 self.onSelect = (e, index) => {
+  GlobalUtil.model.localTeach.curSelectedIndex = index;
   const point = GlobalUtil.model.localTeach.getFileData(GlobalUtil.model.localTeach.curEditingFileUUID, index);
   if (point === null || point === undefined) {
     // GlobalUtil.model.localTeach.curSelectedIndex = -1;
