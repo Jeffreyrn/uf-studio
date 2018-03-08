@@ -29,6 +29,8 @@ self.visible = {
 self.projTypeSelected = '1';
 self.projTypeSelectedShow = false;
 self.projRenameShow = false;
+self.willOnSelectIndex = -1;
+self.changeSelectedShow = false;
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
 self.curProTreeDatas = [];
@@ -178,6 +180,29 @@ self.isHasProj = (name) => {
   }
   self.dialogErrorTips = '';
   return true;
+};
+
+self.onSaveChange = (callback) => {
+  console.log(`on Save Change`);
+  const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
+  const index = GlobalUtil.model.localTeach.curSelectedIndex;
+  const point = GlobalUtil.model.localTeach.curPoint;
+  const points = GlobalUtil.model.localTeach.fileDatas[uuid];
+  points[index] = point;
+
+  const textDict = {
+    type: GlobalUtil.model.localTeach.curProj.type,
+    total: points.length,
+    points: points,
+  };
+  const text = JSON.stringify(textDict);
+
+  CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
+    GlobalUtil.model.localTeach.hasChange = false;
+    if(callback) {
+      callback();
+    }
+  });
 };
 
 self.getTeachFileInfo = (proj, uuid) => {

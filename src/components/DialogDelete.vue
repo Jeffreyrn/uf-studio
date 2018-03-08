@@ -21,8 +21,6 @@
 <script>
 
 const path = require('path')
-  
-import CustomSelect from './CustomSelect';
 
 export default {
   data () {
@@ -48,7 +46,6 @@ export default {
     },
   },
   components: {
-    CustomSelect,
   },
   mounted() {
     // const div = document.getElementById('root-delete');

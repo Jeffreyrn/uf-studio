@@ -68,7 +68,7 @@
                 </div>
               </div>
               <div v-if="editState===true">
-                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='onSaveChange'>Save change</button>
+                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='model.localTeach.onSaveChange'>Save change</button>
                 <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
 
@@ -135,6 +135,8 @@
       v-if="model.localTeach.projRenameShow">
     </DialogTeachProjName>
 
+    <DialogTeachAlert v-if="model.localTeach.changeSelectedShow===true"></DialogTeachAlert>
+
   </div>
 </template>
 <script>
@@ -150,6 +152,7 @@ import EndSet from './common/EndSet';
 import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
 import * as types from './../store/mutation-types';
+import DialogTeachAlert from './DialogTeachAlert';
 
 const path = require('path');
 
@@ -224,26 +227,25 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
-    onSaveChange() {
-      console.log(`on Save Change`);
-      const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
-      const index = GlobalUtil.model.localTeach.curSelectedIndex;
-      const point = GlobalUtil.model.localTeach.curPoint;
-      const points = GlobalUtil.model.localTeach.fileDatas[uuid];
-      points[index] = point;
+    // onSaveChange() {
+    //   console.log(`on Save Change`);
+    //   const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
+    //   const index = GlobalUtil.model.localTeach.curSelectedIndex;
+    //   const point = GlobalUtil.model.localTeach.curPoint;
+    //   const points = GlobalUtil.model.localTeach.fileDatas[uuid];
+    //   points[index] = point;
 
-      const textDict = {
-        type: GlobalUtil.model.localTeach.curProj.type,
-        total: points.length,
-        points: points,
-      };
-      const text = JSON.stringify(textDict);
+    //   const textDict = {
+    //     type: GlobalUtil.model.localTeach.curProj.type,
+    //     total: points.length,
+    //     points: points,
+    //   };
+    //   const text = JSON.stringify(textDict);
 
-      CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
-        GlobalUtil.model.localTeach.hasChange = false;
-      });
-      // this.editState = false;
-    },
+    //   CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
+    //     GlobalUtil.model.localTeach.hasChange = false;
+    //   });
+    // },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
@@ -402,7 +404,7 @@ export default {
         setTimeout(() => {
           console.log(`wait for 5 sec`);
           this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
-        }, 1000);
+        }, 100);
         
       });
       GlobalUtil.model.localTeach.curDuration -= -1;
@@ -686,6 +688,7 @@ export default {
     EndSet,
     // EndJointControl,
     EmulatorControl,
+    DialogTeachAlert,
   },
   computed: {
     getCurFile(){
