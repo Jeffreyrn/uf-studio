@@ -47,7 +47,7 @@
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="">{{index+1}}
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="">{{index+1}}
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@
             </div>
           </div>
           <div v-else>
-            <div class="line-single-ball" style="">
+            <div class="line-single-ball" style="">{{index+1}}
             </div>
           </div>
         </div>
@@ -219,6 +219,10 @@ export default {
 }
 .line-single-ball {
   background:white;
+  color: #444;
+  font-size: 10px;
+  text-align: center;
+  padding-top: 3px;
 }
 .line-single-ball:after {
   border-top-color: #fff;
