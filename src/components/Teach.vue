@@ -77,7 +77,15 @@
         </div>
       </div>
 
-      <div class="projects-list-wrapper" v-if="editState===false">
+      <div class="control-wrapper" v-if="model.localTeach.visible.starRecording===true || editState===true">
+        <!-- <XarmModel></XarmModel> -->
+        <!-- <div>
+          <EndSet></EndSet>
+        </div> -->
+        <!-- <EndJointControl></EndJointControl> -->
+        <EmulatorControl></EmulatorControl>
+      </div>
+      <div v-else class="projects-list-wrapper">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper" id="tree-wrapper">
           <!-- :ref="tree" -->
@@ -93,14 +101,6 @@
             >
           </el-tree>
         </div>
-      </div>
-      <div class="control-wrapper" v-else>
-        <!-- <XarmModel></XarmModel> -->
-        <!-- <div>
-          <EndSet></EndSet>
-        </div> -->
-        <!-- <EndJointControl></EndJointControl> -->
-        <EmulatorControl></EmulatorControl>
       </div>
     </div>
 
@@ -241,7 +241,7 @@ export default {
       CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
         GlobalUtil.model.localTeach.hasChange = false;
       });
-      this.editState = false;
+      // this.editState = false;
     },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
@@ -417,18 +417,21 @@ export default {
       // GlobalUtil.model.localTeach.onSelect(null, -1);
       this.onwinresize();
       setTimeout(() => {
-        document.getElementById("bottom-right-frame").scrollLeft = 0;
-        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+        // document.getElementById("bottom-right-frame").scrollLeft = 0;
+        // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
         this.onwinresize();
       });
     },
     cancelEdit() {
-      this.editState = false;
+      this.editState = false;      
       GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, -1);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
+      setTimeout(() => {
+        this.$refs.tree.setCurrentKey(GlobalUtil.model.localTeach.curSelectedTreeItem.uuid);
+      });
     },
     delProj(uuid) {
       const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
@@ -685,8 +688,8 @@ export default {
     },
     saveChangeClassObject: () => {
       return {
-        'save-change-btn': GlobalUtil.model.localTeach.hasChange === true,
-        'save-change-btn-dark': GlobalUtil.model.localTeach.hasChange === false,
+        'save-change-btn': GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0,
+        'save-change-btn-dark': !(GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0),
       }
     },
   },

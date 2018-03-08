@@ -6,12 +6,12 @@
         {{ index }}
       </div> -->
       <div class="block-cell" v-if="model.localTeach.curSelectedTreeItem.uuid!==''">
-        <div style="width:90px;">
+        <div style="width:40px;">
         </div>
         <div v-for='index in model.localTeach.showArr'>
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)' :editState='editState'></ListProjCell>
         </div>
-        <div style="width:90px;">
+        <div style="width:20px;">
         </div>
         <!-- <div v-if='model.localTeach.curProj.type==='continuous''>
           <ListProjCell :editState='editState'></ListProjCell>
@@ -200,7 +200,7 @@ export default {
 }
 .list-project-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
   width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
-  height: 9px;
+  height: 30px;
 }
 .list-project-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
   border-radius: 5px;
