@@ -413,7 +413,7 @@ export default {
       // GlobalUtil.model.localTeach.curEditingFileUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       this.editState = true;
       GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, 0);
+      // GlobalUtil.model.localTeach.onSelect(null, -1);
       this.onwinresize();
       setTimeout(() => {
         document.getElementById("bottom-right-frame").scrollLeft = 0;
@@ -424,7 +424,7 @@ export default {
     cancelEdit() {
       this.editState = false;
       GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, 0);
+      GlobalUtil.model.localTeach.onSelect(null, -1);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
@@ -563,7 +563,7 @@ export default {
               const type = data.tpye;
               file.storeType = data.type;
               file.isContinus = isContinus;
-              GlobalUtil.model.localTeach.isContinus = isContinus;
+              // GlobalUtil.model.localTeach.isContinus = isContinus;
               // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
               GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
@@ -573,7 +573,7 @@ export default {
             }
             GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
             GlobalUtil.model.localTeach.showArr = tempArr;
-            GlobalUtil.model.localTeach.onSelect(null, 0);
+            GlobalUtil.model.localTeach.onSelect(null, -1);
             // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
