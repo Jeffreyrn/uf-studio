@@ -2,12 +2,16 @@
   <div class="end-container">
     <div class="container-title">TCP</div>
     <ul class="position-set">
-      <li><div>X</div><input v-model.number="position.x" type="number"><span>mm</span></li>
-      <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
-      <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li>
-      <li><div>Roll</div><input v-model.number="orientation.roll" type="number"><sup>&deg;</sup></li>
-      <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><sup>&deg;</sup></li>
-      <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><sup>&deg;</sup></li>
+      <li v-for="li in config.position.nameArray" :key="li">
+        <div>{{li}}</div><input v-model.number="position[li]" type="number" :max="config.position.max" :min="config.position.min" @input="validatePosition(li)"><span>mm</span>
+      </li>
+      <!-- <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
+      <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li> -->
+      <li v-for="li in config.orientation.nameArray" :key="li">
+        <div>{{li}}</div><input v-model.number="orientation[li]" type="number" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><sup>&deg;</sup>
+      </li>
+      <!-- <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><sup>&deg;</sup></li>
+      <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><sup>&deg;</sup></li> -->
       <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
     </ul>
     <div class="set-button">
@@ -20,7 +24,39 @@
 import * as types from '../../store/mutation-types';
 
 export default {
+  data() {
+    return {
+      config: {
+        position: {
+          nameArray: ['x', 'y', 'z'],
+          max: 800,
+          min: -800,
+        },
+        orientation: {
+          nameArray: ['roll', 'yaw', 'pitch'],
+          max: 180,
+          min: -180,
+        },
+      },
+    }
+  },
   methods: {
+    validatePosition(index) {
+      if (this.position[index] > this.config.position.max) {
+        this.$set(this.position, index, this.config.position.max)
+      }
+      if (this.position[index] < this.config.position.min) {
+        this.$set(this.position, index, this.config.position.min)
+      }
+    },
+    validateOrientation(index) {
+      if (this.orientation[index] > this.config.orientation.max) {
+        this.$set(this.orientation, index, this.config.orientation.max)
+      }
+      if (this.orientation[index] < this.config.orientation.min) {
+        this.$set(this.orientation, index, this.config.orientation.min)
+      }
+    },
     resetEnd() {
       // vuex reset position&orientation
       this.$store.commit(types.GO_HOME);

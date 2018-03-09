@@ -33,16 +33,16 @@
         <div>
           <span class="config-title">Speed</span>
           <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="100" :min="5">
+          <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
           <img src="./../../assets/img/control/icon_speed2.svg" alt="">
-          <span class="config-value" v-text="state.speed"></span>
+          <span class="config-value" v-text="stateSpeed"></span>
         </div>
         <div>
           <span class="config-title">Acceleration</span>
           <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="state.acceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
+          <input type="range" v-model="stateAcceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
           <img src="./../../assets/img/control/icon_speed2.svg" alt="">
-          <span class="config-value" v-text="state.acceleration"></span>
+          <span class="config-value" v-text="stateAcceleration"></span>
         </div>
       </div>
     </el-col>
@@ -54,13 +54,13 @@
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
             <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" 
-            :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            :max="config.jointMax" :min="config.jointMin" 
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
           <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" 
           @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
-          :max="config.joint.max[j-1]" :min="config.joint.min[j-1]">
+          :max="config.jointMax" :min="config.jointMin">
           <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
@@ -157,6 +157,7 @@ export default {
         inputWidth: [],
         rangeLength: [],
       },
+      currentMoveIndex: null,
     };
   },
   mounted() {
@@ -174,13 +175,13 @@ export default {
     const cx = 100;
     const cy = 140;
     const sRadius = 120;
-    const strokewidth = 15;
+    const strokewidth = 18;
     // const thumbAngle = Math.PI / 100;
     const value_from = (Math.PI * 4) / 3;
     const value_to = (Math.PI * 5) / 3;
     let mouseX;
     let mouseY;
-    const indicatorSize = 25;
+    const indicatorSize = 27;
     // default value
     // self.cData.r = self.radiansToDegrees(self.radianAngle); // default r value
     sCtx.lineCap = 'round';
@@ -197,9 +198,16 @@ export default {
       // circle
       sCtx.beginPath();
       sCtx.arc(cx, cy, sRadius, value_from, value_to);
-      sCtx.strokeStyle = '#ffffff';
+      sCtx.strokeStyle = '#5A93D7';
       sCtx.lineWidth = strokewidth;
       sCtx.stroke();
+      // circle border
+      sCtx.beginPath();
+      sCtx.arc(cx, cy, sRadius, value_from, value_to);
+      sCtx.strokeStyle = '#ffffff';
+      sCtx.lineWidth = strokewidth - 2;
+      sCtx.stroke();
+      // indicator
       let x;
       let y;
       if (self.radianAngle >= ((-2 * Math.PI) / 3) && self.radianAngle <= (Math.PI / -2)) {
@@ -343,8 +351,9 @@ export default {
       });
     },
     setJoystickStep(nipple, type) {
+      const zoom = type === 'position' ? 7 : 1;
       if (nipple.direction) {
-        const speed = nipple.force * 7; // max 20
+        const speed = nipple.force * zoom; // max 20
         let stepX = speed;
         let stepY = speed;
         if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
@@ -390,20 +399,29 @@ export default {
       this.$store.commit(types.SET_ROBOT_STATE, data);
     },
     setJointOffline(index) {
+      // on input event
       // console.log('test', index, value);
-      if (this.joints[index] > this.config.joint.max[index]) {
-        this.$set(this.joints, index, this.config.joint.max[index])
+      if (this.joints[index] > this.config.jointMax) {
+        this.$set(this.joints, index, this.config.jointMax)
       }
-      if (this.joints[index] < this.config.joint.min[index]) {
-        this.$set(this.joints, index, this.config.joint.min[index])
+      if (this.joints[index] < this.config.jointMin) {
+        this.$set(this.joints, index, this.config.jointMin)
       }
+      this.setRangeMask(index, this.joints[index])
       if (!this.stateOnline) {
         console.log('offline')
         this.setJointCmd(index);
       }
+      // if (this.stateError < 0) {
+      //   this.$set(this.joints, index, this.$store.getters.joints[index])
+      //   this.$message('unable to move.')
+      //   console.log('unun2', this.$store.getters.joints[index])
+      // }
     },
     setJointOnline(index) {
+      // on change event
       if (this.stateOnline) {
+        this.currentMoveIndex = index
         let data = this.joints[index];
         console.log('online')
         console.log(this.joints[index]);
@@ -550,7 +568,7 @@ export default {
   watch: {
     stateError(newValue) {
       this.jointRangeMoved.state = false;
-      if (newValue === -6) {
+      if (newValue === -6 || !this.jointRangeMoved.state) {
         this.$message('unable to move.');
       }
       else if (newValue < 0) {
@@ -564,9 +582,9 @@ export default {
           },
         });
       }
-      else {
-        this.$message('Connected.');
-      }
+      // else {
+      //   this.$message('Connected.');
+      // }
     },
     // 'state.joint': (newValue) => {
     //   console.log('watch posi print:');
@@ -580,8 +598,32 @@ export default {
         this.setRangeMask(index, value);
       });
     },
+    stateErrorCount() {
+      if (this.stateError < 0) {
+        this.$set(this.joints, this.currentMoveIndex, this.$store.getters.joints[this.currentMoveIndex])
+        this.$message('unable to move.')
+        console.log('unun2', this.$store.getters.joints[this.currentMoveIndex])
+      }
+    },
   },
   computed: {
+    stateSpeed: {
+      get() {
+        return this.$store.state.robot.info.speed
+      },
+      set() {
+      },
+    },
+    stateAcceleration: {
+      get() {
+        return this.$store.state.robot.info.acceleration
+      },
+      set() {
+      },
+    },
+    stateErrorCount() {
+      return this.$store.state.robot.status.errorCount
+    },
     stateError() {
       return this.$store.state.robot.status.error;
     },
@@ -596,7 +638,6 @@ export default {
         const arr = this.$store.getters.joints;
         // console.log('get ax', arr, this.state.joints);
         const values = arr.map(str => Number(str));
-
         if (this.jointRangeMoved.state && this.stateOnline) {
           if (arr[this.jointRangeMoved.index] === this.jointRangeMoved.value) {
             this.jointRangeMoved.state = false;
@@ -614,11 +655,6 @@ export default {
           return values.slice();
         }
         return [0, 0, 0, 0, 0, 0, 0];
-      },
-      set(value) {
-        console.log('SET');
-        console.table(value);
-        // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
       },
     },
     // testtest: {
@@ -668,7 +704,7 @@ span.text {
     position: relative;
     justify-content: space-around;
     & > div {
-      margin: 3.8% 0;
+      margin: 3% 0;
       .joystick-wrapper {
         padding: 20% 0;
         margin: 0;
@@ -691,7 +727,7 @@ span.text {
           opacity: 1;
           transform: rotate(-90deg);
           border-radius: 100px;
-          border: none;
+          border: #5A93D7 solid 1px;
           cursor: default;
         }
         #z-control::-webkit-slider-thumb {
@@ -733,7 +769,7 @@ span.text {
       //   left: 10%;
       // }
       .yaw-wrapper {
-        padding-bottom: 40%;
+        padding-bottom: 45%;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
@@ -795,7 +831,7 @@ span.text {
       font-size: 13px;
       color: #FFFFFF;
       letter-spacing: -0.75px;
-      width: 6vw;
+      width: 7px;
       text-align: center;
     }
   }

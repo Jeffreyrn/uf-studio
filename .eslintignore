@@ -18,4 +18,6 @@
 /src/components/CustomSelect.vue
 /src/components/DialogDelete.vue
 /src/components/DialogTeachProjName.vue
+/src/components/DialogTeachSaveRecord.vue
+/src/components/DialogTeachAlert.vue
 /src/router/*
