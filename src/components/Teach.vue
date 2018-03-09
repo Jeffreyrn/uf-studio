@@ -345,6 +345,7 @@ export default {
           self.$refs.tree.setCurrentKey(filePath);
           GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
           self.handleNodeClick({uuid: filePath});
+          this.scrollTo(0);
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {

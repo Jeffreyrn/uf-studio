@@ -44,14 +44,15 @@
         <!--</div>-->
         <div v-if="model.localTeach.visible.starRecording===true">
           <div v-if="index===model.localTeach.showArr.length-1">
-            <div class="line-single-ball-recording" style="">
+            <div class="line-single-ball-recording">
               <img class="line-logo" src="../../assets/img/edit/recording/logo_st.svg">
-              <span class="line-number">{{index+1}}</span>
+              <span class="line-number" style="color:white;">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
             <div class="line-single-ball" style="position:relative;">
-              <span class="line-number">{{index+1}}</span>
+              <!-- <span class="line-number">{{index+1}}</span> -->
+              <span class="line-number"></span>
             </div>
           </div>
         </div>
@@ -59,6 +60,11 @@
           <div v-if="index===model.localTeach.curSelectedIndex">
             <div @click='onSelect($event, index)' class="line-single-ball-selected cursor-pointer" style="position: relative">
               <span class="line-number-selected">{{index+1}}</span>
+            </div>
+          </div>
+          <div v-else-if="index===model.localTeach.showArr.length-1">
+            <div @click='onSelect($event, index)' class="line-single-ball-end cursor-pointer" style="position:relative;">
+              <span class="line-number" style="color:white;">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
@@ -233,11 +239,12 @@ export default {
   border-top-color: #E27347;
 }
 .line-single-ball-end {
-  background:#FF5469 ;
+  // background:#FF5469 ;
+  background: #E24D4A;
 }
 .line-single-ball-end:after {
-  border-top-color: #FF5469 ;
-
+  // border-top-color: #FF5469 ;
+  border-top-color: #E24D4A;
 }
 .line-single-ball-selected {
   // margin-left:50px;
@@ -255,6 +262,8 @@ export default {
   text-align: center;
   // color: #fff;
   color: black;
+  padding-top: 2px;
+  font-family: 'Gotham-Book';
 }
 .line-number-selected {
   position: absolute;
