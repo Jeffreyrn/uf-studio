@@ -31,6 +31,7 @@ self.projTypeSelectedShow = false;
 self.projRenameShow = false;
 self.willOnSelectIndex = -1;
 self.changeSelectedShow = false;
+self.saveDialogShow = false
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
 self.curProTreeDatas = [];
