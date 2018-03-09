@@ -79,7 +79,7 @@ export default {
 }
 .top-title {
   position: absolute;
-  left: 20px;
+  left: 10px;
   top: 20px;
   width: 100px;
   font-family: 'Gotham-Medium';
@@ -130,14 +130,14 @@ export default {
   /* margin-left: 178px; */
   /* background-color: green; */
   /* margin-top:74px; */
-  margin-top: 88px;
+  margin-top: 73px;
   background: #52BF53;
   line-height: 40px;
   /* cursor: pointer; */
 }
 .save-dialog-text {
   text-align: center;
-  margin-top:100px;
+  margin-top:115px;
 }
 .save-dialog-text p{
   font-size: 16px;
