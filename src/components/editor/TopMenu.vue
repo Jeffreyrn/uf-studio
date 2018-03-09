@@ -363,7 +363,7 @@ export default {
       if (curFile.type === 'folder') {
         this.model.localProjTree.folderOrFile = 'rename';
         this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
-        this.model.localProjTree.curDialogInputText = curFile.name;'';//
+        this.model.localProjTree.curDialogInputText = curFile.name;//'';//
         GlobalUtil.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;

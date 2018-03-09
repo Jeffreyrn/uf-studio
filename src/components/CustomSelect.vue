@@ -5,7 +5,8 @@
                 <div class="select-head">
                     <span class="select-head-cont select-font" style="padding-top:10px;"></span>
                     <span class="select-icon"></span>
-                    <div class="position-absolute select-toparrow">
+                    <!-- <div class="position-absolute select-toparrow"> -->
+                    <div class="position-absolute">
                     </div>
                     <div class="position-absolute select-bottomarrow">
                     </div>
