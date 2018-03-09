@@ -2,7 +2,7 @@
   <el-tree
     id="tree-root"
     style="padding-left:10px;"
-    class="ide-project-list noselect"
+    class="ide-project-list noselected"
     :data="model.localProjTree.curProTreeDatas"
     node-key="uuid"
     :indent=12

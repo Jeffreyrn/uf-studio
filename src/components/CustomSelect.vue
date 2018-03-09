@@ -1,5 +1,5 @@
 <template>
-    <div class="noselect">
+    <div class="noselected">
         <ul class="root-select">
             <li>
                 <div class="select-head">
