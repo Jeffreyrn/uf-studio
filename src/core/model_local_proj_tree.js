@@ -739,9 +739,11 @@ self.remoteProjs2Local = (dict) => {
   const filesDict = {};
   // console.log(`datas = ${datas}`);
   const projDates = {};
+  const projSecs = {};
   for (let i = 0; i < datas.length; i += 1) {
     const aFileRecord = datas[i];
     const ctime = aFileRecord.ctime;
+    const ctime_secs = aFileRecord.ctime_secs;
     const type = aFileRecord.type;
     // console.log(`aFileRecord = ${aFileRecord}`);
     const filepath = aFileRecord.path;
@@ -753,6 +755,7 @@ self.remoteProjs2Local = (dict) => {
     const projPath = path.join(CommandsEditorSocket.ROOT_DIR, projName);
     if (filepath === projPath) {
       projDates[filepath] = ctime;
+      projSecs[filepath] = ctime_secs
     }
     let curProj = null;
     for (let i = 0; i < projs.length; i += 1) {
@@ -768,6 +771,7 @@ self.remoteProjs2Local = (dict) => {
       curProj.files = [];
       curProj.superid = '';
       curProj.ctime = projDates[curProj.uuid];
+      curProj.ctime_secs = projSecs[curProj.uuid];
       projs.push(curProj);
     }
     // console.log(`projName 2 = ${projName}, filepath = ${filepath}`);
@@ -790,12 +794,6 @@ self.remoteProjs2Local = (dict) => {
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
         let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
-        // const content = self.curSelectedContent[uuid];
-
-        // file.proId = curProj.uuid;
-
-        // getSelectedContent
-
         curProj.files.push(file);
       }
       curProj.files = self.sortProjFiles(curProj.files);
@@ -805,7 +803,11 @@ self.remoteProjs2Local = (dict) => {
     // console.log(`filesDict = ${JSON.stringify(filesDict)}`);
     // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
   }
-  self.curProjList = projs;
+  // projs.sort((a,b) => {
+  //   a.ctime_secs - b.ctime_secs;
+  // });
+  const sortProjs = bubbleSort(projs);
+  self.curProjList = sortProjs;
   if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
     self.changeProj(self.curProjList[0].uuid);
   }
@@ -815,5 +817,19 @@ self.remoteProjs2Local = (dict) => {
   self.curPro2Tree();
   // callback(projs);
 };
+
+function bubbleSort(arr) {
+  var len = arr.length;
+  for (var i = 0; i < len; i++) {
+      for (var j = 0; j < len - 1 - i; j++) {
+          if (arr[j].ctime_secs < arr[j+1].ctime_secs) {        //相邻元素两两对比
+              var temp = arr[j+1];        //元素交换
+              arr[j+1] = arr[j];
+              arr[j] = temp;
+          }
+      }
+  }
+  return arr;
+}
 
 export default self;
