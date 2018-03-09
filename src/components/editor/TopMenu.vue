@@ -27,10 +27,17 @@ import { setTimeout } from 'timers';
     </div>
     <div class="folder-icon float-left" @click="addFolder()" title='Add folder'>
     </div>
-    <div class="rename-icon float-left" @click="rename()" title='Rename'>
+
+    <div v-if="model.localProjTree.curSelectedUUID!==''" class="rename-icon float-left cursor-pointer" @click="rename()" title='Rename'>
     </div>
-    <div class="del-icon float-left" @click="delFile()" title='Delete file'>
+    <div v-else class="rename-icon float-left" title='Rename' style="opacity:0.3">
     </div>
+
+    <div v-if="model.localProjTree.curSelectedUUID!==''&&model.localProjTree.curSelectedUUID!==model.localProjTree.curProj.uuid" class="del-icon float-left cursor-pointer" @click="delFile()" title='Delete file'>
+    </div>
+    <div v-else class="del-icon float-left" title='Delete file' style="opacity:0.3">
+    </div>
+
     <span v-if="model.localProjTree.isCmdRunning===true">
       <div class="stop-icon float-right" @click="stop()" title='Stop'>
       </div>
@@ -510,7 +517,7 @@ export default {
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_rename.svg');
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .del-icon {
@@ -519,7 +526,7 @@ export default {
   width: 24px;
   height: 24px;
   background-image: url('./../../assets/img/ide/btn_trash.svg');
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .stop-icon {
