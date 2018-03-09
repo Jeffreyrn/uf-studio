@@ -333,6 +333,8 @@ const mutations = {
     }
   },
   [types.GO_HOME](state) {
+    state.info.acceleration = 500
+    state.info.speed = 50
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_gohome',

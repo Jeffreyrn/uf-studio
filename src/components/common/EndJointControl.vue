@@ -33,16 +33,16 @@
         <div>
           <span class="config-title">Speed</span>
           <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="100" :min="5">
+          <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
           <img src="./../../assets/img/control/icon_speed2.svg" alt="">
-          <span class="config-value" v-text="state.speed"></span>
+          <span class="config-value" v-text="stateSpeed"></span>
         </div>
         <div>
           <span class="config-title">Acceleration</span>
           <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="state.acceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
+          <input type="range" v-model="stateAcceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
           <img src="./../../assets/img/control/icon_speed2.svg" alt="">
-          <span class="config-value" v-text="state.acceleration"></span>
+          <span class="config-value" v-text="stateAcceleration"></span>
         </div>
       </div>
     </el-col>
@@ -54,13 +54,13 @@
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
             <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" 
-            :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            :max="config.jointMax" :min="config.jointMin" 
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
           <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" 
           @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
-          :max="config.joint.max[j-1]" :min="config.joint.min[j-1]">
+          :max="config.jointMax" :min="config.jointMin">
           <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
@@ -564,9 +564,9 @@ export default {
           },
         });
       }
-      else {
-        this.$message('Connected.');
-      }
+      // else {
+      //   this.$message('Connected.');
+      // }
     },
     // 'state.joint': (newValue) => {
     //   console.log('watch posi print:');
@@ -582,6 +582,20 @@ export default {
     },
   },
   computed: {
+    stateSpeed: {
+      get() {
+        return this.$store.state.robot.info.speed
+      },
+      set() {
+      },
+    },
+    stateAcceleration: {
+      get() {
+        return this.$store.state.robot.info.acceleration
+      },
+      set() {
+      },
+    },
     stateError() {
       return this.$store.state.robot.status.error;
     },
@@ -795,7 +809,7 @@ span.text {
       font-size: 13px;
       color: #FFFFFF;
       letter-spacing: -0.75px;
-      width: 6vw;
+      width: 7px;
       text-align: center;
     }
   }
