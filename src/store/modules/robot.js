@@ -50,6 +50,7 @@ const state = {
     printed: null,
     paused: null,
     error: null,
+    errorCount: 0,
   },
   message: {
     buffer: {},
@@ -76,6 +77,25 @@ const mutations = {
   },
   [types.SET_ERROR](state, data) {
     state.status.error = data;
+    state.status.errorCount += 1;
+    if (data < 0) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_get_joint_pose',
+        {
+          data: '',
+        },
+        (response) => {
+          const joint = response.data;
+          if (joint && (joint.length > 0)) {
+            state.info.axis = joint.map(num => Number(num.toFixed(2))).slice(); // .slice()
+            state.info.test = joint[1];
+          }
+          else {
+            console.log('[response]get_joint_pose FAIL', response);
+          }
+        },
+      );
+    }
   },
   [types.GET_ROBOT_STATUS](state) {
     window.GlobalUtil.socketCom.sendCmd(

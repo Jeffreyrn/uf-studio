@@ -157,6 +157,7 @@ export default {
         inputWidth: [],
         rangeLength: [],
       },
+      currentMoveIndex: null,
     };
   },
   mounted() {
@@ -343,8 +344,9 @@ export default {
       });
     },
     setJoystickStep(nipple, type) {
+      const zoom = type === 'position' ? 7 : 1;
       if (nipple.direction) {
-        const speed = nipple.force * 7; // max 20
+        const speed = nipple.force * zoom; // max 20
         let stepX = speed;
         let stepY = speed;
         if (nipple.direction.angle === 'up' || nipple.direction.angle === 'down') {
@@ -390,20 +392,29 @@ export default {
       this.$store.commit(types.SET_ROBOT_STATE, data);
     },
     setJointOffline(index) {
+      // on input event
       // console.log('test', index, value);
-      if (this.joints[index] > this.config.joint.max[index]) {
-        this.$set(this.joints, index, this.config.joint.max[index])
+      if (this.joints[index] > this.config.jointMax) {
+        this.$set(this.joints, index, this.config.jointMax)
       }
-      if (this.joints[index] < this.config.joint.min[index]) {
-        this.$set(this.joints, index, this.config.joint.min[index])
+      if (this.joints[index] < this.config.jointMin) {
+        this.$set(this.joints, index, this.config.jointMin)
       }
+      this.setRangeMask(index, this.joints[index])
       if (!this.stateOnline) {
         console.log('offline')
         this.setJointCmd(index);
       }
+      // if (this.stateError < 0) {
+      //   this.$set(this.joints, index, this.$store.getters.joints[index])
+      //   this.$message('unable to move.')
+      //   console.log('unun2', this.$store.getters.joints[index])
+      // }
     },
     setJointOnline(index) {
+      // on change event
       if (this.stateOnline) {
+        this.currentMoveIndex = index
         let data = this.joints[index];
         console.log('online')
         console.log(this.joints[index]);
@@ -550,7 +561,7 @@ export default {
   watch: {
     stateError(newValue) {
       this.jointRangeMoved.state = false;
-      if (newValue === -6) {
+      if (newValue === -6 || !this.jointRangeMoved.state) {
         this.$message('unable to move.');
       }
       else if (newValue < 0) {
@@ -580,6 +591,13 @@ export default {
         this.setRangeMask(index, value);
       });
     },
+    stateErrorCount() {
+      if (this.stateError < 0) {
+        this.$set(this.joints, this.currentMoveIndex, this.$store.getters.joints[this.currentMoveIndex])
+        this.$message('unable to move.')
+        console.log('unun2', this.$store.getters.joints[this.currentMoveIndex])
+      }
+    },
   },
   computed: {
     stateSpeed: {
@@ -596,6 +614,9 @@ export default {
       set() {
       },
     },
+    stateErrorCount() {
+      return this.$store.state.robot.status.errorCount
+    },
     stateError() {
       return this.$store.state.robot.status.error;
     },
@@ -610,7 +631,6 @@ export default {
         const arr = this.$store.getters.joints;
         // console.log('get ax', arr, this.state.joints);
         const values = arr.map(str => Number(str));
-
         if (this.jointRangeMoved.state && this.stateOnline) {
           if (arr[this.jointRangeMoved.index] === this.jointRangeMoved.value) {
             this.jointRangeMoved.state = false;
@@ -628,11 +648,6 @@ export default {
           return values.slice();
         }
         return [0, 0, 0, 0, 0, 0, 0];
-      },
-      set(value) {
-        console.log('SET');
-        console.table(value);
-        // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
       },
     },
     // testtest: {
