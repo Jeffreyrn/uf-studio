@@ -44,46 +44,36 @@
         <!--</div>-->
         <div v-if="model.localTeach.visible.starRecording===true">
           <div v-if="index===model.localTeach.showArr.length-1">
-            <div class="line-single-ball-recording" style="">
+            <div class="line-single-ball-recording">
               <img class="line-logo" src="../../assets/img/edit/recording/logo_st.svg">
-              <span class="line-number">{{index+1}}</span>
+              <span class="line-number" style="color:white;">{{index+1}}</span>
             </div>
           </div>
           <div v-else>
             <div class="line-single-ball" style="position:relative;">
-              <span class="line-number">{{index+1}}</span>
+              <!-- <span class="line-number">{{index+1}}</span> -->
+              <span class="line-number"></span>
             </div>
           </div>
         </div>
-        <div v-else @click='onSelect($event, index)' style="cursor:pointer;">
+        <div v-else>
           <div v-if="index===model.localTeach.curSelectedIndex">
-            <div class="line-single-ball-selected" style="position: relative">
+            <div @click='onSelect($event, index)' class="line-single-ball-selected cursor-pointer" style="position: relative">
               <span class="line-number-selected">{{index+1}}</span>
             </div>
           </div>
+          <div v-else-if="index===model.localTeach.showArr.length-1">
+            <div @click='onSelect($event, index)' class="line-single-ball-end cursor-pointer" style="position:relative;">
+              <span class="line-number" style="color:white;">{{index+1}}</span>
+            </div>
+          </div>
           <div v-else>
-            <div class="line-single-ball" style="position:relative;">
+            <div @click='onSelect($event, index)' class="line-single-ball cursor-pointer" style="position:relative;">
               <span class="line-number">{{index+1}}</span>
             </div>
           </div>
         </div>
-        <!-- <div v-else> -->
-          <!-- <div class="line-single-ball" style="position: relative">
-            <span class="line-number">{{index+1}}</span>
-          </div> -->
-          <!-- <div v-if="index===model.localTeach.showArr.length-1">
-            <div class="line-single-ball-end" style="position: relative">
-              <span class="line-number">{{index+1}}</span>
-            </div>
-          </div>
-          <div v-else>
-            <div class="line-single-ball" style="">{{index+1}}
-            </div>
-          </div> -->
-        <!-- </div> -->
       </div>
-      <!-- isContinus false end -->
-      <!-- <div v-if="model.localTeach.curProj.type==='discontinuous' && index === model.localTeach.curSelectedIndex" style="width:60px;height:1px;background-color:red;"></div> -->
     </div>
     <!-- button end -->
   </div>
@@ -107,10 +97,17 @@ export default {
   },
   methods: {
     onSelect(e, index) {
-      console.log(`onSelect index = ${index}, type= ${GlobalUtil.model.localTeach.curProj.type}`);
+      // console.log(`onSelect index = ${index}, type= ${GlobalUtil.model.localTeach.curProj.type}`);
       if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
-        GlobalUtil.model.localTeach.onSelect(e, index);
-        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+        if (GlobalUtil.model.localTeach.hasChange === true) {
+          GlobalUtil.model.localTeach.willOnSelectIndex = index;
+          GlobalUtil.model.localTeach.changeSelectedShow = true;
+        }
+        else {
+          GlobalUtil.model.localTeach.onSelect(e, index);
+          this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+          GlobalUtil.model.localTeach.hasChange = false;
+        }
       }
     },
   },
@@ -230,6 +227,7 @@ export default {
   font-size: 10px;
   // text-align: center;
   padding-top: 3px;
+  // cursor: pointer;
 }
 .line-single-ball:after {
   border-top-color: #fff;
@@ -241,11 +239,12 @@ export default {
   border-top-color: #E27347;
 }
 .line-single-ball-end {
-  background:#FF5469 ;
+  // background:#FF5469 ;
+  background: #E24D4A;
 }
 .line-single-ball-end:after {
-  border-top-color: #FF5469 ;
-
+  // border-top-color: #FF5469 ;
+  border-top-color: #E24D4A;
 }
 .line-single-ball-selected {
   // margin-left:50px;
@@ -253,6 +252,7 @@ export default {
   margin-top:-42px;
   width:24px;
   position: relative;
+  // cursor: pointer;
 }
 .line-number {
   position: absolute;
@@ -262,6 +262,8 @@ export default {
   text-align: center;
   // color: #fff;
   color: black;
+  padding-top: 2px;
+  font-family: 'Gotham-Book';
 }
 .line-number-selected {
   position: absolute;

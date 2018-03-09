@@ -1,0 +1,157 @@
+
+<template>
+  <div id="root-delete" class="noselected">
+    <div class="dialog-wrap">
+      <div class="dialog-cover" @click="closeMyself"></div>
+      <div class="dialog-content">
+        <span class="top-title">System Notice</span>
+        <span class="top-tips">Your changes will be lost if you don’t save them.</span>
+        <div style="margin-top:224px;">
+          <div class="float-left btn-cancel font-style cursor-pointer" @click="closeMyself">
+            Discard
+          </div>
+          <div class="float-left btn-ok font-style cursor-pointer" @click="onsave">
+            Save Change
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+const path = require('path');
+import * as types from './../store/mutation-types';
+
+export default {
+  data () {
+    return {
+      model: GlobalUtil.model,
+    }
+  },
+  methods: {
+    closeMyself() {
+      GlobalUtil.model.localTeach.changeSelectedShow = false;
+      GlobalUtil.model.localTeach.hasChange = false;
+      GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+    },
+    onsave() {
+      GlobalUtil.model.localTeach.onSaveChange(() => {
+        GlobalUtil.model.localTeach.changeSelectedShow = false;
+        GlobalUtil.model.localTeach.hasChange = false;
+        GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      });
+    },
+  },
+  components: {
+  },
+  mounted() {
+  },
+  computed: {
+  },
+}
+</script>
+
+<style scoped>
+.drop-enter-active {
+  transition: all .5s ease;
+}
+.drop-leave-active {
+  transition: all .3s ease;
+}
+.drop-enter {
+  transform: translateY(-500px);
+}
+.drop-leave-active {
+  transform: translateY(-500px);
+}
+.dialog-wrap {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+.dialog-cover {
+  background: #000;
+  opacity: .3;
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.top-title {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  font-family: 'Gotham-Medium';
+  font-size: 16px;
+  color: #575C62;
+  letter-spacing: -0.57px;
+  text-align: center;
+}
+.top-tips {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 126px;
+  margin: auto;
+  font-family: 'Gotham-Medium';
+  font-size: 16px;
+  color: #555555;
+  letter-spacing: -0.57px;
+  text-align: center;
+}
+.dialog-content {
+  width: 470px;
+  position: fixed;
+  height: 264px;
+  top: 20%;
+  left: 0px;
+  right: 0px;
+  margin-left:auto;
+  margin-right:auto;
+  z-index: 10;
+  background: #FFFFFF;
+  overflow: hidden;
+}
+.dialog-close:hover {
+  color: #4fc08d;
+}
+.dialog-add {
+  width: 100%;
+  height: 100px;
+  /* background-color: yellow; */
+}
+.btn-cancel {
+  width: 235px;
+  height: 40px;
+  /* margin-top: 230px; */
+  /* background-color: yellow; */
+  background: #9D9D9D;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+.font-style {
+  font-family: 'Gotham-Book';
+  font-size: 14px;
+  color: #FFFFFF;
+  letter-spacing: -0.44px;
+  text-align: center;
+}
+.btn-ok {
+  width: 235px;
+  height: 40px;
+  /* margin-top: 230px; */
+  /* margin-left: 178px; */
+  /* background-color: green; */
+  background: #52BF53;
+  line-height: 40px;
+  /* cursor: pointer; */
+}
+</style>

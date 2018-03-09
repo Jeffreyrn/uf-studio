@@ -68,7 +68,7 @@
                 </div>
               </div>
               <div v-if="editState===true">
-                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='onSaveChange'>Save change</button>
+                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='model.localTeach.onSaveChange'>Save change</button>
                 <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
 
@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <el-dialog
+    <!-- <el-dialog
       class="save-dialog"
       title="System Notice"
       width="470px"
@@ -116,8 +116,10 @@
         <p>Stop Recording and save automatically.</p>
         <span>The recording file will be saved to my project list</span>
       </div>
-      <el-button @click="finishRecordOK">Ok</el-button>
-    </el-dialog>
+      <el-button style="background:green;width:450px;" @click="finishRecordOK">Ok</el-button>
+    </el-dialog> -->
+
+    <DialogTeachSaveRecord :onok='finishRecordOK' v-if="model.localTeach.saveDialogShow===true"></DialogTeachSaveRecord>
 
     <DialogTeachProjName
       title="Please choose the way you want to record with xArm in this project"
@@ -135,6 +137,8 @@
       v-if="model.localTeach.projRenameShow">
     </DialogTeachProjName>
 
+    <DialogTeachAlert v-if="model.localTeach.changeSelectedShow===true"></DialogTeachAlert>
+
   </div>
 </template>
 <script>
@@ -150,6 +154,8 @@ import EndSet from './common/EndSet';
 import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
 import * as types from './../store/mutation-types';
+import DialogTeachAlert from './DialogTeachAlert';
+import DialogTeachSaveRecord from './DialogTeachSaveRecord';
 
 const path = require('path');
 
@@ -224,26 +230,25 @@ export default {
     //   name = name.split('.')[0];
     //   return name;
     // },
-    onSaveChange() {
-      console.log(`on Save Change`);
-      const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
-      const index = GlobalUtil.model.localTeach.curSelectedIndex;
-      const point = GlobalUtil.model.localTeach.curPoint;
-      const points = GlobalUtil.model.localTeach.fileDatas[uuid];
-      points[index] = point;
+    // onSaveChange() {
+    //   console.log(`on Save Change`);
+    //   const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
+    //   const index = GlobalUtil.model.localTeach.curSelectedIndex;
+    //   const point = GlobalUtil.model.localTeach.curPoint;
+    //   const points = GlobalUtil.model.localTeach.fileDatas[uuid];
+    //   points[index] = point;
 
-      const textDict = {
-        type: GlobalUtil.model.localTeach.curProj.type,
-        total: points.length,
-        points: points,
-      };
-      const text = JSON.stringify(textDict);
+    //   const textDict = {
+    //     type: GlobalUtil.model.localTeach.curProj.type,
+    //     total: points.length,
+    //     points: points,
+    //   };
+    //   const text = JSON.stringify(textDict);
 
-      CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
-        GlobalUtil.model.localTeach.hasChange = false;
-      });
-      // this.editState = false;
-    },
+    //   CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
+    //     GlobalUtil.model.localTeach.hasChange = false;
+    //   });
+    // },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
@@ -300,7 +305,7 @@ export default {
       const sec = allsec % 60;
       const min = Math.floor(allsec / 60) % 60;
       const hour = Math.floor(Math.floor(allsec / 60) / 60) % 24;
-      const str = `${GlobalUtil.pad(hour,2)}:${GlobalUtil.pad(min,2)}:${GlobalUtil.pad(sec,2)}.${msec}00`;
+      const str = `${GlobalUtil.pad(hour,2)} : ${GlobalUtil.pad(min,2)} : ${GlobalUtil.pad(sec,2)} . ${msec}00`;
       // const sec = Math.floor(length / 10) % 60;
       // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
       // const str = `${min}:${sec}.${msec}00`;
@@ -312,7 +317,8 @@ export default {
       }
     },
     finishRecord () {
-      this.visible.saveDialog = true;
+      // this.visible.saveDialog = true;
+      this.model.localTeach.saveDialogShow = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
@@ -339,10 +345,12 @@ export default {
       }, (dict) => {
         let curProj = self.model.localTeach.curProj;
         const filePath = path.join(curProj.uuid, `${dateStr}.json`);
+        GlobalUtil.model.localTeach.saveDialogShow = false;
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
           GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
           self.handleNodeClick({uuid: filePath});
+          this.scrollTo(0);
         });
       });
       CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
@@ -402,7 +410,7 @@ export default {
         setTimeout(() => {
           console.log(`wait for 5 sec`);
           this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
-        }, 1000);
+        }, 100);
         
       });
       GlobalUtil.model.localTeach.curDuration -= -1;
@@ -686,6 +694,8 @@ export default {
     EndSet,
     // EndJointControl,
     EmulatorControl,
+    DialogTeachAlert,
+    DialogTeachSaveRecord,
   },
   computed: {
     getCurFile(){
@@ -1046,35 +1056,37 @@ export default {
   .recording-project-list .el-tree-node.is-current>.el-tree-node__content .display-none {
     display: inline-block;
   }
-  .save-dialog .el-dialog__title{
-    font-size: 16px;
-    letter-spacing: -0.57px;
-    color: #575C62;
-    font-family: 'Gotham-Medium';
-  }
-  .save-dialog .el-dialog__body {
-    text-align: center;
-  }
-  .save-dialog .save-dialog-text p{
-    font-size: 16px;
-    color: #555;
-    letter-spacing: -0.57px;
-    font-family: 'Gotham-Medium';
-  }
-  .save-dialog .save-dialog-text span {
-    font-size: 12px;
-    letter-spacing: -0.38px;
-    font-family: 'Gotham-Book';
-  }
-  .save-dialog .el-dialog__body button {
-    width: 168px;
-    height: 40px;
-    margin-top: 50px;
-    background: #444;
-    border-radius: 2px;
-    color: #fff;
-    border: none;
-  }
+  // .save-dialog .el-dialog__title{
+  //   font-size: 16px;
+  //   letter-spacing: -0.57px;
+  //   color: #575C62;
+  //   padding: 0px;
+  //   margin: 0px;
+  //   font-family: 'Gotham-Medium';
+  // }
+  // .save-dialog .el-dialog__body {
+  //   text-align: center;
+  // }
+  // .save-dialog .save-dialog-text p{
+  //   font-size: 16px;
+  //   color: #555;
+  //   letter-spacing: -0.57px;
+  //   font-family: 'Gotham-Medium';
+  // }
+  // .save-dialog .save-dialog-text span {
+  //   font-size: 12px;
+  //   letter-spacing: -0.38px;
+  //   font-family: 'Gotham-Book';
+  // }
+  // .save-dialog .el-dialog__body button {
+  //   width: 168px;
+  //   height: 40px;
+  //   margin-top: 50px;
+  //   background: #444;
+  //   border-radius: 2px;
+  //   color: #fff;
+  //   border: none;
+  // }
   .create-project-dialog {
     .el-dialog__body {
       text-align: center;
