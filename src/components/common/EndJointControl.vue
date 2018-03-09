@@ -175,13 +175,13 @@ export default {
     const cx = 100;
     const cy = 140;
     const sRadius = 120;
-    const strokewidth = 15;
+    const strokewidth = 18;
     // const thumbAngle = Math.PI / 100;
     const value_from = (Math.PI * 4) / 3;
     const value_to = (Math.PI * 5) / 3;
     let mouseX;
     let mouseY;
-    const indicatorSize = 25;
+    const indicatorSize = 27;
     // default value
     // self.cData.r = self.radiansToDegrees(self.radianAngle); // default r value
     sCtx.lineCap = 'round';
@@ -198,9 +198,16 @@ export default {
       // circle
       sCtx.beginPath();
       sCtx.arc(cx, cy, sRadius, value_from, value_to);
-      sCtx.strokeStyle = '#ffffff';
+      sCtx.strokeStyle = '#5A93D7';
       sCtx.lineWidth = strokewidth;
       sCtx.stroke();
+      // circle border
+      sCtx.beginPath();
+      sCtx.arc(cx, cy, sRadius, value_from, value_to);
+      sCtx.strokeStyle = '#ffffff';
+      sCtx.lineWidth = strokewidth - 2;
+      sCtx.stroke();
+      // indicator
       let x;
       let y;
       if (self.radianAngle >= ((-2 * Math.PI) / 3) && self.radianAngle <= (Math.PI / -2)) {
@@ -697,7 +704,7 @@ span.text {
     position: relative;
     justify-content: space-around;
     & > div {
-      margin: 3.8% 0;
+      margin: 3% 0;
       .joystick-wrapper {
         padding: 20% 0;
         margin: 0;
@@ -720,7 +727,7 @@ span.text {
           opacity: 1;
           transform: rotate(-90deg);
           border-radius: 100px;
-          border: none;
+          border: #5A93D7 solid 1px;
           cursor: default;
         }
         #z-control::-webkit-slider-thumb {
@@ -762,7 +769,7 @@ span.text {
       //   left: 10%;
       // }
       .yaw-wrapper {
-        padding-bottom: 40%;
+        padding-bottom: 45%;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
