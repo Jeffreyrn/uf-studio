@@ -203,14 +203,15 @@ export default {
   background: #434343;
   display: flex;
   justify-content: flex-start;
+  // height: 250px;
   // align-items: center;
 }
 .list-project-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
   width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
-  height: 15px;
+  height: 12px;
 }
 .list-project-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-  border-radius: 5px;
+  border-radius: 6px;
   -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
   background: #7E7E7E;
 }
@@ -218,6 +219,7 @@ export default {
   -webkit-box-shadow: inset 0 0 5px #434343;
   border-radius: 0;
   background: #434343;
+  // background: yellow;
 }
 .listMarginLeft {
   margin-left:-30px;
