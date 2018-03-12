@@ -194,15 +194,16 @@ self.onTreeNodeClick = (uuid, Expanded) => {
   // const treeRoot = document.getElementById('left-frame');
   // console.log(`treeRoot = ${treeRoot.innerHTML}`);
   // const uuid = data.uuid;
-  // const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
+  const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
   // console.log(`isFile = ${isFile}`);
   if (Expanded === true) {
     GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
   }
   GlobalUtil.model.localProjTree.addOpenTab(uuid);
   GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
-  GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
-
+  if (isFile === true) {
+    GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+  }
   if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
   }
 };
@@ -626,6 +627,21 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
     }
   }
   self.curProjExpandedKeys = tempKeys;
+};
+self.curProjAddExpandedKeys = (uuid) => {
+  // console.log(`curProjAddOrRemoveExpandedKeys`);
+  const isFile = self.isFile(uuid);
+  let isExist = false;
+  // let tempKeys = [];
+  for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
+    if (self.curProjExpandedKeys[i].indexOf(uuid) >= 0) {
+      isExist = true;
+      break;
+    }
+  }
+  if (isExist === false) {
+    self.curProjExpandedKeys.push(path.dirname(uuid));
+  }
 };
 
 self.sortProjFiles = (files) => {

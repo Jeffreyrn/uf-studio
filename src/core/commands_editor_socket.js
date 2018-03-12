@@ -184,6 +184,7 @@ self.createFile = (name, isProjFile, callback) => {
         GlobalUtil.model.localProjTree.onTreeNodeClick(filePath);
         setTimeout(() => {
           // GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(filePath);
+          GlobalUtil.model.localProjTree.curProjAddExpandedKeys(filePath);
           console.log(`curProjExpandedKeys = ${JSON.stringify(GlobalUtil.model.localProjTree.curProjExpandedKeys)}`);
         });
         if (callback) {
