@@ -189,6 +189,24 @@ self.addOpenTab = (fileId) => {
   self.curOpenedFilesList = proTabsList;
 };
 
+self.onTreeNodeClick = (uuid, Expanded) => {
+  // console.log(data.__ob__);
+  // const treeRoot = document.getElementById('left-frame');
+  // console.log(`treeRoot = ${treeRoot.innerHTML}`);
+  // const uuid = data.uuid;
+  // const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
+  // console.log(`isFile = ${isFile}`);
+  if (Expanded === true) {
+    GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
+  }
+  GlobalUtil.model.localProjTree.addOpenTab(uuid);
+  GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
+  GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+
+  if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
+  }
+};
+
 // 关闭当前文件或者文件夹及以下子目录的所以文件的打开的tab
 self.deleteOpenSonTabs = (fileId) => {
   let allFileIDs = [fileId];

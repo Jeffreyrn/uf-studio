@@ -161,7 +161,7 @@ self.selectedUI = () => {
   }
 };
 
-self.createFile = (name, isProjFile) => {
+self.createFile = (name, isProjFile, callback) => {
   console.log(`createFile 3 file 1`);
   let filePath = self.model.localProjTree.getSelectedFileFolder();
   console.log(`createFile 3 file 2`);
@@ -181,6 +181,14 @@ self.createFile = (name, isProjFile) => {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
       self.listProjs(() => {
         // GlobalUtil.model.localProjTree.selectedUI();
+        GlobalUtil.model.localProjTree.onTreeNodeClick(filePath);
+        setTimeout(() => {
+          // GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(filePath);
+          console.log(`curProjExpandedKeys = ${JSON.stringify(GlobalUtil.model.localProjTree.curProjExpandedKeys)}`);
+        });
+        if (callback) {
+          callback();
+        }
       });
     });
   }
@@ -188,6 +196,9 @@ self.createFile = (name, isProjFile) => {
     self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
       self.listProjs(() => {
         // GlobalUtil.model.localProjTree.selectedUI();
+        if (callback) {
+          callback();
+        }
       });
     });
   }

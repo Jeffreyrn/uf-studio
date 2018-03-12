@@ -40,21 +40,21 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
+      GlobalUtil.model.localProjTree.onTreeNodeClick(data.uuid, true);
       // console.log(data.__ob__);
-      const treeRoot = document.getElementById('left-frame');
+      // const treeRoot = document.getElementById('left-frame');
       // console.log(`treeRoot = ${treeRoot.innerHTML}`);
-      const uuid = data.uuid;
-      const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
-      // console.log(`isFile = ${isFile}`);
+      // const uuid = data.uuid;
+      // // const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
+      // // console.log(`isFile = ${isFile}`);
 
-      GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
-      // GlobalUtil.model.localProjTree.addOpenFile(uuid);
-      GlobalUtil.model.localProjTree.addOpenTab(uuid);
-      GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
-      GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+      // GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
+      // GlobalUtil.model.localProjTree.addOpenTab(uuid);
+      // GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
+      // GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
 
-      if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
-      }
+      // if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
+      // }
     },
     renderContent(h, { node, data, store }) {
       // console.log(`renderContent data uuid = ${data.uuid}`);
