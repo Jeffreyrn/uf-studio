@@ -125,7 +125,10 @@ export default {
         || this.model.localProjTree.folderOrFile === 'folder') {
         
         const ext = this.model.localProjTree.fileSelected;
-        const getFileSuperid = this.model.localProjTree.getFileSuperid();
+        let getFileSuperid = this.model.localProjTree.getFileSuperid();
+        if (getFileSuperid === '') {
+          getFileSuperid = this.model.localProjTree.curProj.uuid;
+        }
         let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
         if (this.model.localProjTree.folderOrFile === 'folder') {
           toAddFile = path.join(getFileSuperid, `${text}`);
