@@ -3,8 +3,15 @@
   <div class="blockly-header-wrapper">
     <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Blockly</span></div>
   </div>
-  <div id="blockly-area" class="blockly-workspace" tabindex="0">
-    <div id="tab-blocks"></div>
+  <div class="main-wrapper">
+    <div id="blockly-area" class="blockly-workspace" tabindex="0">
+      <div id="tab-blocks"></div>
+      <div class="hide-button" @click="toggleSideShow">></div>
+    </div>
+    <div id="slide-area" v-show="uiData.sideShow">
+      <div class="file-list"></div>
+      <div class="emulator-wrapper"></div>
+    </div>
   </div>
 </div>
 </template>
@@ -28,6 +35,7 @@ export default {
         snackbar: false,
         snackbarMessage: '',
         projectNameEdit: false,
+        sideShow: true,
       },
       activeTab: null,
       projectNameEditing: false,
@@ -63,6 +71,10 @@ export default {
     // load project
   },
   methods: {
+    toggleSideShow() {
+      this.uiData.sideShow = !this.uiData.sideShow
+      window.setTimeout(this.resizeWorkspace, 0)
+    },
     initBlocklyDiv() {
       return new Promise((resolve) => {
         initBlockly('en');
@@ -92,6 +104,7 @@ export default {
       const blocklyArea = document.getElementById('blockly-area');
       const blocklyDiv = document.getElementById('tab-blocks');
       let element = blocklyArea;
+      console.log('resize', blocklyArea.offsetWidth, blocklyArea.offsetHeight)
       let x = 0;
       let y = 0;
       if (element === null) {
@@ -170,10 +183,29 @@ export default {
 </script>
 <style lang="scss" scoped>
   $themeOrange:#D95E2E;
-#blockly-area {
-  width: 100%;
-  min-height: 500px;
-}
+  .main-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    #blockly-area {
+      width: 56.2%;
+      min-height: 500px;
+      position: relative;
+      .hide-button {
+        position: absolute;
+        background: #5A93D7;
+        right: 0;
+        top: 0;    
+        z-index: 39;
+        cursor: pointer;
+      }
+    }
+    #slide-area {
+      background: #ccc;
+      width: 43.8%;
+      position: relative;
+    }
+  }
   /*==========*/
   .blockly-header-wrapper {
     height: 60px;
