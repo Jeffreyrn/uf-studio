@@ -15,6 +15,7 @@ const BlocklyDefaultColor = {
   COLOR_VARIABLE: '#8283A7',
   COLOR_FUNCTION: '#E98CB1',
   COLOR_SOUND: '#6AAFE6',
+  COLOR_APP: '#E37D7D',
 };
 
 function initBlocklyColor(Blockly) {

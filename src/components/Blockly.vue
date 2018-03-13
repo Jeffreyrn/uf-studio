@@ -13,11 +13,13 @@
       <div class="emulator-wrapper"></div>
     </div>
   </div>
+  <dialogs :dialog="uiData.showDialog"></dialogs>
 </div>
 </template>
 <script>
 import { Blockly, init as initBlockly } from '../assets/lib/blockly/blockly';
 import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
+import Dialogs from './Blockly/Dialogs'
 
 export default {
   props: ['blocklyData', 'moduleName'],
@@ -36,6 +38,7 @@ export default {
         snackbarMessage: '',
         projectNameEdit: false,
         sideShow: true,
+        showDialog: {},
       },
       activeTab: null,
       projectNameEditing: false,
@@ -50,6 +53,9 @@ export default {
     Blockly.removeEndListener(this.endCallback);
     window.removeEventListener('resize', self.resizeWorkspace, false); // avoid fire event listener twice or more
     // Blockly.BlockWorkspace.removeChangeListener(self.onChangeEvent);
+  },
+  components: {
+    Dialogs,
   },
   mounted() {
     const self = this;
@@ -71,6 +77,14 @@ export default {
     // load project
   },
   methods: {
+    onChangeEvent(event) {
+      const blockId = event.blockId
+      const block = Blockly.BlockWorkspace.getBlockById(blockId)
+      if (block !== null && event.type === Blockly.Events.CREATE) {
+        this.uiData.showDialog[block.type] = true
+        console.log(block.type)
+      }
+    },
     toggleSideShow() {
       this.uiData.sideShow = !this.uiData.sideShow
       window.setTimeout(this.resizeWorkspace, 0)

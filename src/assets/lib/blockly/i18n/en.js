@@ -409,6 +409,7 @@ function initBlocklyMsg(Blockly) {
   Blockly.Msg.CATEGORY_MORE = 'More';
   Blockly.Msg.CATEGORY_SOUND = 'Sound';
   Blockly.Msg.CATEGORY_MOTION = 'Motion';
+  Blockly.Msg.CATEGORY_APP = 'Application';
   Blockly.Msg.CATEGORY_INPUT = 'Input';
   Blockly.Msg.CATEGORY_CONDITION = 'Condition';
   Blockly.Msg.CATEGORY_EVENT = 'Event';
@@ -639,6 +640,11 @@ function initBlocklyMsg(Blockly) {
       speed: 'speed',
       stop: 'stop minifan',
     },
+  };
+  Blockly.Msg.app = {
+    ide: 'IDE Program',
+    record: 'Play Record',
+    other: 'Application',
   };
 }
 
