@@ -4,7 +4,7 @@
       <ul>
         <li v-for="(icon ,index) in model.localAppsMgr.allApps.my.data">
           <!--<a><img :src="icon.img"/><span>{{ icon.name }}</span></a>-->
-          {{ icon.name }}
+          <router-link :to="{name: 'AppSubmit'}"><span>{{ icon.name }}</span></router-link>
         </li>
       </ul>
     </div>

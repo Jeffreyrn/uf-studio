@@ -41,8 +41,8 @@ self.remoteProjs2Local = (dict) => {
   }
   const defaults = dict.data.default;
   const thirdpartys = dict.data.thirdparty;
-  self.allApps.thirdparty.data = [];
   self.allApps.default.data = [];
+  self.allApps.thirdparty.data = [];
   self.allApps.my.data = [];
   for (let i = 0; i < defaults.length; i += 1) {
     const aDefault = defaults[i];
@@ -66,23 +66,12 @@ self.remoteProjs2Local = (dict) => {
       created: aThirdparty.created,
     };
     const app = self.createApp(params);
-    if (aThirdparty.author === GlobalConstant.userId) {
-      self.allApps.my.data.push(app);
-    }
-    else {
-      self.allApps.thirdparty.data.push(app);
-    }
+    self.allApps.thirdparty.data.push(app);
   }
   // test
-  const params1 = {
-    name: 'my-test-1',
-  };
-  const app1 = self.createApp(params1);
+  const app1 = self.createApp({name: 'my-test-1'});
   self.allApps.my.data.push(app1);
-  const params2 = {
-    name: 'my-test-2',
-  };
-  const app2 = self.createApp(params2);
+  const app2 = self.createApp({name: 'my-test-2'});
   self.allApps.my.data.push(app2);
 };
 

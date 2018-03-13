@@ -13,6 +13,7 @@ import EditHome from '@/components/EditHome';
 import Setting from '@/components/Setting';
 import AppStore from '@/components/AppStore';
 import AppDetail from '@/components/appStore/AppDetail';
+import AppSubmit from '@/components/appStore/AppSubmit';
 Vue.use(Router);
 
 export default new Router({
@@ -42,6 +43,11 @@ export default new Router({
       path: '/AppDetail',
       name: 'AppDetail',
       component: AppDetail,
+    },
+    {
+      path: '/AppSubmit',
+      name: 'AppSubmit',
+      component: AppSubmit,
     },
     {
       path: '/control',
