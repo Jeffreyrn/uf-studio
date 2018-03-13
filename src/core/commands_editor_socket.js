@@ -15,7 +15,7 @@ self.sendCmd = (cmdId, data, callback) => {
   self.socketCom.sendCmd(cmdId, data, callback);
 };
 
-self.userId = "test";
+self.userId = GlobalConstant.userId;
 
 self.runPythonScript = (uuid, callback) => {
   const filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);

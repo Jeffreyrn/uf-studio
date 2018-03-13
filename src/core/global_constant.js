@@ -27,6 +27,10 @@ self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
 self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
+self.APPSTORE_GET_APPS = 'get_apps';
+
 self.DEBUG_SET_BEART = 'debug_set_beart';
+
+self.userId = 'test';
 
 export default self;

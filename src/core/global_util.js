@@ -5,6 +5,7 @@ import SocketCom from './socket_com';
 import NativeCom from './native_com';
 import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
+import CommandsAppsSocket from './commands_apps_socket';
 
 const args = {
   // host: '192.168.1.166',
@@ -18,12 +19,19 @@ window.GlobalUtil = self;
 self.store = {};
 self.model = Model;
 self.socketCom = SocketCom;
+
 CommandsEditorSocket.socketCom = SocketCom;
 CommandsEditorSocket.model = Model;
 window.CommandsEditorSocket = CommandsEditorSocket;
+
 CommandsTeachSocket.socketCom = SocketCom;
 CommandsTeachSocket.model = Model;
 window.CommandsTeachSocket = CommandsTeachSocket;
+
+CommandsAppsSocket.socketCom = SocketCom;
+CommandsAppsSocket.model = Model;
+window.CommandsAppsSocket = CommandsAppsSocket;
+
 self.nativeCom = NativeCom;
 
 self.autoSizeScale = 0;

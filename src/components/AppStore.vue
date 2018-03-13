@@ -39,6 +39,7 @@
 <script>
 import MyApp from './appStore/MyApp';
 import ThirdParty from './appStore/ThirdParty';
+import { setTimeout } from 'timers';
 
 export default {
   data() {
