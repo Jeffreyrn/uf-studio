@@ -13,6 +13,7 @@ import EditHome from '@/components/EditHome';
 import Setting from '@/components/Setting';
 import AppStore from '@/components/AppStore';
 import AppDetail from '@/components/appStore/AppDetail';
+import LogInfo from '@/components/Setting/LogInfo';
 Vue.use(Router);
 
 export default new Router({
@@ -30,8 +31,13 @@ export default new Router({
     },
     {
       path: '/setting',
-      name: 'Setting',
       component: Setting,
+      name: 'Setting',
+    },
+    {
+      path: '/logInfo',
+      name: 'LogInfo',
+      component: LogInfo,
     },
     {
       path: '/AppStore',
