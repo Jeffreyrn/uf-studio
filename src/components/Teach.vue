@@ -202,19 +202,8 @@ export default {
     };
   },
   mounted() {
-    // const dom = document.getElementById('echart-main-2');
-    // const myChart = echarts.init(dom);
-    // window.myChart = myChart;
-    // const option = GlobalUtil.model.localTeach.chartOption;
-    // myChart.setOption(option, true);
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
-    // GlobalUtil.model.localTeach.setSelectedTreeItem(null);
-    // const nodes = document.getElementsByClassName('el-tree-node__label');
-    // for (let i = 0; i < nodes.length; i += 1) {
-    //   const node = nodes[i];
-    //   node.style.color = 'gray';
-    // }
     const self = this;
     CommandsTeachSocket.listProjs((dict) => {
       setTimeout(() => {

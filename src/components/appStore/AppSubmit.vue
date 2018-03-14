@@ -56,6 +56,10 @@
       // GlobalUtil.model.localAppsMgr.curUploadState = 'uploaded';
       // GlobalUtil.model.localAppsMgr.curUploadState = 'cansubmit';
     },
+    activated: function () {
+      console.log(`params = ${JSON.stringify(this.$route.params)}`);
+      this.name = this.$route.params.name;
+    },
     methods: {
     },
     computed: {
