@@ -20,14 +20,14 @@
         <div class="app-submit-des-text">
           App Name
         </div>
-        <input type="text" class="app-submit-name" v-model="name" @change="onchange" />
+        <input type="text" class="app-submit-name" v-model="name" @input="onchangeinput()" />
         <div class="app-submit-num">
           {{ nameNum - name.length }}
         </div>
         <div class="app-submit-des-text" style="margin-top:30px;">
           Description
         </div>
-        <textarea class="app-submit-des" v-model="des" @change="onchange">
+        <textarea class="app-submit-des" v-model="des" @input="onchangeinput()">
         </textarea>
         <div class="app-submit-num">
           {{ desNum - des.length }}
@@ -52,8 +52,14 @@
     mounted() {
     },
     methods: {
-      onchange() {
+      onchangeinput() {
         console.log(`onchange onchange = ${this.name} -- ${this.des}`);
+        if (this.name.length > 50) {
+          this.name = this.name.substr(0,50);
+        }
+        if (this.des.length > 1000) {
+          this.des = this.des.substr(0,1000);
+        }
       },
     },
     computed: {
