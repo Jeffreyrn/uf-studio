@@ -22,6 +22,8 @@ self.createApp = (params) => {
   }
 };
 
+self.curUploadState = 'normal';
+
 self.allApps = {
   thirdparty: {
     data:[],

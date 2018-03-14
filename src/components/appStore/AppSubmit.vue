@@ -9,8 +9,8 @@
       <span class="app-submit-top-title">
         Please fill in the application form about your upload  
       </span>
-      <div class="app-submit-btn">
-        Summit
+      <div class="app-submit-btn" v-bind:class="classObject">
+        {{ submitButtonValue }}
       </div>
     </div>
     <div class="app-submit-contain">
@@ -43,17 +43,47 @@
   export default {
     data() {
       return {
+        model: GlobalUtil.model,
         name: '',
         des: '',
         nameNum: 50,
         desNum: 1000,
+        // state: 'normal', // normal, cansubmit, uploaded, reviewing, approve, failed
       };
     },
     mounted() {
+      GlobalUtil.model.localAppsMgr.curUploadState = 'failed';
+      // GlobalUtil.model.localAppsMgr.curUploadState = 'uploaded';
+      // GlobalUtil.model.localAppsMgr.curUploadState = 'cansubmit';
     },
     methods: {
     },
     computed: {
+      classObject: () => {
+        return {
+          'app-submit-btn-normal': GlobalUtil.model.localAppsMgr.curUploadState==='normal',
+          'app-submit-btn-cansubmit': GlobalUtil.model.localAppsMgr.curUploadState==='cansubmit',
+          'app-submit-btn-uploaded': GlobalUtil.model.localAppsMgr.curUploadState==='uploaded',
+          'app-submit-btn-reviewing': GlobalUtil.model.localAppsMgr.curUploadState==='reviewing',
+          'app-submit-btn-approve': GlobalUtil.model.localAppsMgr.curUploadState==='approve',
+          'app-submit-btn-failed': GlobalUtil.model.localAppsMgr.curUploadState==='failed',
+        }
+      },
+      submitButtonValue() {
+        switch (GlobalUtil.model.localAppsMgr.curUploadState) {
+          case 'normal':
+          case 'cansubmit':
+            return 'Summit';
+          case 'uploaded':
+            return 'Uploaded';
+          case 'reviewing':
+            return 'Reviewing';
+          case 'approve':
+            return 'Approve';
+          case 'failed':
+            return "Failed";
+        }
+      },
     },
     watch:{
       "name": function() {
@@ -93,17 +123,41 @@
       letter-spacing: -1.81px;
     }
     .app-submit-btn {
-      width: 142px;
-      height: 51px;
+      width: 160px;
+      height: 50px;
       line-height: 51px;
-      background: #777777;
       margin-right: 5%;
       border-radius: 100px;
       font-family: 'Gotham-Book';
       font-size: 20px;
-      color: #BBBBBB;
       letter-spacing: -1.54px;
       text-align: center;
+    }
+    .app-submit-btn-normal {
+      background: #777777;
+      color: #BBBBBB;
+      
+    }
+    .app-submit-btn-cansubmit {
+      background: #52BF53;
+      color: #FFFFFF;
+      cursor: pointer;
+    }
+    .app-submit-btn-uploaded {
+      background: #373737;
+      color: #FFFFFF;
+    }
+    .app-submit-btn-reviewing {
+      background: #F5C26F;
+      color: #FFFFFF;
+    }
+    .app-submit-btn-approve {
+      background: #52BF53;
+      color: #FFFFFF;
+    }
+    .app-submit-btn-failed {
+      background: #E24D4A;
+      color: #FFFFFF;
     }
   }
   .app-submit-contain {
