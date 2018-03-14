@@ -80,6 +80,7 @@ export default {
     };
   },
   mounted() {
+    console.log(`mounted mounted mounted`);
     const curFile = GlobalUtil.model.localProjTree.curFile;
     if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
       // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
@@ -96,6 +97,14 @@ export default {
     document.onkeydown = () => {
       GlobalUtil.model.localProjTree.show();
     };
+  },
+  activated: function () {
+    // console.log(3);
+    GlobalUtil.model.localProjTree.onwinresize();
+  },
+  deactivated: function () {
+    // console.log(4)
+    GlobalUtil.model.localProjTree.onwinresize();
   },
   methods: {
     onCloseResult() {

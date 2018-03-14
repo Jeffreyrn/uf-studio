@@ -224,31 +224,13 @@ export default {
     });
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
+  activated: function () {
+    this.onwinresize();
+  },
+  deactivated: function () {
+    this.onwinresize();
+  },
   methods: {
-    // basename(name) {
-    //   name = path.basename(name);
-    //   name = name.split('.')[0];
-    //   return name;
-    // },
-    // onSaveChange() {
-    //   console.log(`on Save Change`);
-    //   const uuid = GlobalUtil.model.localTeach.curEditingFileUUID;
-    //   const index = GlobalUtil.model.localTeach.curSelectedIndex;
-    //   const point = GlobalUtil.model.localTeach.curPoint;
-    //   const points = GlobalUtil.model.localTeach.fileDatas[uuid];
-    //   points[index] = point;
-
-    //   const textDict = {
-    //     type: GlobalUtil.model.localTeach.curProj.type,
-    //     total: points.length,
-    //     points: points,
-    //   };
-    //   const text = JSON.stringify(textDict);
-
-    //   CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
-    //     GlobalUtil.model.localTeach.hasChange = false;
-    //   });
-    // },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
