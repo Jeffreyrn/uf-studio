@@ -309,10 +309,16 @@ export default {
         this.setJoystickStep(nipple, 'position');
         // this.state.position.z = nipple.direction.angle;
       }).on('start', () => {
+        const nextX = Number((this.joystick.step.position.x).toFixed(2));
+        const nextY = Number((this.joystick.step.position.y).toFixed(2));
+        // if (nextX > 800 || nextX < -800) {
+        //   this.$message('X value unreachable')
+        // }
+        // else if (nextY > 800 || nextY < -800) {
+        //   this.$message('Y value unreachable')
+        // }
         positionInterval = setInterval(() => {
           // console.log(typeof this.joystick.step.position.x, typeof this.state.position.x);
-          const nextX = Number((this.joystick.step.position.x).toFixed(2));
-          const nextY = Number((this.joystick.step.position.y).toFixed(2));
           this.$store.commit(types.MOVE_END_XY, [nextX, nextY]);
           console.log('interval 500 commit', types.MOVE_END_XY, [nextX, nextY]);
           // this.state.position.x = Number(nextX.toFixed(2));
@@ -336,12 +342,19 @@ export default {
         console.log('event type', evt.type);
         this.setJoystickStep(nipple, 'orientation');
       }).on('start', () => {
+        const nextX = Number((this.joystick.step.orientation.x).toFixed(2));
+        const nextY = Number((this.joystick.step.orientation.y).toFixed(2));
+        console.log(nextX, nextY, 'ss');
+        // if (nextX > 180 || nextX < -180) {
+        //   this.$message('roll value unreachable')
+        // }
+        // else if (nextY > 180 || nextY < -180) {
+        //   this.$message('pitch value unreachable')
+        // }
         orientationInterval = setInterval(() => {
           console.log(typeof this.joystick.step.orientation.x, typeof this.joystick.step.orientation.y);
           // const nextX = this.joystick.step.orientation.x + this.state.orientation.yaw;
           // const nextY = this.joystick.step.orientation.y + this.state.orientation.pitch;
-          const nextX = Number((this.joystick.step.orientation.x).toFixed(2));
-          const nextY = Number((this.joystick.step.orientation.y).toFixed(2));
           this.$store.commit(types.MOVE_YAW_PITCH, [nextX, nextY]);
           // this.state.orientation.yaw = Number(nextX.toFixed(2));
           // this.state.orientation.pitch = Number(nextY.toFixed(2));
@@ -351,7 +364,7 @@ export default {
       });
     },
     setJoystickStep(nipple, type) {
-      const zoom = type === 'position' ? 7 : 1;
+      const zoom = type === 'position' ? 7 : 2;
       if (nipple.direction) {
         const speed = nipple.force * zoom; // max 20
         let stepX = speed;
@@ -568,7 +581,7 @@ export default {
   watch: {
     stateError(newValue) {
       this.jointRangeMoved.state = false;
-      if (newValue === -6 || !this.jointRangeMoved.state) {
+      if (newValue === -6) {
         this.$message('unable to move.');
       }
       else if (newValue < 0) {
@@ -599,9 +612,9 @@ export default {
       });
     },
     stateErrorCount() {
-      if (this.stateError < 0) {
+      if (this.stateError === -6) {
         this.$set(this.joints, this.currentMoveIndex, this.$store.getters.joints[this.currentMoveIndex])
-        this.$message('unable to move.')
+        // this.$message('unable to move.')
         console.log('unun2', this.$store.getters.joints[this.currentMoveIndex])
       }
     },

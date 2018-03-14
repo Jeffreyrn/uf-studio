@@ -207,7 +207,16 @@ const mutations = {
     // console.log('set position:', data);
     state.info.position.x += data[0];
     state.info.position.y += data[1];
-    if (state.info.online) {
+    const max = 800
+    if (state.info.position.x > max || state.info.position.x < -max) {
+      state.status.errorCount += 1;
+      state.info.position.x -= data[0];
+    }
+    else if (state.info.position.y > max || state.info.position.y < -max) {
+      state.status.errorCount += 1;
+      state.info.position.y -= data[1];
+    }
+    else if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_line',
         {
@@ -253,8 +262,23 @@ const mutations = {
   },
   [types.MOVE_YAW_PITCH](state, data) {
     // console.log('set position:', data);
-    state.info.orientation.roll += data[0];
-    state.info.orientation.pitch += data[1];
+    // state.info.orientation.roll += data[0];
+    // state.info.orientation.pitch += data[1];
+    const max = 180
+    const tempx = state.info.orientation.roll + data[0]
+    const tempy = state.info.orientation.pitch + data[1]
+    if (tempx > max || tempx < -max) {
+      // state.status.errorCount += 1;
+    }
+    else {
+      state.info.orientation.roll = tempx;
+    }
+    if (tempy > max || tempy < -max) {
+      // state.status.errorCount += 1;
+    }
+    else {
+      state.info.orientation.pitch = tempy;
+    }
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_line',
@@ -285,6 +309,14 @@ const mutations = {
   [types.MOVE_END_ROLL](state, data) {
     // console.log('set position:', data);
     state.info.orientation.yaw += data;
+    const max = 180
+    const temp = state.info.orientation.yaw + data
+    if (temp > max || temp < -max) {
+      // state.status.errorCount += 1;
+    }
+    else {
+      state.info.orientation.yaw = temp;
+    }
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_line',
