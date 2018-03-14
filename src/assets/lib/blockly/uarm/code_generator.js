@@ -352,7 +352,7 @@ CodeGenerator.event_leap_gesture = (params) => {
 };
 
 CodeGenerator.event_button_pressed_stop = () => 'UArm.Button.clearEventListener();\n';
-
+CodeGenerator.ide_app = (name) => `Hellow(${name.ide});\n`;
 /* Code generator*/
 const genFuncCode = (params, block) => CodeGenerator[block.type](params);
 

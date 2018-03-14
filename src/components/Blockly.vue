@@ -9,22 +9,27 @@
       <div class="hide-button" @click="toggleSideShow">></div>
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
-      <div class="file-list"></div>
+      <div class="file-list">
+        <button class="button" @click="genjs">gen</button>
+        <div v-html="jsCode"></div>
+      </div>
       <div class="emulator-wrapper"></div>
     </div>
   </div>
-  <dialogs :dialog="uiData.showDialog"></dialogs>
+  <dialogs></dialogs>
 </div>
 </template>
 <script>
 import { Blockly, init as initBlockly } from '../assets/lib/blockly/blockly';
 import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
+import eventBus from './Blockly/eventBus'
 import Dialogs from './Blockly/Dialogs'
 
 export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      jsCode: '',
       constData: {
         tabName: {
           JS: 'Javascript',
@@ -38,7 +43,6 @@ export default {
         snackbarMessage: '',
         projectNameEdit: false,
         sideShow: true,
-        showDialog: {},
       },
       activeTab: null,
       projectNameEditing: false,
@@ -77,11 +81,14 @@ export default {
     // load project
   },
   methods: {
+    genjs() {
+      this.jsCode = Blockly.JavaScript.workspaceToCode(Blockly.BlockWorkspace);
+    },
     onChangeEvent(event) {
       const blockId = event.blockId
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
-        this.uiData.showDialog[block.type] = true
+        eventBus.$emit('show', block)
         console.log(block.type)
       }
     },

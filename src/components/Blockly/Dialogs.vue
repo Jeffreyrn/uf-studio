@@ -3,15 +3,41 @@
     <el-table :data="gridData">
       <el-table-column property="date" label="Date" width="150"></el-table-column>
       <el-table-column property="name" label="Name" width="200"></el-table-column>
-      <el-table-column property="address" label="Address"></el-table-column>
+      <el-table-column label="Address">
+        <template slot-scope="scope">
+        <el-button @click="insertIde" type="text" size="small">Add</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </el-dialog>
 </template>
 <script>
-module.exports = {
-  props: ['dialog'],
+import eventBus from './eventBus'
+
+export default {
+  mounted() {
+    eventBus.$on('show', (block) => {
+      this.block = block
+      this.dialog[block.type] = true
+    })
+  },
+  methods: {
+    insertIde() {
+      // this.block.setFieldValue(111) // set block name
+      const children = this.block.getChildren()
+      console.log(0, children)
+      const inputField = children[0].inputList[0]
+      console.log(111, inputField)
+      // inputField.connection.targetBlock().setFieldValue('3', 'NUM')
+      inputField.fieldRow[0].setText('23s3')
+    },
+  },
   data() {
     return {
+      block: null,
+      dialog: {
+        ide_app: false,
+      },
       gridData: [{
         date: '2016-05-02',
         name: 'John Smith',
