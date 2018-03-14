@@ -3,8 +3,11 @@
     <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">
       <ul>
         <li v-for="(icon ,index) in model.localAppsMgr.allApps.my.data">
-          <!--<a><img :src="icon.img"/><span>{{ icon.name }}</span></a>-->
-          <router-link :to="{name: 'AppSubmit'}"><span>{{ icon.name }}</span></router-link>
+          <router-link :to="{name: 'AppSubmit'}">
+            <div style="width:100%;height:100%;">
+              <span>{{ icon.name }}</span>
+            </div>
+          </router-link>
         </li>
       </ul>
     </div>

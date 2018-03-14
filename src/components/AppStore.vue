@@ -15,7 +15,11 @@
         <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">Default App
           <ul>
             <li v-for="(icon ,index) in model.localAppsMgr.allApps.default.data">
-              <router-link :to="{name: 'AppDetail'}"><img :src="shoppingBag"/><span>{{ icon.name }}</span></router-link>
+              <router-link :to="{name: 'AppDetail'}">
+                <div style="width:100%;height:100%;">
+                  <img :src="shoppingBag"/><span>{{ icon.name }}</span>
+                </div>
+              </router-link>
             </li>
           </ul>
         </div>
