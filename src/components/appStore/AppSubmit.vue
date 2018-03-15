@@ -20,14 +20,14 @@
         <div class="app-submit-des-text">
           App Name
         </div>
-        <input type="text" class="app-submit-name" v-model="name" />
+        <input type="text" class="app-submit-name" v-model="name" :disabled="['normal','cansubmit'].indexOf(model.localAppsMgr.curUploadState)<0" />
         <div class="app-submit-num">
           {{ nameNum - name.length }}
         </div>
         <div class="app-submit-des-text" style="margin-top:30px;">
           Description
         </div>
-        <textarea class="app-submit-des" v-model="des">
+        <textarea class="app-submit-des" v-model="des" :disabled="['normal','cansubmit'].indexOf(model.localAppsMgr.curUploadState)<0">
         </textarea>
         <div class="app-submit-num">
           {{ desNum - des.length }}
@@ -52,9 +52,7 @@
       };
     },
     mounted() {
-      GlobalUtil.model.localAppsMgr.curUploadState = 'failed';
-      // GlobalUtil.model.localAppsMgr.curUploadState = 'uploaded';
-      // GlobalUtil.model.localAppsMgr.curUploadState = 'cansubmit';
+      GlobalUtil.model.localAppsMgr.curUploadState = 'uploaded';
     },
     activated: function () {
       console.log(`params = ${JSON.stringify(this.$route.params)}`);
