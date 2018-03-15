@@ -2691,6 +2691,9 @@ function initBlocklyDefine(Blockly) {
       this.setNextStatement(true, null);
       this.setColour(BlocklyDefaultColor.COLOR_APP);
     },
+    // onchange(event) {
+    //   console.log('onchange,', event, this)
+    // }
   };
 
   Blockly.Blocks.record_app = {

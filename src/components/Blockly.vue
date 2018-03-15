@@ -13,7 +13,10 @@
         <button class="button" @click="genjs">gen</button>
         <div v-html="jsCode"></div>
       </div>
-      <div class="emulator-wrapper"></div>
+      <div class="emulator-wrapper">
+        <button class="button" @click="genxml">gen xml</button>
+        <div v-html="xmlCode"></div>
+      </div>
     </div>
   </div>
   <dialogs></dialogs>
@@ -30,6 +33,7 @@ export default {
   data() {
     return {
       jsCode: '',
+      xmlCode: '',
       constData: {
         tabName: {
           JS: 'Javascript',
@@ -76,11 +80,25 @@ export default {
     });
     window.addEventListener('resize', self.resizeWorkspace, false);
     Blockly.BlockWorkspace.addChangeListener(self.onChangeEvent);
+
+    Blockly.Blocks.ide_app.onchange = (event) => {
+      // console.log('event change', event)
+      // console.log('event type', event.type) // move change ui
+      const blockId = event.blockId
+      const block = Blockly.BlockWorkspace.getBlockById(blockId)
+      // console.log('event block', block)
+      if (block && event.type === 'ui') {
+        eventBus.$emit('show', block)
+      }
+    }
 //    Blockly.addEndListener(this.endCallback);
     self.activeTab = self.constData.tabName.BLOCKS;
     // load project
   },
   methods: {
+    genxml() {
+      this.xmlCode = this.projectContent()
+    },
     genjs() {
       this.jsCode = Blockly.JavaScript.workspaceToCode(Blockly.BlockWorkspace);
     },

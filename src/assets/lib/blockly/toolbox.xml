@@ -174,22 +174,22 @@
     <category name="{MSG.CATEGORY_APP}" colour="{COLOR.COLOR_APP}">
         <block type="ide_app">
             <value name="ide">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
+                <shadow type="text">
+                    <field name="text">1</field>
                 </shadow>
             </value>
         </block>
         <block type="record_app">
             <value name="record">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
+                <shadow type="text">
+                    <field name="text">1</field>
                 </shadow>
             </value>
         </block>
         <block type="other_app">
             <value name="other">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
+                <shadow type="text">
+                    <field name="text">1</field>
                 </shadow>
             </value>
         </block>

@@ -204,6 +204,7 @@ export default {
   },
   activated() {
     this.onWindowResize()
+    window.addEventListener('resize', this.onWindowResize, false)
   },
   deactivated() {
     window.removeEventListener('resize', this.onWindowResize, false)
