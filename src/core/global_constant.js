@@ -31,6 +31,12 @@ self.APPSTORE_GET_APPS = 'get_apps';
 
 self.DEBUG_SET_BEART = 'debug_set_beart';
 
+//setting cmd
+self.SETTING_GET_LOG_INFO = 'get_log_info';
+self.SETTING_GET_SOFTWARE_VERSION = 'get_software_version';
+self.SETTING_CHECK_UPDATE = 'check_update';
+self.SETTING_START_UPDATE = 'start_update';
+
 self.userId = 'test';
 
 export default self;
