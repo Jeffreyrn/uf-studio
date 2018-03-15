@@ -14,6 +14,7 @@ import Setting from '@/components/Setting';
 import AppStore from '@/components/AppStore';
 import AppDetail from '@/components/appStore/AppDetail';
 import LogInfo from '@/components/Setting/LogInfo';
+import softwareUpdate from '@/components/Setting/softwareUpdate';
 import AppSubmit from '@/components/appStore/AppSubmit';
 
 Vue.use(Router);
@@ -40,6 +41,11 @@ export default new Router({
       path: '/logInfo',
       name: 'LogInfo',
       component: LogInfo,
+    },
+    {
+      path: '/softwareUpdate',
+      name: 'softwareUpdate',
+      component: softwareUpdate,
     },
     {
       path: '/AppStore',

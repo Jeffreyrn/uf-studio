@@ -10,7 +10,7 @@
         <a class="com-text-center">General</a>
         <a class="com-text-center">Studio info</a>
         <router-link class="com-text-center" :to="{name: 'LogInfo'}">System Log</router-link>
-        <a class="com-text-center ">Software Update</a>
+        <router-link class="com-text-center" :to="{name: 'softwareUpdate'}">Software Update</router-link>
       </div>
     </section>
   </div>
