@@ -110,9 +110,9 @@
       // background: yellow;
       margin-left: 20px;
       cursor: pointer;
-      background-image: url('../../assets/img/appStore/icon_close.svg');
+      background-image: url('../../assets/img/appStore/icon_back.svg');
       background-position: center;
-      background-size: 14px 15px;
+      background-size: 28px 29px;
       background-repeat: no-repeat;
     }
     .app-submit-top-title {
