@@ -5,20 +5,25 @@ const self = LocalAppsMgr;
 self.createApp = (params) => {
   const author = params.author;
   const name = params.name;
+  const category = params.category;
   const version = params.version;
-  const type = params.type;
-  const desc = params.desc;
+  const appType = params.appType;
+  const des = params.des;
   const support = params.support;
   const created = params.created;
   const contribution = params.contribution;
+  const control = params.control;
   return {
     author: author,
     name: name,
+    appType: appType,
+    category: category,
     version: version,
     support: support,
-    desc: desc,
+    des: des,
     created: created,
     contribution: contribution,
+    control: control,
   }
 };
 
@@ -47,25 +52,31 @@ self.remoteProjs2Local = (dict) => {
   self.allApps.thirdparty.data = [];
   self.allApps.my.data = [];
   for (let i = 0; i < defaults.length; i += 1) {
-    const aDefault = defaults[i];
+    const one = defaults[i];
     const params = {
-      author: aDefault.author,
-      name: aDefault.name,
-      version: aDefault.version,
-      desc: aDefault.desc,
-      created: aDefault.created,
+      author: one.author,
+      appType: one.appType,
+      category: 'default',
+      name: one.name,
+      version: one.version,
+      des: one.description,
+      control: one.control,
+      created: one.created,
     };
     const app = self.createApp(params);
     self.allApps.default.data.push(app);
   }
   for (let i = 0; i < thirdpartys.length; i += 1) {
-    const aThirdparty = thirdpartys[i];
+    const one = thirdpartys[i];
     const params = {
-      author: aThirdparty.author,
-      name: aThirdparty.name,
-      version: aThirdparty.version,
-      desc: aThirdparty.desc,
-      created: aThirdparty.created,
+      author: one.author,
+      appType: one.appType,
+      category: 'thirdparty',
+      name: one.name,
+      version: one.version,
+      des: one.description,
+      control: one.control,
+      created: one.created,
     };
     const app = self.createApp(params);
     self.allApps.thirdparty.data.push(app);

@@ -4,6 +4,12 @@ const self = GlobalConstant;
 window.GlobalConstant = self;
 
 self.VERSION = {version: 'xarm7'};
+self.userId = 'test';
+
+self.COMMON_PARAMS = {
+  userId: self.userId,
+  version: 'xarm7',
+}
 
 // xArm cmd
 self.CMD_ID_GET_POINT_POSE = 'xarm_get_joint_pose';
@@ -28,6 +34,8 @@ self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
 self.APPSTORE_GET_APPS = 'get_apps';
+self.APPSTORE_APP_INSTALL = 'app_install';
+self.APPSTORE_APP_UNINSTALL = 'app_uninstall';
 
 self.DEBUG_SET_BEART = 'debug_set_beart';
 

@@ -5,18 +5,38 @@
     </div>
     <div class="app-datail-contain">
       <section class="section1 com-text-center">
-        <div class="app-icon"></div>
-        <div class="app-text com-text-center">
+        <div class="app-icon">
+          {{ data.name }}
+          <div>
+            {{ data.version }}
+          </div>
+          <div>
+            {{ data.appType }}
+          </div>
+          <div>
+            {{ data.category }}
+          </div>
+        </div>
+        <div class="app-text">
           <div class="">
+            <!-- <p class="gray-title">Developer</p>
+            <p class="black-text">Johnny</p> -->
             <p class="gray-title">Developer</p>
-            <p class="black-text">Johnny</p>
+            <p class="black-text">{{ data.author }}</p>
           </div>
           <div class="middle-box">
-            <p class="gray-title">Developer</p>
-            <p class="black-text">Johnny</p>
+            <!-- <p class="gray-title">Developer</p>
+            <p class="black-text">Johnny</p> -->
           </div>
           <div class="">
-            <el-button class="install-btn">install</el-button>
+            <div v-if="data.control==='install'">
+              <el-button class="install-btn" @click="oninstall()">{{ data.control }}</el-button>
+            </div>
+            <div v-if="data.control==='run'">
+              <el-button class="install-btn" @click="onrun()">run</el-button>
+              <el-button class="install-btn" @click="onreinstall()">reinstall</el-button>
+              <el-button class="install-btn" @click="onuninstall()">uninstall</el-button>
+            </div>
           </div>
         </div>
       </section>
@@ -37,11 +57,43 @@
   export default {
     data() {
       return {
+        data: {},
       };
     },
     mounted() {
     },
+    activated: function () {
+      this.data = this.$route.params.data;
+      console.log(`app detail params = ${JSON.stringify(this.data)}`);
+    },
     methods: {
+      oninstall() {
+        CommandsAppsSocket.appInstall(this.data.category, this.data.name, this.data.version, (dict) => {
+          console.log(`CommandsAppsSocket appInstall = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            this.data.control = 'run';
+          }
+        });
+      },
+      onrun() {
+
+      },
+      onuninstall() {
+        CommandsAppsSocket.appUninstall(this.data.category, this.data.name, (dict) => {
+          console.log(`CommandsAppsSocket appUninstall = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            this.data.control = 'install';
+          }
+        });
+      },
+      onreinstall() {
+        CommandsAppsSocket.appReinstall(this.data.category, this.data.name, this.data.version, (dict) => {
+          console.log(`CommandsAppsSocket appReinstall = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            this.data.control = 'run';
+          }
+        });
+      }
     },
   };
 </script>

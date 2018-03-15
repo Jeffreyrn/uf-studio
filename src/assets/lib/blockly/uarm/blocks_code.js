@@ -474,6 +474,13 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const params = { gesture, statement };
     return genFuncCode(params, block);
   };
+  Blockly.JavaScript.ide_app = (block) => {
+    const ide = Blockly.JavaScript.valueToCode(block, 'ide', Blockly.JavaScript.ORDER_ATOMIC);
+    // const speed = block.getFieldValue('speed');
+    const params = { ide };
+    console.log(params)
+    return genFuncCode(params, block);
+  };
 }
 
 export default initBlocklyCode;

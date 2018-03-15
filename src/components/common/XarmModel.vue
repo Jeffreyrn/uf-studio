@@ -199,7 +199,15 @@ export default {
       this.three.scene.remove();
       this.three.scene.remove(this.three.groups[0]);
     }
+    window.removeEventListener('resize', this.onWindowResize, false)
     // this.three.scene.remove(this.three.groups[0]);
+  },
+  activated() {
+    this.onWindowResize()
+    window.addEventListener('resize', this.onWindowResize, false)
+  },
+  deactivated() {
+    window.removeEventListener('resize', this.onWindowResize, false)
   },
   methods: {
     createRobotModel() {
@@ -373,19 +381,19 @@ export default {
       axisHelper.position.y = this.config.offsetY;
       scene.add(axisHelper);
       // this.changeJoint(this.select);
-      const onWindowResize = () => {
-        const sizeArray = this.getRenderSize();
-        renderer.setSize(...sizeArray);
-        const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
-        camera.left = -halfSize[0];
-        camera.right = halfSize[0];
-        camera.top = halfSize[1];
-        camera.bottom = -halfSize[1];
-        // camera.aspect = this.getCameraAspect();
-        camera.updateProjectionMatrix();
-      };
-      onWindowResize()
-      window.addEventListener('resize', onWindowResize, false)
+      this.onWindowResize()
+      window.addEventListener('resize', this.onWindowResize, false)
+    },
+    onWindowResize() {
+      const sizeArray = this.getRenderSize();
+      this.three.renderer.setSize(...sizeArray);
+      const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
+      this.three.camera.left = -halfSize[0];
+      this.three.camera.right = halfSize[0];
+      this.three.camera.top = halfSize[1];
+      this.three.camera.bottom = -halfSize[1];
+      // camera.aspect = this.getCameraAspect();
+      this.three.camera.updateProjectionMatrix();
     },
     // getCameraAspect() {
     //   if (this.size) {

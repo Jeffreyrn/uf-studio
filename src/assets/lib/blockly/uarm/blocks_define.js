@@ -2681,6 +2681,42 @@ function initBlocklyDefine(Blockly) {
       this.setHelpUrl('');
     },
   };
+  /** Application block define start*/
+  Blockly.Blocks.ide_app = {
+    init() {
+      this.appendValueInput('ide')
+        .appendField(Blockly.Msg.app.ide);
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(BlocklyDefaultColor.COLOR_APP);
+    },
+    // onchange(event) {
+    //   console.log('onchange,', event, this)
+    // }
+  };
+
+  Blockly.Blocks.record_app = {
+    init() {
+      this.appendValueInput('record')
+        .appendField(Blockly.Msg.app.record);
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(BlocklyDefaultColor.COLOR_APP);
+    },
+  };
+
+  Blockly.Blocks.other_app = {
+    init() {
+      this.appendValueInput('other')
+        .appendField(Blockly.Msg.app.other);
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(BlocklyDefaultColor.COLOR_APP);
+    },
+  };
 }
 
 export default initBlocklyDefine;

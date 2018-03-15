@@ -409,6 +409,7 @@ function initBlocklyMsg(Blockly) {
   Blockly.Msg.CATEGORY_MORE = '更多';
   Blockly.Msg.CATEGORY_SOUND = '声音';
   Blockly.Msg.CATEGORY_MOTION = '运动';
+  Blockly.Msg.CATEGORY_APP = '应用';
   Blockly.Msg.CATEGORY_INPUT = '输入';
   Blockly.Msg.CATEGORY_CONDITION = '条件';
   Blockly.Msg.CATEGORY_EVENT = '事件';
@@ -641,6 +642,12 @@ function initBlocklyMsg(Blockly) {
       speed: '速度',
       stop: '停止迷你风扇',
     },
+  };
+
+  Blockly.Msg.app = {
+    ide: 'IDE Program',
+    record: 'Play Record',
+    other: 'Application',
   };
 }
 
