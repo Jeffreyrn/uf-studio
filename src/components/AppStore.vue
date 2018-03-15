@@ -14,8 +14,12 @@
       <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
         <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">Default App
           <ul>
-            <li v-for="(icon ,index) in item">
-              <router-link :to="{name: 'AppDetail'}"><img :src="icon.img"/><span>{{ icon.name }}</span></router-link>
+            <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data">
+              <router-link :to="{name: 'AppDetail', params:{data: data}}">
+                <div style="width:100%;height:100%;">
+                  <img :src="shoppingBag"/><span>{{ data.name }}</span>
+                </div>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -39,16 +43,19 @@
 <script>
 import MyApp from './appStore/MyApp';
 import ThirdParty from './appStore/ThirdParty';
+import { setTimeout } from 'timers';
 
 export default {
   data() {
     return {
+      model: GlobalUtil.model,
       showApp: 'allApp',
       tab: {
         allApp: 'All Apps',
         thirdParty: 'Third-Party',
         myApp: 'My App',
       },
+      shoppingBag: require('../assets/img/appStore/shopping_bag.svg'), 
       tabContain: {
         1: {
           1: {

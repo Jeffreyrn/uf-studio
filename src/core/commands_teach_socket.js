@@ -6,7 +6,7 @@ const CommandsTeachSocket = {};
 const self = CommandsTeachSocket;
 window.CommandsTeachSocket = CommandsTeachSocket;
 
-self.VERSION = GlobalConstant.VERSION;
+// self.VERSION = GlobalConstant.VERSION;
 
 //
 self.ROOT_DIR = '/teach';
@@ -15,12 +15,12 @@ self.sendCmd = (cmdId, data, callback) => {
   self.socketCom.sendCmd(cmdId, data, callback);
 };
 
-self.userId = "test";
+// self.userId = GlobalConstant.userId;
 
 self.listProjs = (callback) => {
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: self.ROOT_DIR, // 要获取的目录
       type: "detail", // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
     })
@@ -44,8 +44,8 @@ self.createProj = (name, proType) => {
   // }
   let filePath = path.join(self.ROOT_DIR, name);
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       name: '', // 文件夹名称, 可省略
     })
@@ -62,8 +62,8 @@ self.renameProj = (name, callback) => {
   const newProjUUID = path.join(self.ROOT_DIR, name);
   const newname = name;
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: self.ROOT_DIR, // 文件的父目录，必须
       old_name: originName, // 原文件（夹）名称
       new_name: name, // 新文件（夹）名称
@@ -85,8 +85,8 @@ self.delProj = (proId, callback) => {
   let filePath = proId; // path.join(self.ROOT_DIR, name);
   console.log(`filePath = ${filePath}`);
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
     })
@@ -104,8 +104,8 @@ self.createFile = (name, content, callback1, callback2) => {
   }
   const filePath = path.join(curProj.uuid, `${name}.json`);
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
       data: content, // 文件内容
@@ -126,8 +126,8 @@ self.delFiles = (uuid, callback) => {
   const filePath = uuid;
   console.log(`filePath = ${filePath}`);
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
     })
@@ -150,8 +150,8 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
   //JSON.stringify(self.model.localTeach.fileDatas[uuid]);
   // console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: uuid, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
       data: text, // 文件内容
@@ -170,8 +170,8 @@ self.getFile = (uuid, callback) => {
   // console.log(`getFile filePath = ${filePath}`);
   // return;
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
     })
@@ -189,8 +189,8 @@ self.getProjFiles = (uuid, callback) => {
   // console.log(`getFile filePath = ${filePath}`);
   // return;
   const params = {
-    data: merge(self.VERSION, {
-      userId: self.userId, // 默认是test，用来区分不同用户
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
     })
   };
@@ -204,7 +204,7 @@ self.getProjFiles = (uuid, callback) => {
 
 self.debugSetBeart = (isOpen, sleepTime, callback) => {
   const params = {
-    data: merge(self.VERSION, {
+    data: merge(GlobalConstant.COMMON_PARAMS, {
       isOpen: isOpen,
       sleepTime: sleepTime,
     })

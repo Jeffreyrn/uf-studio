@@ -8,8 +8,8 @@
     <section class="section1-wrapper com-font-GB-22 ">
       <div class="box1-wrapper com-text-center">
         <a class="com-text-center">General</a>
-        <router-link class="com-text-center">Studio info</router-link>
-        <a class="com-text-center ">System Log</a>
+        <a class="com-text-center">Studio info</a>
+        <router-link class="com-text-center" :to="{name: 'LogInfo'}">System Log</router-link>
         <a class="com-text-center ">Software Update</a>
       </div>
     </section>
