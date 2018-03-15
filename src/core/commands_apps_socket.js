@@ -68,4 +68,8 @@ self.appUninstall = (category, appName, callback) => {
   });
 };
 
+self.appReinstall = (category, appName, appVersion, callback) => {
+  self.appControl('reinstall', category, appName, appVersion, callback);
+};
+
 export default self;

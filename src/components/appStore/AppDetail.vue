@@ -34,6 +34,7 @@
             </div>
             <div v-if="data.control==='run'">
               <el-button class="install-btn" @click="onrun()">run</el-button>
+              <el-button class="install-btn" @click="onreinstall()">reinstall</el-button>
               <el-button class="install-btn" @click="onuninstall()">uninstall</el-button>
             </div>
           </div>
@@ -79,12 +80,20 @@
       },
       onuninstall() {
         CommandsAppsSocket.appUninstall(this.data.category, this.data.name, (dict) => {
-          console.log(`CommandsAppsSocket appInstall = ${JSON.stringify(dict)}`);
+          console.log(`CommandsAppsSocket appUninstall = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             this.data.control = 'install';
           }
         });
       },
+      onreinstall() {
+        CommandsAppsSocket.appReinstall(this.data.category, this.data.name, this.data.version, (dict) => {
+          console.log(`CommandsAppsSocket appReinstall = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            this.data.control = 'run';
+          }
+        });
+      }
     },
   };
 </script>
