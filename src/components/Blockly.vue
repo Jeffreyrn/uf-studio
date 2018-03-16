@@ -23,11 +23,13 @@
       </div>
       <div class="emulator-wrapper">
         <button class="button" @click="genxml">gen xml</button>
+        <button class="button" @click="onIDE()">test ide list</button>
+        <button class="button" @click="onTeach()">test teach list</button>
         <div v-text="xmlCode"></div>
       </div>
     </div>
   </div>
-  <dialogs></dialogs>
+  <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true"></dialogs>
 </div>
 </template>
 <script>
@@ -40,6 +42,7 @@ export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      model: window.GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
       constData: {
@@ -96,7 +99,7 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       // console.log('event block', block)
       if (block && event.type === 'ui') {
-        eventBus.$emit('show', block)
+        // eventBus.$emit('show', block)
         console.log('onchange 1')
       }
     }
@@ -113,6 +116,16 @@ export default {
           console.log(err);
         });
       }
+    },
+    onIDE() {
+      this.model.localAppsMgr.setProjListDialogType('ide');
+      // this.model.localTeach.ProjListDialogType = 'ide';
+      // this.model.localAppsMgr.isProjListDialogShow = true;
+    },
+    onTeach() {
+      this.model.localAppsMgr.setProjListDialogType('teach');
+      // this.model.localTeach.ProjListDialogType = 'teach';
+      // this.model.localAppsMgr.isProjListDialogShow = true;
     },
     newProject() {
       Blockly.BlockWorkspace.clear();

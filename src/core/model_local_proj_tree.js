@@ -678,25 +678,47 @@ self.curPro2Tree = () => {
   aChild.type = 'folder'
   tempDatas.push(aChild);
   let fileDatas = tempDatas[0].children;
-  self.findFolder(fileDatas, '');
+  self.findFolder(fileDatas, '', self.curProj);
   self.curProTreeDatas = tempDatas;
 };
 
-self.findFolder = (tmpArr, superid) => {
-  for (let i = 0; i < self.curProj.files.length; i += 1) {
+self.findFolder = (tmpArr, superid, curProj) => {
+  for (let i = 0; i < curProj.files.length; i += 1) {
     const aChild = {};
-    const file = self.curProj.files[i];
+    const file = curProj.files[i];
     if (superid === file.superid) {
-      aChild.label = file.name; //`<div>${file.name}</div>`;// self.getThisFileFullPath(file.uuid); //
+      aChild.label = file.name;
       aChild.uuid = file.uuid;
       aChild.type = file.type;
       aChild.children = [];
       tmpArr.push(aChild);
       if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
-        self.findFolder(aChild.children, file.uuid);
+        self.findFolder(aChild.children, file.uuid, curProj);
       }
     }
   }
+};
+
+self.allProsTreeDatas = [];
+self.allPros2Tree = () => {
+  let allTempDatas = [];
+  for (let i = 0; i < self.curProjList.length; ++i) {
+    const thisProj = self.curProjList[i];
+    const files = thisProj.files;
+    let tempDatas = [];
+    // first folder proj
+    const aChild = {};
+    aChild.label = thisProj.name;
+    aChild.uuid = thisProj.uuid;
+    aChild.icon = '';
+    aChild.children = [];
+    aChild.type = 'folder'
+    tempDatas.push(aChild);
+    let fileDatas = tempDatas[0].children;
+    self.findFolder(fileDatas, '', thisProj);
+    allTempDatas.push(aChild)
+  }
+  self.allProsTreeDatas = allTempDatas;
 };
 
 self.curFile = null;
@@ -849,19 +871,20 @@ self.remoteProjs2Local = (dict) => {
     self.changeProj(self.curProj.uuid);
   }
   self.curPro2Tree();
+  self.allPros2Tree();
   // callback(projs);
 };
 
 function bubbleSort(arr) {
   var len = arr.length;
   for (var i = 0; i < len; i++) {
-      for (var j = 0; j < len - 1 - i; j++) {
-          if (arr[j].ctime_secs < arr[j+1].ctime_secs) {        //相邻元素两两对比
-              var temp = arr[j+1];        //元素交换
-              arr[j+1] = arr[j];
-              arr[j] = temp;
-          }
+    for (var j = 0; j < len - 1 - i; j++) {
+      if (arr[j].ctime_secs < arr[j+1].ctime_secs) {        //相邻元素两两对比
+        var temp = arr[j+1];        //元素交换
+        arr[j+1] = arr[j];
+        arr[j] = temp;
       }
+    }
   }
   return arr;
 }
