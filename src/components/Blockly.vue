@@ -2,13 +2,13 @@
 <div class="blockly-wrapper">
   <div class="blockly-header-wrapper">
     <div><router-link :to="{name: 'EditHome'}">
-      <img src="../assets/img/common/icon_back.svg" alt="back"/></router-link>
+      <img src="../assets/img/ide/icon_back.svg" alt="back"/></router-link>
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
-      <div>save</div>
-      <div>new</div>
-      <div>run</div>
+      <div><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
+      <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
+      <div><img src="../assets/img/ide/icon_running.svg"/></div>
     </div>
   </div>
   <div class="main-wrapper">
@@ -117,6 +117,9 @@ export default {
       this.model.localAppsMgr.setProjListDialogType('teach');
       // this.model.localTeach.ProjListDialogType = 'teach';
       // this.model.localAppsMgr.isProjListDialogShow = true;
+    },
+    newProject() {
+      Blockly.BlockWorkspace.clear();
     },
     genxml() {
       this.xmlCode = this.projectContent()
@@ -273,7 +276,7 @@ export default {
     height: 60px;
     line-height: 60px;
     padding: 0 2rem;
-    background: #F8F8F8;
+    background: #575C62;
     display: flex;
     justify-content: space-between;
     img {
@@ -283,14 +286,27 @@ export default {
       margin-left: 1rem;
       font-family: 'Gotham-Bold';
       font-size: 2rem;
-      color: #444;
+      color: #fff;
       letter-spacing: -1px;
     }
   }
   .menu-wrapper {
     display: flex;
     & > div {
-      padding: 0 1vw;
+      padding: 0 1vw;    
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      span {
+        font-size: 0.7em;
+        padding: 0;
+        margin: 0;
+        line-height: 1.2vw;
+        text-transform: capitalize;
+      }
     }
   }
   .blockly-wrapper {
