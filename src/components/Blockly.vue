@@ -8,7 +8,7 @@
     <div class="menu-wrapper">
       <div><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
       <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
-      <div><img src="../assets/img/ide/icon_running.svg"/></div>
+      <div @click="runProject"><img src="../assets/img/ide/icon_running.svg"/></div>
     </div>
   </div>
   <div class="main-wrapper">
@@ -105,6 +105,15 @@ export default {
     // load project
   },
   methods: {
+    runProject() {
+      if (this.blocksLength() > 0) {
+        Blockly.executeCode().then().catch((err) => {
+          this.$message(`excute error${err}`);
+          // eventBus.$emit('running-status-changed', false);
+          console.log(err);
+        });
+      }
+    },
     newProject() {
       Blockly.BlockWorkspace.clear();
     },
