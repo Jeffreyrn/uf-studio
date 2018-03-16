@@ -44,6 +44,7 @@ self.createApp = (params) => {
   const created = params.created;
   const contribution = params.contribution;
   const control = params.control;
+  const userId = params.userId;
   return {
     author: author,
     name: name,
@@ -55,6 +56,7 @@ self.createApp = (params) => {
     created: created,
     contribution: contribution,
     control: control,
+    userId: userId,
   }
 };
 
@@ -113,10 +115,35 @@ self.remoteProjs2Local = (dict) => {
     self.allApps.thirdparty.data.push(app);
   }
   // test
-  const app1 = self.createApp({name: 'my-test-1'});
-  self.allApps.my.data.push(app1);
-  const app2 = self.createApp({name: 'my-test-2'});
-  self.allApps.my.data.push(app2);
+  // const app1 = self.createApp({name: 'my-test-1'});
+  // self.allApps.my.data.push(app1);
+  // const app2 = self.createApp({name: 'my-test-2'});
+  // self.allApps.my.data.push(app2);
+};
+
+self.remoteMyProjs2Local = (dict) => {
+  if (dict.code !== 0) {
+    console.log(`datas is not right`);
+    return;
+  }
+  const data = dict.data;
+  self.allApps.my.data = [];
+  for (let i = 0; i < data.length; i += 1) {
+    const one = data[i];
+    const params = {
+      author: one.author,
+      appType: one.appType,
+      category: 'myapp',
+      name: one.name,
+      version: one.version,
+      des: one.description,
+      // control: one.control,
+      created: one.created,
+      userId: one.userId,
+    };
+    const app = self.createApp(params);
+    self.allApps.my.data.push(app);
+  }
 };
 
 export default self;

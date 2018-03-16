@@ -32,6 +32,23 @@ self.listApps = (callback) => {
   });
 };
 
+self.listLocalApps = (callback) => {
+  const params = {
+    data: merge(GlobalConstant.COMMON_PARAMS, {
+      // userId: self.userId, // 默认是test，用来区分不同用户
+      // root: self.ROOT_DIR, // 要获取的目录
+      // type: "detail", // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
+    })
+  };
+  self.sendCmd(GlobalConstant.APPSTORE_GET_LOCAL_APPS, params, (dict) => {
+    // GlobalUtil.model.localAppsMgr.remoteProjs2Local(dict);
+    GlobalUtil.model.localAppsMgr.remoteMyProjs2Local(dict);
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
 self.appControl = (appControl, category, appName, appVersion, callback) => {
   const params = {
     data: merge(GlobalConstant.COMMON_PARAMS, {

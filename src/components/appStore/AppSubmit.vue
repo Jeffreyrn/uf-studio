@@ -52,7 +52,7 @@
       };
     },
     mounted() {
-      GlobalUtil.model.localAppsMgr.curUploadState = 'uploaded';
+      GlobalUtil.model.localAppsMgr.curUploadState = 'approve';
     },
     activated: function () {
       console.log(`params = ${JSON.stringify(this.$route.params)}`);

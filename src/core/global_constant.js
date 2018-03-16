@@ -34,6 +34,7 @@ self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 
 self.APPSTORE_GET_APPS = 'get_apps';
+self.APPSTORE_GET_LOCAL_APPS = 'get_local_apps';
 self.APPSTORE_APP_INSTALL = 'app_install';
 self.APPSTORE_APP_UNINSTALL = 'app_uninstall';
 self.APPSTORE_APP_REMOVE = 'app_remove';
