@@ -36,10 +36,11 @@ self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 self.APPSTORE_GET_APPS = 'get_apps';
 self.APPSTORE_APP_INSTALL = 'app_install';
 self.APPSTORE_APP_UNINSTALL = 'app_uninstall';
+self.APPSTORE_APP_REMOVE = 'app_remove';
 
 self.DEBUG_SET_BEART = 'debug_set_beart';
 
-//setting cmd
+// setting cmd
 self.SETTING_GET_LOG_INFO = 'get_log_info';
 self.SETTING_GET_SOFTWARE_VERSION = 'get_software_version';
 self.SETTING_CHECK_UPDATE = 'check_update';

@@ -2,6 +2,37 @@
 const LocalAppsMgr = {};
 const self = LocalAppsMgr;
 
+self.isProjListDialogShow = false;
+self.curDialogTitle = '';
+self.projListDialogType = '';
+self.curProTreeDatas = [];
+self.setProjListDialogType = (type) => {
+  self.projListDialogType = type;
+  self.isProjListDialogShow = true;
+  switch (type) {
+    case 'app': {
+      self.curDialogTitle = 'Select an Application';
+      break;
+    }
+    case 'ide': {
+      self.curProTreeDatas = window.GlobalUtil.model.localProjTree.allProsTreeDatas;
+      self.curDialogTitle = 'Select an IDE File';
+      console.log(`ide curProTreeDatas = ${JSON.stringify(self.curProTreeDatas)}`);
+      break;
+    }
+    case 'teach': {
+      self.curProTreeDatas = window.GlobalUtil.model.localTeach.curProTreeDatas;
+      self.curDialogTitle = 'Select a Recording File';
+      break;
+    }
+    default:
+      break;
+  }
+};
+
+// self.isTeachProjListDialogShow = false;
+// self.isAppsProjListDialogShow = false;
+
 self.createApp = (params) => {
   const author = params.author;
   const name = params.name;

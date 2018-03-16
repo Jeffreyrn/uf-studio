@@ -23,11 +23,13 @@
       </div>
       <div class="emulator-wrapper">
         <button class="button" @click="genxml">gen xml</button>
+        <button class="button" @click="onIDE()">test ide list</button>
+        <button class="button" @click="onTeach()">test teach list</button>
         <div v-text="xmlCode"></div>
       </div>
     </div>
   </div>
-  <dialogs></dialogs>
+  <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true"></dialogs>
 </div>
 </template>
 <script>
@@ -40,6 +42,7 @@ export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      model: GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
       constData: {
@@ -105,6 +108,16 @@ export default {
     // load project
   },
   methods: {
+    onIDE() {
+      this.model.localAppsMgr.setProjListDialogType('ide');
+      // this.model.localTeach.ProjListDialogType = 'ide';
+      // this.model.localAppsMgr.isProjListDialogShow = true;
+    },
+    onTeach() {
+      this.model.localAppsMgr.setProjListDialogType('teach');
+      // this.model.localTeach.ProjListDialogType = 'teach';
+      // this.model.localAppsMgr.isProjListDialogShow = true;
+    },
     genxml() {
       this.xmlCode = this.projectContent()
     },
