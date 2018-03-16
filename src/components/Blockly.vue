@@ -1,7 +1,15 @@
 <template>
 <div class="blockly-wrapper">
   <div class="blockly-header-wrapper">
-    <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Blockly</span></div>
+    <div><router-link :to="{name: 'EditHome'}">
+      <img src="../assets/img/common/icon_back.svg" alt="back"/></router-link>
+      <span>Blockly</span>
+    </div>
+    <div class="menu-wrapper">
+      <div>save</div>
+      <div>new</div>
+      <div>run</div>
+    </div>
   </div>
   <div class="main-wrapper">
     <div id="blockly-area" class="blockly-workspace" tabindex="0">
@@ -15,7 +23,7 @@
       </div>
       <div class="emulator-wrapper">
         <button class="button" @click="genxml">gen xml</button>
-        <div v-html="xmlCode"></div>
+        <div v-text="xmlCode"></div>
       </div>
     </div>
   </div>
@@ -264,6 +272,12 @@ export default {
       font-size: 2rem;
       color: #444;
       letter-spacing: -1px;
+    }
+  }
+  .menu-wrapper {
+    display: flex;
+    & > div {
+      padding: 0 1vw;
     }
   }
   .blockly-wrapper {
