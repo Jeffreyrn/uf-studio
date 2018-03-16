@@ -20,4 +20,8 @@
 /src/components/DialogTeachProjName.vue
 /src/components/DialogTeachSaveRecord.vue
 /src/components/DialogTeachAlert.vue
+/src/components/AppStore.vue
+/src/components/appStore/
+/src/components/MyApp.vue
+/src/components/ThirdParty.vue
 /src/router/*
