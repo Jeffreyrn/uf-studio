@@ -89,6 +89,7 @@ export default {
       // console.log('event block', block)
       if (block && event.type === 'ui') {
         eventBus.$emit('show', block)
+        console.log('onchange 1')
       }
     }
 //    Blockly.addEndListener(this.endCallback);
@@ -108,6 +109,7 @@ export default {
       if (block !== null && event.type === Blockly.Events.CREATE) {
         eventBus.$emit('show', block)
         console.log(block.type)
+        console.log('onchange 2')
       }
     },
     toggleSideShow() {

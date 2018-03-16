@@ -1,14 +1,7 @@
 <template>
-  <el-dialog title="app list" :visible.sync="dialog.ide_app">
-    <!-- <el-table :data="gridData">
-      <el-table-column property="date" label="Date" width="150"></el-table-column>
-      <el-table-column property="name" label="Name" width="200"></el-table-column>
-      <el-table-column label="Address">
-        <template slot-scope="scope">
-        <el-button @click="insertIde" type="text" size="small">Add</el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
+<div>
+
+  <el-dialog title="ide project list" :visible.sync="dialog.ide_app">
     <table>
       <tr>
         <th class="dialog-table-head">Project name</th>
@@ -20,14 +13,55 @@
           <td>{{ data.name }}</td>
           <td>{{ data.ctime }}</td>
           <td>
-            <div class="float-left proj-selected" v-if="model.localProjTree.curProj.uuid===data.uuid"></div>
-            <div class="float-left proj-open" v-if="model.localProjTree.curProj.uuid!==data.uuid" @click="insertIde(data.uuid)">Open</div>
+            <!-- <div class="float-left proj-selected" v-if="model.localProjTree.curProj.uuid===data.uuid"></div> -->
+            <div class="float-left proj-open" @click="insertIde(data.name)">Open</div>
             <!-- btn_trash.svg -->
           </td>
         </tr>
       </template>
     </table>
   </el-dialog>
+  <el-dialog title="teach project list" :visible.sync="dialog.record_app">
+    <table>
+      <tr>
+        <th class="dialog-table-head">Project name</th>
+        <th class="dialog-table-head">Date</th>
+        <th class="dialog-table-head">Option</th>
+      </tr>
+      <template>
+        <tr  v-for="(data, index) in model.localTeach.curProjList" :key="index">
+          <td>{{ data.name }}</td>
+          <td>{{ data.ctime }}</td>
+          <td>
+            <!-- <div class="float-left proj-selected" v-if="model.localTeach.curProj.uuid===data.uuid"></div> -->
+            <div class="float-left proj-open" @click="insertIde(data.name)">select</div>
+            <!-- btn_trash.svg -->
+          </td>
+        </tr>
+      </template>
+    </table>
+  </el-dialog>
+  <el-dialog title="build in app list" :visible.sync="dialog.other_app">
+    <table>
+      <tr>
+        <th class="dialog-table-head">Project name</th>
+        <th class="dialog-table-head">Date</th>
+        <th class="dialog-table-head">Option</th>
+      </tr>
+      <template>
+        <tr  v-for="i in 7" :key="i">
+          <td>{{ i }}</td>
+          <td>{{ i + 1 }}</td>
+          <td>
+            <div class="float-left proj-open" @click="insertIde(i)">Open</div>
+            <!-- btn_trash.svg -->
+          </td>
+        </tr>
+      </template>
+    </table>
+  </el-dialog>
+</div>
+  
 </template>
 <script>
 import eventBus from './eventBus'
@@ -35,9 +69,11 @@ import eventBus from './eventBus'
 export default {
   mounted() {
     eventBus.$on('show', (block) => {
-      this.block = block
-      this.dialog[block.type] = true
-      console.log(this.block)
+      if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
+        this.block = block
+        this.dialog[block.type] = true
+        console.log('has property', this.block)
+      }
     })
   },
   methods: {
@@ -50,6 +86,7 @@ export default {
       // inputField.connection.targetBlock().setFieldValue('3', 'NUM')
       this.plus += 1
       inputField.fieldRow[1].setText(`a${name}`)
+      this.dialog[this.block.type] = false
     },
   },
   data() {
@@ -58,25 +95,10 @@ export default {
       block: null,
       dialog: {
         ide_app: false,
+        record_app: false,
+        other_app: false,
       },
       plus: 0,
-      gridData: [{
-        date: '2016-05-02',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-      }, {
-        date: '2016-05-04',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-      }, {
-        date: '2016-05-01',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-      }, {
-        date: '2016-05-03',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District',
-      }],
     };
   },
 }

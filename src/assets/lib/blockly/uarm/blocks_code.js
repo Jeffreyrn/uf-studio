@@ -478,6 +478,18 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const ide = Blockly.JavaScript.valueToCode(block, 'ide', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { ide };
+    return genFuncCode(params, block);
+  };
+  Blockly.JavaScript.record_app = (block) => {
+    const record = Blockly.JavaScript.valueToCode(block, 'record', Blockly.JavaScript.ORDER_ATOMIC);
+    // const speed = block.getFieldValue('speed');
+    const params = { record };
+    return genFuncCode(params, block);
+  };
+  Blockly.JavaScript.other_app = (block) => {
+    const other = Blockly.JavaScript.valueToCode(block, 'other', Blockly.JavaScript.ORDER_ATOMIC);
+    // const speed = block.getFieldValue('speed');
+    const params = { other };
     console.log(params)
     return genFuncCode(params, block);
   };
