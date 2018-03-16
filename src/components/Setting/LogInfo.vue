@@ -36,7 +36,7 @@ export default {
           count: this.number,
         },
       };
-      window.GlobalUtil.socketCom.sendCmd('get_log_info', params, (response) => {
+      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_GET_LOG_INFO, params, (response) => {
         const logInfoData = response.data;
         if (logInfoData.length > 0) {
           this.logInfo = logInfoData.reverse();
