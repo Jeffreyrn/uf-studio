@@ -153,7 +153,7 @@ export default {
       border: none;
     }
     .update-content {
-      width: 80%;
+      width: 90%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -184,6 +184,7 @@ export default {
         font-size: 1.2rem;
         color: #444;
         letter-spacing: -1.67px;
+        padding-left: 2vw;
         span {
           font-family: 'Gotham-Medium';
         }
