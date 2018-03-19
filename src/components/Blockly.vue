@@ -25,6 +25,7 @@
         <button class="button" @click="genxml">gen xml</button>
         <button class="button" @click="onIDE()">test ide list</button>
         <button class="button" @click="onTeach()">test teach list</button>
+        <button class="button" @click="onApp()">test app list</button>
         <div v-text="xmlCode"></div>
       </div>
     </div>
@@ -122,6 +123,9 @@ export default {
     },
     onTeach() {
       this.model.localAppsMgr.setProjListDialogType('teach');
+    },
+    onApp() {
+      this.model.localAppsMgr.setProjListDialogType('app');
     },
     newProject() {
       Blockly.BlockWorkspace.clear();

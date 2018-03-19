@@ -1,4 +1,6 @@
 
+const uuidv4 = require('uuid/v4');
+
 const LocalAppsMgr = {};
 const self = LocalAppsMgr;
 
@@ -6,12 +8,33 @@ self.isProjListDialogShow = false;
 self.curDialogTitle = '';
 self.projListDialogType = '';
 self.curProTreeDatas = [];
+self.appTreeDatas = [
+  {
+    uuid: '',
+    type: 'proj',
+    label: 'Default App',
+    children: [],
+  },
+  {
+    uuid: '',
+    type: 'proj',
+    label: 'Third-Party App',
+    children: [],
+  },
+  {
+    uuid: '',
+    type: 'proj',
+    label: 'My App',
+    children: [],
+  },
+];
 self.setProjListDialogType = (type) => {
   self.projListDialogType = type;
   self.isProjListDialogShow = true;
   switch (type) {
     case 'app': {
       self.curDialogTitle = 'Select an Application';
+      self.curProTreeDatas = self.appTreeDatas;
       break;
     }
     case 'ide': {
@@ -81,9 +104,13 @@ self.remoteProjs2Local = (dict) => {
   }
   const defaults = dict.data.default;
   const thirdpartys = dict.data.thirdparty;
+  
   self.allApps.default.data = [];
   self.allApps.thirdparty.data = [];
-  self.allApps.my.data = [];
+
+  self.appTreeDatas[0].children = [];
+  self.appTreeDatas[1].children = [];
+
   for (let i = 0; i < defaults.length; i += 1) {
     const one = defaults[i];
     const params = {
@@ -98,6 +125,17 @@ self.remoteProjs2Local = (dict) => {
     };
     const app = self.createApp(params);
     self.allApps.default.data.push(app);
+
+    self.appTreeDatas[0].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
+    self.appTreeDatas[1].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
   }
   for (let i = 0; i < thirdpartys.length; i += 1) {
     const one = thirdpartys[i];
@@ -127,7 +165,11 @@ self.remoteMyProjs2Local = (dict) => {
     return;
   }
   const data = dict.data;
+
   self.allApps.my.data = [];
+
+  self.appTreeDatas[2].children = [];
+
   for (let i = 0; i < data.length; i += 1) {
     const one = data[i];
     const params = {
@@ -143,6 +185,12 @@ self.remoteMyProjs2Local = (dict) => {
     };
     const app = self.createApp(params);
     self.allApps.my.data.push(app);
+
+    self.appTreeDatas[2].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
   }
 };
 

@@ -119,6 +119,9 @@ self.getCurProj = (uuid) => {
 };
 
 self.getRealProjFileName = (name) => {
+  if (name === null || name === undefined) {
+    return '';
+  }
   name = name.replace("discontinuous_", "");
   name = name.replace("continuous_", "");
   return name;
