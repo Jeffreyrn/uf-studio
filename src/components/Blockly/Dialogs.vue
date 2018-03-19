@@ -9,10 +9,7 @@
           <div class="dialog-close" @click="closeMyself">
           </div>
         </div>
-<!-- 
-  :render-content="renderContent"
-  @node-click="handleNodeClick" 
--->
+
         <el-tree
           id="app-tree-root"
           style="padding-left:10px;"
@@ -20,99 +17,60 @@
           :data="model.localAppsMgr.curProTreeDatas"
           node-key="uuid"
           :indent=12
-          
+          :render-content="renderContent"
           :default-expanded-keys="[]"
-          >
+          @node-click="handleNodeClick">
         </el-tree>
 
-        <div class="btn-ok cursor-pointer">
+        <div v-if="curSelectedFileUUID.length>0&&curSelectedFileUUID.indexOf('.py')>0" class="btn-ok cursor-pointer" @click="onopen">
+          Open
+        </div>
+        <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
           Open
         </div>
       </div>
     </div>
   </div>
 
-  <!-- <div>
-    @click="onok"
-    <el-dialog title="ide project list" :visible.sync="dialog.ide_app">
-      <table>
-        <tr>
-          <th class="dialog-table-head">Project name</th>
-          <th class="dialog-table-head">Date</th>
-          <th class="dialog-table-head">Option</th>
-        </tr>
-        <template>
-          <tr  v-for="(data, index) in model.localProjTree.curProjList" :key="index">
-            <td>{{ data.name }}</td>
-            <td>{{ data.ctime }}</td>
-            <td>
-              
-              <div class="float-left proj-open" @click="insertIde(data.name)">Open</div>
-              
-            </td>
-          </tr>
-        </template>
-      </table>
-    </el-dialog>
-    <el-dialog title="teach project list" :visible.sync="dialog.record_app">
-      <table>
-        <tr>
-          <th class="dialog-table-head">Project name</th>
-          <th class="dialog-table-head">Date</th>
-          <th class="dialog-table-head">Option</th>
-        </tr>
-        <template>
-          <tr  v-for="(data, index) in model.localTeach.curProjList" :key="index">
-            <td>{{ data.name }}</td>
-            <td>{{ data.ctime }}</td>
-            <td>
-              
-              <div class="float-left proj-open" @click="insertIde(data.name)">select</div>
-              
-            </td>
-          </tr>
-        </template>
-      </table>
-    </el-dialog>
-    <el-dialog title="build in app list" :visible.sync="dialog.other_app">
-      <table>
-        <tr>
-          <th class="dialog-table-head">Project name</th>
-          <th class="dialog-table-head">Date</th>
-          <th class="dialog-table-head">Option</th>
-        </tr>
-        <template>
-          <tr  v-for="i in 7" :key="i">
-            <td>{{ i }}</td>
-            <td>{{ i + 1 }}</td>
-            <td>
-              <div class="float-left proj-open" @click="insertIde(i)">Open</div>
-              
-            </td>
-          </tr>
-        </template>
-      </table>
-    </el-dialog>
-  </div> -->
-  
 </template>
 <script>
 // import eventBus from './eventBus'
 
 export default {
+  // props: ['onok'],
+  data() {
+    return {
+      model: window.GlobalUtil.model,
+      curSelectedFileUUID: '',
+      curProTreeDatas: [],
+      block: null,
+      dialog: {
+        ide_app: false,
+        record_app: false,
+        other_app: false,
+      },
+      plus: 0,
+      fileIcon: {
+        py: require('./../../assets/img/blockly/dialog/language_python_dark.svg'),
+        proj: require('./../../assets/img/blockly/dialog/icon_project_dark.svg'),
+      },
+    };
+  },
   mounted() {
-    // this.model.localAppsMgr.curDialogTitle = 'Select an Application';
-    // eventBus.$on('show', (block) => {
-    //   if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
-    //     this.block = block
-    //     this.dialog[block.type] = true
-    //     console.log('has property', this.block)
-    //   }
-    // })
+    classObject: () => {
+      return {
+        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
+        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
+      }
+    }
   },
   methods: {
     closeMyself() {
+      this.curSelectedFileUUID = '';
       this.model.localAppsMgr.isProjListDialogShow = false;
+    },
+    onopen() {
+      this.closeMyself();
     },
     insertIde(name) {
       // this.block.setFieldValue(111) // set block name
@@ -125,19 +83,32 @@ export default {
       inputField.fieldRow[1].setText(`a${name}`)
       this.dialog[this.block.type] = false
     },
-  },
-  data() {
-    return {
-      model: window.GlobalUtil.model,
-      curProTreeDatas: [],
-      block: null,
-      dialog: {
-        ide_app: false,
-        record_app: false,
-        other_app: false,
-      },
-      plus: 0,
-    };
+    handleNodeClick(data) {
+      this.curSelectedFileUUID = data.uuid;
+    },
+    renderContent(h, { node, data, store }) {
+      const flag = data.uuid === this.curSelectedFileUUID; 
+      console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
+      const curUUID = this.curSelectedFileUUID; // GlobalUtil.model.localProjTree.curSelectedFileUUID;
+      const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
+      let textColorStyle = data.uuid === curUUID && data.uuid.indexOf('.py') > 0 ? 'color:#4F7597;' : 'color:#A6A6A6;';
+      textColorStyle = `${textColorStyle}font-family:'Gotham-Book';letter-spacing:-0.8px;padding-left:20px;`;
+      let url = '';
+      if (data.uuid.indexOf('.py') >= 0) {
+        url = this.fileIcon.py;
+      }
+      if (data.type === 'proj') {
+        url = this.fileIcon.proj;
+      }
+      const urlstyle = `background:url('${url}') no-repeat center left;${textColorStyle}`;
+      return (
+        <span class="">
+          <span style={urlstyle}>
+            { data.label }
+          </span>
+        </span>
+      );
+    },
   },
 }
 </script>
