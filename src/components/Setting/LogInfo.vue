@@ -1,8 +1,9 @@
 <template>
   <div class="log-wrapper com-module-wrapper">
-    <div class="com-back-home-wrapper com-text-center">
+    <div class="com-back-home-wrapper com-text-center" style="position: relative">
       <a @click="goBack()"><img class="com-icon-back" src="../../assets/img/common/icon_back.svg"/></a>
       <span class="com-font-GB-24 com-module-name">System Log</span>
+      <el-button type="primary" icon="el-icon-download" style="position: absolute;right: 4vw;" @click="downloadDoc()">Download</el-button>
     </div>
     <div class="log-content" id="log-content" @scroll="scrollToBottom()">
       <ul>
@@ -53,6 +54,17 @@ export default {
       if (logContenId.scrollHeight - logContenId.scrollTop - logContenId.clientHeight < 1) {
         setTimeout(this.getLogInfo(), 2000);
       }
+    },
+    downloadDoc() {
+      fetch('http://192.168.1.67:18333/test/log/download').then(response => response.blob().then((blob) => {
+        const a = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        const filename = 'system log.zip';
+        a.href = url;
+        a.download = filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }))
     },
 //    getScrollTop() {
 //      let bodyScrollTop = 0;
