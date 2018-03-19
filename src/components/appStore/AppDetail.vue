@@ -1,54 +1,65 @@
 <template>
   <div class="app-detail-wrapper">
     <div class="app-detail-header com-text-center">
-      <router-link :to="{name: 'AppStore'}"><img src="../../assets/img/common/icon_back.svg" /></router-link><span>Pick and Place</span>
+      <router-link :to="{name: 'AppStore'}">
+        <img src="../../assets/img/common/icon_back.svg" />
+      </router-link>
+      <span>
+        {{ data.name }}
+      </span>
+      <div v-if="data.control==='install'">
+        <el-button class="control-btn float-left install-btn" @click="oninstall()">{{ data.control }}</el-button>
+      </div>
+      <div v-if="data.control==='run'">
+        <div style="width:400px;margin-left:100%;">
+          <el-button class="control-btn float-left run-btn" @click="onrun()">run</el-button>
+          <el-button class="control-btn float-left uninstall-btn" @click="onuninstall()">uninstall</el-button>
+        </div>
+      </div>
     </div>
     <div class="app-datail-contain">
       <section class="section1 com-text-center">
         <div class="app-icon">
-          {{ data.name }}
-          <div>
+          <div style="text-align:center;margin-top:190px;">
             {{ data.version }}
           </div>
-          <div>
+          <!-- <div>
             {{ data.appType }}
           </div>
           <div>
             {{ data.category }}
-          </div>
+          </div> -->
         </div>
         <div class="app-text">
-          <div class="">
-            <!-- <p class="gray-title">Developer</p>
-            <p class="black-text">Johnny</p> -->
+          <div class="middle-box">
             <p class="gray-title">Developer</p>
             <p class="black-text">{{ data.author }}</p>
           </div>
           <div class="middle-box">
-            <!-- <p class="gray-title">Developer</p>
-            <p class="black-text">Johnny</p> -->
+            <p class="gray-title">Contributor</p>
+            <p class="black-text">Contributor</p>
           </div>
-          <div class="">
-            <div v-if="data.control==='install'">
-              <el-button class="install-btn" @click="oninstall()">{{ data.control }}</el-button>
-            </div>
-            <div v-if="data.control==='run'">
-              <el-button class="install-btn" @click="onrun()">run</el-button>
-              <el-button class="install-btn" @click="onreinstall()">reinstall</el-button>
-              <el-button class="install-btn" @click="onuninstall()">uninstall</el-button>
-            </div>
+          <div class="middle-box">
+            <p class="gray-title">Size</p>
+            <p class="black-text">{{ data.size }} MB</p>
           </div>
+
         </div>
       </section>
-      <section class="section2"></section>
+      <!-- <section class="section2">
+        {{ data. version }}
+      </section> -->
+      <!-- <section class="section2"></section> -->
       <section class="section3">
         <h4>Description</h4>
-        <div></div>
+        <!-- <div></div> -->
+        <textarea v-model="data.des" disabled>
+        </textarea>
       </section>
-      <section class="section4">
+      <!-- <section class="section4">
         <h4>Information</h4>
         <div></div>
-      </section>
+      </section> -->
     </div>
   </div>
 </template>
@@ -107,67 +118,118 @@
     background: #FAFAFB;
     img {
       width: 1.5rem;
-      margin-left: 4rem;
+      // margin-left: 4rem;
+      margin-left: 40px;
     }
     span {
       font-family: 'Gotham-Medium';
       font-size: 1.5rem;
       color: #444;
       letter-spacing: -1.81px;
-      margin-left: 3rem;
+      // margin-left: 3rem;
+      margin-left: 20%;
+    }
+    .control-btn {
+      width: 140px;
+      height: 47px;
+      border: none;
+      font-family: 'Gotham-Book';
+      font-size: 20px;
+      letter-spacing: -1.23px;
+      text-align: center;
+      border-radius: 24px;
+      color: #FFFFFF;
+    }
+    .install-btn {
+      margin-left: 300%;
+      background: #575C62;
+    }
+    .uninstall-btn {
+      // float: left;
+      // margin-left: 180%;
+      background: #E24D4A;
+    }
+    .run-btn {
+      // float: left;
+      // margin-left: 100%;
+      background: #52BF53;
     }
   }
   .app-datail-contain {
     width: 80%;
-    margin: 0 auto;
-    max-width: 1200px;
+    margin-left: 25%;
+    // margin: 0 auto;
+    max-width: 1000px;
     .section1 {
-      margin: 4rem 0;
+      // margin: 4rem 0;
+      margin-top: 4rem;
+      // background: green;
       .app-icon {
-        width: 10rem;
-        height: 10rem;
+        // width: 10rem;
+        // height: 10rem;
+        width: 180px;
+        height: 180px;
         background: #D9D9D9;
         border-radius: 2px;
-        margin-right: 4rem;
+        margin-right: 6rem;
       }
       .app-text {
-        flex-direction: column;
-        font-family: 'Gotham-Book';
-        font-size: 1rem;
-        letter-spacing: -1.62px;
+        // flex-direction: column;
+        // font-family: 'Gotham-Book';
+        // font-size: 1rem;
+        // letter-spacing: -1.62px;
         .middle-box {
           margin: 2rem 0;
-        }
-        .gray-title {
-          color: #A5A5A5;
-        }
-        .black-text {
-          color: #444;
-        }
-        .install-btn {
-          background: #E27347;
-          border-radius: 58px;
-          border: none;
-          padding: 4px 20px;
-          color: #FFF;
-          letter-spacing: -1.38px;
+          .gray-title {
+            // color: #A5A5A5;
+            font-family: 'Gotham-Book';
+            font-size: 18px;
+            color: #AEAEAE;
+            letter-spacing: -1px;
+            text-align: left;
+          }
+          .black-text {
+            // color: #444;
+            font-family: 'Gotham-Book';
+            font-size: 18px;
+            color: #444444;
+            letter-spacing: -1.62px;
+            text-align: left;
+          }
         }
       }
     }
     .section2 {
-      background: #EEE;
-      width: 60%;
-      height: 425px;
-      margin: 0 auto;
+      // margin-top: 1rem;
+      // background: yellow;
+      // width: 60%;
+      // height: 425px;
+      // margin: 0 auto;
+      // margin-left: 0px;
     }
-    .section3, .section4 {
+    .section3 {
       margin-top: 4rem;
+      // margin-left: 0px;
+      // margin-right: 0px;
       h4 {
-        width: 90%;
-        border-bottom: 1px solid #EEE;
+        width: 80%;
+        height:40px;
+        border-bottom: 3px solid #EEE;
+        font-family: 'Gotham-Medium';
+        font-size: 26px;
+        color: #444444;
+        letter-spacing: -1px;
+      }
+      textarea {
+        width: 80%;
+        margin-top: 5px;
+        border:0;
+        outline: none;
+        height: 200px;
         font-family: 'Gotham-Book';
-        color: #444;
-        letter-spacing: -2px;
+        font-size: 22px;
+        color: #444444;
+        letter-spacing: -0.85px;
       }
     }
   }

@@ -57,29 +57,22 @@ self.setProjListDialogType = (type) => {
 // self.isAppsProjListDialogShow = false;
 
 self.createApp = (params) => {
-  const author = params.author;
-  const name = params.name;
-  const category = params.category;
-  const version = params.version;
-  const appType = params.appType;
-  const des = params.des;
-  const support = params.support;
-  const created = params.created;
-  const contribution = params.contribution;
-  const control = params.control;
-  const userId = params.userId;
+  if (params.size === undefined) {
+    params.size = 0;
+  }
   return {
-    author: author,
-    name: name,
-    appType: appType,
-    category: category,
-    version: version,
-    support: support,
-    des: des,
-    created: created,
-    contribution: contribution,
-    control: control,
-    userId: userId,
+    author: params.author,
+    name: params.name,
+    appType: params.appType,
+    category: params.category,
+    version: params.version,
+    support: params.support,
+    des: params.des,
+    created: params.created,
+    contribution: params.contribution,
+    control: params.control,
+    userId: params.userId,
+    size: params.size,
   }
 };
 
@@ -122,16 +115,12 @@ self.remoteProjs2Local = (dict) => {
       des: one.description,
       control: one.control,
       created: one.created,
+      size: one.size,
     };
     const app = self.createApp(params);
     self.allApps.default.data.push(app);
 
     self.appTreeDatas[0].children.push({
-      label: one.name,
-      type: 'file',
-      uuid: uuidv4(),
-    });
-    self.appTreeDatas[1].children.push({
       label: one.name,
       type: 'file',
       uuid: uuidv4(),
@@ -148,9 +137,15 @@ self.remoteProjs2Local = (dict) => {
       des: one.description,
       control: one.control,
       created: one.created,
+      size: one.size,
     };
     const app = self.createApp(params);
     self.allApps.thirdparty.data.push(app);
+    self.appTreeDatas[1].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
   }
   // test
   // const app1 = self.createApp({name: 'my-test-1'});
@@ -182,6 +177,7 @@ self.remoteMyProjs2Local = (dict) => {
       // control: one.control,
       created: one.created,
       userId: one.userId,
+      size: one.size,
     };
     const app = self.createApp(params);
     self.allApps.my.data.push(app);
