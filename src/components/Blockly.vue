@@ -35,7 +35,7 @@
 <script>
 import { Blockly, init as initBlockly } from '../assets/lib/blockly/blockly';
 import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
-import eventBus from './Blockly/eventBus'
+// import eventBus from './Blockly/eventBus'
 import Dialogs from './Blockly/Dialogs'
 
 export default {
@@ -66,6 +66,17 @@ export default {
       currentBlockId: 0,
       sideToggle: true,
       toggleSideVisible: true,
+      dialog: {
+        ide_app: () => {
+          this.onIDE()
+        },
+        record_app: () => {
+          this.onTeach()
+        },
+        other_app: () => {
+          console.log('open other app')
+        },
+      },
     };
   },
   beforeDestroy() {
@@ -100,6 +111,7 @@ export default {
       // console.log('event block', block)
       if (block && event.type === 'ui') {
         // eventBus.$emit('show', block)
+        this.dialog[block.type]()
         console.log('onchange 1')
       }
     }
@@ -140,7 +152,8 @@ export default {
       const blockId = event.blockId
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
-        eventBus.$emit('show', block)
+        // eventBus.$emit('show', block)
+        this.dialog[block.type]()
         console.log(block.type)
         console.log('onchange 2')
       }
