@@ -69,9 +69,9 @@ self.createApp = (params) => {
     support: params.support,
     des: params.des,
     created: params.created,
+    userId: params.userId,
     contribution: params.contribution,
     control: params.control,
-    userId: params.userId,
     size: params.size,
   }
 };
@@ -115,7 +115,9 @@ self.remoteProjs2Local = (dict) => {
       des: one.description,
       control: one.control,
       created: one.created,
+      userId: one.userId,
       size: one.size,
+      contribution: one.contribution,
     };
     const app = self.createApp(params);
     self.allApps.default.data.push(app);
@@ -137,7 +139,9 @@ self.remoteProjs2Local = (dict) => {
       des: one.description,
       control: one.control,
       created: one.created,
+      userId: one.userId,
       size: one.size,
+      contribution: one.contribution,
     };
     const app = self.createApp(params);
     self.allApps.thirdparty.data.push(app);
@@ -178,6 +182,7 @@ self.remoteMyProjs2Local = (dict) => {
       created: one.created,
       userId: one.userId,
       size: one.size,
+      contribution: one.contribution,
     };
     const app = self.createApp(params);
     self.allApps.my.data.push(app);

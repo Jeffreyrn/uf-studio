@@ -37,7 +37,7 @@
           </div>
           <div class="middle-box">
             <p class="gray-title">Contributor</p>
-            <p class="black-text">Contributor</p>
+            <p class="black-text">{{ (data.contribution || []).join(', ') }}</p>
           </div>
           <div class="middle-box">
             <p class="gray-title">Size</p>
