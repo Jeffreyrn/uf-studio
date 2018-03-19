@@ -126,10 +126,23 @@ CodeGenerator.buzzer_beats = (params) => {
 
 CodeGenerator.set_speed = (params) => {
   const speed = params.speed;
-  return `UArm.set_speed(${speed});\n`;
+  const data = JSON.stringify({
+    index: 'speed',
+    value: speed,
+  })
+  return `window.xArmVuex.commit('SET_ROBOT_STATE',${data});\n`;
 };
 
-CodeGenerator.reset = () => 'await UArm.set_home_position();\n';
+CodeGenerator.set_acceleration = (params) => {
+  const acceleration = params.acceleration;
+  const data = JSON.stringify({
+    index: 'acceleration',
+    value: acceleration,
+  })
+  return `window.xArmVuex.commit('SET_ROBOT_STATE',${data});\n`;
+};
+
+CodeGenerator.reset = () => `await window.xArmVuex.commit('GO_HOME'));\n`;
 
 /** ****************************** Loop **************************************************************/
 // CodeGenerator.loop_repeat_times = (params) => {
@@ -354,7 +367,7 @@ CodeGenerator.event_leap_gesture = (params) => {
 CodeGenerator.event_button_pressed_stop = () => 'UArm.Button.clearEventListener();\n';
 CodeGenerator.ide_app = (name) => `ideExcute(${name.ide});\n`;
 CodeGenerator.record_app = (name) => `recordExcute(${name.record});\n`;
-CodeGenerator.other_app = (name) => `otherExcute(${name.other});\n`;
+CodeGenerator.other_app = (name) => `console.log(this, window.xArmVuex.commit('GET_ROBOT_STATUS'));\n`;
 /* Code generator*/
 const genFuncCode = (params, block) => CodeGenerator[block.type](params);
 

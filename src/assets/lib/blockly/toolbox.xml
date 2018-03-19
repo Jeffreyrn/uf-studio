@@ -10,6 +10,13 @@
                 </shadow>
             </value>
         </block>
+        <block type="set_acceleration">
+            <value name="acceleration">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
         <!-- <block type="studio_play_recording"></block> -->
         <block type="move_to">
             <value name="position">

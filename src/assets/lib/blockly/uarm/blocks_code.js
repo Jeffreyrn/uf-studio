@@ -120,6 +120,12 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const params = { speed };
     return genFuncCode(params, block);
   };
+  Blockly.JavaScript.set_acceleration = (block) => {
+    const acceleration = Blockly.JavaScript.valueToCode(block, 'acceleration', Blockly.JavaScript.ORDER_ATOMIC);
+    // const speed = block.getFieldValue('speed');
+    const params = { acceleration };
+    return genFuncCode(params, block);
+  };
 
   Blockly.JavaScript.reset = block => genFuncCode(null, block);
 

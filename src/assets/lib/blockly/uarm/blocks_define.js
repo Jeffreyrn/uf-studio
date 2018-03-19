@@ -521,6 +521,17 @@ function initBlocklyDefine(Blockly) {
       this.setColour(BlocklyDefaultColor.COLOR_MOTION);
     },
   };
+  Blockly.Blocks.set_acceleration = {
+    init() {
+      this.appendValueInput('acceleration')
+        .setCheck('Number')
+        .appendField(Blockly.Msg.motion.acceleration);
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(BlocklyDefaultColor.COLOR_MOTION);
+    },
+  };
   Blockly.Blocks.reset = {
     init() {
       this.appendDummyInput()

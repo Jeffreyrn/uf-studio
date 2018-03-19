@@ -89,6 +89,7 @@ export default {
   },
   mounted() {
     const self = this;
+    window.xArmVuex = this.$store;
     if (this.uarmConnectStatus) {
       window.UArm.set_acceleration({
         printingMoves: 200,
@@ -111,7 +112,7 @@ export default {
       // console.log('event block', block)
       if (block && event.type === 'ui') {
         // eventBus.$emit('show', block)
-        this.dialog[block.type]()
+        this.popDialog(block)
         console.log('onchange 1')
       }
     }
@@ -120,6 +121,11 @@ export default {
     // load project
   },
   methods: {
+    popDialog(block) {
+      if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
+        this.dialog[block.type]()
+      }
+    },
     runProject() {
       if (this.blocksLength() > 0) {
         Blockly.executeCode().then().catch((err) => {
@@ -149,7 +155,7 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
         // eventBus.$emit('show', block)
-        this.dialog[block.type]()
+        this.popDialog(block)
         console.log(block.type)
         console.log('onchange 2')
       }
