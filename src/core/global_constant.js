@@ -44,8 +44,9 @@ self.DEBUG_SET_BEART = 'debug_set_beart';
 // setting cmd
 self.SETTING_GET_LOG_INFO = 'get_log_info';
 self.SETTING_GET_SOFTWARE_VERSION = 'get_software_version';
-self.SETTING_CHECK_UPDATE = 'check_update';
+self.SETTING_CHECK_SOFTWARE_UPDATE = 'check_software_update';
 self.SETTING_START_UPDATE = 'start_update';
+self.SETTING_SET_SOFTWARE_INFO = 'get_software_info';
 
 self.userId = 'test';
 

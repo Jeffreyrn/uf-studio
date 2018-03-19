@@ -9,17 +9,17 @@
       </div>
     </div>
     <div class="conten-wrapper">
-      <div class="update-content" v-for="(item, index) in haveUpdate" :key="index">
+      <div class="update-content" v-for="(item, key, index) in haveUpdate" :key="index">
         <div class="update-info">
-          <span class="name">{{ item.name }}</span>
-          <span class="version">{{ item.version }}</span>
-          <span class="time">Released January 1, 2018</span>
+          <span class="name">{{ key}}</span>
+          <span class="version">{{ item.version}}</span>
+          <span class="time">{{ item.time }}</span>
         </div>
         <div class="update-text">
           <span v-if="item.update">This Version Updates：</span>
           <span v-else>This Version Updated：</span>
           <ul>
-            <li>Fix  an issue where using certain character sequences could cause apps to crash</li>
+            <li >Fix  an issue where using certain character sequences could cause apps to crash</li>
             <li>Fixes  an issue where some third-party apps could fail to connect to external accessories</li>
           </ul>
         </div>
@@ -37,48 +37,41 @@
 export default {
   data() {
     return {
-      haveUpdate: [
-        {
+      haveUpdate: {
+        Software: {
           name: 'Software',
           version: '',
           time: '',
           text: [],
           update: false,
         },
-        {
+        Hardware: {
           name: 'Hardware',
           version: '',
           time: '',
           text: [],
-          update: true,
+          update: false,
         },
-      ],
+      },
     };
   },
   created() {
     this.checkUpdate();
-    this.getVersion();
+    this.getSoftwareInfo();
   },
   mounted() {
   },
   methods: {
     checkUpdate() {
       const data = {};
-      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_CHECK_UPDATE, data, (response) => {
+      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_CHECK_SOFTWARE_UPDATE, data, (response) => {
         const checkUpdate = response.data;
         if (checkUpdate) {
-          this.haveUpdate[0].update = checkUpdate.xArmStudioUpdate;
-          this.haveUpdate[1].update = checkUpdate.xArmCoreUpdate;
-        }
-      });
-    },
-    getVersion() {
-      const data = {};
-      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_GET_SOFTWARE_VERSION, data, (response) => {
-        const softwareVersion = response.data;
-        if (softwareVersion) {
-          this.haveUpdate[0].version = `xArm Studio ${softwareVersion.xArmStudioVersion}`;
-          this.haveUpdate[1].version = `ROS ${softwareVersion.xArmCoreVersion}`;
+          this.haveUpdate.Software.update = checkUpdate.xArmStudio.update;
+          this.haveUpdate.Software.version = `xArm Studio${checkUpdate.xArmStudio.version}`;
+          this.haveUpdate.Hardware.update = checkUpdate.xArmCore.update;
+          this.haveUpdate.Hardware.version = `ROS ${checkUpdate.xArmCore.version}`;
+          console.log('checkUpdate', checkUpdate);
         }
       });
     },
@@ -91,11 +84,20 @@ export default {
         }
       });
     },
+    getSoftwareInfo() {
+      const data = {};
+      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_SET_SOFTWARE_INFO, data, (response) => {
+        const softwareInfo = response.data;
+        if (softwareInfo) {
+          console.log('softwareInfo', softwareInfo);
+        }
+      });
+    },
   },
   computed: {
     countUpdates() {
-      const softWare = this.haveUpdate[0].update;
-      const hardware = this.haveUpdate[1].update;
+      const softWare = this.haveUpdate.Software.update;
+      const hardware = this.haveUpdate.Hardware.update;
       if (softWare && hardware) {
         return {
           number: 2,
