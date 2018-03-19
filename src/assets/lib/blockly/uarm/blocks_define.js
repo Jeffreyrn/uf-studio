@@ -203,6 +203,15 @@ function initBlocklyDefine(Blockly) {
       this.appendValueInput('z')
         .setCheck('Number')
         .appendField('Z');
+      this.appendValueInput('a')
+        .setCheck('Number')
+        .appendField('A');
+      this.appendValueInput('b')
+        .setCheck('Number')
+        .appendField('B');
+      this.appendValueInput('c')
+        .setCheck('Number')
+        .appendField('C');
       this.setInputsInline(true);
       this.setOutput(true, null);
       this.setColour(BlocklyDefaultColor.COLOR_MOTION);
@@ -222,6 +231,15 @@ function initBlocklyDefine(Blockly) {
                 item.connection.targetBlock().setFieldValue(value, 'NUM');
                 break;
               case 'z':
+                item.connection.targetBlock().setFieldValue(value, 'NUM');
+                break;
+              case 'a':
+                item.connection.targetBlock().setFieldValue(value, 'NUM');
+                break;
+              case 'b':
+                item.connection.targetBlock().setFieldValue(value, 'NUM');
+                break;
+              case 'c':
                 item.connection.targetBlock().setFieldValue(value, 'NUM');
                 break;
             }
@@ -366,6 +384,15 @@ function initBlocklyDefine(Blockly) {
                 break;
               case 'z':
                 item.connection.targetBlock().setFieldValue(Math.round(positions[2]).toString(), 'NUM');
+                break;
+              case 'a':
+                item.connection.targetBlock().setFieldValue(Math.round(positions[3]).toString(), 'NUM');
+                break;
+              case 'b':
+                item.connection.targetBlock().setFieldValue(Math.round(positions[4]).toString(), 'NUM');
+                break;
+              case 'c':
+                item.connection.targetBlock().setFieldValue(Math.round(positions[5]).toString(), 'NUM');
                 break;
             }
           }
