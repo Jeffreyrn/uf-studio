@@ -1,4 +1,6 @@
 
+const uuidv4 = require('uuid/v4');
+
 const LocalAppsMgr = {};
 const self = LocalAppsMgr;
 
@@ -6,12 +8,33 @@ self.isProjListDialogShow = false;
 self.curDialogTitle = '';
 self.projListDialogType = '';
 self.curProTreeDatas = [];
+self.appTreeDatas = [
+  {
+    uuid: '',
+    type: 'proj',
+    label: 'Default App',
+    children: [],
+  },
+  {
+    uuid: '',
+    type: 'proj',
+    label: 'Third-Party App',
+    children: [],
+  },
+  {
+    uuid: '',
+    type: 'proj',
+    label: 'My App',
+    children: [],
+  },
+];
 self.setProjListDialogType = (type) => {
   self.projListDialogType = type;
   self.isProjListDialogShow = true;
   switch (type) {
     case 'app': {
       self.curDialogTitle = 'Select an Application';
+      self.curProTreeDatas = self.appTreeDatas;
       break;
     }
     case 'ide': {
@@ -34,29 +57,22 @@ self.setProjListDialogType = (type) => {
 // self.isAppsProjListDialogShow = false;
 
 self.createApp = (params) => {
-  const author = params.author;
-  const name = params.name;
-  const category = params.category;
-  const version = params.version;
-  const appType = params.appType;
-  const des = params.des;
-  const support = params.support;
-  const created = params.created;
-  const contribution = params.contribution;
-  const control = params.control;
-  const userId = params.userId;
+  if (params.size === undefined) {
+    params.size = 0;
+  }
   return {
-    author: author,
-    name: name,
-    appType: appType,
-    category: category,
-    version: version,
-    support: support,
-    des: des,
-    created: created,
-    contribution: contribution,
-    control: control,
-    userId: userId,
+    author: params.author,
+    name: params.name,
+    appType: params.appType,
+    category: params.category,
+    version: params.version,
+    support: params.support,
+    des: params.des,
+    created: params.created,
+    contribution: params.contribution,
+    control: params.control,
+    userId: params.userId,
+    size: params.size,
   }
 };
 
@@ -81,9 +97,13 @@ self.remoteProjs2Local = (dict) => {
   }
   const defaults = dict.data.default;
   const thirdpartys = dict.data.thirdparty;
+  
   self.allApps.default.data = [];
   self.allApps.thirdparty.data = [];
-  self.allApps.my.data = [];
+
+  self.appTreeDatas[0].children = [];
+  self.appTreeDatas[1].children = [];
+
   for (let i = 0; i < defaults.length; i += 1) {
     const one = defaults[i];
     const params = {
@@ -95,9 +115,16 @@ self.remoteProjs2Local = (dict) => {
       des: one.description,
       control: one.control,
       created: one.created,
+      size: one.size,
     };
     const app = self.createApp(params);
     self.allApps.default.data.push(app);
+
+    self.appTreeDatas[0].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
   }
   for (let i = 0; i < thirdpartys.length; i += 1) {
     const one = thirdpartys[i];
@@ -110,9 +137,15 @@ self.remoteProjs2Local = (dict) => {
       des: one.description,
       control: one.control,
       created: one.created,
+      size: one.size,
     };
     const app = self.createApp(params);
     self.allApps.thirdparty.data.push(app);
+    self.appTreeDatas[1].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
   }
   // test
   // const app1 = self.createApp({name: 'my-test-1'});
@@ -127,7 +160,11 @@ self.remoteMyProjs2Local = (dict) => {
     return;
   }
   const data = dict.data;
+
   self.allApps.my.data = [];
+
+  self.appTreeDatas[2].children = [];
+
   for (let i = 0; i < data.length; i += 1) {
     const one = data[i];
     const params = {
@@ -140,9 +177,16 @@ self.remoteMyProjs2Local = (dict) => {
       // control: one.control,
       created: one.created,
       userId: one.userId,
+      size: one.size,
     };
     const app = self.createApp(params);
     self.allApps.my.data.push(app);
+
+    self.appTreeDatas[2].children.push({
+      label: one.name,
+      type: 'file',
+      uuid: uuidv4(),
+    });
   }
 };
 

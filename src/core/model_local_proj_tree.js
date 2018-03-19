@@ -712,11 +712,27 @@ self.allPros2Tree = () => {
     aChild.uuid = thisProj.uuid;
     aChild.icon = '';
     aChild.children = [];
-    aChild.type = 'folder'
+    aChild.type = 'proj'
+    aChild.ctime = thisProj.ctime;
     tempDatas.push(aChild);
-    let fileDatas = tempDatas[0].children;
-    self.findFolder(fileDatas, '', thisProj);
-    allTempDatas.push(aChild)
+    const fileDatas = tempDatas[0].children;
+
+    // 只要第一层
+    // self.findFolder(fileDatas, '', thisProj);
+    for (let i = 0; i < thisProj.files.length; i += 1) {
+      const aChild = {};
+      const file = thisProj.files[i];
+      aChild.label = file.name;
+      aChild.uuid = file.uuid;
+      aChild.type = file.type;
+      aChild.children = [];
+      if (aChild.type === 'file' && aChild.uuid.indexOf('.py')>0) {
+        fileDatas.push(aChild);
+      }
+    }
+    if (fileDatas.length > 0) {
+      allTempDatas.push(aChild);
+    }
   }
   self.allProsTreeDatas = allTempDatas;
 };

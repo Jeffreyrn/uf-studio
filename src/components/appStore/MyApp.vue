@@ -2,10 +2,10 @@
   <div>
     <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">
       <ul>
-        <li v-for="(icon ,index) in model.localAppsMgr.allApps.my.data">
-          <router-link :to="{name: 'AppSubmit', params:{name: icon.name}}">
+        <li v-for="(data ,index) in model.localAppsMgr.allApps.my.data">
+          <router-link :to="{name: 'AppSubmit', params:{name: data.name}}">
             <div style="width:100%;height:100%;">
-              <span>{{ icon.name }}</span>
+              <span>{{ data.name }}</span>
             </div>
           </router-link>
         </li>
