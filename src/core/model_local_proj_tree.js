@@ -713,6 +713,7 @@ self.allPros2Tree = () => {
     aChild.icon = '';
     aChild.children = [];
     aChild.type = 'proj'
+    aChild.ctime = thisProj.ctime;
     tempDatas.push(aChild);
     const fileDatas = tempDatas[0].children;
 

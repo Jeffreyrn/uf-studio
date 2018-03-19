@@ -232,6 +232,7 @@ self.remoteProjs2Local = (dict) => {
   for (let i = 0; i < datas.length; i += 1) {
     const aFileRecord = datas[i];
     const filepath = aFileRecord.path;
+    const ctime = aFileRecord.ctime;
     if (path.basename(filepath).indexOf('.') === 0) {
       continue;
     }
@@ -253,6 +254,7 @@ self.remoteProjs2Local = (dict) => {
       // name = name.replace("continuous_", "");
       // name = name.replace("discontinuous_", "")
       curProj.name = name;
+      curProj.ctime = ctime;
       const type = projName.split("_")[0];
       if (type === 'discontinuous') {
         curProj.type = 'discontinuous';
@@ -321,7 +323,8 @@ self.curPro2Tree = () => {
     const aChild = {};
     aChild.label = proj.name;
     aChild.uuid = proj.uuid;
-    // aChild.type = 'folder';
+    aChild.type = 'proj';
+    aChild.ctime = proj.ctime;
     const type = proj.name.split("_")[0];
     if (type === 'continuous' || type === 'discontinuous') {
       aChild.proType = type;

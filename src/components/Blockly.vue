@@ -131,13 +131,9 @@ export default {
     },
     onIDE() {
       this.model.localAppsMgr.setProjListDialogType('ide');
-      // this.model.localTeach.ProjListDialogType = 'ide';
-      // this.model.localAppsMgr.isProjListDialogShow = true;
     },
     onTeach() {
       this.model.localAppsMgr.setProjListDialogType('teach');
-      // this.model.localTeach.ProjListDialogType = 'teach';
-      // this.model.localAppsMgr.isProjListDialogShow = true;
     },
     newProject() {
       Blockly.BlockWorkspace.clear();

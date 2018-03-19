@@ -9,11 +9,21 @@
           <div class="dialog-close" @click="closeMyself">
           </div>
         </div>
-
+        <div class="list-head">
+          <div class="list-head-title">
+            Project name
+          </div>
+          <div class="list-head-title">
+            Date
+          </div>
+          <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType==='teach'">
+            Type
+          </div>
+        </div>
         <el-tree
           id="app-tree-root"
           style="padding-left:10px;"
-          class="recording-project-list noselected"
+          class="blockly-project-list noselected"
           :data="model.localAppsMgr.curProTreeDatas"
           node-key="uuid"
           :indent=12
@@ -22,7 +32,7 @@
           @node-click="handleNodeClick">
         </el-tree>
 
-        <div v-if="curSelectedFileUUID.length>0&&curSelectedFileUUID.indexOf('.py')>0" class="btn-ok cursor-pointer" @click="onopen">
+        <div v-if="curSelectedFileUUID.length>0&&(curSelectedFileUUID.indexOf('.py')>0||curSelectedFileUUID.indexOf('.json')>0)" class="btn-ok cursor-pointer" @click="onopen">
           Open
         </div>
         <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
@@ -53,6 +63,8 @@ export default {
       fileIcon: {
         py: require('./../../assets/img/blockly/dialog/language_python_dark.svg'),
         proj: require('./../../assets/img/blockly/dialog/icon_project_dark.svg'),
+        discontinuous: require('./../../assets/img/blockly/dialog/icon_singlepoint_dark.svg'),
+        continuous: require('./../../assets/img/blockly/dialog/icon_pathfile_dark.svg'),
       },
     };
   },
@@ -72,41 +84,67 @@ export default {
     onopen() {
       this.closeMyself();
     },
-    insertIde(name) {
-      // this.block.setFieldValue(111) // set block name
-      const children = this.block.childBlocks_// this.block.getChildren()
-      console.log(0, children)
-      const inputField = children[0].inputList[0]
-      console.log(111, inputField)
-      // inputField.connection.targetBlock().setFieldValue('3', 'NUM')
-      this.plus += 1
-      inputField.fieldRow[1].setText(`a${name}`)
-      this.dialog[this.block.type] = false
-    },
     handleNodeClick(data) {
-      this.curSelectedFileUUID = data.uuid;
+      if (data.uuid.indexOf('.py') > 0 || data.uuid.indexOf('.json') > 0) {
+        this.curSelectedFileUUID = data.uuid;
+      }
     },
     renderContent(h, { node, data, store }) {
       const flag = data.uuid === this.curSelectedFileUUID; 
       console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
       const curUUID = this.curSelectedFileUUID; // GlobalUtil.model.localProjTree.curSelectedFileUUID;
       const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
-      let textColorStyle = data.uuid === curUUID && data.uuid.indexOf('.py') > 0 ? 'color:#4F7597;' : 'color:#A6A6A6;';
+      let textColorStyle = data.uuid === curUUID && (data.uuid.indexOf('.py')>0||data.uuid.indexOf('.json')>0) ? 'color:#4F7597;' : 'color:#A6A6A6;';
       textColorStyle = `${textColorStyle}font-family:'Gotham-Book';letter-spacing:-0.8px;padding-left:20px;`;
       let url = '';
       if (data.uuid.indexOf('.py') >= 0) {
         url = this.fileIcon.py;
       }
+      if (data.uuid.indexOf('.json') >= 0) {
+        // url = this.fileIcon.json;
+      }
       if (data.type === 'proj') {
         url = this.fileIcon.proj;
+        if (data.proType === 'continuous') {
+          url = this.fileIcon.continuous;
+        }
+        else if (data.proType === 'discontinuous') {
+          url = this.fileIcon.discontinuous;
+        }
       }
-      const urlstyle = `background:url('${url}') no-repeat center left;${textColorStyle}`;
+      let ctime = data.ctime;
+      if (data.type==='proj') {
+
+      }
+      else {
+        ctime = '';
+      }
+      let proType = data.proType;
+      if (data.type==='proj') {
+        if (proType === 'discontinuous') {
+          proType = 'Singlepoint';
+        }
+        else if (proType === 'continuous') {
+          proType = 'Waypoint';
+        }
+      }
+      else {
+        proType = '';
+      }
+      const urlstyle = `background:url('${url}') no-repeat center left;${textColorStyle};width:200px;height:36px;line-height:36px;float:left;`;
+      const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
       return (
-        <span class="">
-          <span style={urlstyle}>
-            { data.label }
-          </span>
-        </span>
+        <div class="" style="">
+          <div style={urlstyle}>
+            { label }
+          </div>
+          <div style="float:left;width:220px;line-height:36px;">
+            { ctime }
+          </div>
+          <div style="float:left;line-height:36px;">
+            { proType }
+          </div> 
+        </div>
       );
     },
   },
@@ -201,32 +239,35 @@ export default {
   letter-spacing: -0.5px;
   /* cursor: pointer; */
 }
-
-.recording-project-list {
+.blockly-project-list {
   width: 100%;
-  height: 225px;
+  /* height: 225px; */
+  height: 185px;
   /* background: yellow; */
   overflow-y: scroll;
 }
-.recording-project-list .el-tree-node__content {
+.blockly-project-list .el-tree-node__content {
   height: 36px;
 }
-/*.recording-project-list .el-tree-node.is-expanded>.el-tree-node__children {*/
-  /*background: #E8E8E8;*/
-/*}*/
-/*.recording-project-list .el-tree-node__expand-icon.is-leaf:before{*/
-  /*background: url("../assets/img/edit/recording/icon_pathfile_grey.svg") no-repeat center left;*/
-  /*padding: 10px;*/
-/*}*/
-/*.recording-project-list .el-tree-node.is-current >.el-tree-node__content .el-tree-node__expand-icon.is-leaf:before{*/
-  /*background: url("../assets/img/edit/recording/icon_pathfile_white.svg") no-repeat center left;*/
-/*}*/
-.recording-project-list .el-tree-node.is-current>.el-tree-node__content {
+.blockly-project-list .el-tree-node.is-current>.el-tree-node__content {
   background-color: #575C62;
   color: #fff;
 }
-.recording-project-list .el-tree-node.is-current>.el-tree-node__content .display-none {
+.blockly-project-list .el-tree-node.is-current>.el-tree-node__content .display-none {
   display: inline-block;
 }
-
+.list-head {
+  width:100%;
+  height:40px;
+}
+.list-head-title {
+  float:left;
+  width:33%;
+  font-family: 'Gotham-Medium';
+  font-size: 16px;
+  color: #3C3C3C;
+  letter-spacing: -1px;
+  text-align: center;
+  line-height: 40px;
+}
 </style>
