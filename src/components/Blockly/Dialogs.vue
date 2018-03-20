@@ -69,12 +69,12 @@ export default {
     };
   },
   mounted() {
-    classObject: () => {
-      return {
-        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
-        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
-      }
-    }
+    // classObject: () => {
+    //   return {
+    //     'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
+    //     'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
+    //   }
+    // }
   },
   methods: {
     closeMyself() {

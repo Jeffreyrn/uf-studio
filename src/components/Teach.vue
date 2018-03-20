@@ -147,9 +147,9 @@
 
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import ElButton from "../../node_modules/element-ui/packages/button/src/button";
+// import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
@@ -161,14 +161,14 @@ import DialogAlert from './DialogAlert';
 
 const path = require('path');
 
-const echarts = require('echarts');
-let t;
+// const echarts = require('echarts');
+// let t;
 
 export default {
   data() {
     return {
-      socketCom: GlobalUtil.socketCom,
-      model: GlobalUtil.model,
+      socketCom: window.GlobalUtil.socketCom,
+      model: window.GlobalUtil.model,
       protype: '',
       folderOrFile: '',
       title: '',
@@ -191,7 +191,7 @@ export default {
         continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         rename: require('../assets/img/edit/recording/icon_rename_white.svg'),
-        delete: require('../assets/img/edit/recording/btn_trash_white.svg')
+        delete: require('../assets/img/edit/recording/btn_trash_white.svg'),
       },
       visible: {
         createProjectDialog: false,
@@ -210,66 +210,66 @@ export default {
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
     const self = this;
-    CommandsTeachSocket.listProjs((dict) => {
+    window.CommandsTeachSocket.listProjs(() => {
       setTimeout(() => {
         self.$refs.tree.setCurrentKey('');
-        GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
+        window.GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
       });
     });
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
-  activated: function () {
+  activated: () => {
     this.onwinresize();
   },
-  deactivated: function () {
+  deactivated: () => {
     this.onwinresize();
   },
   methods: {
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
-      CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
-      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+      window.CommandsTeachSocket.createProj(text, window.GlobalUtil.model.localTeach.projTypeSelected);
+      window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onsave() {
-      GlobalUtil.model.localTeach.onSaveChange(() => {
-        GlobalUtil.model.localTeach.changeSelectedShow = false;
-        GlobalUtil.model.localTeach.hasChange = false;
-        GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
-        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      window.GlobalUtil.model.localTeach.onSaveChange(() => {
+        window.GlobalUtil.model.localTeach.changeSelectedShow = false;
+        window.GlobalUtil.model.localTeach.hasChange = false;
+        window.GlobalUtil.model.localTeach.onSelect(null, window.GlobalUtil.model.localTeach.willOnSelectIndex);
+        this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
       });
     },
     closeAlert() {
       this.isDeleteFileDialogShow = false;
-      GlobalUtil.model.localTeach.changeSelectedShow = false;
-      GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
-      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      window.GlobalUtil.model.localTeach.changeSelectedShow = false;
+      window.GlobalUtil.model.localTeach.hasChange = false;
+      window.GlobalUtil.model.localTeach.onSelect(null, window.GlobalUtil.model.localTeach.willOnSelectIndex);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
     },
     onrename() {
       const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
-      GlobalUtil.model.localTeach.projRenameShow = false;
-      const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
+      window.GlobalUtil.model.localTeach.projRenameShow = false;
+      const projTypeSelected = window.GlobalUtil.model.localTeach.projTypeSelected;
       const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
       text = `${pre}${text}`;
       console.log(`onrename text = ${text}`);
-      CommandsTeachSocket.renameProj(text, () => {
+      window.CommandsTeachSocket.renameProj(text, () => {
         setTimeout(() => {
-          const filePath = path.join(CommandsTeachSocket.ROOT_DIR, text);
+          const filePath = path.join(window.CommandsTeachSocket.ROOT_DIR, text);
           self.$refs.tree.setCurrentKey(filePath);
-          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
         });
       });
     },
     rename(data) {
       console.log(`rename data uuid = ${data.uuid}`)
-      GlobalUtil.model.localTeach.projRenameShow = true;
-      GlobalUtil.model.localTeach.curDialogProjInputText = GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
+      window.GlobalUtil.model.localTeach.projRenameShow = true;
+      window.GlobalUtil.model.localTeach.curDialogProjInputText = window.GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
       if (data.uuid.indexOf('discontinuous_') >= 0) {
-        GlobalUtil.model.localTeach.projTypeSelected = '2';
+        window.GlobalUtil.model.localTeach.projTypeSelected = '2';
       }
       else {
-        GlobalUtil.model.localTeach.projTypeSelected = '1';
+        window.GlobalUtil.model.localTeach.projTypeSelected = '1';
       }
       setTimeout(() => {
         document.getElementById('teach-input-text').focus();
@@ -277,18 +277,18 @@ export default {
     },
     fileLength(uuid) {
       if (uuid.indexOf('.json') < 0) {
-        return;
+        return '0';
       }
-      if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
-        if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
-          return GlobalUtil.model.localTeach.fileDatas[uuid].length;
+      if (window.GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
+        if (window.GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
+          return window.GlobalUtil.model.localTeach.fileDatas[uuid].length;
         }
-        if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
-          const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
+        if (window.GlobalUtil.model.localTeach.curProj.type === 'continuous') {
+          const length = window.GlobalUtil.model.localTeach.fileDatas[uuid].length;
           return this.getTimeLongStr(length);
         }
       }
-      return 0;
+      return '0';
     },
     getTimeLongStr(length) {
       const msec = length % 10;
@@ -296,135 +296,133 @@ export default {
       const sec = allsec % 60;
       const min = Math.floor(allsec / 60) % 60;
       const hour = Math.floor(Math.floor(allsec / 60) / 60) % 24;
-      const str = `${GlobalUtil.pad(hour,2)} : ${GlobalUtil.pad(min,2)} : ${GlobalUtil.pad(sec,2)} . ${msec}00`;
+      const str = `${window.GlobalUtil.pad(hour, 2)} : ${window.GlobalUtil.pad(min, 2)} : ${window.GlobalUtil.pad(sec, 2)} . ${msec}00`;
       // const sec = Math.floor(length / 10) % 60;
       // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
       // const str = `${min}:${sec}.${msec}00`;
       return str;
     },
     checkInputText() {
-      if(this.inputText !== ''){
+      if (this.inputText !== '') {
         this.createProjectDisable = false;
       }
     },
-    finishRecord () {
+    finishRecord() {
       // this.visible.saveDialog = true;
       this.model.localTeach.saveDialogShow = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
-      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
     },
     finishRecordOK() {
       const self = this;
       this.visible.saveDialog = false;
-      GlobalUtil.model.localTeach.visible.starRecording = false;
+      window.GlobalUtil.model.localTeach.visible.starRecording = false;
 
-      const curFileDatas = GlobalUtil.model.localTeach.fileDatas['temp']; //GlobalUtil.model.localTeach.curFileDatas;
+      const curFileDatas = window.GlobalUtil.model.localTeach.fileDatas["temp"]; // GlobalUtil.model.localTeach.curFileDatas;
       console.log(`curFileDatas = ${JSON.stringify(curFileDatas)}`);
 
       const textDict = {
-        type: GlobalUtil.model.localTeach.curProj.type,
+        type: window.GlobalUtil.model.localTeach.curProj.type,
         total: curFileDatas.length,
         points: curFileDatas,
       };
       const text = JSON.stringify(textDict);
 
-      const dateStr = GlobalUtil.getTimeString();
-      CommandsTeachSocket.createFile(dateStr, text, (dict) => {
-      }, (dict) => {
-        let curProj = self.model.localTeach.curProj;
+      const dateStr = window.GlobalUtil.getTimeString();
+      window.CommandsTeachSocket.createFile(dateStr, text, () => {
+      }, () => {
+        const curProj = self.model.localTeach.curProj;
         const filePath = path.join(curProj.uuid, `${dateStr}.json`);
-        GlobalUtil.model.localTeach.saveDialogShow = false;
+        window.GlobalUtil.model.localTeach.saveDialogShow = false;
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
-          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
-          self.handleNodeClick({uuid: filePath});
+          window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          self.handleNodeClick({ uuid: filePath });
           this.scrollTo(0);
         });
       });
-      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
     },
     finishRecordCancle() {
       this.visible.saveDialog = false;
       // GlobalUtil.model.localTeach.visible.starRecording = false;
-//      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+//      window.CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
 //        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
 //      });
     },
     startRecord() {
-      GlobalUtil.model.localTeach.curEditingFileUUID = '';
+      window.GlobalUtil.model.localTeach.curEditingFileUUID = '';
       this.visible.starRecording = false;
-      const dateStr = GlobalUtil.getTimeString();
-      const curSelectedTreeItemUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
-      const proj = GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
+      // const dateStr = GlobalUtil.getTimeString();
+      const curSelectedTreeItemUUID = window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
+      const proj = window.GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
       if (proj === null) {
         return;
       }
       const isContinus = proj.type === 'continuous';
-      GlobalUtil.model.localTeach.visible.starRecording = true;
+      window.GlobalUtil.model.localTeach.visible.starRecording = true;
 
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-      GlobalUtil.model.localTeach.curDuration = 0;
+      window.GlobalUtil.model.localTeach.curDuration = 0;
 
-      GlobalUtil.model.localTeach.fileDatas['temp'] = [];
+      window.GlobalUtil.model.localTeach.fileDatas["temp"] = [];
       // GlobalUtil.model.localTeach.curFileDatas = [];
-      CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-        const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-        GlobalUtil.model.localTeach.lastFileData = testData;
+        const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
+        window.GlobalUtil.model.localTeach.lastFileData = testData;
         if (isContinus === false) {
-          GlobalUtil.model.localTeach.curDuration -= -1;
+          window.GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
 
-        if (GlobalUtil.model.localTeach.fileDatas['temp'].length >= 1800) {
+        if (window.GlobalUtil.model.localTeach.fileDatas["temp"].length >= 1800) {
           this.finishRecordOK();
         }
         else {
           // test data
-          const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+          const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
           // GlobalUtil.model.localTeach.curFileDatas.push(testData)
-          GlobalUtil.model.localTeach.pushFileData('temp', testData);
-          let tempArr = [];
-          for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+          window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+          const tempArr = [];
+          for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
             tempArr.push(i);
           }
-          // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-          GlobalUtil.model.localTeach.showArr = tempArr;
-          // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
+          window.GlobalUtil.model.localTeach.showArr = tempArr;
         }
-        this.curProjTotal = GlobalUtil.model.localTeach.showArr.length;
+        this.curProjTotal = window.GlobalUtil.model.localTeach.showArr.length;
         setTimeout(() => {
-          console.log(`wait for 5 sec`);
-          this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+          // console.log(`wait for 5 sec`);
+          this.scrollTo(window.GlobalUtil.model.localTeach.fileDatas['temp'].length);
         }, 100);
         
       });
-      GlobalUtil.model.localTeach.curDuration -= -1;
+      window.GlobalUtil.model.localTeach.curDuration -= -1;
     },
     scrollTo(time) {
-      document.getElementById("bottom-right-frame").scrollLeft = 1800 * 60; //60 * (parseInt(time / 10) * 10);
+      document.getElementById("bottom-right-frame").scrollLeft = 1800 * time; //60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
-      const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+      const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
       // GlobalUtil.model.localTeach.curFileDatas.push(testData);
-      GlobalUtil.model.localTeach.pushFileData('temp', testData);
+      window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
       let tempArr = [];
-      for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+      for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
         tempArr.push(i);
       }
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-      GlobalUtil.model.localTeach.showArr = tempArr;
-      this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+      window.GlobalUtil.model.localTeach.showArr = tempArr;
+      this.scrollTo(window.GlobalUtil.model.localTeach.fileDatas["temp"].length);
     },
     startEdit() {
       // GlobalUtil.model.localTeach.curEditingFileUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       this.editState = true;
-      GlobalUtil.model.localTeach.hasChange = false;
+      window.GlobalUtil.model.localTeach.hasChange = false;
       // GlobalUtil.model.localTeach.onSelect(null, -1);
       this.onwinresize();
       setTimeout(() => {
@@ -435,41 +433,41 @@ export default {
     },
     cancelEdit() {
       this.editState = false;      
-      GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, -1);
+      window.GlobalUtil.model.localTeach.hasChange = false;
+      window.GlobalUtil.model.localTeach.onSelect(null, -1);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
       document.getElementById("bottom-right-frame").scrollLeft = 0;
       this.onwinresize();
       setTimeout(() => {
-        this.$refs.tree.setCurrentKey(GlobalUtil.model.localTeach.curSelectedTreeItem.uuid);
+        this.$refs.tree.setCurrentKey(window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid);
       });
     },
     delProj(uuid) {
-      const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
+      const realName = window.GlobalUtil.model.localTeach.getRealFileFileName(uuid)
       if (uuid.indexOf('.json') >=0 ) {
         this.isDeleteFileDialogShow = true;
         this.delProjOK = () => {
           this.isDeleteFileDialogShow = false;
-          CommandsTeachSocket.delFiles(uuid, (dict) => {
+          window.CommandsTeachSocket.delFiles(uuid, (dict) => {
             // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
           });
         };
         this.deleteFileDialogTitle = `Are you sure you want to delete ${realName}?`;
         return;
       }
-      const curProj = GlobalUtil.model.localTeach.curProj;
+      const curProj = window.GlobalUtil.model.localTeach.curProj;
       this.deleteFileDialogTitle = `Are you sure you want to delete ${curProj.name}?`;
       this.delProjOK = () => {
         this.isDeleteFileDialogShow = false;
-        CommandsTeachSocket.delProj(curProj.uuid, (dict) => {
+        window.CommandsTeachSocket.delProj(curProj.uuid, (dict) => {
           // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
         });
       };
       this.isDeleteFileDialogShow = true;
     },
     newProj() {
-      GlobalUtil.model.localTeach.curDialogProjInputText = '';
-      GlobalUtil.model.localTeach.projTypeSelectedShow = true;
+      window.GlobalUtil.model.localTeach.curDialogProjInputText = '';
+      window.GlobalUtil.model.localTeach.projTypeSelectedShow = true;
       setTimeout(() => {
         document.getElementById('teach-input-text').focus();
       }, 100);
@@ -536,32 +534,32 @@ export default {
       // }
       this.cancelEdit();
       const uuid = data.uuid;
-      GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
-      const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
-      GlobalUtil.model.localTeach.curProj = proj;
-      const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
+      window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
+      const proj = window.GlobalUtil.model.localTeach.getProjInfo(uuid);
+      window.GlobalUtil.model.localTeach.curProj = proj;
+      const file = window.GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
 
       this.protype = proj.type;
 
-      const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
+      const curProj = window.GlobalUtil.model.localTeach.getCurProj(uuid);
       if (curProj !== null && curProj !== undefined) {
-        GlobalUtil.model.localTeach.showArr = [];
-        CommandsTeachSocket.getProjFiles(uuid, (dict) => {
+        window.GlobalUtil.model.localTeach.showArr = [];
+        window.CommandsTeachSocket.getProjFiles(uuid, (dict) => {
           const total = dict.data.total;
           this.curProjTotal = total;
-          console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
+          // console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
         });
       }
 
       if (file !== null && file !== undefined) {
         // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         // GlobalUtil.model.localTeach.onSelect(null, 0);
-        CommandsTeachSocket.getFile(uuid, (dict) => {
+        window.CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             let data = dict.data;
             if (data === "" || data === undefined || data === null) {
-              GlobalUtil.model.localTeach.fileDatas[uuid] = [];
+              window.GlobalUtil.model.localTeach.fileDatas[uuid] = [];
             }
             else {
               data = JSON.parse(data);
@@ -572,15 +570,15 @@ export default {
               file.isContinus = isContinus;
               // GlobalUtil.model.localTeach.isContinus = isContinus;
               // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
-              GlobalUtil.model.localTeach.fileDatas[uuid] = points;
+              window.GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
             let tempArr = [];
-            for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+            for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
               tempArr.push(i);
             }
-            GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-            GlobalUtil.model.localTeach.showArr = tempArr;
-            GlobalUtil.model.localTeach.onSelect(null, -1);
+            window.GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+            window.GlobalUtil.model.localTeach.showArr = tempArr;
+            window.GlobalUtil.model.localTeach.onSelect(null, -1);
             // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
@@ -628,18 +626,18 @@ export default {
       let iconUrl = '';
       if (data.proType === 'continuous') {
         iconUrl = `background:url('${this.fileIcon.continuous}')`;
-        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
+        if (window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
           iconUrl = `background:url('${this.fileIcon.continuous_white}')`;
         }
       }
       if (data.proType === 'discontinuous') {
         iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
-        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
+        if (window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
           iconUrl = `background:url('${this.fileIcon.discontinuous_white}')`;
         }
       }
       const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
-      const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
+      const label = window.GlobalUtil.model.localTeach.getRealProjFileName(data.label);
 //      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
       const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
       return (
@@ -687,14 +685,14 @@ export default {
     },
     classObject: () => {
       return {
-        'start-btn': GlobalUtil.model.localTeach.curProj.files.length > 0 && GlobalUtil.model.localTeach.visible.starRecording===false,
-        'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0 || GlobalUtil.model.localTeach.visible.starRecording===true,
+        'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording===false,
+        'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording===true,
       }
     },
     saveChangeClassObject: () => {
       return {
-        'save-change-btn': GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0,
-        'save-change-btn-dark': !(GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0),
+        'save-change-btn': window.GlobalUtil.model.localTeach.hasChange===true && window.GlobalUtil.model.localTeach.curSelectedIndex>=0,
+        'save-change-btn-dark': !(window.GlobalUtil.model.localTeach.hasChange===true && window.GlobalUtil.model.localTeach.curSelectedIndex>=0),
       }
     },
   },

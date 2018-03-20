@@ -41,37 +41,26 @@
 <script>
 
 const path = require('path')
-  
+
 import CustomSelect from './CustomSelect';
 
 export default {
   data () {
     return {
-      model: GlobalUtil.model,
-      // inputText: '',
-      // selected: '.py',
-      options: [
-          { text: 'py', value: '.py' },
-          { text: 'txt', value: '.txt' },
-          { text: 'md', value: '.md' },
-          { text: 'none', value: '' },
-      ],
+      model: window.GlobalUtil.model,
     }
   },
   methods: {
     contentClick() {
-      console.log(`contentClick contentClick`);
+      // console.log(`contentClick contentClick`);
       const Option = document.getElementsByClassName('option')[0];
-      Option.style.display = 'none';
+      if (Option !== undefined) {
+        Option.style.display = 'none';
+      }
     },
     closeMyself() {
-      // this.$emit('on-close')
-      // this.model.localProjTree.projsDialogShow = false;
       this.model.localProjTree.fileDialogShow = false;
     },
-  //   addProj() {
-  //     GlobalUtil.model.localProjTree.dialogVisible = true;
-  //   },
     oncreate() {
       const text = this.model.localProjTree.curDialogInputText;
       console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
@@ -144,7 +133,6 @@ export default {
       if (text === null || text === '') {
         GlobalUtil.model.localProjTree.dialogErrorTips = '';
       }
-
       return isFileStr;
     },
     isExtInput() {
