@@ -10,7 +10,7 @@
           <div class="float-left btn-cancel font-style cursor-pointer" @click="oncancel">
             {{ cancel }}
           </div>
-          <div class="float-left btn-ok font-style cursor-pointer" @click="onok">
+          <div id='bottom-ok-btn' class="float-left btn-ok font-style cursor-pointer" @click="onok">
             {{ ok }}
           </div>
         </div>
@@ -25,7 +25,7 @@ const path = require('path');
 import * as types from './../store/mutation-types';
 
 export default {
-  props: ['onok', 'oncancel', 'title', 'cancel', 'ok'],
+  props: ['onok', 'oncancel', 'title', 'cancel', 'ok', 'isdelete'],
   data () {
     return {
       model: GlobalUtil.model,
@@ -50,6 +50,10 @@ export default {
   components: {
   },
   mounted() {
+    if (this.isdelete !== undefined && this.isdelete === true) {
+      const bottomBtn = document.getElementById('bottom-ok-btn');
+      bottomBtn.style.background = '#E24D4A'; 
+    }
   },
   computed: {
   },

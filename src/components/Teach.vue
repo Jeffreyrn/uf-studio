@@ -6,26 +6,14 @@
     <div class="main-contain">
       <div class="recording-area-wrapper"  id="left-teach-frame">
         <div class="left-top-area" id="left-top-area">
-          <!-- <div style="position:relative;">
-          </div> -->
           <div class="left-emulator" id="left-emulator">
             <XarmModel :size="emulatorHeight"></XarmModel>
           </div>
-          <!-- <div v-if="editState===true" class="left-show" id="left-show">
-          </div>
-          <div v-if="editState===true" class="left-control" id="left-control" style="overflow-y:scroll">
-            <XarmModel></XarmModel>
-            <EndSet></EndSet>
-            <EndJointControl></EndJointControl>
-          </div> -->
-          <!-- <div v-if="editState===false" style="background:gray;width:100%;height:100%;">
-          </div> -->
         </div>
         <div class="left-bottom-area" id="left-bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time">
-                <!-- curSelectedTreeItem.uuid == -->
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
@@ -39,7 +27,6 @@
                   {{ curProjTotal }}
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
-                  <!-- {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }} -->
                   {{ getTimeLongStr(curProjTotal) }}
                 </div>
               </div>
@@ -54,7 +41,6 @@
                   {{ model.localTeach.getRealFileFileName(model.localTeach.curSelectedTreeItem.uuid) }}
                 </span>
               </div>
-              <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
               <div v-if="editState===false">
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
                   <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
@@ -79,17 +65,11 @@
       </div>
 
       <div class="control-wrapper" v-if="model.localTeach.visible.starRecording===true || editState===true">
-        <!-- <XarmModel></XarmModel> -->
-        <!-- <div>
-          <EndSet></EndSet>
-        </div> -->
-        <!-- <EndJointControl></EndJointControl> -->
         <EmulatorControl></EmulatorControl>
       </div>
       <div v-else class="projects-list-wrapper">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper" id="tree-wrapper">
-          <!-- :ref="tree" -->
           <el-tree
             class="recording-project-list"
             :data="model.localTeach.curProTreeDatas"
@@ -151,6 +131,16 @@
       v-if="model.localTeach.changeSelectedShow===true">
     </DialogTeachAlert>
 
+    <DialogTeachAlert
+      :title='deleteFileDialogTitle'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='delProjOK'
+      :isdelete=true
+      :oncancel='closeAlert'
+      v-if="isDeleteFileDialogShow===true">
+    </DialogTeachAlert>
+
   </div>
 </template>
 <script>
@@ -189,6 +179,9 @@ export default {
       bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
+      isDeleteFileDialogShow: false,
+      deleteFileDialogTitle: '',
+      delProjOK: null,
       curProjTotal: 0,
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
@@ -246,6 +239,7 @@ export default {
       });
     },
     closeAlert() {
+      this.isDeleteFileDialogShow = false;
       GlobalUtil.model.localTeach.changeSelectedShow = false;
       GlobalUtil.model.localTeach.hasChange = false;
       GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
@@ -453,33 +447,25 @@ export default {
     delProj(uuid) {
       const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
       if (uuid.indexOf('.json') >=0 ) {
-        this.$confirm(`Delete ${realName}?`, {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'CANCEL',
-          type: 'info',
-          showClose: false,
-          closeOnClickModal: false,
-        }).then(() => {
+        this.isDeleteFileDialogShow = true;
+        this.delProjOK = () => {
+          this.isDeleteFileDialogShow = false;
           CommandsTeachSocket.delFiles(uuid, (dict) => {
             // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
           });
-        }).catch(() => {
-        });
+        };
+        this.deleteFileDialogTitle = `Are you sure you want to delete ${realName}?`;
         return;
       }
       const curProj = GlobalUtil.model.localTeach.curProj;
-      this.$confirm(`Delete ${curProj.name}?`, {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'CANCEL',
-        type: 'info',
-        showClose: false,
-        closeOnClickModal: false,
-      }).then(() => {
+      this.deleteFileDialogTitle = `Are you sure you want to delete ${curProj.name}?`;
+      this.delProjOK = () => {
+        this.isDeleteFileDialogShow = false;
         CommandsTeachSocket.delProj(curProj.uuid, (dict) => {
-          console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+          // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
         });
-      }).catch(() => {
-      });
+      };
+      this.isDeleteFileDialogShow = true;
     },
     newProj() {
       GlobalUtil.model.localTeach.curDialogProjInputText = '';
