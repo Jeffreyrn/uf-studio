@@ -86,6 +86,7 @@ export default {
 }
 .top-title {
   position: absolute;
+  width: 100px;
   left: 40px;
   top: 40px;
   font-family: 'Gotham-Medium';

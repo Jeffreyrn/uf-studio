@@ -46,7 +46,7 @@
           </div>
           <div class="middle-box">
             <p class="gray-title">Size</p>
-            <p class="black-text">{{ data.size }} MB</p>
+            <p class="black-text">{{ data.size }}</p>
           </div>
 
         </div>
@@ -66,14 +66,25 @@
         <div></div>
       </section> -->
     </div>
+
+    <DialogAlert
+      title='Request fails.'
+      subtitle=''
+      :onok='onok'
+      v-if="errorAlert">
+    </DialogAlert>
   </div>
 </template>
 
 <script>
+
+  import DialogAlert from './../DialogAlert';
+
   export default {
     data() {
       return {
         data: {},
+        errorAlert: false,
       };
     },
     mounted() {
@@ -82,14 +93,24 @@
       this.data = this.$route.params.data;
       console.log(`app detail params = ${JSON.stringify(this.data)}`);
     },
+    components: {
+      DialogAlert,
+    },
     methods: {
       oninstall() {
         CommandsAppsSocket.appInstall(this.data.category, this.data.name, this.data.version, (dict) => {
           console.log(`CommandsAppsSocket appInstall = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             this.data.control = 'run';
+            // this.errorAlert = true;
+          }
+          else {
+            this.errorAlert = true;
           }
         });
+      },
+      onok() {
+        this.errorAlert = false;
       },
       onrun() {
 
@@ -100,16 +121,19 @@
           if (dict.code === 0) {
             this.data.control = 'install';
           }
-        });
-      },
-      onreinstall() {
-        CommandsAppsSocket.appReinstall(this.data.category, this.data.name, this.data.version, (dict) => {
-          console.log(`CommandsAppsSocket appReinstall = ${JSON.stringify(dict)}`);
-          if (dict.code === 0) {
-            this.data.control = 'run';
+          else {
+            this.errorAlert = true;
           }
         });
-      }
+      },
+      // onreinstall() {
+      //   CommandsAppsSocket.appReinstall(this.data.category, this.data.name, this.data.version, (dict) => {
+      //     console.log(`CommandsAppsSocket appReinstall = ${JSON.stringify(dict)}`);
+      //     if (dict.code === 0) {
+      //       this.data.control = 'run';
+      //     }
+      //   });
+      // }
     },
   };
 </script>

@@ -119,7 +119,12 @@
       <el-button style="background:green;width:450px;" @click="finishRecordOK">Ok</el-button>
     </el-dialog> -->
 
-    <DialogTeachSaveRecord :onok='finishRecordOK' v-if="model.localTeach.saveDialogShow===true"></DialogTeachSaveRecord>
+    <DialogAlert
+      title='Stop Recording and save automatically.'
+      subtitle='The recording file will be saved to my project list'
+      :onok='finishRecordOK'
+      v-if="model.localTeach.saveDialogShow===true">
+    </DialogAlert>
 
     <DialogTeachProjName
       title="Please choose the way you want to record with xArm in this project"
@@ -155,7 +160,7 @@ import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
 import * as types from './../store/mutation-types';
 import DialogTeachAlert from './DialogTeachAlert';
-import DialogTeachSaveRecord from './DialogTeachSaveRecord';
+import DialogAlert from './DialogAlert';
 
 const path = require('path');
 
@@ -666,7 +671,7 @@ export default {
     // EndJointControl,
     EmulatorControl,
     DialogTeachAlert,
-    DialogTeachSaveRecord,
+    DialogAlert,
   },
   computed: {
     getCurFile(){

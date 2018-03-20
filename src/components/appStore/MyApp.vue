@@ -3,7 +3,7 @@
     <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">
       <ul>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.my.data">
-          <router-link :to="{name: 'AppSubmit', params:{name: data.name}}">
+          <router-link :to="{name: 'AppSubmit', params:{data: data}}">
             <div style="width:100%;height:100%;">
               <span>{{ data.name }}</span>
             </div>
