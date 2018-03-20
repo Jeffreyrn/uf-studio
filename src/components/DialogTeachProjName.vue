@@ -27,18 +27,16 @@
           type="text" class="position-absolute dialog-input"
           placeholder="Please enter a project name"/>
         <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
-        <div style="margin-top:230px;">
-          <span v-if="isFileNameCorrect">
-            <div class="position-absolute btn-create cursor-pointer" @click="onok">
-              OK
-            </div>
-          </span>
-          <span v-if="!isFileNameCorrect">
-            <div class="position-absolute btn-create-opacity">
-              OK
-            </div>
-          </span>
-        </div>
+        <span v-if="isFileNameCorrect">
+          <div class="position-absolute btn-create cursor-pointer" @click="onok">
+            OK
+          </div>
+        </span>
+        <span v-else>
+          <div class="position-absolute btn-create-opacity">
+            OK
+          </div>
+        </span>
       </div>
 
     </div>
