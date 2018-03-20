@@ -11,12 +11,12 @@
         aaa
       </div> -->
       <div v-if="data.control==='install'">
-        <div style="width:150px;margin-right:5%;">
+        <div style="width:250px;margin-right:5%;">
           <el-button class="control-btn float-left install-btn" @click="oninstall()">{{ data.control }}</el-button>
         </div>
       </div>
       <div v-if="data.control==='run'">
-        <div style="width:300px;margin-right:5%;">
+        <div style="width:250px;margin-right:5%;">
           <el-button class="control-btn float-left run-btn" @click="onrun()">run</el-button>
           <el-button class="control-btn float-left uninstall-btn" @click="onuninstall()">uninstall</el-button>
         </div>
@@ -25,7 +25,7 @@
     <div class="app-datail-contain">
       <section class="section1 com-text-center">
         <div class="app-icon">
-          <div style="text-align:center;margin-top:190px;">
+          <div style="text-align:center;margin-top:145px;">
             {{ data.version }}
           </div>
           <!-- <div>
@@ -120,6 +120,7 @@
           console.log(`CommandsAppsSocket appUninstall = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             this.data.control = 'install';
+            // this.errorAlert = true;
           }
           else {
             this.errorAlert = true;
@@ -161,14 +162,14 @@
       margin-left: 20%;
     }
     .control-btn {
-      width: 140px;
-      height: 47px;
+      width: 100px;
+      height: 40px;
       border: none;
       font-family: 'Gotham-Book';
-      font-size: 20px;
+      font-size: 16px;
       letter-spacing: -1.23px;
       text-align: center;
-      border-radius: 24px;
+      border-radius: 20px;
       color: #FFFFFF;
     }
     .install-btn {
@@ -193,8 +194,8 @@
       .app-icon {
         // width: 10rem;
         // height: 10rem;
-        width: 180px;
-        height: 180px;
+        width: 140px;
+        height: 140px;
         background: #D9D9D9;
         border-radius: 2px;
         margin-right: 6rem;
@@ -205,11 +206,11 @@
         // font-size: 1rem;
         // letter-spacing: -1.62px;
         .middle-box {
-          margin: 2rem 0;
+          margin: 1rem 0;
           .gray-title {
             // color: #A5A5A5;
             font-family: 'Gotham-Book';
-            font-size: 18px;
+            font-size: 16px;
             color: #AEAEAE;
             letter-spacing: -1px;
             text-align: left;
@@ -217,7 +218,7 @@
           .black-text {
             // color: #444;
             font-family: 'Gotham-Book';
-            font-size: 18px;
+            font-size: 16px;
             color: #444444;
             letter-spacing: -1.62px;
             text-align: left;
@@ -239,10 +240,10 @@
       // margin-right: 0px;
       h4 {
         width: 80%;
-        height:40px;
+        height:30px;
         border-bottom: 3px solid #EEE;
         font-family: 'Gotham-Medium';
-        font-size: 26px;
+        font-size: 20px;
         color: #444444;
         letter-spacing: -1px;
       }
@@ -253,7 +254,7 @@
         outline: none;
         height: 200px;
         font-family: 'Gotham-Book';
-        font-size: 22px;
+        font-size: 18px;
         color: #444444;
         letter-spacing: -0.85px;
       }

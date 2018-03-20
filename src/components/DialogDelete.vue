@@ -26,14 +26,6 @@ export default {
   data () {
     return {
       model: GlobalUtil.model,
-      // inputText: '',
-      // selected: '.py',
-      options: [
-          { text: 'py', value: '.py' },
-          { text: 'txt', value: '.txt' },
-          { text: 'md', value: '.md' },
-          { text: 'none', value: '' },
-      ],
     }
   },
   methods: {
