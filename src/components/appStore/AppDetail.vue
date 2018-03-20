@@ -7,11 +7,16 @@
       <span>
         {{ data.name }}
       </span>
+      <!-- <div class="" style="width:80px;height:50px;margin-right:5%;background:yellow;">
+        aaa
+      </div> -->
       <div v-if="data.control==='install'">
-        <el-button class="control-btn float-left install-btn" @click="oninstall()">{{ data.control }}</el-button>
+        <div style="width:150px;margin-right:5%;">
+          <el-button class="control-btn float-left install-btn" @click="oninstall()">{{ data.control }}</el-button>
+        </div>
       </div>
       <div v-if="data.control==='run'">
-        <div style="width:400px;margin-left:100%;">
+        <div style="width:300px;margin-right:5%;">
           <el-button class="control-btn float-left run-btn" @click="onrun()">run</el-button>
           <el-button class="control-btn float-left uninstall-btn" @click="onuninstall()">uninstall</el-button>
         </div>
@@ -115,6 +120,7 @@
   .app-detail-header {
     width: 100%;
     height: 8rem;
+    // height: 168px;
     background: #FAFAFB;
     img {
       width: 1.5rem;
@@ -122,6 +128,7 @@
       margin-left: 40px;
     }
     span {
+      width: 100%;
       font-family: 'Gotham-Medium';
       font-size: 1.5rem;
       color: #444;
@@ -141,17 +148,12 @@
       color: #FFFFFF;
     }
     .install-btn {
-      margin-left: 300%;
       background: #575C62;
     }
     .uninstall-btn {
-      // float: left;
-      // margin-left: 180%;
       background: #E24D4A;
     }
     .run-btn {
-      // float: left;
-      // margin-left: 100%;
       background: #52BF53;
     }
   }
