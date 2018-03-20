@@ -6,9 +6,11 @@
       <div class="dialog-content">
         <span class="top-title">System Notice</span>
         <div class="save-dialog-text">
-          <p>Stop Recording and save automatically.</p>
-          <span>The recording file will be saved to my project list</span>
+          <p>{{ title }}</p>
+          <span>{{ subtitle }}</span>
         </div>
+        <!-- <div style="height:100%;">
+        </div> -->
         <div class="btn-ok font-style cursor-pointer" @click="onok">
           OK
         </div>
@@ -23,11 +25,13 @@ const path = require('path');
 import * as types from './../store/mutation-types';
 
 export default {
-  props: ['onok'],
+  props: ['onok', 'title', 'subtitle'],
   data () {
     return {
       model: GlobalUtil.model,
     }
+  },
+  mounted() {
   },
   methods: {
     closeMyself() {
@@ -40,8 +44,6 @@ export default {
     // },
   },
   components: {
-  },
-  mounted() {
   },
   computed: {
   },
@@ -88,7 +90,7 @@ export default {
   letter-spacing: -0.57px;
   text-align: center;
 }
-.top-tips {
+/* .top-tips {
   position: absolute;
   left: 0px;
   right: 0px;
@@ -99,7 +101,7 @@ export default {
   color: #555555;
   letter-spacing: -0.57px;
   text-align: center;
-}
+} */
 .dialog-content {
   width: 470px;
   position: fixed;
@@ -124,16 +126,12 @@ export default {
   text-align: center;
 }
 .btn-ok {
+  position: absolute;
   width: 100%;
   height: 40px;
-  /* margin-top: 230px; */
-  /* margin-left: 178px; */
-  /* background-color: green; */
-  /* margin-top:74px; */
-  margin-top: 73px;
+  bottom: 0px;
   background: #52BF53;
   line-height: 40px;
-  /* cursor: pointer; */
 }
 .save-dialog-text {
   text-align: center;

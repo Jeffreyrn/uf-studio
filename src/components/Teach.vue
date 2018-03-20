@@ -119,7 +119,12 @@
       <el-button style="background:green;width:450px;" @click="finishRecordOK">Ok</el-button>
     </el-dialog> -->
 
-    <DialogTeachSaveRecord :onok='finishRecordOK' v-if="model.localTeach.saveDialogShow===true"></DialogTeachSaveRecord>
+    <DialogAlert
+      title='Stop Recording and save automatically.'
+      subtitle='The recording file will be saved to my project list'
+      :onok='finishRecordOK'
+      v-if="model.localTeach.saveDialogShow===true">
+    </DialogAlert>
 
     <DialogTeachProjName
       title="Please choose the way you want to record with xArm in this project"
@@ -137,7 +142,14 @@
       v-if="model.localTeach.projRenameShow">
     </DialogTeachProjName>
 
-    <DialogTeachAlert v-if="model.localTeach.changeSelectedShow===true"></DialogTeachAlert>
+    <DialogTeachAlert
+      title='Your changes will be lost if you don’t save them.'
+      cancel='Discard'
+      ok='Save Change'
+      :onok='onsave'
+      :oncancel='closeAlert'
+      v-if="model.localTeach.changeSelectedShow===true">
+    </DialogTeachAlert>
 
   </div>
 </template>
@@ -155,7 +167,7 @@ import EmulatorControl from './common/EmulatorControl';
 // import { constants } from 'perf_hooks';
 import * as types from './../store/mutation-types';
 import DialogTeachAlert from './DialogTeachAlert';
-import DialogTeachSaveRecord from './DialogTeachSaveRecord';
+import DialogAlert from './DialogAlert';
 
 const path = require('path');
 
@@ -224,6 +236,20 @@ export default {
       const text = this.model.localTeach.curDialogProjInputText
       CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
       GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+    },
+    onsave() {
+      GlobalUtil.model.localTeach.onSaveChange(() => {
+        GlobalUtil.model.localTeach.changeSelectedShow = false;
+        GlobalUtil.model.localTeach.hasChange = false;
+        GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
+        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      });
+    },
+    closeAlert() {
+      GlobalUtil.model.localTeach.changeSelectedShow = false;
+      GlobalUtil.model.localTeach.hasChange = false;
+      GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
     },
     onrename() {
       const self = this;
@@ -666,7 +692,7 @@ export default {
     // EndJointControl,
     EmulatorControl,
     DialogTeachAlert,
-    DialogTeachSaveRecord,
+    DialogAlert,
   },
   computed: {
     getCurFile(){

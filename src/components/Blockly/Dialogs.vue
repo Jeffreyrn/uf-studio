@@ -13,7 +13,7 @@
           <div class="list-head-title">
             Project name
           </div>
-          <div class="list-head-title">
+          <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType!=='app'">
             Date
           </div>
           <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType==='teach'">
@@ -32,7 +32,7 @@
           @node-click="handleNodeClick">
         </el-tree>
 
-        <div v-if="curSelectedFileUUID.length>0&&(curSelectedFileUUID.indexOf('.py')>0||curSelectedFileUUID.indexOf('.json')>0)" class="btn-ok cursor-pointer" @click="onopen">
+        <div v-if="curSelectedFileUUID.length>0&&(curSelectedFileUUID.indexOf('.py')>0||curSelectedFileUUID.indexOf('.json')>0||model.localAppsMgr.projListDialogType==='app')" class="btn-ok cursor-pointer" @click="onopen">
           Open
         </div>
         <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
@@ -82,25 +82,40 @@ export default {
       this.model.localAppsMgr.isProjListDialogShow = false;
     },
     onopen() {
+      console.log(`onopen onopen curSelectedFileUUID = ${this.curSelectedFileUUID}`);
+      switch (this.model.localAppsMgr.projListDialogType) {
+        case 'app': {
+          break;
+        }
+        case 'ide': {
+          break;
+        }
+        case 'teach': {
+          break;
+        }
+        default:
+          break;
+      }
       this.closeMyself();
     },
     handleNodeClick(data) {
-      if (data.uuid.indexOf('.py') > 0 || data.uuid.indexOf('.json') > 0) {
+      if (data.type !== 'proj') {
         this.curSelectedFileUUID = data.uuid;
       }
     },
     renderContent(h, { node, data, store }) {
       const flag = data.uuid === this.curSelectedFileUUID; 
       console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
-      const curUUID = this.curSelectedFileUUID; // GlobalUtil.model.localProjTree.curSelectedFileUUID;
+      const curUUID = this.curSelectedFileUUID;
       const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
-      let textColorStyle = data.uuid === curUUID && (data.uuid.indexOf('.py')>0||data.uuid.indexOf('.json')>0) ? 'color:#4F7597;' : 'color:#A6A6A6;';
+      const isSelected = curUUID.length>0 && data.uuid === curUUID && (data.uuid.indexOf('.py')>0||data.uuid.indexOf('.json')>0||this.model.localAppsMgr.projListDialogType==='app');
+      let textColorStyle = isSelected ? 'color:#4F7597;' : 'color:#A6A6A6;';
       textColorStyle = `${textColorStyle}font-family:'Gotham-Book';letter-spacing:-0.8px;padding-left:20px;`;
       let url = '';
-      if (data.uuid.indexOf('.py') >= 0) {
+      if (data.uuid !== undefined && data.uuid.indexOf('.py') >= 0) {
         url = this.fileIcon.py;
       }
-      if (data.uuid.indexOf('.json') >= 0) {
+      if (data.uuid !== undefined && data.uuid.indexOf('.json') >= 0) {
         // url = this.fileIcon.json;
       }
       if (data.type === 'proj') {

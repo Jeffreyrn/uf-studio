@@ -2,16 +2,16 @@
 <template>
   <div id="root-delete" class="noselected">
     <div class="dialog-wrap">
-      <div class="dialog-cover" @click="closeMyself"></div>
+      <div class="dialog-cover" @click="oncancel"></div>
       <div class="dialog-content">
         <span class="top-title">System Notice</span>
-        <span class="top-tips">Your changes will be lost if you don’t save them.</span>
-        <div style="margin-top:224px;">
-          <div class="float-left btn-cancel font-style cursor-pointer" @click="closeMyself">
-            Discard
+        <span class="top-tips">{{ title }}</span>
+        <div class="bottom-btns">
+          <div class="float-left btn-cancel font-style cursor-pointer" @click="oncancel">
+            {{ cancel }}
           </div>
-          <div class="float-left btn-ok font-style cursor-pointer" @click="onsave">
-            Save Change
+          <div class="float-left btn-ok font-style cursor-pointer" @click="onok">
+            {{ ok }}
           </div>
         </div>
       </div>
@@ -25,26 +25,27 @@ const path = require('path');
 import * as types from './../store/mutation-types';
 
 export default {
+  props: ['onok', 'oncancel', 'title', 'cancel', 'ok'],
   data () {
     return {
       model: GlobalUtil.model,
     }
   },
   methods: {
-    closeMyself() {
-      GlobalUtil.model.localTeach.changeSelectedShow = false;
-      GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
-      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
-    },
-    onsave() {
-      GlobalUtil.model.localTeach.onSaveChange(() => {
-        GlobalUtil.model.localTeach.changeSelectedShow = false;
-        GlobalUtil.model.localTeach.hasChange = false;
-        GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
-        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
-      });
-    },
+    // closeMyself() {
+    //   GlobalUtil.model.localTeach.changeSelectedShow = false;
+    //   GlobalUtil.model.localTeach.hasChange = false;
+    //   GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
+    //   this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+    // },
+    // onsave() {
+    //   GlobalUtil.model.localTeach.onSaveChange(() => {
+    //     GlobalUtil.model.localTeach.changeSelectedShow = false;
+    //     GlobalUtil.model.localTeach.hasChange = false;
+    //     GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
+    //     this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+    //   });
+    // },
   },
   components: {
   },
@@ -86,7 +87,8 @@ export default {
 }
 .top-title {
   position: absolute;
-  left: 40px;
+  width: 100px;
+  left: 20px;
   top: 40px;
   font-family: 'Gotham-Medium';
   font-size: 16px;
@@ -105,6 +107,10 @@ export default {
   color: #555555;
   letter-spacing: -0.57px;
   text-align: center;
+}
+.bottom-btns {
+  position: absolute;
+  bottom: 0px;
 }
 .dialog-content {
   width: 470px;

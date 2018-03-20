@@ -45,6 +45,7 @@
       return {
         model: GlobalUtil.model,
         name: '',
+        data: {},
         des: '',
         nameNum: 50,
         desNum: 1000,
@@ -56,7 +57,9 @@
     },
     activated: function () {
       console.log(`params = ${JSON.stringify(this.$route.params)}`);
-      this.name = this.$route.params.name;
+      this.data = this.$route.params.data;
+      this.name = this.data.name;
+      this.des = this.data.des;
     },
     methods: {
     },
