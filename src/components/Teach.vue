@@ -483,7 +483,7 @@ export default {
       this.clientHeight = document.body.clientHeight;
       const leftFrame = document.getElementById("left-teach-frame");
       const bottomRightFrame = document.getElementById("bottom-right-frame");
-      const totalFrameWidth = this.clientWidth - 13;
+      const totalFrameWidth = this.clientWidth - 8;
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
@@ -730,7 +730,7 @@ export default {
     justify-content: space-between;
     background: #F8F8F8;
     .recording-area-wrapper {
-      width: 80%;
+      /*width: 80%;*/
       /*margin: 0 12px;*/
       font-size: 14px;
       .left-top-area {
@@ -748,7 +748,7 @@ export default {
         float: left;
         width: 100%;
         height: 100%;
-        background: lightcyan;
+        background: #fff;
         // background: yellow;
         // padding-bottom:5px;
       }
