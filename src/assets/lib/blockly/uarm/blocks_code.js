@@ -28,7 +28,7 @@ function initBlocklyCode(Blockly, genFuncCode) {
   };
   Blockly.JavaScript.move_to = (block) => {
     const position = Blockly.JavaScript.valueToCode(block, 'position', Blockly.JavaScript.ORDER_ATOMIC);
-    // console.log(`position: ${position}`);
+    console.log(`position move to: ${position}`);
     const params = { position };
     return genFuncCode(params, block);
   };

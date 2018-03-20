@@ -4,8 +4,13 @@ const CodeGenerator = {};
 CodeGenerator.wait_until = (params) => `await BlocklyLib.waitUntil(()=> ${params.condition}, 0.1);\n`;
 
 CodeGenerator.position = (params) => {
-  const positions = { x: params.x, y: params.y, z: params.z };
-  return [JSON.stringify(positions)];
+  const position = { x: params.x, y: params.y, z: params.z };
+  const orientation = {
+    roll: params.a,
+    yaw: params.b,
+    pitch: params.c
+  }
+  return [JSON.stringify({position, orientation})];
 };
 CodeGenerator.position7 = (params) => {
   const positions = { i: params.i, j: params.j, k: params.k, l: params.l, m: params.m, n: params.n, o: params.o };
@@ -16,10 +21,11 @@ CodeGenerator.ON = params => [JSON.stringify(params.checkboxON)];
 // CodeGenerator.servo_angle = params => [JSON.stringify(params.angle)];
 
 CodeGenerator.move_to = (params) => {
-  params.position = params.position === '' ? '{ "x": 150, "y": 0, "z": 150 }' : params.position;
-  const position = JSON.parse(params.position);
-  const args = `{"x": ${position.x}, "y": ${position.y}, "z": ${position.z}}`;
-  return `await UArm.set_position(${args});\n`;
+  console.log(params.position, 'sssss')
+  params.position = params.position === '' ? '{"position":{"x":"172","y":"0","z":"36"},"orientation":{"roll":"-180","yaw":"0","pitch":"0"}}' : params.position;
+  // const data = JSON.parse(params)
+  // const args = `{"x": ${position.x}, "y": ${position.y}, "z": ${position.z}}`;
+  return `await window.xArmVuex.commit('MOVE_END', ${params.position});\n`;
 };
 CodeGenerator.move_7 = (params) => {
   const defaltStr = '{ "i": 150, "j": 0, "k": 150, "l": 150, "m": 0, "n": 150, "o": 150 }';
@@ -30,7 +36,7 @@ CodeGenerator.move_7 = (params) => {
   const args = `[${position.i}, ${position.j}, ${position.k}, 
   ${position.l}, ${position.m}, ${position.n}, ${position.o}]`;
   
-  return `await window.xArmVuex.commit('SET_ROBOT_STATE', ${args});\n`;
+  return `await window.xArmVuex.commit('ROBOT_MOVE_JOINT', ${args});\n`;
   // return `await UArm.set_joint(${args});\n`;
 };
 CodeGenerator.move = (params) => {

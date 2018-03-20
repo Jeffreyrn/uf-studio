@@ -218,6 +218,7 @@ function initBlocklyDefine(Blockly) {
     },
     onchange(event) {
       if (event.type === 'change' && isChildBlock(event.blockId, this)) {
+        console.log('inputlist', this)
         for (const item of this.inputList) {
           if (item.connection !== null) {
             const value = item.connection.targetBlock().getFieldValue('NUM');
