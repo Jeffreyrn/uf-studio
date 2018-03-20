@@ -25,9 +25,13 @@ CodeGenerator.move_7 = (params) => {
   const defaltStr = '{ "i": 150, "j": 0, "k": 150, "l": 150, "m": 0, "n": 150, "o": 150 }';
   params.position = params.position === '' ? defaltStr : params.position;
   const position = JSON.parse(params.position);
-  const args = `{"i": ${position.i}, "j": ${position.j}, "k": ${position.k}, 
-  "l": ${position.l}, "m": ${position.m}, "n": ${position.n}, "o": ${position.o}}`;
-  return `await UArm.set_joint(${args});\n`;
+  // const args = `{"i": ${position.i}, "j": ${position.j}, "k": ${position.k}, 
+  // "l": ${position.l}, "m": ${position.m}, "n": ${position.n}, "o": ${position.o}}`;
+  const args = `[${position.i}, ${position.j}, ${position.k}, 
+  ${position.l}, ${position.m}, ${position.n}, ${position.o}]`;
+  
+  return `await window.xArmVuex.commit('SET_ROBOT_STATE', ${args});\n`;
+  // return `await UArm.set_joint(${args});\n`;
 };
 CodeGenerator.move = (params) => {
   const value = params.value;
