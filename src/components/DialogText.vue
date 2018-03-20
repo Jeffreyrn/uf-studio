@@ -18,7 +18,7 @@
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
         </div>
         <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div>
-        <div style="margin-top:230px;">
+        <div class="position-absolute" style="bottom:0px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
           </div>
@@ -27,7 +27,7 @@
               OK
             </div>
           </span>
-          <span v-if="!isFileNameCorrect">
+          <span v-else>
             <div class="float-left btn-create btn-create-opacity">
               OK
             </div>
@@ -235,7 +235,7 @@ export default {
     left:35px;
     top:155px;
     width: 288px;
-    font-size: 7.8px;
+    font-size: 10px;
     color: #878787;
     font-family: 'Gotham-Book';
   }
@@ -314,8 +314,6 @@ export default {
   .btn-cancel {
     width: 178px;
     height: 40px;
-    /* margin-top: 230px; */
-    /* background-color: yellow; */
     background: #484848;
     text-align: center;
     font-family: 'Gotham-Book';
@@ -328,9 +326,6 @@ export default {
   .btn-create {
     width: 178px;
     height: 40px;
-    /* margin-top: 230px; */
-    /* margin-left: 178px; */
-    /* background-color: green; */
     background: #52BF53;
     text-align: center;
     font-family: 'Gotham-Book';
