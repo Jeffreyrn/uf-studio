@@ -6,28 +6,23 @@ const CommandsEditorSocket = {};
 const self = CommandsEditorSocket;
 window.CommandsEditorSocket = CommandsEditorSocket;
 
-// self.VERSION = GlobalConstant.VERSION;
-
-//
 self.ROOT_DIR = '/python';
 
 self.sendCmd = (cmdId, data, callback) => {
   self.socketCom.sendCmd(cmdId, data, callback);
 };
 
-// self.userId = GlobalConstant.userId;
-
 self.runPythonScript = (uuid, callback) => {
-  const filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
+  const filePath = uuid;
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       path: filePath, // 要执行的python文件路径, /python/prj1/test.py
       // userId: self.userId, // 和path共同存在，用来区分不同用户
       // "script": "", // 要执行的python代码
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
-    GlobalUtil.model.localProjTree.isCmdRunning = true;
+  self.sendCmd(window.GlobalConstant.FILE_ID_RUN_PYTHON_SCRIPT, params, (dict) => {
+    window.GlobalUtil.model.localProjTree.isCmdRunning = true;
     if (callback) {
       callback(dict);
     }
@@ -37,12 +32,12 @@ self.runPythonScript = (uuid, callback) => {
 self.stopPythonScript = (callback) => {
   const pID = self.model.localProjTree.runningCmdProgramID;
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       program_id: pID, // 该id在上面两个接口都会有返回, null或者不传代表停止所有的
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
-    GlobalUtil.model.localProjTree.isCmdRunning = false;
+  self.sendCmd(window.GlobalConstant.FILE_ID_STOP_PYTHON_SCRIPT, params, (dict) => {
+    window.GlobalUtil.model.localProjTree.isCmdRunning = false;
     if (callback) {
       callback(dict);
     }
@@ -51,28 +46,28 @@ self.stopPythonScript = (callback) => {
 
 self.runPipCommand = (command, options, callback) => {
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
-      command: command,
-      options: options,
-    })
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      command,
+      options,
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
-    GlobalUtil.model.localProjTree.isCmdRunning = true;
+  self.sendCmd(window.GlobalConstant.FILE_ID_RUN_PIP_COMMAND, params, (dict) => {
+    window.GlobalUtil.model.localProjTree.isCmdRunning = true;
     if (callback) {
       callback(dict);
     }
   });
 };
 
-self.autocompletePython = (source, line, column, callback) => {
+self.autocompletePython = (source, line, clolumn, callback) => {
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
-      source: source, // 整个文本内容
-      line: line, // 行号
-      clolumn: column, // 列号
-    })
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      source, // 整个文本内容
+      line, // 行号
+      clolumn, // 列号
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_AUTOCOMPLETE_PYTHON, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_AUTOCOMPLETE_PYTHON, params, (dict) => {
     if (callback) {
       callback(dict);
     }
@@ -84,10 +79,10 @@ self.listProjs = (callback) => {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: self.ROOT_DIR, // 要获取的目录
-      type: "detail", // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
-    })
+      type: 'detail', // simple: 仅获取当前目录，不包括子目录 detail:包括子目录
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_LIST_DIR, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_LIST_DIR, params, (dict) => {
     // console.log(`remoteProjs2Local = ${JSON.stringify(dict)}`);
     self.model.localProjTree.remoteProjs2Local(dict);
     if (callback) {
@@ -97,15 +92,15 @@ self.listProjs = (callback) => {
 };
 
 self.createProj = (name) => {
-  let filePath = path.join(self.ROOT_DIR, name);
+  const filePath = path.join(self.ROOT_DIR, name);
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       name: '', // 文件夹名称, 可省略
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_DIR, params, () => {
     self.listProjs(() => {
       // const lastProj = self.model.localProjTree.curProjList[self.model.localProjTree.curProjList.length - 1];
       self.model.localProjTree.changeProj(filePath);
@@ -114,16 +109,16 @@ self.createProj = (name) => {
 };
 
 self.delProj = (proId, callback) => {
-  let filePath = proId; //path.join(self.ROOT_DIR, name);
+  const filePath = proId;
   console.log(`filePath = ${filePath}`);
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_DELETE_DIR, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_DELETE_DIR, params, () => {
     self.listProjs(callback);
   });
 };
@@ -132,16 +127,16 @@ self.renameProj = (name) => {
   const originName = self.model.localProjTree.curProj.name;
   // const curProjUUID = self.model.localProjTree.curProj.uuid;
   const newProjUUID = path.join(self.ROOT_DIR, name);
-  const newname = name;
+  // const newname = name;
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: self.ROOT_DIR, // 文件的父目录，必须
       old_name: originName, // 原文件（夹）名称
       new_name: name, // 新文件（夹）名称
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_CHANGE_NAME, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_CHANGE_NAME, params, () => {
     self.model.localProjTree.deleteOpenSonTabs('');
     self.listProjs(() => {
       self.model.localProjTree.changeProj(newProjUUID);
@@ -151,41 +146,39 @@ self.renameProj = (name) => {
   });
 };
 
-self.selectedUI = () => {
-  const curFile = GlobalUtil.model.localProjTree.curFile;
-  if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
-    // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
-  }
-  else {
-    // GlobalUtil.model.localProjTree.setSelectedEditor('');
-  }
-};
+// self.selectedUI = () => {
+//   const curFile = GlobalUtil.model.localProjTree.curFile;
+//   if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
+//     // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
+//   }
+//   else {
+//     // GlobalUtil.model.localProjTree.setSelectedEditor('');
+//   }
+// };
 
 self.createFile = (name, isProjFile, callback) => {
-  console.log(`createFile 3 file 1`);
+  // console.log('createFile 3 file 1');
   let filePath = self.model.localProjTree.getSelectedFileFolder();
-  console.log(`createFile 3 file 2`);
+  // console.log('createFile 3 file 2');
   filePath = path.join(filePath, name);
-  console.log(`createFile 3 file 3 = ${filePath}`);
+  // console.log(`createFile 3 file 3 = ${filePath}`);
   // const isProjFile = name.indexOf('.') > 0;
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
       data: '', // 文件内容
-    })
+    }),
   };
-  const proId = self.model.localProjTree.curProj.uuid;
+  // const proId = self.model.localProjTree.curProj.uuid;
   if (isProjFile === true) {
-    self.sendCmd(GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
+    self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_FILE, params, () => {
       self.listProjs(() => {
-        // GlobalUtil.model.localProjTree.selectedUI();
-        GlobalUtil.model.localProjTree.onTreeNodeClick(filePath);
+        self.model.localProjTree.onTreeNodeClick(filePath);
         setTimeout(() => {
-          // GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(filePath);
-          GlobalUtil.model.localProjTree.curProjAddExpandedKeys(filePath);
-          console.log(`curProjExpandedKeys = ${JSON.stringify(GlobalUtil.model.localProjTree.curProjExpandedKeys)}`);
+          self.model.localProjTree.curProjAddExpandedKeys(filePath);
+          // console.log(`curProjExpandedKeys = ${JSON.stringify(self.model.localProjTree.curProjExpandedKeys)}`);
         });
         if (callback) {
           callback();
@@ -194,9 +187,8 @@ self.createFile = (name, isProjFile, callback) => {
     });
   }
   else {
-    self.sendCmd(GlobalConstant.FILE_ID_CREATE_DIR, params, (dict) => {
+    self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_DIR, params, () => {
       self.listProjs(() => {
-        // GlobalUtil.model.localProjTree.selectedUI();
         if (callback) {
           callback();
         }
@@ -207,18 +199,18 @@ self.createFile = (name, isProjFile, callback) => {
 
 self.saveOrUpdateFile = (uuid, text, callback) => {
   // text = 'test test';
-  let filePath = uuid; //self.model.localProjTree.getThisFileFullPath(uuid);
+  const filePath = uuid;
   console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
   // return;
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
       data: text, // 文件内容
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
     // self.listProjs(callback);
     if (callback) {
       callback(dict);
@@ -227,17 +219,15 @@ self.saveOrUpdateFile = (uuid, text, callback) => {
 };
 
 self.getFile = (uuid, callback) => {
-  let filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
-  // console.log(`getFile filePath = ${filePath}`);
-  // return;
+  const filePath = uuid;
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_GET_FILE, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_GET_FILE, params, (dict) => {
     // console.log(`get file = ${JSON.stringify(dict)}`);
     if (callback) {
       callback(dict);
@@ -251,21 +241,21 @@ self.delFiles = (uuid) => {
   const filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
   console.log(`filePath = ${filePath}`);
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: filePath, // 文件夹的父目录，必须
       file: '', // 文件夹名称, 可省略
-    })
+    }),
   };
   const isProjFile = filePath.indexOf('.') > 0;
   if (isProjFile === true) {
-    self.sendCmd(GlobalConstant.FILE_ID_DELETE_FILE, params, (dict) => {
+    self.sendCmd(window.GlobalConstant.FILE_ID_DELETE_FILE, params, () => {
       self.model.localProjTree.deleteOpenSonTabs(uuid);
       self.listProjs();
     });
   }
   else {
-    self.sendCmd(GlobalConstant.FILE_ID_DELETE_DIR, params, (dict) => {
+    self.sendCmd(window.GlobalConstant.FILE_ID_DELETE_DIR, params, () => {
       self.model.localProjTree.deleteOpenSonTabs(uuid);
       self.listProjs();
     });
@@ -274,22 +264,22 @@ self.delFiles = (uuid) => {
 
 self.renameFile = (uuid, name) => {
   const filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
-  const file = self.model.localProjTree.getFileInfo(uuid);
+  // const file = self.model.localProjTree.getFileInfo(uuid);
   const fatherDir = path.dirname(filePath);
   const basename = path.basename(filePath);
-  const newname = name;
-  const newFilePath = path.join(fatherDir, newname);
+  // const newname = name;
+  // const newFilePath = path.join(fatherDir, newname);
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       root: fatherDir, // 文件的父目录，必须
       old_name: basename, // 原文件（夹）名称
       new_name: name, // 新文件（夹）名称
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.FILE_ID_CHANGE_NAME, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.FILE_ID_CHANGE_NAME, params, () => {
     self.model.localProjTree.deleteOpenSonTabs(uuid);
-    self.listProjs((dict) => {
+    self.listProjs(() => {
       // file.uuid = path.join(newFilePath);
       // file.name = newname;
       // self.model.localProjTree.curPro2Tree();
@@ -298,20 +288,22 @@ self.renameFile = (uuid, name) => {
   });
 };
 
-// (uuid, superid, self.PROJ_TREE_TYPE.FOLDER, name, '');
-
 self.isFileSuc = (dict) => {
-  return (dict.code === 0) && (dict.type = "response");
+  // return (dict.code === 0 && dict.type === 'response');
+  if (dict.code === 0 && dict.type === 'response') {
+    return true;
+  }
+  return false;
 };
 
 self.getTestPost = () => {
-  const a0 = GlobalUtil.randomNumber(0, 360);
-  const a1 = GlobalUtil.randomNumber(0, 360);
-  const a2 = GlobalUtil.randomNumber(0, 360);
-  const a3 = GlobalUtil.randomNumber(0, 360);
-  const a4 = GlobalUtil.randomNumber(0, 360);
-  const a5 = GlobalUtil.randomNumber(0, 360);
-  const a6 = GlobalUtil.randomNumber(0, 360);
+  const a0 = window.GlobalUtil.randomNumber(0, 360);
+  const a1 = window.GlobalUtil.randomNumber(0, 360);
+  const a2 = window.GlobalUtil.randomNumber(0, 360);
+  const a3 = window.GlobalUtil.randomNumber(0, 360);
+  const a4 = window.GlobalUtil.randomNumber(0, 360);
+  const a5 = window.GlobalUtil.randomNumber(0, 360);
+  const a6 = window.GlobalUtil.randomNumber(0, 360);
   return [a0, a1, a2, a3, a4, a5, a6];
 };
 
