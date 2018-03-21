@@ -15,25 +15,25 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        model: GlobalUtil.model,
-        tabContain: {
+export default {
+  data() {
+    return {
+      model: window.GlobalUtil.model,
+      tabContain: {
+        1: {
           1: {
-            1: {
-              img: require('../../assets/img/appStore/shopping_bag.svg'),
-              name: 'thirdparty',
-            },
+            img: require('../../assets/img/appStore/shopping_bag.svg'),
+            name: 'thirdparty',
           },
         },
-      };
-    },
-    mounted() {
-    },
-    methods: {
-    },
-  };
+      },
+    };
+  },
+  mounted() {
+  },
+  methods: {
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

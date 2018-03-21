@@ -45,59 +45,48 @@ import { setTimeout } from 'timers';
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        model: GlobalUtil.model,
-      }
-    },
-    methods: {
-      closeMyself() {
-        // this.$emit('on-close')
-        this.model.localProjTree.projsDialogShow = false;
-      },
-      addProj() {
-        this.model.localProjTree.folderOrFile = 'proj';
-        this.model.localProjTree.curDialogTitle = 'new project name';
-        GlobalUtil.model.localProjTree.dialogErrorTips = '';
-        this.model.localProjTree.fileDialogShow = true;
-        setTimeout(() => {
-          document.getElementById('input-text').focus();
-        });
-      },
-      onSelect(uuid) {
-        console.log(uuid);
-        this.model.localProjTree.changeProj(uuid);
-        this.model.localProjTree.projsDialogShow = false;
-      },
-      onDelete(uuid) {
-        // this.projSelectDialog = false;
-        // this.$confirm(`Delete project?`, {
-        //   confirmButtonText: 'OK',
-        //   cancelButtonText: 'CANCEL',
-        //   type: 'info',
-        //   showClose: false,
-        //   closeOnClickModal: false,
-        // }).then(() => {
-        //   CommandsEditorSocket.delProj(uuid, (dict) => {
-        //     console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
-        //   });
-        // }).catch(() => {
-        // });
 
-        GlobalUtil.model.localProjTree.curDialogTitle = `Delete project?`; 
-        // 'Please insert a folder';
-        GlobalUtil.model.localProjTree.dialogErrorTips = '';
-        GlobalUtil.model.localProjTree.deleteDialogShow = true;
-        GlobalUtil.model.localProjTree.onDeleteDialog = () => {
-          CommandsEditorSocket.delProj(uuid, (dict) => {
-            // GlobalUtil.model.localProjTree.deleteDialogShow = false;
-            console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
-          });
-        };
-      },
+const path = require('path');
+
+export default {
+  data() {
+    return {
+      model: window.GlobalUtil.model,
     }
-  }
+  },
+  methods: {
+    closeMyself() {
+      // this.$emit('on-close')
+      this.model.localProjTree.projsDialogShow = false;
+    },
+    addProj() {
+      this.model.localProjTree.folderOrFile = 'proj';
+      this.model.localProjTree.curDialogTitle = 'new project name';
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      this.model.localProjTree.fileDialogShow = true;
+      setTimeout(() => {
+        document.getElementById('input-text').focus();
+      });
+    },
+    onSelect(uuid) {
+      console.log(uuid);
+      this.model.localProjTree.changeProj(uuid);
+      this.model.localProjTree.projsDialogShow = false;
+    },
+    onDelete(uuid) {
+      const name = path.basename(uuid);
+      window.GlobalUtil.model.localProjTree.curDialogTitle = `Delete project '${name}' ?`;
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      window.GlobalUtil.model.localProjTree.deleteDialogShow = true;
+      window.GlobalUtil.model.localProjTree.onDeleteDialog = () => {
+        window.CommandsEditorSocket.delProj(uuid, (dict) => {
+          // GlobalUtil.model.localProjTree.deleteDialogShow = false;
+          console.log(`localTeach.delProj = ${uuid}, dict = ${JSON.stringify(dict)}`);
+        });
+      };
+    },
+  },
+}
 </script>
 
 <style scoped>

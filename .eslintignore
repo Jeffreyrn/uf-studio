@@ -11,12 +11,4 @@
 /src/components/params/
 /src/components/Teach/
 /src/components/Params.vue
-/src/components/Editor.vue
-/src/components/DialogProjs.vue
-/src/components/DialogDelete.vue
-/src/components/AppStore.vue
-/src/components/appStore/
-/src/components/MyApp.vue
-/src/components/ThirdParty.vue
-/src/components/Blockly/Dialogs.vue
 /src/router/*
