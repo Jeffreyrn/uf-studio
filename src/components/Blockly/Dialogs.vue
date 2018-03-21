@@ -83,19 +83,20 @@ export default {
     },
     onopen() {
       console.log(`onopen onopen curSelectedFileUUID = ${this.curSelectedFileUUID}`);
-      switch (this.model.localAppsMgr.projListDialogType) {
-        case 'app': {
-          break;
-        }
-        case 'ide': {
-          break;
-        }
-        case 'teach': {
-          break;
-        }
-        default:
-          break;
-      }
+      this.$emit('insertProject', this.curSelectedFileUUID)
+      // switch (this.model.localAppsMgr.projListDialogType) {
+      //   case 'app': {
+      //     break;
+      //   }
+      //   case 'ide': {
+      //     break;
+      //   }
+      //   case 'teach': {
+      //     break;
+      //   }
+      //   default:
+      //     break;
+      // }
       this.closeMyself();
     },
     handleNodeClick(data) {

@@ -32,7 +32,7 @@
       </div>
     </div>
   </div>
-  <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true"></dialogs>
+  <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true" @insertProject="insertProject"></dialogs>
   <dialog-input-name v-show="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
 </div>
 </template>
@@ -122,6 +122,7 @@ export default {
       // console.log('event block', block)
       if (block && event.type === 'ui') {
         // eventBus.$emit('show', block)
+        this.block = block
         this.popDialog(block)
         console.log('onchange 1')
       }
@@ -131,6 +132,12 @@ export default {
     // load project
   },
   methods: {
+    insertProject(path) {
+      console.log(path, this.block)
+      const children = this.block.childBlocks_
+      const inputField = children[0].inputList[0].fieldRow[1]
+      inputField.setText(path)
+    },
     popDialog(block) {
       if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
         this.dialog[block.type]()
@@ -181,6 +188,7 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
         // eventBus.$emit('show', block)
+        this.block = block
         this.popDialog(block)
         console.log(block.type)
         console.log('onchange 2')
