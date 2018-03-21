@@ -54,11 +54,11 @@ export default {
       curSelectedFileUUID: '',
       curProTreeDatas: [],
       block: null,
-      dialog: {
-        ide_app: false,
-        record_app: false,
-        other_app: false,
-      },
+      // dialog: {
+      //   studio_run_python: false,
+      //   studio_play_recording: false,
+      //   studio_run_app: false,
+      // },
       plus: 0,
       fileIcon: {
         py: require('./../../assets/img/blockly/dialog/language_python_dark.svg'),
@@ -83,19 +83,20 @@ export default {
     },
     onopen() {
       console.log(`onopen onopen curSelectedFileUUID = ${this.curSelectedFileUUID}`);
-      switch (this.model.localAppsMgr.projListDialogType) {
-        case 'app': {
-          break;
-        }
-        case 'ide': {
-          break;
-        }
-        case 'teach': {
-          break;
-        }
-        default:
-          break;
-      }
+      this.$emit('insertProject', this.curSelectedFileUUID)
+      // switch (this.model.localAppsMgr.projListDialogType) {
+      //   case 'app': {
+      //     break;
+      //   }
+      //   case 'ide': {
+      //     break;
+      //   }
+      //   case 'teach': {
+      //     break;
+      //   }
+      //   default:
+      //     break;
+      // }
       this.closeMyself();
     },
     handleNodeClick(data) {

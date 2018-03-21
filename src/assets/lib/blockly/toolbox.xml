@@ -10,6 +10,13 @@
                 </shadow>
             </value>
         </block>
+        <block type="set_acceleration">
+            <value name="acceleration">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
         <!-- <block type="studio_play_recording"></block> -->
         <block type="move_to">
             <value name="position">
@@ -29,21 +36,51 @@
                             <field name="NUM">150</field>
                         </shadow>
                     </value>
-                </shadow>
-                <block type="position">
-                    <value name="x">
+                    <value name="a">
                         <shadow type="math_number">
                             <field name="NUM">0</field>
                         </shadow>
                     </value>
-                    <value name="y">
+                    <value name="b">
                         <shadow type="math_number">
                             <field name="NUM">150</field>
                         </shadow>
                     </value>
-                    <value name="z">
+                    <value name="c">
                         <shadow type="math_number">
                             <field name="NUM">150</field>
+                        </shadow>
+                    </value>
+                </shadow>
+                <block type="position">
+                    <value name="x">
+                        <shadow type="math_number">
+                            <field name="NUM">172</field>
+                        </shadow>
+                    </value>
+                    <value name="y">
+                        <shadow type="math_number">
+                            <field name="NUM">0</field>
+                        </shadow>
+                    </value>
+                    <value name="z">
+                        <shadow type="math_number">
+                            <field name="NUM">36</field>
+                        </shadow>
+                    </value>
+                    <value name="a">
+                        <shadow type="math_number">
+                            <field name="NUM">-180</field>
+                        </shadow>
+                    </value>
+                    <value name="b">
+                        <shadow type="math_number">
+                            <field name="NUM">0</field>
+                        </shadow>
+                    </value>
+                    <value name="c">
+                        <shadow type="math_number">
+                            <field name="NUM">0</field>
                         </shadow>
                     </value>
                 </block>
@@ -172,21 +209,21 @@
         </block> -->
     </category>
     <category name="{MSG.CATEGORY_APP}" colour="{COLOR.COLOR_APP}">
-        <block type="ide_app">
+        <block type="studio_run_python">
             <value name="ide">
                 <shadow type="text">
                     <field name="text">1</field>
                 </shadow>
             </value>
         </block>
-        <block type="record_app">
+        <block type="studio_play_recording">
             <value name="record">
                 <shadow type="text">
                     <field name="text">1</field>
                 </shadow>
             </value>
         </block>
-        <block type="other_app">
+        <block type="studio_run_app">
             <value name="other">
                 <shadow type="text">
                     <field name="text">1</field>

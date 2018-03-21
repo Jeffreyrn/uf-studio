@@ -203,12 +203,22 @@ function initBlocklyDefine(Blockly) {
       this.appendValueInput('z')
         .setCheck('Number')
         .appendField('Z');
+      this.appendValueInput('a')
+        .setCheck('Number')
+        .appendField('A');
+      this.appendValueInput('b')
+        .setCheck('Number')
+        .appendField('B');
+      this.appendValueInput('c')
+        .setCheck('Number')
+        .appendField('C');
       this.setInputsInline(true);
       this.setOutput(true, null);
       this.setColour(BlocklyDefaultColor.COLOR_MOTION);
     },
     onchange(event) {
       if (event.type === 'change' && isChildBlock(event.blockId, this)) {
+        console.log('inputlist', this)
         for (const item of this.inputList) {
           if (item.connection !== null) {
             const value = item.connection.targetBlock().getFieldValue('NUM');
@@ -222,6 +232,15 @@ function initBlocklyDefine(Blockly) {
                 item.connection.targetBlock().setFieldValue(value, 'NUM');
                 break;
               case 'z':
+                item.connection.targetBlock().setFieldValue(value, 'NUM');
+                break;
+              case 'a':
+                item.connection.targetBlock().setFieldValue(value, 'NUM');
+                break;
+              case 'b':
+                item.connection.targetBlock().setFieldValue(value, 'NUM');
+                break;
+              case 'c':
                 item.connection.targetBlock().setFieldValue(value, 'NUM');
                 break;
             }
@@ -366,6 +385,15 @@ function initBlocklyDefine(Blockly) {
                 break;
               case 'z':
                 item.connection.targetBlock().setFieldValue(Math.round(positions[2]).toString(), 'NUM');
+                break;
+              case 'a':
+                item.connection.targetBlock().setFieldValue(Math.round(positions[3]).toString(), 'NUM');
+                break;
+              case 'b':
+                item.connection.targetBlock().setFieldValue(Math.round(positions[4]).toString(), 'NUM');
+                break;
+              case 'c':
+                item.connection.targetBlock().setFieldValue(Math.round(positions[5]).toString(), 'NUM');
                 break;
             }
           }
@@ -515,6 +543,17 @@ function initBlocklyDefine(Blockly) {
       //   .appendField(Blockly.Msg.motion.speed)
       //   .appendField(new Blockly.FieldDropdown([['1x', '1'], ['2x', '2'],
       //     ['4x', '4']]), 'speed');
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(BlocklyDefaultColor.COLOR_MOTION);
+    },
+  };
+  Blockly.Blocks.set_acceleration = {
+    init() {
+      this.appendValueInput('acceleration')
+        .setCheck('Number')
+        .appendField(Blockly.Msg.motion.acceleration);
       this.setInputsInline(false);
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
@@ -2682,7 +2721,7 @@ function initBlocklyDefine(Blockly) {
     },
   };
   /** Application block define start*/
-  Blockly.Blocks.ide_app = {
+  Blockly.Blocks.studio_run_python = {
     init() {
       this.appendValueInput('ide')
         .appendField(Blockly.Msg.app.ide);
@@ -2696,7 +2735,7 @@ function initBlocklyDefine(Blockly) {
     // }
   };
 
-  Blockly.Blocks.record_app = {
+  Blockly.Blocks.studio_play_recording = {
     init() {
       this.appendValueInput('record')
         .appendField(Blockly.Msg.app.record);
@@ -2707,7 +2746,7 @@ function initBlocklyDefine(Blockly) {
     },
   };
 
-  Blockly.Blocks.other_app = {
+  Blockly.Blocks.studio_run_app = {
     init() {
       this.appendValueInput('other')
         .appendField(Blockly.Msg.app.other);

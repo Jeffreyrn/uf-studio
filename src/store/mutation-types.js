@@ -14,5 +14,6 @@ export const MOVE_END = 'MOVE_END';
 export const SET_ROBOT_STATE = 'SET_ROBOT_STATE';
 export const GO_HOME = 'GO_HOME';
 export const SET_ERROR = 'SET_ERROR';
+export const MOVE_END_STEP = 'MOVE_END_STEP';
 // geometry.is
 export const SET_XARM_SRC = 'SET_XARM_SRC'

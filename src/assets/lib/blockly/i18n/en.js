@@ -569,6 +569,7 @@ function initBlocklyMsg(Blockly) {
       speed: 'speed',
     },
     speed: 'speed:',
+    acceleration: 'acceleration:',
     fullspeed: 'full speed',
     reset: 'reset',
   };

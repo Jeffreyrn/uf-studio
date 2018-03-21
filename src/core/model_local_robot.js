@@ -1,3 +1,5 @@
+import { ROBOT_BROADCAST } from "../store/mutation-types";
+
 
 const robot = {
   running: true,
@@ -115,15 +117,10 @@ const robot = {
       cmd: 'xarm_move_line',
       data: {
         relative: args.relative,
+        F: robot.info.speed,
+        Q: robot.info.acceleration,
       },
     };
-    if (args.speed !== undefined) {
-      msg.data.F = Number(args.speed);
-      robot.info.speed = Number(args.speed);
-    }
-    else {
-      msg.data.F = robot.info.speed;
-    }
     if (args.x !== undefined) {
       msg.data.X = Number(args.x);
       robot.info.position.x = Number(args.x);
@@ -135,9 +132,6 @@ const robot = {
     if (args.z !== undefined) {
       msg.data.Z = Number(args.z);
       robot.info.position.z = Number(args.z);
-    }
-    if (args.acceleration !== undefined) {
-      msg.data.Q = Number(args.acceleration);
     }
     if (args.roll !== undefined) {
       msg.data.A = args.roll;

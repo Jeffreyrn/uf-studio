@@ -6,7 +6,7 @@
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
-      <div><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
+      <div @click="saveProject"><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
       <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
       <div @click="runProject"><img src="../assets/img/ide/icon_running.svg"/></div>
     </div>
@@ -18,10 +18,12 @@
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="file-list">
-        <button class="button" @click="genjs">gen</button>
-        <div v-html="jsCode"></div>
+        <file-list></file-list>
       </div>
       <div class="emulator-wrapper">
+
+        <button class="button" @click="genjs">gen</button>
+        <div v-html="jsCode"></div>
         <button class="button" @click="genxml">gen xml</button>
         <button class="button" @click="onIDE()">test ide list</button>
         <button class="button" @click="onTeach()">test teach list</button>
@@ -30,7 +32,8 @@
       </div>
     </div>
   </div>
-  <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true"></dialogs>
+  <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true" @insertProject="insertProject"></dialogs>
+  <dialog-input-name v-show="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
 </div>
 </template>
 <script>
@@ -38,6 +41,8 @@ import { Blockly, init as initBlockly } from '../assets/lib/blockly/blockly';
 import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
 // import eventBus from './Blockly/eventBus'
 import Dialogs from './Blockly/Dialogs'
+import DialogInputName from './Blockly/DialogInputName'
+import FileList from './Blockly/FileList'
 
 export default {
   props: ['blocklyData', 'moduleName'],
@@ -59,6 +64,7 @@ export default {
         snackbarMessage: '',
         projectNameEdit: false,
         sideShow: true,
+        inputName: false,
       },
       activeTab: null,
       projectNameEditing: false,
@@ -68,13 +74,13 @@ export default {
       sideToggle: true,
       toggleSideVisible: true,
       dialog: {
-        ide_app: () => {
+        studio_run_python: () => {
           this.onIDE()
         },
-        record_app: () => {
+        studio_play_recording: () => {
           this.onTeach()
         },
-        other_app: () => {
+        studio_run_app: () => {
           console.log('open other app')
         },
       },
@@ -87,9 +93,13 @@ export default {
   },
   components: {
     Dialogs,
+    FileList,
+    DialogInputName,
   },
   mounted() {
     const self = this;
+    this.model.localAppsMgr.curProName = ''
+    window.xArmVuex = this.$store;
     if (this.uarmConnectStatus) {
       window.UArm.set_acceleration({
         printingMoves: 200,
@@ -104,7 +114,7 @@ export default {
     window.addEventListener('resize', self.resizeWorkspace, false);
     Blockly.BlockWorkspace.addChangeListener(self.onChangeEvent);
 
-    Blockly.Blocks.ide_app.onchange = (event) => {
+    Blockly.Blocks.studio_run_python.onchange = (event) => {
       // console.log('event change', event)
       // console.log('event type', event.type) // move change ui
       const blockId = event.blockId
@@ -112,7 +122,8 @@ export default {
       // console.log('event block', block)
       if (block && event.type === 'ui') {
         // eventBus.$emit('show', block)
-        this.dialog[block.type]()
+        this.block = block
+        this.popDialog(block)
         console.log('onchange 1')
       }
     }
@@ -121,6 +132,29 @@ export default {
     // load project
   },
   methods: {
+    insertProject(path) {
+      console.log(path, this.block)
+      const children = this.block.childBlocks_
+      const inputField = children[0].inputList[0].fieldRow[1]
+      inputField.setText(path)
+    },
+    popDialog(block) {
+      if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
+        this.dialog[block.type]()
+      }
+    },
+    saveProject() {
+      const name = this.model.localAppsMgr.curProName
+      if (!name) {
+        this.uiData.inputName = true
+      }
+      else {
+        window.CommandsAppsSocket.createFile(name, this.projectContent(), () => {
+          this.$message('Saved')
+          this.uiData.inputName = false
+        })
+      }
+    },
     runProject() {
       if (this.blocksLength() > 0) {
         Blockly.executeCode().then().catch((err) => {
@@ -141,6 +175,7 @@ export default {
     },
     newProject() {
       Blockly.BlockWorkspace.clear();
+      this.model.localAppsMgr.curProName = ''
     },
     genxml() {
       this.xmlCode = this.projectContent()
@@ -153,7 +188,8 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
         // eventBus.$emit('show', block)
-        this.dialog[block.type]()
+        this.block = block
+        this.popDialog(block)
         console.log(block.type)
         console.log('onchange 2')
       }

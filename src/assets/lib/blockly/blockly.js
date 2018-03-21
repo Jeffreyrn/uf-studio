@@ -224,7 +224,7 @@ function init(languageCode) {
       code = code.replace(new RegExp('async function', 'g'), 'function');
     }
     else {
-      code = `(async function () {\n\nUArm.set_speed(20);\n${code}\n}());`;
+      code = `(async function () {\n\n${code}\n}());`;
     }
     return code;
   };

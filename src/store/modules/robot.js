@@ -260,6 +260,32 @@ const mutations = {
       });
     }
   },
+  [types.MOVE_END_STEP](state, data) {
+    // console.log('set position:', data);
+    const index = Object.keys(data)[0]
+    const value = Number(data[index])
+    state.info.position[index] += value;
+    const params = {
+      [index.toUpperCase()]: state.info.position[index],
+      F: state.info.speed,
+      Q: state.info.acceleration,
+    }
+    if (state.info.online) {
+      window.GlobalUtil.socketCom.sendCmd(
+        'xarm_move_line',
+        {
+          data: params,
+        },
+        (response) => { console.log(`set ${index} move end step, socket res`, response); },
+      );
+    }
+    else { // offline mode
+      getReverseKinematics(state, (response) => {
+        state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
+        console.log('get 7 angle, socket res', response);
+      });
+    }
+  },
   [types.MOVE_YAW_PITCH](state, data) {
     // console.log('set position:', data);
     // state.info.orientation.roll += data[0];

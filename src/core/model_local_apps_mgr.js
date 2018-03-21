@@ -8,6 +8,7 @@ self.isProjListDialogShow = false;
 self.curDialogTitle = '';
 self.projListDialogType = '';
 self.curProTreeDatas = [];
+self.curProName = ''
 self.appTreeDatas = [
   {
     uuid: '',

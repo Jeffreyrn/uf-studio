@@ -572,6 +572,7 @@ function initBlocklyMsg(Blockly) {
       speed: '播放速度',
     },
     speed: '运动速度:',
+    acceleration: '加速度:',
     fullspeed: '最大速度',
     reset: '复位',
   };
