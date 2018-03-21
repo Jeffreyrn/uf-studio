@@ -1,5 +1,5 @@
 
-import GlobalConstant from './global_constant.js';
+import GlobalConstant from './global_constant';
 import Model from './model';
 import SocketCom from './socket_com';
 import NativeCom from './native_com';
@@ -14,14 +14,14 @@ import CommandsAppsSocket from './commands_apps_socket';
 //   port: '18333',
 // };
 
+window.GlobalConstant = GlobalConstant;
+
 const GlobalUtil = {};
 const self = GlobalUtil;
 window.GlobalUtil = self;
 self.store = {};
 self.model = Model;
 self.socketCom = SocketCom;
-
-window.GlobalConstant = GlobalConstant;
 
 CommandsEditorSocket.socketCom = SocketCom;
 CommandsEditorSocket.model = Model;
@@ -56,15 +56,15 @@ self.isFileStr = (str) => {
     GlobalUtil.model.localTeach.dialogErrorTips = errStr;
     return false;
   }
-  const firstChar = str[0];
-  if ( !(firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z') ) {
+  // const firstChar = str[0];
+  // if (!(firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z')) {
     // return false;
-  }
+  // }
   for (let i = 0; i < str.length; i += 1) {
     const aChar = str[i];
-    if ( !(aChar >= 'a' && aChar <= 'z' || aChar >= 'A' && aChar <= 'Z' || aChar === '_' || aChar >= '0' && aChar <= '9') ) {
-      GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
-      GlobalUtil.model.localTeach.dialogErrorTips = errStr;
+    if (!((aChar >= 'a' && aChar <= 'z') || (aChar >= 'A' && aChar <= 'Z') || aChar === '_' || (aChar >= '0' && aChar <= '9'))) {
+      self.model.localProjTree.dialogErrorTips = errStr;
+      self.model.localTeach.dialogErrorTips = errStr;
       return false;
     }
   }
@@ -79,8 +79,8 @@ self.getMinWidth = () => {
   return self.min_width;
 };
 self.uniqueArr = (arr) => {
-  let result = [];
-  let hash = {};
+  const result = [];
+  const hash = {};
   for (let i = 0, elem; (elem = arr[i]) != null; i += 1) {
     if (!hash[elem]) {
       result.push(elem);
@@ -91,7 +91,7 @@ self.uniqueArr = (arr) => {
 }
 
 self.randomNumber = (begin, end) => {
- return Math.floor(Math.random() * (end - begin)) + begin;
+  return Math.floor(Math.random() * (end - begin)) + begin;
 }
 
 self.getMinWidth();
@@ -106,11 +106,11 @@ self.adaptSize = (x) => {
   return x * self.autoSizeScale;
 };
 
-GlobalUtil.fixSize = () => {
+self.fixSize = () => {
   // GlobalUtil.min_width = 480;
   const div = document.getElementById('index-page');
-  div.style.width = `${GlobalUtil.min_width / 9.0 * 16.0}px`;
-  div.style.height = `${GlobalUtil.min_width}px`;
+  div.style.width = `${self.min_width / 9.0 * 16.0}px`;
+  div.style.height = `${self.min_width}px`;
 };
 
 self.getTimeString = () => {
@@ -128,15 +128,17 @@ self.getTimeString = () => {
 
 self.pad = (num, n) => {
   let len = num.toString().length;
-   while(len < n) {
-     num = "0" + num;
-     len += 1;
-   }
-   return num;
+  while (len < n) {
+    num = `0${num}`;
+    len += 1;
+  }
+  return num;
 };
 
 self.getUrlParam = (lan) => {
-  const reg = new RegExp('(^|&)' + lan + '=([^&]*)(&|$)', 'i');
+  const s1 = '(^|&)';
+  const s2 = '=([^&]*)(&|$)';
+  const reg = new RegExp(`${s1}${lan}${s2}`, 'i');
   const r = window.location.search.substr(1).match(reg);
   if (r === null || r.length < 2) {
     return '';
