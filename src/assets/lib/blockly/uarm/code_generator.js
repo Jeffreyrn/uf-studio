@@ -65,7 +65,7 @@ CodeGenerator.move = (params) => {
       args = `{"y": ${value} * -1, "relative": true}`;
       break;
   }
-  return `await UArm.set_position(${args});\n`;
+  return `await window.xArmVuex.commit('MOVE_END_STEP', ${args});\n`;
 };
 
 // CodeGenerator.stretch = (params) => {
