@@ -13,10 +13,10 @@
           <div class="list-head-title">
             Project name
           </div>
-          <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType!=='app'">
+          <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType !== 'app'">
             Date
           </div>
-          <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType==='teach'">
+          <div class="list-head-title" v-if="model.localAppsMgr.projListDialogType === 'teach'">
             Type
           </div>
         </div>
@@ -69,12 +69,12 @@ export default {
     };
   },
   mounted() {
-    classObject: () => {
-      return {
-        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
-        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
-      }
-    }
+    // classObject: () => {
+    //   return {
+    //     'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
+    //     'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
+    //   }
+    // }
   },
   methods: {
     closeMyself() {
@@ -104,11 +104,13 @@ export default {
       }
     },
     renderContent(h, { node, data, store }) {
-      const flag = data.uuid === this.curSelectedFileUUID; 
-      console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
+      console.log(node);
+      console.log(store);
+      // const flag = data.uuid === this.curSelectedFileUUID;
+      // console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
       const curUUID = this.curSelectedFileUUID;
-      const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
-      const isSelected = curUUID.length>0 && data.uuid === curUUID && (data.uuid.indexOf('.py')>0||data.uuid.indexOf('.json')>0||this.model.localAppsMgr.projListDialogType==='app');
+      // const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
+      const isSelected = curUUID.length > 0 && data.uuid === curUUID && (data.uuid.indexOf('.py') > 0 || data.uuid.indexOf('.json') > 0 || this.model.localAppsMgr.projListDialogType === 'app');
       let textColorStyle = isSelected ? 'color:#4F7597;' : 'color:#A6A6A6;';
       textColorStyle = `${textColorStyle}font-family:'Gotham-Book';letter-spacing:-0.8px;padding-left:20px;`;
       let url = '';
@@ -128,14 +130,11 @@ export default {
         }
       }
       let ctime = data.ctime;
-      if (data.type==='proj') {
-
-      }
-      else {
+      if (data.type !== 'proj') {
         ctime = '';
       }
       let proType = data.proType;
-      if (data.type==='proj') {
+      if (data.type === 'proj') {
         if (proType === 'discontinuous') {
           proType = 'Singlepoint';
         }
@@ -147,7 +146,7 @@ export default {
         proType = '';
       }
       const urlstyle = `background:url('${url}') no-repeat center left;${textColorStyle};width:200px;height:36px;line-height:36px;float:left;`;
-      const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
+      const label = window.GlobalUtil.model.localTeach.getRealProjFileName(data.label);
       return (
         <div class="" style="">
           <div style={urlstyle}>
@@ -158,7 +157,7 @@ export default {
           </div>
           <div style="float:left;line-height:36px;">
             { proType }
-          </div> 
+          </div>
         </div>
       );
     },

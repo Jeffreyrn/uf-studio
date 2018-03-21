@@ -6,26 +6,14 @@
     <div class="main-contain">
       <div class="recording-area-wrapper"  id="left-teach-frame">
         <div class="left-top-area" id="left-top-area">
-          <!-- <div style="position:relative;">
-          </div> -->
           <div class="left-emulator" id="left-emulator">
             <XarmModel :size="emulatorHeight"></XarmModel>
           </div>
-          <!-- <div v-if="editState===true" class="left-show" id="left-show">
-          </div>
-          <div v-if="editState===true" class="left-control" id="left-control" style="overflow-y:scroll">
-            <XarmModel></XarmModel>
-            <EndSet></EndSet>
-            <EndJointControl></EndJointControl>
-          </div> -->
-          <!-- <div v-if="editState===false" style="background:gray;width:100%;height:100%;">
-          </div> -->
         </div>
         <div class="left-bottom-area" id="left-bottom-area">
           <div class="switch-wrapper">
             <div class="recording">
               <div class="recording-time">
-                <!-- curSelectedTreeItem.uuid == -->
                 <div v-if="model.localTeach.curSelectedTreeItem.uuid===''">
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
@@ -39,7 +27,6 @@
                   {{ curProjTotal }}
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='proj'  && model.localTeach.curProj.type==='continuous'">
-                  <!-- {{ `${Math.floor(curProjTotal/10)}.${curProjTotal%10}` }} -->
                   {{ getTimeLongStr(curProjTotal) }}
                 </div>
               </div>
@@ -54,12 +41,11 @@
                   {{ model.localTeach.getRealFileFileName(model.localTeach.curSelectedTreeItem.uuid) }}
                 </span>
               </div>
-              <!--<div class="file-name"><img src="../assets/img/edit/recording/icon_pathfile_grey.svg"/><span>{{ getCurFile }}</span></div>-->
               <div v-if="editState===false">
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
                   <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
                   <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
-                  <button class="bottom-btn" v-bind:class="classObject"><i class="el-icon-caret-right"></i></button>
+                  <button class="bottom-btn" v-bind:class="startBtn"><i class="el-icon-caret-right"></i></button>
                   <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
                 </div>
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
@@ -68,10 +54,9 @@
                 </div>
               </div>
               <div v-if="editState===true">
-                <button class="bottom-btn" v-bind:class="saveChangeClassObject" @click='model.localTeach.onSaveChange'>Save change</button>
+                <button class="bottom-btn" v-bind:class="saveChange" @click='model.localTeach.onSaveChange'>Save change</button>
                 <button class="bottom-btn edit-cancel-btn" @click='cancelEdit'>Cancel</button>
               </div>
-
             </div>
           </div>
           <ListProj id="bottom-right-frame" :editState='editState'></ListProj>
@@ -79,17 +64,11 @@
       </div>
 
       <div class="control-wrapper" v-if="model.localTeach.visible.starRecording===true || editState===true">
-        <!-- <XarmModel></XarmModel> -->
-        <!-- <div>
-          <EndSet></EndSet>
-        </div> -->
-        <!-- <EndJointControl></EndJointControl> -->
         <EmulatorControl></EmulatorControl>
       </div>
       <div v-else class="projects-list-wrapper">
         <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
         <div class="tree-wrapper" id="tree-wrapper">
-          <!-- :ref="tree" -->
           <el-tree
             class="recording-project-list"
             :data="model.localTeach.curProTreeDatas"
@@ -151,15 +130,25 @@
       v-if="model.localTeach.changeSelectedShow===true">
     </DialogTeachAlert>
 
+    <DialogTeachAlert
+      :title='deleteFileDialogTitle'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='delProjOK'
+      :isdelete=true
+      :oncancel='closeAlert'
+      v-if="isDeleteFileDialogShow===true">
+    </DialogTeachAlert>
+
   </div>
 </template>
 <script>
 
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
-import ElButton from "../../node_modules/element-ui/packages/button/src/button";
+// import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
@@ -171,14 +160,11 @@ import DialogAlert from './DialogAlert';
 
 const path = require('path');
 
-const echarts = require('echarts');
-let t;
-
 export default {
   data() {
     return {
-      socketCom: GlobalUtil.socketCom,
-      model: GlobalUtil.model,
+      socketCom: window.GlobalUtil.socketCom,
+      model: window.GlobalUtil.model,
       protype: '',
       folderOrFile: '',
       title: '',
@@ -189,6 +175,9 @@ export default {
       bottomLeftWidth: 200,
       pointWay: false,
       editState: false,
+      isDeleteFileDialogShow: false,
+      deleteFileDialogTitle: '',
+      delProjOK: null,
       curProjTotal: 0,
       fileIcon: {
         front: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
@@ -198,7 +187,7 @@ export default {
         continuous_white: require('../assets/img/edit/recording/icon_waypoint_14x14_white.svg'),
         pathFileGrey: require('../assets/img/edit/recording/icon_pathfile_grey.svg'),
         rename: require('../assets/img/edit/recording/icon_rename_white.svg'),
-        delete: require('../assets/img/edit/recording/btn_trash_white.svg')
+        delete: require('../assets/img/edit/recording/btn_trash_white.svg'),
       },
       visible: {
         createProjectDialog: false,
@@ -217,65 +206,66 @@ export default {
     window.addEventListener('resize', this.onwinresize, false);
     this.onwinresize();
     const self = this;
-    CommandsTeachSocket.listProjs((dict) => {
+    window.CommandsTeachSocket.listProjs(() => {
       setTimeout(() => {
         self.$refs.tree.setCurrentKey('');
-        GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
+        window.GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
       });
     });
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
-  activated: function () {
+  activated: () => {
     this.onwinresize();
   },
-  deactivated: function () {
+  deactivated: () => {
     this.onwinresize();
   },
   methods: {
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
-      CommandsTeachSocket.createProj(text, GlobalUtil.model.localTeach.projTypeSelected);
-      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+      window.CommandsTeachSocket.createProj(text, window.GlobalUtil.model.localTeach.projTypeSelected);
+      window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onsave() {
-      GlobalUtil.model.localTeach.onSaveChange(() => {
-        GlobalUtil.model.localTeach.changeSelectedShow = false;
-        GlobalUtil.model.localTeach.hasChange = false;
-        GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
-        this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      window.GlobalUtil.model.localTeach.onSaveChange(() => {
+        window.GlobalUtil.model.localTeach.changeSelectedShow = false;
+        window.GlobalUtil.model.localTeach.hasChange = false;
+        window.GlobalUtil.model.localTeach.onSelect(null, window.GlobalUtil.model.localTeach.willOnSelectIndex);
+        this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
       });
     },
     closeAlert() {
-      GlobalUtil.model.localTeach.changeSelectedShow = false;
-      GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, GlobalUtil.model.localTeach.willOnSelectIndex);
-      this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
+      this.isDeleteFileDialogShow = false;
+      window.GlobalUtil.model.localTeach.changeSelectedShow = false;
+      window.GlobalUtil.model.localTeach.hasChange = false;
+      window.GlobalUtil.model.localTeach.onSelect(null, window.GlobalUtil.model.localTeach.willOnSelectIndex);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
     },
     onrename() {
       const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
-      GlobalUtil.model.localTeach.projRenameShow = false;
-      const projTypeSelected = GlobalUtil.model.localTeach.projTypeSelected;
+      window.GlobalUtil.model.localTeach.projRenameShow = false;
+      const projTypeSelected = window.GlobalUtil.model.localTeach.projTypeSelected;
       const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
       text = `${pre}${text}`;
       console.log(`onrename text = ${text}`);
-      CommandsTeachSocket.renameProj(text, () => {
+      window.CommandsTeachSocket.renameProj(text, () => {
         setTimeout(() => {
-          const filePath = path.join(CommandsTeachSocket.ROOT_DIR, text);
+          const filePath = path.join(window.CommandsTeachSocket.ROOT_DIR, text);
           self.$refs.tree.setCurrentKey(filePath);
-          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
         });
       });
     },
     rename(data) {
       console.log(`rename data uuid = ${data.uuid}`)
-      GlobalUtil.model.localTeach.projRenameShow = true;
-      GlobalUtil.model.localTeach.curDialogProjInputText = GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
+      window.GlobalUtil.model.localTeach.projRenameShow = true;
+      window.GlobalUtil.model.localTeach.curDialogProjInputText = window.GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
       if (data.uuid.indexOf('discontinuous_') >= 0) {
-        GlobalUtil.model.localTeach.projTypeSelected = '2';
+        window.GlobalUtil.model.localTeach.projTypeSelected = '2';
       }
       else {
-        GlobalUtil.model.localTeach.projTypeSelected = '1';
+        window.GlobalUtil.model.localTeach.projTypeSelected = '1';
       }
       setTimeout(() => {
         document.getElementById('teach-input-text').focus();
@@ -283,18 +273,18 @@ export default {
     },
     fileLength(uuid) {
       if (uuid.indexOf('.json') < 0) {
-        return;
+        return '0';
       }
-      if (GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
-        if (GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
-          return GlobalUtil.model.localTeach.fileDatas[uuid].length;
+      if (window.GlobalUtil.model.localTeach.fileDatas[uuid] !== undefined) {
+        if (window.GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
+          return window.GlobalUtil.model.localTeach.fileDatas[uuid].length;
         }
-        if (GlobalUtil.model.localTeach.curProj.type === 'continuous') {
-          const length = GlobalUtil.model.localTeach.fileDatas[uuid].length;
+        if (window.GlobalUtil.model.localTeach.curProj.type === 'continuous') {
+          const length = window.GlobalUtil.model.localTeach.fileDatas[uuid].length;
           return this.getTimeLongStr(length);
         }
       }
-      return 0;
+      return '0';
     },
     getTimeLongStr(length) {
       const msec = length % 10;
@@ -302,135 +292,127 @@ export default {
       const sec = allsec % 60;
       const min = Math.floor(allsec / 60) % 60;
       const hour = Math.floor(Math.floor(allsec / 60) / 60) % 24;
-      const str = `${GlobalUtil.pad(hour,2)} : ${GlobalUtil.pad(min,2)} : ${GlobalUtil.pad(sec,2)} . ${msec}00`;
+      const str = `${window.GlobalUtil.pad(hour, 2)} : ${window.GlobalUtil.pad(min, 2)} : ${window.GlobalUtil.pad(sec, 2)} . ${msec}00`;
       // const sec = Math.floor(length / 10) % 60;
       // const min = Math.floor(Math.floor(length / 10) / 60) % 60;
       // const str = `${min}:${sec}.${msec}00`;
       return str;
     },
     checkInputText() {
-      if(this.inputText !== ''){
+      if (this.inputText !== '') {
         this.createProjectDisable = false;
       }
     },
-    finishRecord () {
+    finishRecord() {
       // this.visible.saveDialog = true;
       this.model.localTeach.saveDialogShow = true;
       this.visible.singlePointRecording = false;
       this.visible.wayPointRecording = false;
-      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
     },
     finishRecordOK() {
       const self = this;
       this.visible.saveDialog = false;
-      GlobalUtil.model.localTeach.visible.starRecording = false;
+      window.GlobalUtil.model.localTeach.visible.starRecording = false;
 
-      const curFileDatas = GlobalUtil.model.localTeach.fileDatas['temp']; //GlobalUtil.model.localTeach.curFileDatas;
+      const curFileDatas = window.GlobalUtil.model.localTeach.fileDatas.temp; // GlobalUtil.model.localTeach.curFileDatas;
       console.log(`curFileDatas = ${JSON.stringify(curFileDatas)}`);
 
       const textDict = {
-        type: GlobalUtil.model.localTeach.curProj.type,
+        type: window.GlobalUtil.model.localTeach.curProj.type,
         total: curFileDatas.length,
         points: curFileDatas,
       };
       const text = JSON.stringify(textDict);
 
-      const dateStr = GlobalUtil.getTimeString();
-      CommandsTeachSocket.createFile(dateStr, text, (dict) => {
-      }, (dict) => {
-        let curProj = self.model.localTeach.curProj;
+      const dateStr = window.GlobalUtil.getTimeString();
+      window.CommandsTeachSocket.createFile(dateStr, text, () => {
+      }, () => {
+        const curProj = self.model.localTeach.curProj;
         const filePath = path.join(curProj.uuid, `${dateStr}.json`);
-        GlobalUtil.model.localTeach.saveDialogShow = false;
+        window.GlobalUtil.model.localTeach.saveDialogShow = false;
         setTimeout(() => {
           self.$refs.tree.setCurrentKey(filePath);
-          GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
-          self.handleNodeClick({uuid: filePath});
+          window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          self.handleNodeClick({ uuid: filePath });
           this.scrollTo(0);
         });
       });
-      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
       });
     },
     finishRecordCancle() {
       this.visible.saveDialog = false;
-      // GlobalUtil.model.localTeach.visible.starRecording = false;
-//      CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
-//        console.log(`1111SetBeart false = dict = ${JSON.stringify(dict)}`);
-//      });
     },
     startRecord() {
-      GlobalUtil.model.localTeach.curEditingFileUUID = '';
+      window.GlobalUtil.model.localTeach.curEditingFileUUID = '';
       this.visible.starRecording = false;
-      const dateStr = GlobalUtil.getTimeString();
-      const curSelectedTreeItemUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
-      const proj = GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
+      // const dateStr = GlobalUtil.getTimeString();
+      const curSelectedTreeItemUUID = window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
+      const proj = window.GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
       if (proj === null) {
         return;
       }
       const isContinus = proj.type === 'continuous';
-      GlobalUtil.model.localTeach.visible.starRecording = true;
+      window.GlobalUtil.model.localTeach.visible.starRecording = true;
 
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-      GlobalUtil.model.localTeach.curDuration = 0;
+      window.GlobalUtil.model.localTeach.curDuration = 0;
 
-      GlobalUtil.model.localTeach.fileDatas['temp'] = [];
+      window.GlobalUtil.model.localTeach.fileDatas.temp = [];
       // GlobalUtil.model.localTeach.curFileDatas = [];
-      CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-        const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
-        GlobalUtil.model.localTeach.lastFileData = testData;
+        const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
+        window.GlobalUtil.model.localTeach.lastFileData = testData;
         if (isContinus === false) {
-          GlobalUtil.model.localTeach.curDuration -= -1;
+          window.GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
 
-        if (GlobalUtil.model.localTeach.fileDatas['temp'].length >= 1800) {
+        if (window.GlobalUtil.model.localTeach.fileDatas.temp.length >= 1800) {
           this.finishRecordOK();
         }
         else {
           // test data
-          const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+          const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
           // GlobalUtil.model.localTeach.curFileDatas.push(testData)
-          GlobalUtil.model.localTeach.pushFileData('temp', testData);
-          let tempArr = [];
-          for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+          window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+          const tempArr = [];
+          for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas.temp.length; i += 1) {
             tempArr.push(i);
           }
-          // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-          GlobalUtil.model.localTeach.showArr = tempArr;
-          // this.onSelect(null, GlobalUtil.model.localTeach.curDuration);
+          window.GlobalUtil.model.localTeach.showArr = tempArr;
         }
-        this.curProjTotal = GlobalUtil.model.localTeach.showArr.length;
+        this.curProjTotal = window.GlobalUtil.model.localTeach.showArr.length;
         setTimeout(() => {
-          console.log(`wait for 5 sec`);
-          this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+          // console.log(`wait for 5 sec`);
+          this.scrollTo(window.GlobalUtil.model.localTeach.fileDatas.temp.length);
         }, 100);
-        
       });
-      GlobalUtil.model.localTeach.curDuration -= -1;
+      window.GlobalUtil.model.localTeach.curDuration -= -1;
     },
     scrollTo(time) {
-      document.getElementById("bottom-right-frame").scrollLeft = 1800 * 60; //60 * (parseInt(time / 10) * 10);
+      document.getElementById('bottom-right-frame').scrollLeft = 1800 * time; // 60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
-      const testData = GlobalUtil.model.localTeach.getTestData(GlobalUtil.model.localTeach.curDuration);
+      const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
       // GlobalUtil.model.localTeach.curFileDatas.push(testData);
-      GlobalUtil.model.localTeach.pushFileData('temp', testData);
-      let tempArr = [];
-      for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas['temp'].length; i += 1) {
+      window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+      const tempArr = [];
+      for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas.temp.length; i += 1) {
         tempArr.push(i);
       }
       // GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-      GlobalUtil.model.localTeach.showArr = tempArr;
-      this.scrollTo(GlobalUtil.model.localTeach.fileDatas['temp'].length);
+      window.GlobalUtil.model.localTeach.showArr = tempArr;
+      this.scrollTo(window.GlobalUtil.model.localTeach.fileDatas.temp.length);
     },
     startEdit() {
-      // GlobalUtil.model.localTeach.curEditingFileUUID = GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       this.editState = true;
-      GlobalUtil.model.localTeach.hasChange = false;
+      window.GlobalUtil.model.localTeach.hasChange = false;
       // GlobalUtil.model.localTeach.onSelect(null, -1);
       this.onwinresize();
       setTimeout(() => {
@@ -440,50 +422,42 @@ export default {
       });
     },
     cancelEdit() {
-      this.editState = false;      
-      GlobalUtil.model.localTeach.hasChange = false;
-      GlobalUtil.model.localTeach.onSelect(null, -1);
+      this.editState = false;
+      window.GlobalUtil.model.localTeach.hasChange = false;
+      window.GlobalUtil.model.localTeach.onSelect(null, -1);
       // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
-      document.getElementById("bottom-right-frame").scrollLeft = 0;
+      document.getElementById('bottom-right-frame').scrollLeft = 0;
       this.onwinresize();
       setTimeout(() => {
-        this.$refs.tree.setCurrentKey(GlobalUtil.model.localTeach.curSelectedTreeItem.uuid);
+        this.$refs.tree.setCurrentKey(window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid);
       });
     },
     delProj(uuid) {
-      const realName = GlobalUtil.model.localTeach.getRealFileFileName(uuid)
-      if (uuid.indexOf('.json') >=0 ) {
-        this.$confirm(`Delete ${realName}?`, {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'CANCEL',
-          type: 'info',
-          showClose: false,
-          closeOnClickModal: false,
-        }).then(() => {
-          CommandsTeachSocket.delFiles(uuid, (dict) => {
+      const realName = window.GlobalUtil.model.localTeach.getRealFileFileName(uuid)
+      if (uuid.indexOf('.json') >= 0) {
+        this.isDeleteFileDialogShow = true;
+        this.delProjOK = () => {
+          this.isDeleteFileDialogShow = false;
+          window.CommandsTeachSocket.delFiles(uuid, () => {
             // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
           });
-        }).catch(() => {
-        });
+        };
+        this.deleteFileDialogTitle = `Are you sure you want to delete ${realName}?`;
         return;
       }
-      const curProj = GlobalUtil.model.localTeach.curProj;
-      this.$confirm(`Delete ${curProj.name}?`, {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'CANCEL',
-        type: 'info',
-        showClose: false,
-        closeOnClickModal: false,
-      }).then(() => {
-        CommandsTeachSocket.delProj(curProj.uuid, (dict) => {
-          console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+      const curProj = window.GlobalUtil.model.localTeach.curProj;
+      this.deleteFileDialogTitle = `Are you sure you want to delete ${curProj.name}?`;
+      this.delProjOK = () => {
+        this.isDeleteFileDialogShow = false;
+        window.CommandsTeachSocket.delProj(curProj.uuid, () => {
+          // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
         });
-      }).catch(() => {
-      });
+      };
+      this.isDeleteFileDialogShow = true;
     },
     newProj() {
-      GlobalUtil.model.localTeach.curDialogProjInputText = '';
-      GlobalUtil.model.localTeach.projTypeSelectedShow = true;
+      window.GlobalUtil.model.localTeach.curDialogProjInputText = '';
+      window.GlobalUtil.model.localTeach.projTypeSelectedShow = true;
       setTimeout(() => {
         document.getElementById('teach-input-text').focus();
       }, 100);
@@ -497,9 +471,9 @@ export default {
     onwinresize() {
       this.clientWidth = document.body.clientWidth;
       this.clientHeight = document.body.clientHeight;
-      const leftFrame = document.getElementById("left-teach-frame");
-      const bottomRightFrame = document.getElementById("bottom-right-frame");
-      const totalFrameWidth = this.clientWidth - 13;
+      const leftFrame = document.getElementById('left-teach-frame');
+      const bottomRightFrame = document.getElementById('bottom-right-frame');
+      const totalFrameWidth = this.clientWidth - 8;
       const totalFrameHeight = this.clientHeight - 120;
       const leftTopArea = document.getElementById('left-top-area');
       const leftBottomArea = document.getElementById('left-bottom-area');
@@ -515,177 +489,106 @@ export default {
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
         bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
       }
-      const bottomHeight = 300 //this.editState ? 200 : 300;
+      const bottomHeight = 300; // this.editState ? 200 : 300;
       if (leftBottomArea !== null && leftBottomArea !== undefined) {
         leftBottomArea.style.height = `${bottomHeight}px`;
       }
-      const leftTopHeight = totalFrameHeight + 50 - bottomHeight;
-      if(leftTopArea !== null && leftTopArea !== undefined){
+      const leftTopHeight = (totalFrameHeight - bottomHeight) + 50;
+      if (leftTopArea !== null && leftTopArea !== undefined) {
         leftTopArea.style.height = `${leftTopHeight}px`;
         this.emulatorHeight = leftTopHeight
       }
       if (rightFrame !== null && rightFrame !== undefined) {
         rightFrame.style.height = `${totalFrameHeight}px`;
       }
-      if (this.editState) {
-        // const emulatorHeight = leftTopHeight - 200 - 0;
-        // if (leftShow !== null) {
-        //   leftShow.style.height = `${emulatorHeight}px`;
-        // }
-        // leftEmulator.style.height = `${emulatorHeight}px`;
-        // leftEmulator.style.width = `${leftFrameWidth - 210}px`;
-      }
-      else {
-        // leftEmulator.style.height = `100%`;
-        // leftEmulator.style.width = `100%`;
-        // if (leftShow !== null) {
-        //   leftShow.style.height = `100%`;
-        // }
-      }
-      // console.log(`totalFrameHeight = ${totalFrameHeight}, bottomRightFrame = ${bottomRightFrame.style.width}`);
     },
     handleNodeClick(data) {
-      // if (this.editState) {
-      //   return;
-      // }
       this.cancelEdit();
       const uuid = data.uuid;
-      GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
-      const proj = GlobalUtil.model.localTeach.getProjInfo(uuid);
-      GlobalUtil.model.localTeach.curProj = proj;
-      const file = GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
+      window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(uuid);
+      const proj = window.GlobalUtil.model.localTeach.getProjInfo(uuid);
+      window.GlobalUtil.model.localTeach.curProj = proj;
+      const file = window.GlobalUtil.model.localTeach.getTeachFileInfo(proj, uuid);
 
       this.protype = proj.type;
 
-      const curProj = GlobalUtil.model.localTeach.getCurProj(uuid);
+      const curProj = window.GlobalUtil.model.localTeach.getCurProj(uuid);
       if (curProj !== null && curProj !== undefined) {
-        GlobalUtil.model.localTeach.showArr = [];
-        CommandsTeachSocket.getProjFiles(uuid, (dict) => {
+        window.GlobalUtil.model.localTeach.showArr = [];
+        window.CommandsTeachSocket.getProjFiles(uuid, (dict) => {
           const total = dict.data.total;
           this.curProjTotal = total;
-          console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
+          // console.log(`CommandsTeachSocket getProjFiles dict = ${JSON.stringify(dict)}`);
         });
       }
-
       if (file !== null && file !== undefined) {
         // GlobalUtil.model.localTeach.setSelectedTreeItem(file);
         // GlobalUtil.model.localTeach.onSelect(null, 0);
-        CommandsTeachSocket.getFile(uuid, (dict) => {
+        window.CommandsTeachSocket.getFile(uuid, (dict) => {
           // console.log(`CommandsTeachSocket getFile dict = ${JSON.stringify(dict)}`);
           if (dict.code === 0) {
             let data = dict.data;
-            if (data === "" || data === undefined || data === null) {
-              GlobalUtil.model.localTeach.fileDatas[uuid] = [];
+            if (data === '' || data === undefined || data === null) {
+              window.GlobalUtil.model.localTeach.fileDatas[uuid] = [];
             }
             else {
               data = JSON.parse(data);
               const isContinus = data.type === 'continuous';
               const points = data.points;
-              const type = data.tpye;
+              // const type = data.tpye;
               file.storeType = data.type;
               file.isContinus = isContinus;
               // GlobalUtil.model.localTeach.isContinus = isContinus;
               // console.log(`isContinus = ${isContinus}, data.type = ${type}`);
-              GlobalUtil.model.localTeach.fileDatas[uuid] = points;
+              window.GlobalUtil.model.localTeach.fileDatas[uuid] = points;
             }
-            let tempArr = [];
-            for (let i = 0; i < GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
+            const tempArr = [];
+            for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas[uuid].length; i += 1) {
               tempArr.push(i);
             }
-            GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
-            GlobalUtil.model.localTeach.showArr = tempArr;
-            GlobalUtil.model.localTeach.onSelect(null, -1);
+            window.GlobalUtil.model.localTeach.curEditingFileUUID = uuid;
+            window.GlobalUtil.model.localTeach.showArr = tempArr;
+            window.GlobalUtil.model.localTeach.onSelect(null, -1);
             // this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
           }
         });
       }
     },
-//    renderContent(createElement, { node, data, store }) {
-//      console.log(`createElement node.uuid = ${data.uuid}`);
-//      console.log(`createElement node.type = ${data.type}`);
-//      console.log(`createElement node.proType = ${data.proType}`);
-//      let iconUrl = '';
-//      if (data.proType === 'continuous') {
-//        iconUrl = `background:url('${this.fileIcon.front}')`;
-//      }
-//      if (data.proType === 'discontinuous') {
-//        iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
-//      }
-//      return createElement(
-//        'span', [
-//          createElement('span',{
-//            attrs:{
-//              style:`${iconUrl} no-repeat center left;padding-left:20px;`,
-//            }}, GlobalUtil.model.localTeach.getRealProjFileName(data.label)),
-//          createElement('span',{
-//            attrs:{
-//              style:"color:red;padding-left:5px;"
-//            },
-//            on:{
-//              click: function() {
-//                console.log('rename-button');
-//              }
-//            }},'rename'),
-//          createElement('span',{
-//            attrs:{
-//              style:"color:blue;padding-left:5px;"
-//            },
-//            on:{
-//              click: function() {
-//                console.log('delete-button');
-//              }
-//            }},'delete'),
-//        ]);
-//
-//    },
     renderContent(h, { node, data, store }) {
+      console.log(node);
+      console.log(store);
       let iconUrl = '';
       if (data.proType === 'continuous') {
         iconUrl = `background:url('${this.fileIcon.continuous}')`;
-        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
+        if (window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
           iconUrl = `background:url('${this.fileIcon.continuous_white}')`;
         }
       }
       if (data.proType === 'discontinuous') {
         iconUrl = `background:url('${this.fileIcon.discontinuous}')`;
-        if (GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
+        if (window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid === data.uuid) {
           iconUrl = `background:url('${this.fileIcon.discontinuous_white}')`;
         }
       }
       const iconStyle = `${iconUrl} no-repeat center left;padding-left: 20px;`;
-      const label = GlobalUtil.model.localTeach.getRealProjFileName(data.label);
-//      const isProj = data.uuid.indexOf('discontinuous_') >= 0 || data.uuid.indexOf('continuous_') >= 0 ? true:false;
-      const isProj = data.uuid.indexOf('.json') >= 0 ? false:true;
+      const label = window.GlobalUtil.model.localTeach.getRealProjFileName(data.label);
+      const indexOfJson = (data.uuid || '').indexOf('.json');
+      // const isProj = (indexOfJson >= 0 ? false : true);
       return (
         <span class="tree-list">
           <span style={iconStyle}>{label}</span>
           <span class="display-none" style="margin-right: 20px">
-            {isProj?<el-button style="mini" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button>:<span style="display:none">1</span>}
+            { (indexOfJson < 0) ? <el-button style="mini" size="mini" type="text" on-click={ () => this.rename(data) }><img style="margin-right: 10px" src={this.fileIcon.rename} /></el-button> : <span style="display:none">1</span> }
             <el-button size="mini" type="text" on-click={ () => this.delProj(data.uuid) }><img src={this.fileIcon.delete} /></el-button>
           </span>
       </span>);
     },
-    // onClick(e) {
-    //   const attr = e.currentTarget.value;
-    //   console.log(`attr = ${attr}`);
-    //   switch (attr) {
-    //     case 'scroll':
-    //       {
-    //         const time = GlobalUtil.model.localTeach.curDuration;
-    //         document.getElementById("scroll-timer").scrollLeft = 60 * (parseInt(time / 10) * 10);
-    //         break;
-    //       }
-    //     default:
-    //       break;
-    //   }
-    // },
   },
   beforeDestroy() {
   },
   components: {
     OnePointSetting,
     ListProj,
-    XarmModel,
     DialogTeachProjName,
     XarmModel,
     EndSet,
@@ -695,22 +598,18 @@ export default {
     DialogAlert,
   },
   computed: {
-    getCurFile(){
+    getCurFile() {
       const tempArr = this.model.localTeach.curEditingFileUUID.split('/');
-      return tempArr[tempArr.length-1];
+      return tempArr[tempArr.length - 1];
     },
-    classObject: () => {
-      return {
-        'start-btn': GlobalUtil.model.localTeach.curProj.files.length > 0 && GlobalUtil.model.localTeach.visible.starRecording===false,
-        'start-btn-dark': GlobalUtil.model.localTeach.curProj.files.length === 0 || GlobalUtil.model.localTeach.visible.starRecording===true,
-      }
-    },
-    saveChangeClassObject: () => {
-      return {
-        'save-change-btn': GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0,
-        'save-change-btn-dark': !(GlobalUtil.model.localTeach.hasChange===true && GlobalUtil.model.localTeach.curSelectedIndex>=0),
-      }
-    },
+    startBtn: () => ({
+      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false,
+      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true,
+    }),
+    saveChange: () => ({
+      'save-change-btn': window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0,
+      'save-change-btn-dark': !(window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0),
+    }),
   },
 };
 
@@ -746,7 +645,7 @@ export default {
     justify-content: space-between;
     background: #F8F8F8;
     .recording-area-wrapper {
-      width: 80%;
+      /*width: 80%;*/
       /*margin: 0 12px;*/
       font-size: 14px;
       .left-top-area {
@@ -764,7 +663,7 @@ export default {
         float: left;
         width: 100%;
         height: 100%;
-        background: lightcyan;
+        background: #fff;
         // background: yellow;
         // padding-bottom:5px;
       }

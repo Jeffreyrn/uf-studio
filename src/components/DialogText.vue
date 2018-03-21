@@ -18,7 +18,7 @@
           <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
         </div>
         <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div>
-        <div style="margin-top:230px;">
+        <div class="position-absolute" style="bottom:0px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
           </div>
@@ -27,7 +27,7 @@
               OK
             </div>
           </span>
-          <span v-if="!isFileNameCorrect">
+          <span v-else>
             <div class="float-left btn-create btn-create-opacity">
               OK
             </div>
@@ -39,67 +39,55 @@
 </template>
 
 <script>
-
-const path = require('path')
-  
 import CustomSelect from './CustomSelect';
 
+const path = require('path')
+
 export default {
-  data () {
+  data() {
     return {
-      model: GlobalUtil.model,
-      // inputText: '',
-      // selected: '.py',
-      options: [
-          { text: 'py', value: '.py' },
-          { text: 'txt', value: '.txt' },
-          { text: 'md', value: '.md' },
-          { text: 'none', value: '' },
-      ],
+      model: window.GlobalUtil.model,
     }
   },
   methods: {
     contentClick() {
-      console.log(`contentClick contentClick`);
+      // console.log(`contentClick contentClick`);
       const Option = document.getElementsByClassName('option')[0];
-      Option.style.display = 'none';
+      if (Option !== undefined) {
+        Option.style.display = 'none';
+      }
     },
     closeMyself() {
-      // this.$emit('on-close')
-      // this.model.localProjTree.projsDialogShow = false;
       this.model.localProjTree.fileDialogShow = false;
     },
-  //   addProj() {
-  //     GlobalUtil.model.localProjTree.dialogVisible = true;
-  //   },
     oncreate() {
       const text = this.model.localProjTree.curDialogInputText;
-      console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
-      console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
+      // console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
+      // console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
       if (this.model.localProjTree.folderOrFile === 'folder') {
-        CommandsEditorSocket.createFile(text, false);
+        window.CommandsEditorSocket.createFile(text, false);
         // const folder = GlobalUtil.model.localProjTree.createFolder(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.model.localProjTree.folderOrFile === 'file') {
-        CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
+        window.CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
       if (this.model.localProjTree.folderOrFile === 'proj') {
-        CommandsEditorSocket.createProj(text);
+        window.CommandsEditorSocket.createProj(text);
         // const proj = GlobalUtil.model.localProjTree.createProj(text);
         // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
       if (this.model.localProjTree.folderOrFile === 'rename') {
         // GlobalUtil.model.localProjTree.renameFile(text);
-        const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-        CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
+        const curUUID = window.GlobalUtil.model.localProjTree.curSelectedUUID;
+        window.CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
       }
       if (this.model.localProjTree.folderOrFile === 'renameproj') {
         // GlobalUtil.model.localProjTree.renameProj(text);
-        CommandsEditorSocket.renameProj(text);
+        window.CommandsEditorSocket.renameProj(text);
       }
       this.model.localProjTree.projsDialogShow = false;
       this.model.localProjTree.fileDialogShow = false;
@@ -111,40 +99,34 @@ export default {
   },
   computed: {
     isFileNameCorrect() {
-      const isFileStr = GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
+      const isFileStr = window.GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
       const text = this.model.localProjTree.curDialogInputText;
+      const folderOrFile = this.model.localProjTree.folderOrFile;
 
-      if (this.model.localProjTree.folderOrFile === 'proj'
-        || this.model.localProjTree.folderOrFile === 'renameproj'
-        ) {
-        const isHasProj = GlobalUtil.model.localProjTree.isHasProj(text);
+      if (folderOrFile === 'proj' || folderOrFile === 'renameproj') {
+        const isHasProj = window.GlobalUtil.model.localProjTree.isHasProj(text);
         return isFileStr && !isHasProj;
       }
-      if (this.model.localProjTree.folderOrFile === 'file'
-        || this.model.localProjTree.folderOrFile === 'rename'
-        || this.model.localProjTree.folderOrFile === 'folder') {
-        
+      if (folderOrFile === 'file' || folderOrFile === 'rename' || folderOrFile === 'folder') {
         const ext = this.model.localProjTree.fileSelected;
         let getFileSuperid = this.model.localProjTree.getFileSuperid();
         if (getFileSuperid === '') {
           getFileSuperid = this.model.localProjTree.curProj.uuid;
         }
         let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
-        if (this.model.localProjTree.folderOrFile === 'folder') {
+        if (folderOrFile === 'folder') {
           toAddFile = path.join(getFileSuperid, `${text}`);
         }
         const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
         console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
         if (text === null || text === '') {
-          GlobalUtil.model.localProjTree.dialogErrorTips = '';
+          window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
         }
         return isFileStr && !isRepeatFile;
       }
-
       if (text === null || text === '') {
-        GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
       }
-
       return isFileStr;
     },
     isExtInput() {
@@ -235,7 +217,7 @@ export default {
     left:35px;
     top:155px;
     width: 288px;
-    font-size: 7.8px;
+    font-size: 10px;
     color: #878787;
     font-family: 'Gotham-Book';
   }
@@ -314,8 +296,6 @@ export default {
   .btn-cancel {
     width: 178px;
     height: 40px;
-    /* margin-top: 230px; */
-    /* background-color: yellow; */
     background: #484848;
     text-align: center;
     font-family: 'Gotham-Book';
@@ -328,9 +308,6 @@ export default {
   .btn-create {
     width: 178px;
     height: 40px;
-    /* margin-top: 230px; */
-    /* margin-left: 178px; */
-    /* background-color: green; */
     background: #52BF53;
     text-align: center;
     font-family: 'Gotham-Book';

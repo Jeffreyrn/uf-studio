@@ -20,22 +20,20 @@
 </template>
 
 <script>
-
-const path = require('path');
-import * as types from './../store/mutation-types';
-
+// const path = require('path');
+// import * as types from './../store/mutation-types';
 export default {
   props: ['onok', 'title', 'subtitle'],
-  data () {
+  data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     }
   },
   mounted() {
   },
   methods: {
     closeMyself() {
-      GlobalUtil.model.localTeach.saveDialogShow = false;
+      window.GlobalUtil.model.localTeach.saveDialogShow = false;
     },
     // onsave() {
     //   GlobalUtil.model.localTeach.onSaveChange(() => {

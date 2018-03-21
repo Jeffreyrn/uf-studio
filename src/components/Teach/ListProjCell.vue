@@ -84,29 +84,29 @@ import * as types from './../../store/mutation-types';
 import ListProjCellLastText from './ListProjCellLastText';
 
 export default {
-  props: ['file', 'index','editState'],
+  props: ['file', 'index', 'editState'],
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {
     // console.log(`cell mounted index = ${this.index}`);
-    const cell = document.getElementById(`cell_id_${this.index}`);
+    // const cell = document.getElementById(`cell_id_${this.index}`);
     // cell.style.left = `${250 + 60 * this.index}px`;
   },
   methods: {
     onSelect(e, index) {
       // console.log(`onSelect index = ${index}, type= ${GlobalUtil.model.localTeach.curProj.type}`);
-      if (GlobalUtil.model.localTeach.curProj.type==='discontinuous') {
-        if (GlobalUtil.model.localTeach.hasChange === true) {
-          GlobalUtil.model.localTeach.willOnSelectIndex = index;
-          GlobalUtil.model.localTeach.changeSelectedShow = true;
+      if (window.GlobalUtil.model.localTeach.curProj.type === 'discontinuous') {
+        if (window.GlobalUtil.model.localTeach.hasChange === true) {
+          window.GlobalUtil.model.localTeach.willOnSelectIndex = index;
+          window.GlobalUtil.model.localTeach.changeSelectedShow = true;
         }
         else {
-          GlobalUtil.model.localTeach.onSelect(e, index);
-          this.$store.commit(types.ROBOT_MOVE_JOINT, GlobalUtil.model.localTeach.curPoint);
-          GlobalUtil.model.localTeach.hasChange = false;
+          window.GlobalUtil.model.localTeach.onSelect(e, index);
+          this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
+          window.GlobalUtil.model.localTeach.hasChange = false;
         }
       }
     },
@@ -117,18 +117,14 @@ export default {
     ListProjCellLastText,
   },
   computed: {
-    classObject: () => {
-      return {
-        'bgcolor0': !GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
-        'bgcolor1': GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
-      }
-    },
-    lineBlockColor: () => {
-      return {
-        'line-block-color': this.index % 10 !== 0,
-        'line-block-color-selected': this.index % 10 === 0,
-      }
-    },
+    // classObject: () => ({
+    //   'bgcolor0': !window.GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+    //   'bgcolor1': window.GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
+    // }),
+    lineBlockColor: () => ({
+      'line-block-color': this.index % 10 !== 0,
+      'line-block-color-selected': this.index % 10 === 0,
+    }),
   },
 };
 

@@ -27,18 +27,16 @@
           type="text" class="position-absolute dialog-input"
           placeholder="Please enter a project name"/>
         <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
-        <div style="margin-top:230px;">
-          <span v-if="isFileNameCorrect">
-            <div class="position-absolute btn-create cursor-pointer" @click="onok">
-              OK
-            </div>
-          </span>
-          <span v-if="!isFileNameCorrect">
-            <div class="position-absolute btn-create-opacity">
-              OK
-            </div>
-          </span>
-        </div>
+        <span v-if="isFileNameCorrect">
+          <div class="position-absolute btn-create cursor-pointer" @click="onok">
+            OK
+          </div>
+        </span>
+        <span v-else>
+          <div class="position-absolute btn-create-opacity">
+            OK
+          </div>
+        </span>
       </div>
 
     </div>
@@ -49,9 +47,9 @@
 
 export default {
   props: ['width', 'height', 'title', 'show_selected', 'input_top', 'onok'],
-  data () {
+  data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
       showSelected: true,
     }
   },
@@ -75,43 +73,39 @@ export default {
   },
   methods: {
     typeSelect(type) {
-      GlobalUtil.model.localTeach.projTypeSelected = type;
+      window.GlobalUtil.model.localTeach.projTypeSelected = type;
     },
     closeMyself() {
-      GlobalUtil.model.localTeach.projTypeSelectedShow = false;
-      GlobalUtil.model.localTeach.projRenameShow = false;
+      window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+      window.GlobalUtil.model.localTeach.projRenameShow = false;
     },
   },
   components: {
   },
   computed: {
     isFileNameCorrect() {
-      if (text === null || text === '') {
-        GlobalUtil.model.localTeach.dialogErrorTips = '';
-      }
       const text = this.model.localTeach.curDialogProjInputText;
-      const isHasProj = GlobalUtil.model.localTeach.isHasProj(text);
+      if (text === null || text === '') {
+        window.GlobalUtil.model.localTeach.dialogErrorTips = '';
+      }
+      const isHasProj = window.GlobalUtil.model.localTeach.isHasProj(text);
       if (!isHasProj) {
         return false;
       }
-      const isFileStr = GlobalUtil.isFileStr(this.model.localTeach.curDialogProjInputText);
+      const isFileStr = window.GlobalUtil.isFileStr(this.model.localTeach.curDialogProjInputText);
       if (!isFileStr) {
         return false;
       }
       return isFileStr && isHasProj;
     },
-    classObject1: () => {
-      return {
-        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected !== '1',
-        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected === '1',
-      }
-    },
-    classObject2: () => {
-      return {
-        'point-selected-selected0': GlobalUtil.model.localTeach.projTypeSelected === '1',
-        'point-selected-selected1': GlobalUtil.model.localTeach.projTypeSelected !== '1',
-      }
-    },
+    classObject1: () => ({
+      'point-selected-selected0': window.GlobalUtil.model.localTeach.projTypeSelected !== '1',
+      'point-selected-selected1': window.GlobalUtil.model.localTeach.projTypeSelected === '1',
+    }),
+    classObject2: () => ({
+      'point-selected-selected0': window.GlobalUtil.model.localTeach.projTypeSelected === '1',
+      'point-selected-selected1': window.GlobalUtil.model.localTeach.projTypeSelected !== '1',
+    }),
   },
 }
 </script>
