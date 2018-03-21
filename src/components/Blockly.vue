@@ -6,7 +6,7 @@
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
-      <div><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
+      <div @click="saveProject"><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
       <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
       <div @click="runProject"><img src="../assets/img/ide/icon_running.svg"/></div>
     </div>
@@ -33,6 +33,7 @@
     </div>
   </div>
   <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true"></dialogs>
+  <dialog-input-name v-show="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
 </div>
 </template>
 <script>
@@ -40,6 +41,7 @@ import { Blockly, init as initBlockly } from '../assets/lib/blockly/blockly';
 import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
 // import eventBus from './Blockly/eventBus'
 import Dialogs from './Blockly/Dialogs'
+import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
 
 export default {
@@ -62,6 +64,7 @@ export default {
         snackbarMessage: '',
         projectNameEdit: false,
         sideShow: true,
+        inputName: false,
       },
       activeTab: null,
       projectNameEditing: false,
@@ -91,9 +94,11 @@ export default {
   components: {
     Dialogs,
     FileList,
+    DialogInputName,
   },
   mounted() {
     const self = this;
+    this.model.localAppsMgr.curProName = ''
     window.xArmVuex = this.$store;
     if (this.uarmConnectStatus) {
       window.UArm.set_acceleration({
@@ -131,6 +136,18 @@ export default {
         this.dialog[block.type]()
       }
     },
+    saveProject() {
+      const name = this.model.localAppsMgr.curProName
+      if (!name) {
+        this.uiData.inputName = true
+      }
+      else {
+        window.CommandsAppsSocket.createFile(name, this.projectContent(), () => {
+          this.$message('Saved')
+          this.uiData.inputName = false
+        })
+      }
+    },
     runProject() {
       if (this.blocksLength() > 0) {
         Blockly.executeCode().then().catch((err) => {
@@ -151,6 +168,7 @@ export default {
     },
     newProject() {
       Blockly.BlockWorkspace.clear();
+      this.model.localAppsMgr.curProName = ''
     },
     genxml() {
       this.xmlCode = this.projectContent()
