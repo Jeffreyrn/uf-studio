@@ -20,15 +20,13 @@
 </template>
 
 <script>
-
-const path = require('path');
-import * as types from './../store/mutation-types';
-
+// import * as types from './../store/mutation-types';
+// const path = require('path');
 export default {
   props: ['onok', 'oncancel', 'title', 'cancel', 'ok', 'isdelete'],
-  data () {
+  data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     }
   },
   methods: {
@@ -52,7 +50,7 @@ export default {
   mounted() {
     if (this.isdelete !== undefined && this.isdelete === true) {
       const bottomBtn = document.getElementById('bottom-ok-btn');
-      bottomBtn.style.background = '#E24D4A'; 
+      bottomBtn.style.background = '#E24D4A';
     }
   },
   computed: {

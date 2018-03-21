@@ -13,11 +13,7 @@
 /src/components/Params.vue
 /src/components/Editor.vue
 /src/components/DialogProjs.vue
-/src/components/DialogText.vue
-/src/components/CustomSelect.vue
 /src/components/DialogDelete.vue
-/src/components/DialogTeachProjName.vue
-/src/components/DialogTeachAlert.vue
 /src/components/AppStore.vue
 /src/components/appStore/
 /src/components/MyApp.vue
