@@ -8,3 +8,4 @@
 /src/lib/*
 /src/components/params/
 /src/components/Params.vue
+/src/core/model_local_teach.js
