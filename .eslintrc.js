@@ -58,7 +58,7 @@ module.exports = {
     "linebreak-style":0,
     "semi": 0,
     "no-continue": 0,//禁止使用continue
-    "func-names": 1,//函数表达式必须有名字
+    // "func-names": 1,//函数表达式必须有名字
     "no-cond-assign": 0,//禁止在条件表达式中使用赋值语句
     "arrow-body-style": 0, // 要求箭头函数体使用大括号
     "no-mixed-operators": 0, // 禁止混合使用不同的操作符
