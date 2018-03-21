@@ -214,10 +214,10 @@ export default {
     });
     console.log('sssaaa', this.model.localTeach.curProTreeDatas)
   },
-  activated: () => {
+  activated: function() {
     this.onwinresize();
   },
-  deactivated: () => {
+  deactivated: function() {
     this.onwinresize();
   },
   methods: {

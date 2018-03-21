@@ -17,7 +17,7 @@
             <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data">
               <router-link :to="{name: 'AppDetail', params:{data: data}}">
                 <div style="width:100%;height:100%;">
-                  <img :src="shoppingBag"/><span>{{ data.name }}</span>
+                  <img :src="shoppingBag"/><span>010{{ data.name }}</span>
                 </div>
               </router-link>
             </li>

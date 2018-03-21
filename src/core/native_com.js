@@ -11,7 +11,7 @@ function _sendToNative(obj) {
   const isApple = /iphone|ipad|ipod|ios/i.test(u);
   const isAndroid = /android/i.test(u);
   try {
-    // const jsonStr = JSON.stringify(obj);
+    const jsonStr = JSON.stringify(obj);
     if (isApple === true) {
       //            console.log("isApple true");
       window.webkit.messageHandlers.GlobalViewControllerCallback.postMessage(obj);

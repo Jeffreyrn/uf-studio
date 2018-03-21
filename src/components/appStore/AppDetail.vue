@@ -78,6 +78,7 @@
 <script>
 
 import DialogAlert from './../DialogAlert';
+// import { setTimeout } from 'timers';
 
 export default {
   data() {
@@ -87,10 +88,10 @@ export default {
     };
   },
   mounted() {
+    // console.log(`mounted app detail route = ${JSON.stringify(this.$route)}`);
   },
-  activated: () => {
+  activated: function() {
     this.data = this.$route.params.data;
-    console.log(`app detail params = ${JSON.stringify(this.data)}`);
   },
   components: {
     DialogAlert,

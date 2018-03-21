@@ -6,13 +6,13 @@ import NativeCom from './native_com';
 import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
 import CommandsAppsSocket from './commands_apps_socket';
-import CommandsBlocklySocket from './commands_blockly_socket';
+// import CommandsBlocklySocket from './commands_blockly_socket';
 
-const args = {
-  // host: '192.168.1.166',
-  host: '192.168.1.67',
-  port: '18333',
-};
+// const args = {
+//   // host: '192.168.1.166',
+//   host: '192.168.1.67',
+//   port: '18333',
+// };
 
 const GlobalUtil = {};
 const self = GlobalUtil;
@@ -20,6 +20,8 @@ window.GlobalUtil = self;
 self.store = {};
 self.model = Model;
 self.socketCom = SocketCom;
+
+window.GlobalConstant = GlobalConstant;
 
 CommandsEditorSocket.socketCom = SocketCom;
 CommandsEditorSocket.model = Model;
@@ -33,16 +35,16 @@ CommandsAppsSocket.socketCom = SocketCom;
 CommandsAppsSocket.model = Model;
 window.CommandsAppsSocket = CommandsAppsSocket;
 
-CommandsBlocklySocket.socketCom = SocketCom;
-CommandsBlocklySocket.model = Model;
-window.CommandsBlocklySocket = CommandsBlocklySocket;
+// CommandsBlocklySocket.socketCom = SocketCom;
+// CommandsBlocklySocket.model = Model;
+// window.CommandsBlocklySocket = CommandsBlocklySocket;
 
 self.nativeCom = NativeCom;
 
 self.autoSizeScale = 0;
 
 self.isFileStr = (str) => {
-  const errStr = `'Name contains "only letter, numbers, '_' and no more than 15 characters in total.`;
+  const errStr = `'Name contains "only letter, numbers, '_' and no more than 15 characters in total.${[]}`;
   if (str === null || str === undefined) {
     return false;
   }

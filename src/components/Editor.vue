@@ -94,11 +94,11 @@ export default {
       window.GlobalUtil.model.localProjTree.show();
     };
   },
-  activated: () => {
+  activated: function() {
     // console.log(3);
     window.GlobalUtil.model.localProjTree.onwinresize();
   },
-  deactivated: () => {
+  deactivated: function() {
     // console.log(4)
     window.GlobalUtil.model.localProjTree.onwinresize();
   },

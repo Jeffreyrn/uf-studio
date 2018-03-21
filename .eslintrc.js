@@ -48,7 +48,7 @@ module.exports = {
     }],
     'camelcase': 0,
     'no-console': 0,
-    'func-names': ["error", "always"],
+    // 'func-names': ["error", "always"],
     'space-before-function-paren': ["error", "never"],
     "no-unused-vars": ["error", { "args": "after-used" }],
     "max-len": ["error", 512],
@@ -57,5 +57,7 @@ module.exports = {
     "no-return-assign":0,
     "linebreak-style":0,
     "semi": 0,
+    "no-continue": 0,//禁止使用continue
+    "func-names": 1,//函数表达式必须有名字
   }
 }

@@ -1,17 +1,5 @@
 <template>
-  <!-- <div class="float-left top-tab" name="top-tab" :id="getTabId()">
-    <div class="float-left top-tab-item-border">
-      <div class="float-left tab-left-icon" @click="onselect()"></div>
-      <div class="float-left top-tab-item" @click="onselect()">
-        <div v-if="data.localContent !== data.remoteContent" class="float-left"></div>
-        <div v-if="data.uuid !== model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color-unselect">{{ data.name }}</div>
-        <div v-if="data.uuid === model.localProjTree.curSelectedFileUUID" class="float-left top-tab-background-color">{{ data.name }}</div>
-      </div>
-      <div @click="close()" class="float-left tab-cancel"></div>
-    </div>
-  </div> -->
   <div class="noselected">
-
     <!-- un selected -->
     <div v-if="data.uuid!==model.localProjTree.curSelectedFileUUID" class="">
       <div class="float-left top-tab" name="top-tab" :id="getTabId()" style="background:transparent;">
@@ -26,7 +14,6 @@
       </div>
     </div>
     <!-- un selected end -->
-
     <!-- selected -->
     <div v-if="data.uuid===model.localProjTree.curSelectedFileUUID" class="">
       <div class="float-left top-tab" name="top-tab" :id="getTabId()" style="background:#3F4955;">
@@ -41,9 +28,7 @@
       </div>
     </div>
     <!-- selected end -->
-
   </div>
-
 </template>
 
 <script>
@@ -52,7 +37,7 @@ export default {
   props: ['data'],
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {
@@ -64,15 +49,15 @@ export default {
     },
     onselect() {
       const uuid = this.data.uuid;
-      GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
-      console.log(`folder uuid = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-      console.log(`folder uuid curSelectedUUID = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
-      GlobalUtil.model.localProjTree = GlobalUtil.model.localProjTree;
+      window.GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
+      console.log(`folder uuid = ${window.GlobalUtil.model.localProjTree.curFile.uuid}`);
+      console.log(`folder uuid curSelectedUUID = ${window.GlobalUtil.model.localProjTree.curSelectedUUID}`);
+      window.GlobalUtil.model.localProjTree = window.GlobalUtil.model.localProjTree;
     },
     close() {
       const uuid = this.data.uuid;
-      console.log(`close uuid = ${uuid}, curSelectedFileUUID = ${GlobalUtil.model.localProjTree.curFile.uuid}`);
-      GlobalUtil.model.localProjTree.removeOpenTab(uuid);
+      console.log(`close uuid = ${uuid}, curSelectedFileUUID = ${window.GlobalUtil.model.localProjTree.curFile.uuid}`);
+      window.GlobalUtil.model.localProjTree.removeOpenTab(uuid);
     },
   },
   beforeDestroy() {

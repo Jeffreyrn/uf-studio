@@ -139,8 +139,8 @@ import { setTimeout } from 'timers';
 export default {
   data() {
     return {
-      model: GlobalUtil.model,
-      store: GlobalUtil.store,
+      model: window.GlobalUtil.model,
+      store: window.GlobalUtil.store,
       // dialogVisible: false,
       // fileDialogVisible: false,
       // projSelectDialog: false,
@@ -160,26 +160,25 @@ export default {
   },
   methods: {
     run() {
-      const curFile = GlobalUtil.model.localProjTree.curFile; //this.getCurFile();
+      const curFile = window.GlobalUtil.model.localProjTree.curFile; // this.getCurFile();
       if (curFile === null) {
         return;
       }
-      GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
-      GlobalUtil.model.localProjTree.runningCmdResult = '';
-      GlobalUtil.model.localProjTree.onwinresize();
-      CommandsEditorSocket.stopPythonScript(() => {
-        GlobalUtil.model.localProjTree.runningCmdResult = '';
+      window.GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
+      window.GlobalUtil.model.localProjTree.runningCmdResult = '';
+      window.GlobalUtil.model.localProjTree.onwinresize();
+      window.CommandsEditorSocket.stopPythonScript(() => {
+        window.GlobalUtil.model.localProjTree.runningCmdResult = '';
       });
       setTimeout(() => {
-        CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
+        window.CommandsEditorSocket.runPythonScript(curFile.uuid, (dict) => {
           // GlobalUtil.model.localProjTree.isCmdRunning = true;
-          GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+          window.GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
         });
       }, 100);
     },
     stop() {
-      CommandsEditorSocket.stopPythonScript((dict) => {
-
+      window.CommandsEditorSocket.stopPythonScript(() => {
       });
     },
     saveFile() {
@@ -189,28 +188,29 @@ export default {
       }
       const uuid = curFile.uuid;
       const text = curFile.localContent;
-      CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
+      window.CommandsEditorSocket.saveOrUpdateFile(uuid, text, (dict) => {
         if (dict.data === 'success') {
           // curFile.remoteContent = text;
-          GlobalUtil.model.localProjTree.curOpenedFilesList = GlobalUtil.model.localProjTree.curOpenedFilesList;
+          window.GlobalUtil.model.localProjTree.curOpenedFilesList = window.GlobalUtil.model.localProjTree.curOpenedFilesList;
         }
-        console.log(`update content success`);
+        console.log('update content success');
       });
     },
     handleClose(done) {
+      console.log(done);
       // this.$confirm('确认关闭？')
       //   .then(_ => {
       //     done();
       //   })
       //   .catch(_ => {});
-      GlobalUtil.model.localProjTree.dialogVisible = false;
-      GlobalUtil.model.localProjTree.fileDialogVisible = false;
+      window.GlobalUtil.model.localProjTree.dialogVisible = false;
+      window.GlobalUtil.model.localProjTree.fileDialogVisible = false;
     },
     importPro() {
       document.getElementById('f_input').click();
     },
     didImport() {
-      console.log(`didImport`);
+      console.log('didImport');
       document.getElementById('f_input').value = null;
       document.getElementById('f_input').files = null;
     },
@@ -228,12 +228,12 @@ export default {
       //   // console.log(`listProjs dict = ${JSON.stringify(dict)}`);
       // });
       // this.projSelectDialog = true;
-      GlobalUtil.model.localProjTree.dialogErrorTips = '';
-      GlobalUtil.model.localProjTree.projsDialogShow = true;
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      window.GlobalUtil.model.localProjTree.projsDialogShow = true;
     },
     getCurFile() {
-      const curSelectedUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-      return GlobalUtil.model.localProjTree.getFileInfo(curSelectedUUID);
+      const curSelectedUUID = window.GlobalUtil.model.localProjTree.curSelectedUUID;
+      return window.GlobalUtil.model.localProjTree.getFileInfo(curSelectedUUID);
     },
     delFile() {
       // CommandsEditorSocket.delFiles(this.getCurFile().uuid);
@@ -243,56 +243,44 @@ export default {
       if (curFile === null) {
         return;
       }
-
-      GlobalUtil.model.localProjTree.curDialogTitle = `Delete ${curFile.name}?`; 
+      window.GlobalUtil.model.localProjTree.curDialogTitle = `Delete ${curFile.name}?`;
       // 'Please insert a folder';
-      GlobalUtil.model.localProjTree.dialogErrorTips = '';
-      GlobalUtil.model.localProjTree.deleteDialogShow = true;
-      GlobalUtil.model.localProjTree.onDeleteDialog = () => {
-        CommandsEditorSocket.delFiles(this.getCurFile().uuid);
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      window.GlobalUtil.model.localProjTree.deleteDialogShow = true;
+      window.GlobalUtil.model.localProjTree.onDeleteDialog = () => {
+        window.CommandsEditorSocket.delFiles(this.getCurFile().uuid);
       };
-
-      // this.$confirm(`Delete ${curFile.name}?`, {
-      //   confirmButtonText: 'OK',
-      //   cancelButtonText: 'CANCEL',
-      //   type: 'info',
-      //   showClose: false,
-      //   closeOnClickModal: false,
-      // }).then(() => {
-      //   CommandsEditorSocket.delFiles(this.getCurFile().uuid);
-      // }).catch(() => {
-      // });
     },
-    add(file) {
+    add() {
       const text = this.inputText;
       console.log(`text = ${text}`);
       if (this.folderOrFile === 'folder') {
-        CommandsEditorSocket.createFile(text, false);
+        window.CommandsEditorSocket.createFile(text, false);
         // const folder = GlobalUtil.model.localProjTree.createFolder(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(folder);
       }
       if (this.folderOrFile === 'file') {
-        CommandsEditorSocket.createFile(`${text}${this.selected}`, true);
+        window.CommandsEditorSocket.createFile(`${text}${this.selected}`, true);
         // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
         // GlobalUtil.model.localProjTree.curProj.files.push(file);
         // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
       }
       if (this.folderOrFile === 'proj') {
-        CommandsEditorSocket.createProj(text);
+        window.CommandsEditorSocket.createProj(text);
         // const proj = GlobalUtil.model.localProjTree.createProj(text);
         // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
       }
       if (this.folderOrFile === 'rename') {
         // GlobalUtil.model.localProjTree.renameFile(text);
-        const curUUID = GlobalUtil.model.localProjTree.curSelectedUUID;
-        CommandsEditorSocket.renameFile(curUUID, `${text}${this.selected}`)
+        const curUUID = window.GlobalUtil.model.localProjTree.curSelectedUUID;
+        window.CommandsEditorSocket.renameFile(curUUID, `${text}${this.selected}`)
       }
       if (this.folderOrFile === 'renameproj') {
         // GlobalUtil.model.localProjTree.renameProj(text);
-        CommandsEditorSocket.renameProj(text);
+        window.CommandsEditorSocket.renameProj(text);
       }
-      GlobalUtil.model.localProjTree.dialogVisible = false;
-      GlobalUtil.model.localProjTree.fileDialogVisible = false;
+      window.GlobalUtil.model.localProjTree.dialogVisible = false;
+      window.GlobalUtil.model.localProjTree.fileDialogVisible = false;
     },
     textFocus() {
       setTimeout(() => {
@@ -308,7 +296,6 @@ export default {
     //   this.title = 'new project name';
     //   this.inputText = '';
     //   GlobalUtil.model.localProjTree.dialogVisible = true;
-      
     //   this.textFocus();
     // },
     addFolder() {
@@ -318,10 +305,9 @@ export default {
       // this.inputText = '';
       // GlobalUtil.model.localProjTree.dialogVisible = true;
       // this.textFocus();
-
       this.model.localProjTree.folderOrFile = 'folder';
       this.model.localProjTree.curDialogTitle = 'Please insert a folder';
-      GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      this.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = false;
       setTimeout(() => {
@@ -336,12 +322,11 @@ export default {
       // // this.dialogVisible = true;
       // GlobalUtil.model.localProjTree.fileDialogVisible = true;
       // this.textFocus();
-
       this.model.localProjTree.folderOrFile = 'file';
       this.model.localProjTree.curDialogTitle = 'Please insert a file';
       this.model.localProjTree.fileSelected = '.py';
       this.model.localProjTree.curDialogInputText = '';
-      GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      this.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = true;
       setTimeout(() => {
@@ -349,13 +334,13 @@ export default {
       });
     },
     rename() {
-      console.log(`Rename`);
-      if (GlobalUtil.model.localProjTree.curSelectedUUID === GlobalUtil.model.localProjTree.curProj.uuid) {
-        console.log(`Rename proj`);
+      console.log('Rename');
+      if (this.model.localProjTree.curSelectedUUID === this.model.localProjTree.curProj.uuid) {
+        console.log('Rename proj');
         this.model.localProjTree.folderOrFile = 'renameproj';
-        this.model.localProjTree.curDialogTitle = `Rename project ${GlobalUtil.model.localProjTree.curProj.name}`;
-        this.model.localProjTree.curDialogInputText = `${GlobalUtil.model.localProjTree.curProj.name}`;
-        GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        this.model.localProjTree.curDialogTitle = `Rename project ${this.model.localProjTree.curProj.name}`;
+        this.model.localProjTree.curDialogInputText = `${this.model.localProjTree.curProj.name}`;
+        this.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
         setTimeout(() => {
@@ -370,14 +355,14 @@ export default {
       if (curFile.type === 'folder') {
         this.model.localProjTree.folderOrFile = 'rename';
         this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
-        this.model.localProjTree.curDialogInputText = curFile.name;//'';//
-        GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        this.model.localProjTree.curDialogInputText = curFile.name;
+        this.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
         setTimeout(() => {
           document.getElementById('input-text').focus();
         });
-        // GlobalUtil.model.localProjTree.dialogVisible = true;
+        // this.model.localProjTree.dialogVisible = true;
         this.model.localProjTree.fileSelected = '';
         // this.textFocus();
         return;
@@ -385,11 +370,13 @@ export default {
       this.model.localProjTree.folderOrFile = 'rename';
       this.model.localProjTree.curDialogTitle = `Rename ${curFile.name}`;
       this.model.localProjTree.curDialogInputText = `${curFile.name}`.split('.')[0];
-      // GlobalUtil.model.localProjTree.fileDialogVisible = true;
-      GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      // this.model.localProjTree.fileDialogVisible = true;
+      this.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
-      this.model.localProjTree.fileSelected = '.' + `${curFile.name}`.split('.')[1];
-      if (`${curFile.name}`.split('.')[1] === undefined ) {
+      this.model.localProjTree.fileSelected = `${curFile.name}`.split('.')[1];
+      this.model.localProjTree.fileSelected = `.${this.model.localProjTree.fileSelected}`;
+      const extend = `${curFile.name}`.split('.')[1];
+      if (extend === undefined) {
         this.model.localProjTree.fileSelected = '';
       }
       // this.textFocus();
@@ -398,47 +385,20 @@ export default {
         document.getElementById('input-text').focus();
       });
     },
-    tableRowClassName({row, rowIndex}) {
+    // tableRowClassName({ row, rowIndex }) {
       // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);
-      const uuid = row.uuid;
+      // const uuid = row.uuid;
       // if (rowIndex === 1) {
       //   return 'warning-row';
       // } else if (rowIndex === 3) {
       //   return 'success-row';
       // }
-      return '';
-    },
+    //   return '';
+    // },
     onSelect(row) {
       console.log(row.uuid);
-      GlobalUtil.model.localProjTree.changeProj(row.uuid);
+      this.model.localProjTree.changeProj(row.uuid);
       this.projSelectDialog = false;
-    },
-    onDelete(row) {
-      // this.projSelectDialog = false;
-      // this.$confirm(`Delete project?`, {
-      //   confirmButtonText: 'OK',
-      //   cancelButtonText: 'CANCEL',
-      //   type: 'info',
-      //   showClose: false,
-      //   closeOnClickModal: false,
-      // }).then(() => {
-      //   CommandsEditorSocket.delProj(row.uuid, (dict) => {
-      //     console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
-      //   });
-      // }).catch(() => {
-      // });
-
-      // GlobalUtil.model.localProjTree.curDialogTitle = `Delete project?`; 
-      // // 'Please insert a folder';
-      // GlobalUtil.model.localProjTree.dialogErrorTips = '';
-      // GlobalUtil.model.localProjTree.deleteDialogShow = true;
-      // GlobalUtil.model.localProjTree.onDeleteDialog = () => {
-      //   CommandsEditorSocket.delProj(row.uuid, (dict) => {
-      //     // GlobalUtil.model.localProjTree.deleteDialogShow = false;
-      //     console.log(`localTeach.delProj = ${row.uuid}, dict = ${JSON.stringify(dict)}`);
-      //   });
-      // };
-
     },
   },
   beforeDestroy() {
@@ -447,14 +407,14 @@ export default {
   },
   computed: {
     proListData() {
-      const proList = GlobalUtil.model.localProjTree.curProjList;
+      const proList = this.model.localProjTree.curProjList;
       const tmpList = [];
       for (let i = 0; i < proList.length; i += 1) {
         const pro = proList[i];
         const onePro = {
           name: pro.name,
           time: pro.ctime, // '2017-12-12 12:12:12',
-          state: GlobalUtil.model.localProjTree.curProj.uuid === pro.uuid ? 'Selected' : '',
+          state: this.model.localProjTree.curProj.uuid === pro.uuid ? 'Selected' : '',
           uuid: pro.uuid,
         };
         tmpList.push(onePro);
@@ -462,7 +422,7 @@ export default {
       return tmpList;
     },
     isFileNameCorrect() {
-      return GlobalUtil.isFileStr(this.inputText);
+      return window.GlobalUtil.isFileStr(this.inputText);
     },
   },
   components: {
@@ -471,17 +431,14 @@ export default {
 </script>
 
 <style scoped>
-
 .proj-list-style {
   background: green;
 }
-
 .top-btn {
   /*width: 50px;
   height: 20px;*/
   padding: 10px;
 }
-
 .proj-icon {
   margin-left: 17px;
   margin-top: 13px;
@@ -492,7 +449,6 @@ export default {
   background-repeat: no-repeat;
   cursor: pointer;
 }
-
 .folder-icon {
   margin-left: 20px;
   margin-top: 6px;
@@ -501,7 +457,6 @@ export default {
   background-image: url('./../../assets/img/ide/btn_addfolder.svg');
   cursor: pointer;
 }
-
 .file-icon {
   margin-left: 10px;
   margin-top: 6px;
@@ -510,7 +465,6 @@ export default {
   background-image: url('./../../assets/img/ide/icon_addfile.svg');
   cursor: pointer;
 }
-
 .rename-icon {
   margin-left: 20px;
   margin-top: 6px;
@@ -519,7 +473,6 @@ export default {
   background-image: url('./../../assets/img/ide/btn_rename.svg');
   /* cursor: pointer; */
 }
-
 .del-icon {
   margin-left: 20px;
   margin-top: 6px;
@@ -528,7 +481,6 @@ export default {
   background-image: url('./../../assets/img/ide/btn_trash.svg');
   /* cursor: pointer; */
 }
-
 .stop-icon {
   margin-right: 60px;
   margin-top: 10px;
@@ -537,7 +489,6 @@ export default {
   background-image: url('./../../assets/img/ide/icon_stop.svg');
   cursor: pointer;
 }
-
 .run-icon {
   margin-right: 30px;
   margin-top: 8px;
@@ -546,11 +497,9 @@ export default {
   background-image: url('./../../assets/img/ide/icon_running.svg');
   cursor: pointer;
 }
-
 .el-table .warning-row {
   background: oldlace;
 }
-
 .el-table .success-row {
   background: #f0f9eb;
 }
