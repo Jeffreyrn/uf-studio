@@ -18,10 +18,12 @@
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="file-list">
-        <button class="button" @click="genjs">gen</button>
-        <div v-html="jsCode"></div>
+        <file-list></file-list>
       </div>
       <div class="emulator-wrapper">
+
+        <button class="button" @click="genjs">gen</button>
+        <div v-html="jsCode"></div>
         <button class="button" @click="genxml">gen xml</button>
         <button class="button" @click="onIDE()">test ide list</button>
         <button class="button" @click="onTeach()">test teach list</button>
@@ -38,6 +40,7 @@ import { Blockly, init as initBlockly } from '../assets/lib/blockly/blockly';
 import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
 // import eventBus from './Blockly/eventBus'
 import Dialogs from './Blockly/Dialogs'
+import FileList from './Blockly/FileList'
 
 export default {
   props: ['blocklyData', 'moduleName'],
@@ -87,6 +90,7 @@ export default {
   },
   components: {
     Dialogs,
+    FileList,
   },
   mounted() {
     const self = this;
