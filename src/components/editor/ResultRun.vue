@@ -30,39 +30,35 @@ export default {
   data() {
     return {
       input: '',
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {
-    GlobalUtil.model.localProjTree.onwinresize();
+    window.GlobalUtil.model.localProjTree.onwinresize();
   },
   methods: {
     clearText() {
-      GlobalUtil.model.localProjTree.runningCmdResult = '';
+      window.GlobalUtil.model.localProjTree.runningCmdResult = '';
     },
     stopCmd() {
-      CommandsEditorSocket.stopPythonScript((dict) => {
-
+      window.CommandsEditorSocket.stopPythonScript(() => {
       });
     },
     runCmd() {
-      console.log(`run run`);
+      console.log('run run');
       if (this.input === null || this.input === undefined || this.input === '') {
         return;
       }
-      GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
+      window.GlobalUtil.model.localProjTree.isResultFrameDisplay = true;
       // GlobalUtil.model.localProjTree.runningCmdResult = "";
-      GlobalUtil.model.localProjTree.onwinresize();
-      CommandsEditorSocket.stopPythonScript((dict) => {
+      window.GlobalUtil.model.localProjTree.onwinresize();
+      window.CommandsEditorSocket.stopPythonScript((dict) => {
         console.log(`has stopPythonScript = ${JSON.stringify(dict)}`);
-        GlobalUtil.model.localProjTree.runningCmdResult = "";
-        CommandsEditorSocket.runPipCommand(this.input, [], (dict) => {
-          // GlobalUtil.model.localProjTree.isCmdRunning = true;
-          // GlobalUtil.model.localProjTree.runningCmdResult = "";
-          GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
+        window.GlobalUtil.model.localProjTree.runningCmdResult = '';
+        window.CommandsEditorSocket.runPipCommand(this.input, [], (dict) => {
+          window.GlobalUtil.model.localProjTree.remoteCmdResult2Local(dict);
         });
       });
-
     },
   },
   beforeDestroy() {

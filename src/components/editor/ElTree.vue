@@ -17,7 +17,7 @@
 export default {
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
       // curProTreeDatas: GlobalUtil.model.localProjTree.curProTreeDatas,
       defaultProps: {
         children: 'children',
@@ -33,33 +33,21 @@ export default {
     };
   },
   mounted() {
-    console.log(`el tree mounted`);
+    // console.log(`el tree mounted`);
   },
   created() {
-    console.log(`el tree created`);
+    // console.log(`el tree created`);
   },
   methods: {
     handleNodeClick(data) {
-      GlobalUtil.model.localProjTree.onTreeNodeClick(data.uuid, true);
-      // console.log(data.__ob__);
-      // const treeRoot = document.getElementById('left-frame');
-      // console.log(`treeRoot = ${treeRoot.innerHTML}`);
-      // const uuid = data.uuid;
-      // // const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
-      // // console.log(`isFile = ${isFile}`);
-
-      // GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
-      // GlobalUtil.model.localProjTree.addOpenTab(uuid);
-      // GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
-      // GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
-
-      // if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
-      // }
+      window.GlobalUtil.model.localProjTree.onTreeNodeClick(data.uuid, true);
     },
     renderContent(h, { node, data, store }) {
       // console.log(`renderContent data uuid = ${data.uuid}`);
-      const curUUID = GlobalUtil.model.localProjTree.curSelectedFileUUID;
-      const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
+      console.log(node);
+      console.log(store);
+      const curUUID = window.GlobalUtil.model.localProjTree.curSelectedFileUUID;
+      const fileInfo = window.GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
       let textColorStyle = fileInfo !== null && data.uuid === curUUID && fileInfo.type === 'file' ? 'color:#4F7597;' : 'color:#A6A6A6;';
       textColorStyle = `${textColorStyle}font-family:'Gotham-Book';letter-spacing:-0.8px;padding-left:20px;`;
       let url = '';
@@ -71,7 +59,7 @@ export default {
       }
       if (data.type === 'folder') {
         url = this.fileIcon.folder;
-        const keys = GlobalUtil.model.localProjTree.curProjExpandedKeys;
+        const keys = window.GlobalUtil.model.localProjTree.curProjExpandedKeys;
         if (keys.join('####').indexOf(data.uuid) >= 0) {
           url = this.fileIcon.openfolder;
         }
@@ -83,7 +71,7 @@ export default {
               { data.label }
             </span>
           </span>
-        );
+      );
     },
   },
   beforeDestroy() {
@@ -98,7 +86,6 @@ export default {
 </script>
 
 <style scoped>
-
 .ide-project-list {
   /* background: #fff; */
 }
@@ -115,5 +102,4 @@ export default {
 .ide-project-list .el-tree-node.is-current>.el-tree-node__content .display-none {
   display: inline-block;
 }
-
 </style>

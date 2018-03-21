@@ -7,7 +7,6 @@
 /src/assets/lib/*
 /src/core/*
 /src/lib/*
-/src/components/editor/
 /src/components/params/
 /src/components/Params.vue
 /src/router/*
