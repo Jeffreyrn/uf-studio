@@ -55,7 +55,7 @@ export default {
   mounted() {
     window.GlobalUtil.model.localAppsMgr.curUploadState = 'normal';
   },
-  activated: () => {
+  activated: function() {
     console.log(`params = ${JSON.stringify(this.$route.params)}`);
     this.data = this.$route.params.data;
     this.name = this.data.name;

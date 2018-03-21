@@ -36,7 +36,7 @@ self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
 self.curProTreeDatas = [];
 self.pushFileData = (uuid, datas) => {
-  let dict = self.fileDatas[uuid];
+  const dict = self.fileDatas[uuid];
   if (dict === null || dict === undefined) {
     self.fileDatas[uuid] = [];
   }
@@ -46,9 +46,8 @@ self.pushFileData = (uuid, datas) => {
   self.fileDatas[uuid].push(datas);
 };
 
-self.setFileData = (uuid, datas) => {
-
-};
+// self.setFileData = (uuid, datas) => {
+// };
 
 self.setCurSelectedTreeItem = (uuid) => {
   if (uuid === null || uuid === '') {
@@ -122,8 +121,8 @@ self.getRealProjFileName = (name) => {
   if (name === null || name === undefined) {
     return '';
   }
-  name = name.replace("discontinuous_", "");
-  name = name.replace("continuous_", "");
+  name = name.replace('discontinuous_', '');
+  name = name.replace('continuous_', '');
   return name;
 };
 
@@ -141,7 +140,6 @@ self.getRealFileFileName = (name) => {
 
 self.createFile = (uuid, superid, proId, type, name, content) => {
   const file = {
-    // index: indexCounter += 1,
     uuid: uuid,
     superid: superid,
     type: type,
@@ -555,7 +553,7 @@ self.pushTestData = (ch) => {
 };
 
 self.genAndPushTestPoints = () => {
-  if (1 == 2) {
+  if (true) {
     self.chartOption.series[0].data.push(CommandsEditorSocket.getTestPost());
     self.chartOption.series[1].data.push(CommandsEditorSocket.getTestPost());
     self.chartOption.series[2].data.push(CommandsEditorSocket.getTestPost());

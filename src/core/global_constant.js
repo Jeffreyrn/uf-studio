@@ -3,7 +3,7 @@ const GlobalConstant = {};
 const self = GlobalConstant;
 window.GlobalConstant = self;
 
-self.VERSION = {version: 'xarm7'};
+self.VERSION = { version: 'xarm7' };
 self.userId = 'test';
 
 self.COMMON_PARAMS = {

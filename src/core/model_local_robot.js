@@ -27,8 +27,8 @@ const robot = {
     id: 0,
   },
   connect: () => {
-    const ip = '192.168.1.166'; // 67 196 166
-    const url = `ws:${ip}:18333/ws`;
+    // const ip = '192.168.1.166'; // 67 196 166
+    // const url = `ws:${ip}:18333/ws`;
     // robot.info.socket = new Websocket(url, null, {
     //   debug: true,
     //   logger: console,
@@ -90,18 +90,18 @@ const robot = {
     progress: 0,
   },
   sendMessageSync: (data) => {
-    if (GlobalUtil.socketCom.msgid > 10000) {
+    if (window.GlobalUtil.socketCom.msgid > 10000) {
       // robot.message.id = 0;
-      GlobalUtil.socketCom.msgid = 0;
+      window.GlobalUtil.socketCom.msgid = 0;
     }
     // robot.message.id += 1;
     // data.id = `${robot.message.id}`;
-    GlobalUtil.socketCom.msgid += 1;
-    data.id = `${GlobalUtil.socketCom.msgid}`;
+    window.GlobalUtil.socketCom.msgid += 1;
+    data.id = `${window.GlobalUtil.socketCom.msgid}`;
     // robot.info.socket.send(JSON.stringify(data));
-    GlobalUtil.socketCom.socket_info.socket.send(JSON.stringify(data));
+    window.GlobalUtil.socketCom.socket_info.socket.send(JSON.stringify(data));
     // return robot.message.id;
-    return GlobalUtil.socketCom.msgid;
+    return window.GlobalUtil.socketCom.msgid;
   },
   setSpeed: (value) => {
     robot.info.speed = (value < 0) ? 20 : value;
