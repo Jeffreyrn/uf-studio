@@ -39,14 +39,14 @@ self.createFile = (name, content, callback1) => {
   // }
   // const filePath = path.join(curProj.uuid, `${name}.json`);
   const params = {
-    data: merge(GlobalConstant.COMMON_PARAMS, {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
       // userId: self.userId, // 默认是test，用来区分不同用户
       // root: filePath, // 文件夹的父目录，必须
       appName: name, // 文件夹名称, 可省略
       xmlData: content, // 文件内容
-    })
+    }),
   };
-  self.sendCmd(GlobalConstant.APPSTORE_APP_CREATE, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.APPSTORE_APP_CREATE, params, () => {
     // dict.uuid = filePath;
     // console.log(`TEACH_ID_CREATE_FILE dict = ${JSON.stringify(dict)}`);
     // if (callback1) {
