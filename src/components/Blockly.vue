@@ -71,13 +71,13 @@ export default {
       sideToggle: true,
       toggleSideVisible: true,
       dialog: {
-        ide_app: () => {
+        studio_run_python: () => {
           this.onIDE()
         },
-        record_app: () => {
+        studio_play_recording: () => {
           this.onTeach()
         },
-        other_app: () => {
+        studio_run_app: () => {
           console.log('open other app')
         },
       },
@@ -109,7 +109,7 @@ export default {
     window.addEventListener('resize', self.resizeWorkspace, false);
     Blockly.BlockWorkspace.addChangeListener(self.onChangeEvent);
 
-    Blockly.Blocks.ide_app.onchange = (event) => {
+    Blockly.Blocks.studio_run_python.onchange = (event) => {
       // console.log('event change', event)
       // console.log('event type', event.type) // move change ui
       const blockId = event.blockId

@@ -483,19 +483,19 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const params = { gesture, statement };
     return genFuncCode(params, block);
   };
-  Blockly.JavaScript.ide_app = (block) => {
+  Blockly.JavaScript.studio_run_python = (block) => {
     const ide = Blockly.JavaScript.valueToCode(block, 'ide', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { ide };
     return genFuncCode(params, block);
   };
-  Blockly.JavaScript.record_app = (block) => {
+  Blockly.JavaScript.studio_play_recording = (block) => {
     const record = Blockly.JavaScript.valueToCode(block, 'record', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { record };
     return genFuncCode(params, block);
   };
-  Blockly.JavaScript.other_app = (block) => {
+  Blockly.JavaScript.studio_run_app = (block) => {
     const other = Blockly.JavaScript.valueToCode(block, 'other', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { other };

@@ -209,21 +209,21 @@
         </block> -->
     </category>
     <category name="{MSG.CATEGORY_APP}" colour="{COLOR.COLOR_APP}">
-        <block type="ide_app">
+        <block type="studio_run_python">
             <value name="ide">
                 <shadow type="text">
                     <field name="text">1</field>
                 </shadow>
             </value>
         </block>
-        <block type="record_app">
+        <block type="studio_play_recording">
             <value name="record">
                 <shadow type="text">
                     <field name="text">1</field>
                 </shadow>
             </value>
         </block>
-        <block type="other_app">
+        <block type="studio_run_app">
             <value name="other">
                 <shadow type="text">
                     <field name="text">1</field>

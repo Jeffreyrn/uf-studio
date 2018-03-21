@@ -2721,7 +2721,7 @@ function initBlocklyDefine(Blockly) {
     },
   };
   /** Application block define start*/
-  Blockly.Blocks.ide_app = {
+  Blockly.Blocks.studio_run_python = {
     init() {
       this.appendValueInput('ide')
         .appendField(Blockly.Msg.app.ide);
@@ -2735,7 +2735,7 @@ function initBlocklyDefine(Blockly) {
     // }
   };
 
-  Blockly.Blocks.record_app = {
+  Blockly.Blocks.studio_play_recording = {
     init() {
       this.appendValueInput('record')
         .appendField(Blockly.Msg.app.record);
@@ -2746,7 +2746,7 @@ function initBlocklyDefine(Blockly) {
     },
   };
 
-  Blockly.Blocks.other_app = {
+  Blockly.Blocks.studio_run_app = {
     init() {
       this.appendValueInput('other')
         .appendField(Blockly.Msg.app.other);
