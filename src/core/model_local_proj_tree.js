@@ -436,11 +436,13 @@ self.onwinresize = () => {
     totalFrame.style.width = `${totalFrameWidth}px`;
     totalFrame.style.height = `${totalFrameHeight}px`;
   }
-  if(rightFrame !==null && rightFrame !== undefined){
+  if (rightFrame !== null && rightFrame !== undefined) {
     rightFrame.style.width = `${rightFrameWidth}px`;
   }
   const editors = window.GlobalUtil.model.localProjTree.editors;
-  for (const key in editors) {
+  const keys = Object.keys(editors);
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
     const editor = editors[key];
     if (editor !== null && editor !== undefined) {
       // editor.setSize('auto', `${totalFrameHeight - 200}px`);
@@ -475,12 +477,12 @@ self.createFile = (uuid, superid, proId, type, name, content) => {
 };
 
 self.getSelectedFileFolder = () => {
-  let curUUID = self.curSelectedUUID;
+  const curUUID = self.curSelectedUUID;
   // let filePath = curSelectedUUID; //self.getThisFileFullPath(curSelectedUUID);
   const fileInfo = self.getFileInfo(curUUID);
   // console.log(`getSelectedFileFolder path = ${filePath}`);
   if (fileInfo === null) {
-    return `${path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name)}`;
+    return `${path.join(window.CommandsEditorSocket.ROOT_DIR, self.curProj.name)}`;
   }
   let filePath = fileInfo.uuid;
   const isProjFile = fileInfo.type === 'file';  // filePath.indexOf('.') > 0;
@@ -491,9 +493,9 @@ self.getSelectedFileFolder = () => {
 };
 
 self.getFileSuperid = () => {
-  let curSelectedUUID = self.curSelectedUUID;
+  const curSelectedUUID = self.curSelectedUUID;
   if (curSelectedUUID === null || curSelectedUUID === undefined || curSelectedUUID === '') {
-    return path.join(CommandsEditorSocket.ROOT_DIR, self.curProj.name);
+    return path.join(window.CommandsEditorSocket.ROOT_DIR, self.curProj.name);
   }
   let superid = curSelectedUUID;
   for (let i = 0; i < self.curProj.files.length; i += 1) {
@@ -525,7 +527,7 @@ self.createFolder = (proId, name) => {
   const uuid = uuidv4();
   console.log(`uuid = ${uuid}`);
   let superid = self.getFileSuperid();
-  const fileInfo = self.getFileInfo(superid);
+  // const fileInfo = self.getFileInfo(superid);
   if (superid === proId || superid === undefined) {
     superid = '';
   }
@@ -548,8 +550,8 @@ self.delFiles = () => {
   if (curUUID === null || curUUID === '' || curUUID === undefined) {
     return;
   }
-  let tempFiles = [];
-  for (var i = 0; i < self.curProj.files.length; i++) {
+  const tempFiles = [];
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
     const file = self.curProj.files[i];
     if (file.uuid !== curUUID && file.superid !== curUUID) {
       tempFiles.push(file);
@@ -561,7 +563,7 @@ self.delFiles = () => {
 
 self.renameFile = (newname) => {
   const curUUID = self.curSelectedUUID;
-  let file = self.getFileInfo(curUUID);
+  const file = self.getFileInfo(curUUID);
   file.name = newname;
 };
 
@@ -613,8 +615,8 @@ self.curProjExpandedKeys = [];
 self.curProjAddOrRemoveExpandedKeys = (uuid) => {
   // console.log(`curProjAddOrRemoveExpandedKeys`);
   const isFile = self.isFile(uuid);
-  let isExist = false;
-  let tempKeys = [];
+  // let isExist = false;
+  const tempKeys = [];
   if (isFile === false) {
     for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
       if (self.curProjExpandedKeys[i].indexOf(uuid) < 0) {
@@ -626,7 +628,7 @@ self.curProjAddOrRemoveExpandedKeys = (uuid) => {
 };
 self.curProjAddExpandedKeys = (uuid) => {
   // console.log(`curProjAddOrRemoveExpandedKeys`);
-  const isFile = self.isFile(uuid);
+  // const isFile = self.isFile(uuid);
   let isExist = false;
   // let tempKeys = [];
   for (let i = 0; i < self.curProjExpandedKeys.length; i += 1) {
@@ -641,8 +643,8 @@ self.curProjAddExpandedKeys = (uuid) => {
 };
 
 self.sortProjFiles = (files) => {
-  let tempFiles = [];
-  let tempFolders = [];
+  const tempFiles = [];
+  const tempFolders = [];
   for (let j = 0; j < files.length; j += 1) {
     const file = files[j];
     if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
@@ -663,8 +665,8 @@ self.curPro2Tree = () => {
   if (self.curProj.files === null || self.curProj.files === undefined) {
     return [];
   }
-  const files = self.curProj.files;
-  let tempDatas = [];
+  // const files = self.curProj.files;
+  const tempDatas = [];
   // first folder proj
   const aChild = {};
   aChild.label = self.curProj.name;
@@ -673,9 +675,10 @@ self.curPro2Tree = () => {
   aChild.children = [];
   aChild.type = 'folder'
   tempDatas.push(aChild);
-  let fileDatas = tempDatas[0].children;
+  const fileDatas = tempDatas[0].children;
   self.findFolder(fileDatas, '', self.curProj);
   self.curProTreeDatas = tempDatas;
+  return tempDatas;
 };
 
 self.findFolder = (tmpArr, superid, curProj) => {
@@ -697,11 +700,11 @@ self.findFolder = (tmpArr, superid, curProj) => {
 
 self.allProsTreeDatas = [];
 self.allPros2Tree = () => {
-  let allTempDatas = [];
-  for (let i = 0; i < self.curProjList.length; ++i) {
+  const allTempDatas = [];
+  for (let i = 0; i < self.curProjList.length; i += 1) {
     const thisProj = self.curProjList[i];
-    const files = thisProj.files;
-    let tempDatas = [];
+    // const files = thisProj.files;
+    const tempDatas = [];
     // first folder proj
     const aChild = {};
     aChild.label = thisProj.name;
@@ -722,7 +725,7 @@ self.allPros2Tree = () => {
       aChild.uuid = file.uuid;
       aChild.type = file.type;
       aChild.children = [];
-      if (aChild.type === 'file' && aChild.uuid.indexOf('.py')>0) {
+      if (aChild.type === 'file' && aChild.uuid.indexOf('.py') > 0) {
         fileDatas.push(aChild);
       }
     }
@@ -760,18 +763,6 @@ self.getFileInfo = (uuid) => {
   return null;
 };
 
-//////////////////////////////////////////////////////////
-  // get from remote
-//////////////////////////////////////////////////////////
-
-// curProjList
-// self.getProjsFromArm = (callback) => {
-//   const projs = [];
-//   CommandsEditorSocket.listProjs((dict) => {
-//
-//   });
-// };
-
 self.isCmdRunning = false;
 self.remoteCmdResult2Local = (dict) => {
   let stdout = dict.data.stdout;
@@ -781,25 +772,39 @@ self.remoteCmdResult2Local = (dict) => {
   }
 
   if (stdout !== undefined) {
-    window.GlobalUtil.model.localProjTree.runningCmdResult += stdout + "\n";
+    window.GlobalUtil.model.localProjTree.runningCmdResult += `${stdout}\n`;
     // GlobalUtil.model.localProjTree.runningCmdResult = stdout;
   }
   if (programID !== undefined) {
     window.GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
   }
-  const show = document.getElementById("result-text");
+  const show = document.getElementById('result-text');
   show.scrollTop = show.scrollHeight;
   console.log(`runPipCommand dict = ${stdout}, programID = ${programID}`);
   if (dict.code === 1111) {
-    CommandsEditorSocket.stopPythonScript(() => {
+    window.CommandsEditorSocket.stopPythonScript(() => {
 
     })
   }
 };
 
+function bubbleSort(arr) {
+  const len = arr.length;
+  for (let i = 0; i < len; i += 1) {
+    for (let j = 0; j < len - 1 - i; j += 1) {
+      if (arr[j].ctime_secs < arr[j + 1].ctime_secs) {
+        const temp = arr[j + 1];
+        arr[j + 1] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  return arr;
+}
+
 self.remoteProjs2Local = (dict) => {
   if (dict.code !== 0) {
-    console.log(`datas is not array`);
+    console.log('datas is not array');
     return;
   }
   const projs = [];
@@ -819,8 +824,8 @@ self.remoteProjs2Local = (dict) => {
       continue;
     }
     // check which project
-    const projName = filepath.replace(CommandsEditorSocket.ROOT_DIR + "/", "").split("/")[0];
-    const projPath = path.join(CommandsEditorSocket.ROOT_DIR, projName);
+    const projName = filepath.replace(`${window.CommandsEditorSocket.ROOT_DIR}/`, '').split('/')[0];
+    const projPath = path.join(window.CommandsEditorSocket.ROOT_DIR, projName);
     if (filepath === projPath) {
       projDates[filepath] = ctime;
       projSecs[filepath] = ctime_secs
@@ -846,30 +851,27 @@ self.remoteProjs2Local = (dict) => {
     // check and create folder
     // const isProFile = path.basename(filepath).indexOf('.') > 0;
     let tempPath = filepath;
-    while (tempPath !== projPath && tempPath !== CommandsEditorSocket.ROOT_DIR) {
+    while (tempPath !== projPath && tempPath !== window.CommandsEditorSocket.ROOT_DIR) {
       // console.log(`filename = ${tempPath}`);
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
       filesDict[tempPath] = ''; // tempPath; //
       const uuid = tempPath; // Base64.btoa(tempPath);
       let superpath = path.dirname(tempPath);
-      if (superpath === projPath || superpath === CommandsEditorSocket.ROOT_DIR) {
+      if (superpath === projPath || superpath === window.CommandsEditorSocket.ROOT_DIR) {
         superpath = '';
       }
       const name = path.basename(tempPath);
-      const superid = superpath; //Base64.btoa(superpath); //
-      const isProFile = type === self.PROJ_TREE_TYPE.FILE; //path.basename(tempPath).indexOf('.') > 0;
-      let fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
+      const superid = superpath;
+      const isProFile = type === self.PROJ_TREE_TYPE.FILE;
+      const fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
       // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
-        let file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
+        const file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
         curProj.files.push(file);
       }
       curProj.files = self.sortProjFiles(curProj.files);
       tempPath = path.dirname(tempPath);
-    } 
-    //;
-    // console.log(`filesDict = ${JSON.stringify(filesDict)}`);
-    // console.log(`curProj.files = ${JSON.stringify(curProj.files)}`);
+    }
   }
   // projs.sort((a,b) => {
   //   a.ctime_secs - b.ctime_secs;
@@ -886,19 +888,5 @@ self.remoteProjs2Local = (dict) => {
   self.allPros2Tree();
   // callback(projs);
 };
-
-function bubbleSort(arr) {
-  var len = arr.length;
-  for (var i = 0; i < len; i++) {
-    for (var j = 0; j < len - 1 - i; j++) {
-      if (arr[j].ctime_secs < arr[j+1].ctime_secs) {        //相邻元素两两对比
-        var temp = arr[j+1];        //元素交换
-        arr[j+1] = arr[j];
-        arr[j] = temp;
-      }
-    }
-  }
-  return arr;
-}
 
 export default self;
