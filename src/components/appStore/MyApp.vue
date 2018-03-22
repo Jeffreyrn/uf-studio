@@ -6,16 +6,16 @@
           <!-- <router-link :to="{name: 'AppSubmit', params:{data: data}}">
           </router-link> -->
           <div class="icon-text-style" style="background:#9CC5F7;" v-if="index % 4 === 0">
-            {{ data.name[0] }}
+            {{ data.name[0].toUpperCase() }}
           </div>
           <div class="icon-text-style" style="background:#F8C6DE;" v-if="index % 4 === 1">
-            {{ data.name[0] }}
+            {{ data.name[0].toUpperCase() }}
           </div>
           <div class="icon-text-style" style="background:#B8E986;" v-if="index % 4 === 2">
-            {{ data.name[0] }}
+            {{ data.name[0].toUpperCase() }}
           </div>
           <div class="icon-text-style" style="background:#D5D5D5" v-if="index % 4 === 3">
-            {{ data.name[0] }}
+            {{ data.name[0].toUpperCase() }}
           </div>
           <div style="width:100%;height:36px;margin-top:-36px;">
             <router-link :to="{name: 'AppSubmit', params:{data: data}}">
@@ -26,7 +26,7 @@
             </router-link>
             <div class="icon-btn delete-btn" @click="onDelete(data.name)"></div>
           </div>
-          <div class="app-title">{{ data.name }}</div>
+          <div class="app-title">{{ data.omitname }}</div>
         </li>
       </ul>
     </div>
@@ -102,7 +102,7 @@ export default {
   border-radius: 4px;
   // background:yellow;
   font-family: Gotham-Medium;
-  font-size: 24px;
+  font-size: 36px;
   color: #FFFFFF;
   letter-spacing: -0.66px;
   text-align: center;

@@ -7,7 +7,7 @@
             <div style="width:100%;height:100%;">
             </div>
           </router-link>
-          <div class="app-title">{{ data.name }}</div>
+          <div class="app-title">{{ data.omitname }}</div>
         </li>
       </ul>
     </div>

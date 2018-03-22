@@ -3,11 +3,11 @@
     <div class="tab-contain">
       <ul>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="app-deault-icon">
-          <router-link :to="{name: 'AppSubmit', params:{data: data}}">
+          <router-link :to="{name: 'AppDetail', params:{data: data}}">
             <div style="width:100%;height:100%;">
             </div>
           </router-link>
-          <div class="app-title">{{ data.name }}</div>
+          <div class="app-title">{{ data.omitname }}</div>
         </li>
       </ul>
     </div>

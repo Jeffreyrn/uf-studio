@@ -67,6 +67,20 @@ self.delFile = (name, callback) => {
   });
 };
 
+self.uploadFile = (name, appInfo, callback) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      appName: name,
+      appInfo: appInfo,
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.APPSTORE_APP_UPLOAD, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
 self.listLocalApps = (callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {

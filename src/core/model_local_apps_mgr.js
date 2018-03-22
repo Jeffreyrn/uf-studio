@@ -61,9 +61,16 @@ self.createApp = (params) => {
   if (params.size === undefined) {
     params.size = 0;
   }
+  let omitname = params.name;
+  const ll = 13;
+  if (omitname.length > ll) {
+    omitname = omitname.substr(0, ll);
+    omitname = `${omitname}...`
+  }
   return {
     author: params.author,
     name: params.name,
+    omitname: omitname,
     appType: params.appType,
     category: params.category,
     version: params.version,

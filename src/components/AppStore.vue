@@ -69,6 +69,14 @@ export default {
       this.showApp = item;
     },
   },
+  activated: function() {
+    window.CommandsAppsSocket.listApps((dict) => {
+      console.log(dict);
+    });
+    window.CommandsAppsSocket.listLocalApps((dict) => {
+      console.log(dict);
+    });
+  },
   components: {
     MyApp,
     ThirdParty,

@@ -9,7 +9,7 @@
       <span class="app-submit-top-title">
         Please fill in the application form about your upload  
       </span>
-      <div class="app-submit-btn" v-bind:class="classObject">
+      <div class="app-submit-btn" v-bind:class="classObject" @click="onsubmit">
         {{ submitButtonValue }}
       </div>
     </div>
@@ -20,14 +20,22 @@
         <div class="app-submit-des-text">
           App Name
         </div>
-        <input type="text" class="app-submit-name" v-model="name" :disabled="['normal','cansubmit'].indexOf(model.localAppsMgr.curUploadState)<0" />
+        <input type="text"
+          @keydown="appNameClick"
+          class="app-submit-name"
+          v-model="name"
+          :disabled="['normal','cansubmit'].indexOf(model.localAppsMgr.curUploadState)<0" />
         <div class="app-submit-num">
           {{ nameNum - name.length }}
         </div>
         <div class="app-submit-des-text" style="margin-top:30px;">
           Description
         </div>
-        <textarea class="app-submit-des" v-model="des" :disabled="['normal','cansubmit'].indexOf(model.localAppsMgr.curUploadState)<0">
+        <textarea
+          @keydown="appNameClick"
+          class="app-submit-des"
+          v-model="des"
+          :disabled="['normal','cansubmit'].indexOf(model.localAppsMgr.curUploadState)<0">
         </textarea>
         <div class="app-submit-num">
           {{ desNum - des.length }}
@@ -53,15 +61,52 @@ export default {
     };
   },
   mounted() {
-    window.GlobalUtil.model.localAppsMgr.curUploadState = 'normal';
   },
   activated: function() {
     console.log(`params = ${JSON.stringify(this.$route.params)}`);
     this.data = this.$route.params.data;
     this.name = this.data.name;
     this.des = this.data.des;
+    if (this.name === undefined) {
+      this.name = '';
+    }
+    if (this.des === undefined) {
+      this.des = '';
+    }
+    window.GlobalUtil.model.localAppsMgr.curUploadState = 'normal';
+    if (this.des.length > 0) {
+      window.GlobalUtil.model.localAppsMgr.curUploadState = 'approve';
+    }
   },
   methods: {
+    onsubmit() {
+      if (window.GlobalUtil.model.localAppsMgr.curUploadState === 'cansubmit') {
+        console.log(`cansubmit cansubmit cansubmit ${this.data.name} ${this.name}`);
+        const appInfo = {
+          name: this.name,
+          description: this.des,
+        };
+        window.CommandsAppsSocket.uploadFile(this.data.name, appInfo, (dict) => {
+          console.log(`cansubmit dict = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            this.data.name = this.name;
+            window.GlobalUtil.model.localAppsMgr.curUploadState = 'approve';
+          }
+        });
+      }
+    },
+    checkCanSubmit() {
+      const isNoEmpty = this.name.length > 0 && this.des.length > 100;
+      window.GlobalUtil.model.localAppsMgr.curUploadState = isNoEmpty ? 'cansubmit' : 'normal';
+    },
+    appNameClick() {
+      // console.log('appNameClick appNameClick appNameClickappNameClick' + this.name);
+      setTimeout(() => {
+        this.name = this.name.substr(0, 50);
+        this.des = this.des.substr(0, 1000);
+        this.checkCanSubmit();
+      });
+    },
   },
   computed: {
     classObject: () => ({
@@ -76,7 +121,7 @@ export default {
       switch (window.GlobalUtil.model.localAppsMgr.curUploadState) {
         case 'normal':
         case 'cansubmit':
-          return 'Summit';
+          return 'Submit';
         case 'uploaded':
           return 'Uploaded';
         case 'reviewing':
@@ -91,15 +136,26 @@ export default {
     },
   },
   watch: {
-    name: () => {
-      if (this.name === undefined) {
-        this.name = '';
-      }
-      this.name = this.name.substr(0, 50);
-    },
-    des: () => {
-      this.des = this.des.substr(0, 1000);
-    },
+    // 'name': () => {
+    //   if (this.name === undefined) {
+    //     this.name = '';
+    //   }
+    //   // if (this.des === undefined) {
+    //   //   this.des = '';
+    //   // }
+    //   // checkCanSubmit();
+    //   this.name = this.name.substr(0, 50);
+    // },
+    // 'des': () => {
+    //   // if (this.name === undefined) {
+    //   //   this.name = '';
+    //   // }
+    //   if (this.des === undefined) {
+    //     this.des = '';
+    //   }
+    //   // checkCanSubmit();
+    //   this.des = this.des.substr(0, 1000);
+    // },
   },
 };
 </script>
@@ -181,6 +237,7 @@ export default {
       .app-submit-des-text {
         font-family: 'Gotham-Medium';
         font-size: 18px;
+        // width: 100%;
         height: 46px;
         color: #444444;
         letter-spacing: -1.38px;
@@ -211,7 +268,7 @@ export default {
         line-height: 30px;
       }
       .app-submit-des {
-        width: 100%;
+        width: 580px;
         height: 300px;
         background: #F6F6F6;
         border: 1px solid #DCDCDC;
