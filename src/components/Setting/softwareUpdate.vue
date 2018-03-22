@@ -4,23 +4,29 @@
       <router-link :to="{name:'Setting'}"><img class="com-icon-back" src="../../assets/img/common/icon_back.svg"/></router-link>
       <span class="com-font-GB-24 com-module-name">Software Update</span>
       <div class="update-tip">
-        <span v-if="countUpdates.boolean" class="have-update">{{ countUpdates.number }} updates avaliable</span>
+        <span v-if="countUpdates.boolean" class="have-update">{{ countUpdates.number }}  updates avaliable</span>
         <span v-else>You are using the latest version, no updates available</span>
       </div>
     </div>
     <div class="conten-wrapper">
-      <div class="update-content" v-for="(item, key, index) in haveUpdate" :key="index">
+      <div class="update-content" v-for="(item, index) in haveUpdate">
         <div class="update-info">
-          <span class="name">{{ key}}</span>
+          <span class="name">{{ index }}</span>
           <span class="version">{{ item.version}}</span>
-          <span class="time">{{ item.time }}</span>
+          <span class="time">{{ item.published }}</span>
         </div>
         <div class="update-text">
           <span v-if="item.update">This Version Updates：</span>
           <span v-else>This Version Updated：</span>
-          <ul>
-            <li >Fix  an issue where using certain character sequences could cause apps to crash</li>
-            <li>Fixes  an issue where some third-party apps could fail to connect to external accessories</li>
+          <ul v-if="$route.params.lang">
+            <li v-for="(itemText, indexText) in item.updateInfo" :key="index">
+              {{ indexText }} : {{ itemText.cn }}
+            </li>
+          </ul>
+          <ul v-else>
+            <li v-for="(itemText, indexText) in item.updateInfo" :key="index">
+              {{ indexText }} : {{ itemText.en }}
+            </li>
           </ul>
         </div>
         <div class="update-btn-wrapper">
@@ -37,27 +43,17 @@
 export default {
   data() {
     return {
+      langData: {},
       haveUpdate: {
         Software: {
-          name: 'Software',
-          version: '',
-          time: '',
-          text: [],
-          update: false,
         },
         Hardware: {
-          name: 'Hardware',
-          version: '',
-          time: '',
-          text: [],
-          update: false,
         },
       },
     };
   },
   created() {
     this.checkUpdate();
-    this.getSoftwareInfo();
   },
   mounted() {
   },
@@ -65,31 +61,34 @@ export default {
     checkUpdate() {
       const data = {};
       window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_CHECK_SOFTWARE_UPDATE, data, (response) => {
-        const checkUpdate = response.data;
+        const checkUpdate = (response.data !== undefined) ? response.data : response;
         if (checkUpdate) {
-          this.haveUpdate.Software.update = checkUpdate.xArmStudio.update;
-          this.haveUpdate.Software.version = `xArm Studio${checkUpdate.xArmStudio.version}`;
-          this.haveUpdate.Hardware.update = checkUpdate.xArmCore.update;
-          this.haveUpdate.Hardware.version = `ROS ${checkUpdate.xArmCore.version}`;
-          console.log('checkUpdate', checkUpdate);
+          const tempJson = {};
+          if (checkUpdate.update) {
+            for (const attr in checkUpdate) {
+              if (typeof checkUpdate[attr] === 'object' && checkUpdate[attr].update) {
+                tempJson[attr] = checkUpdate[attr].updateInfo;
+              }
+            }
+          }
+          else {
+            for (const attr in checkUpdate) {
+              if (typeof checkUpdate[attr] === 'object') {
+                tempJson[attr] = checkUpdate[attr].updateInfo;
+              }
+            }
+          }
+          this.haveUpdate.Software = checkUpdate;
+          this.haveUpdate.Software.updateInfo = tempJson;
         }
       });
     },
     startUpdate() {
       const data = {};
-      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_START_UPDATE, data, (response) => {
-        const installPackage = response.data;
+      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_START_SOFTWARE_UPDATE, data, (response) => {
+        const installPackage = (response.data !== undefined) ? response.data : response;
         if (installPackage) {
-//          console.log('installPackage', installPackage);
-        }
-      });
-    },
-    getSoftwareInfo() {
-      const data = {};
-      window.GlobalUtil.socketCom.sendCmd(window.GlobalConstant.SETTING_SET_SOFTWARE_INFO, data, (response) => {
-        const softwareInfo = response.data;
-        if (softwareInfo) {
-          console.log('softwareInfo', softwareInfo);
+          this.checkUpdate();
         }
       });
     },
@@ -112,6 +111,13 @@ export default {
       }
       return {
         boolean: false,
+      }
+    },
+  },
+  watch: {
+    $route() {
+      if (this.$route.name === 'softwareUpdate') {
+        this.checkUpdate();
       }
     },
   },

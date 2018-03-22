@@ -54,7 +54,7 @@ self.show = () => {
 self.isHasProj = (name) => {
   for (let i = 0; i < self.curProjList.length; i += 1) {
     if (self.curProjList[i].name === name) {
-      self.dialogErrorTips = 'Project name is the same';
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = 'Project name is the same';
       return true;
     }
   }
@@ -66,7 +66,7 @@ self.isRepeatFile = (uuid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     // console.log(`file uuid = ${self.curProj.files[i].uuid}`);
     if (self.curProj.files[i].uuid === uuid) {
-      self.dialogErrorTips = 'File name is the same';
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = 'File name is the same';
       return true;
     }
   }
@@ -115,6 +115,7 @@ self.getCurSelectedFileUUIDs = () => {
     //   }
     // });
   }
+
   return self.curSelectedFileUUID;
 };
 self.uuids2Files = (uuids) => {
@@ -192,17 +193,17 @@ self.onTreeNodeClick = (uuid, Expanded) => {
   // const treeRoot = document.getElementById('left-frame');
   // console.log(`treeRoot = ${treeRoot.innerHTML}`);
   // const uuid = data.uuid;
-  const isFile = self.isFile(uuid);
+  const isFile = window.GlobalUtil.model.localProjTree.isFile(uuid);
   // console.log(`isFile = ${isFile}`);
   if (Expanded === true) {
-    self.curProjAddOrRemoveExpandedKeys(uuid);
+    window.GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
   }
-  self.addOpenTab(uuid);
-  self.setSelectedUUID(uuid);
+  window.GlobalUtil.model.localProjTree.addOpenTab(uuid);
+  window.GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
   if (isFile === true) {
-    self.curSelectedFileUUID = uuid;
+    window.GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
   }
-  // if (self.allCodeEditorVue[uuid] !== undefined) {
+  // if (window.GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
   // }
 };
 
@@ -259,7 +260,7 @@ self.removeOpenTab = (fileId) => {
   self.curOpenedFilesList = proTabsList;
   // const alltext = JSON.stringify(GlobalUtil.model.localProjTree.allCodeEditorVue);
   // console.log(`GlobalUtil.model.localProjTree.allCodeEditorVue = ${alltext}`);
-  self.allCodeEditorVue = self.allCodeEditorVue;
+  window.GlobalUtil.model.localProjTree.allCodeEditorVue = window.GlobalUtil.model.localProjTree.allCodeEditorVue;
   // 选中前一个
   if (fileId === self.getCurSelectedFileUUIDs()) {
     if (proTabsList.length > 0) {
@@ -270,10 +271,11 @@ self.removeOpenTab = (fileId) => {
       self.setCurSelectedFileUUIDs(null);
     }
   }
-  // if (self.curOpenedFilesList.length === 0) {
+
+  if (self.curOpenedFilesList.length === 0) {
     // self.setSelectedUI(null);
     // self.setSelectedEditor('');
-  // }
+  }
 };
 
 self.isFile = (uuid) => {
@@ -296,7 +298,7 @@ self.setSelectedUUID = (uuid) => {
     // self.setSelectedUI(uuid);
     return;
   }
-  //
+
   const file = self.getFileInfo(uuid);
   if (file === null) {
     return;
@@ -308,11 +310,119 @@ self.setSelectedUUID = (uuid) => {
     self.curSelectedFolderUUID = '';
     self.curFile = file;
     self.setCurSelectedFileUUIDs(uuid);
+    // CommandsEditorSocket.getFile(file.uuid, (dict) => {
+    //   let content = dict.data;
+    //   if (content === null || content === undefined) {
+    //     content = '';
+    //   }
+    //   self.curFile.remoteContent = content;
+    //   self.setSelectedContent(file.uuid, content);
+    // });
   }
+  // self.setSelectedUI(uuid);
+  // self.setSelectedEditor(uuid);
+  // ui
 };
 
+// self.setSelectedUI = (uuid) => {
+//   // console.log(`setSelectedUI 2 file uuid = ${uuid}`);
+//   // if (uuid === null || uuid === '') {
+//   //   setTimeout(() => {
+//   //     const nodes = document.getElementsByClassName('el-tree-node__label');
+//   //     for (let i = 0; i < nodes.length; i += 1) {
+//   //       const node = nodes[i];
+//   //       // node.style.color = '#A6A6A6';
+//   //     }
+//   //   });
+//   //   return;
+//   // }
+//   let file = self.getFileInfo(uuid);
+//   if (file.type === 'folder') {
+//     file = self.curFile;
+//   }
+//   // console.log(`setSelectedUI file type uuid = ${uuid}, file = file`);
+//   // setTimeout(() => {
+//   //   const nodes = document.getElementsByClassName('el-tree-node__label');
+//   //   for (let i = 0; i < nodes.length; i += 1) {
+//   //     const node = nodes[i];
+//   //     if (file === null || file === undefined) {
+//   //       // node.style.color = '#A6A6A6';
+//   //     }
+//   //     else if (file.name === node.innerHTML) {
+//   //       // node.style.color = 'blue';
+//   //       // node.style.color = '#4F7597';
+//   //     }
+//   //     else {
+//   //       // node.style.color = 'gray';
+//   //       // node.style.color = '#A6A6A6';
+//   //     }
+//   //   }
+//   // });
+
+//   // const file = self.getFileInfo(uuid);
+//   if (file === null) {
+//     return;
+//   }
+//   if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
+//     return;
+//   }
+//   setTimeout(() => {
+//     // const curFile = GlobalUtil.model.localProjTree.curFile;
+//     let selectedEditor = null;
+//     const editors = document.getElementsByName("code-editor");
+//     // console.log(`editor value =  cur ${curFile.uuid}`);
+//     // for (let i = 0; i < editors.length; i += 1) {
+//     //   const editor = editors[i];
+//     //   editor.style.display = 'none';
+//     // }
+//     for (let i = 0; i < editors.length; i += 1) {
+//       const editor = editors[i];
+//       // console.log(`editor value = ${editor.getAttribute("value")}`);
+//       const aUUID = editor.getAttribute("value");
+//       // editor.style.display = 'none';
+//       if (aUUID === file.uuid) {
+//         editor.style.opacity = '1.0';
+//         // editor.style.display = 'block';
+//         // selectedEditor = editor;
+//       }
+//       else {
+//         // editor.style.display = 'none';
+//         editor.style.opacity = '0.0';
+//       }
+//     }
+//     // if (selectedEditor !== null) {
+//     //   selectedEditor.style.display = 'block';
+//     // }
+//   });
+// };
+
+// self.setSelectedEditor = (uuid) => {
+  // let selectedEditor = null;
+  // const editors = document.getElementsByName("code-editor");
+  // // console.log(`editor value =  cur ${curFile.uuid}`);
+  // // for (let i = 0; i < editors.length; i += 1) {
+  // //   const editor = editors[i];
+  // //   editor.style.display = 'none';
+  // // }
+  // for (let i = 0; i < editors.length; i += 1) {
+  //   const editor = editors[i];
+  //   // console.log(`editor value = ${editor.getAttribute("value")}`);
+  //   const aUUID = editor.getAttribute("value");
+  //   // editor.style.display = 'none';
+  //   if (aUUID === uuid) {
+  //     editor.style.opacity = '1.0';
+  //     // editor.style.display = 'block';
+  //     // selectedEditor = editor;
+  //   }
+  //   else {
+  //     // editor.style.display = 'none';
+  //     editor.style.opacity = '0.0';
+  //   }
+  // }
+// };
+
 self.onwinresize = () => {
-  // const leftFrame = document.getElementById('left-frame');
+  // const leftFrame = document.getElementById("left-frame");
   // leftFrame.style.width = `${leftFrameWidth}px`;
   const rightFrame = document.getElementById('right-frame');
   const totalFrame = document.getElementById('total-frame');
@@ -329,20 +439,22 @@ self.onwinresize = () => {
   if (rightFrame !== null && rightFrame !== undefined) {
     rightFrame.style.width = `${rightFrameWidth}px`;
   }
-  const editors = self.editors;
+  const editors = window.GlobalUtil.model.localProjTree.editors;
   const keys = Object.keys(editors);
-  for (let i = 0; i < keys.length; i += i) {
+  for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];
     const editor = editors[key];
     if (editor !== null && editor !== undefined) {
       // editor.setSize('auto', `${totalFrameHeight - 200}px`);
-      const editorHeight = self.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
+      const editorHeight = window.GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
       editor.setSize('auto', `${editorHeight}px`);
     }
   }
   if (pipInstallInput !== null && pipInstallInput !== undefined) {
     pipInstallInput.style.width = `${rightFrameWidth - 61}px`;
   }
+  // document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 61}px`;
+  // console.log(`totalFrameHeight = ${totalFrameHeight - 200}`);
 };
 
 let indexCounter = 0;
@@ -350,13 +462,13 @@ let indexCounter = 0;
 self.createFile = (uuid, superid, proId, type, name, content) => {
   const file = {
     index: indexCounter += 1,
-    uuid,
-    superid,
-    type,
-    name,
+    uuid: uuid,
+    superid: superid,
+    type: type,
+    name: name,
     localContent: content,
     // remoteContent: content,
-    proId,
+    proId: proId,
   };
   // if (self.curProj.files !== undefined) {
   //   self.curProj.files.push(file);
@@ -566,7 +678,7 @@ self.curPro2Tree = () => {
   const fileDatas = tempDatas[0].children;
   self.findFolder(fileDatas, '', self.curProj);
   self.curProTreeDatas = tempDatas;
-  return self.curProTreeDatas;
+  return tempDatas;
 };
 
 self.findFolder = (tmpArr, superid, curProj) => {
@@ -660,16 +772,18 @@ self.remoteCmdResult2Local = (dict) => {
   }
 
   if (stdout !== undefined) {
-    self.runningCmdResult += `${stdout}\n`;
+    window.GlobalUtil.model.localProjTree.runningCmdResult += `${stdout}\n`;
+    // GlobalUtil.model.localProjTree.runningCmdResult = stdout;
   }
   if (programID !== undefined) {
-    self.runningCmdProgramID = programID;
+    window.GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
   }
   const show = document.getElementById('result-text');
   show.scrollTop = show.scrollHeight;
   console.log(`runPipCommand dict = ${stdout}, programID = ${programID}`);
   if (dict.code === 1111) {
     window.CommandsEditorSocket.stopPythonScript(() => {
+
     })
   }
 };

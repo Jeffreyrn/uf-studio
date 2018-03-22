@@ -47,6 +47,7 @@ self.pushFileData = (uuid, datas) => {
 };
 
 // self.setFileData = (uuid, datas) => {
+
 // };
 
 self.setCurSelectedTreeItem = (uuid) => {
@@ -118,9 +119,6 @@ self.getCurProj = (uuid) => {
 };
 
 self.getRealProjFileName = (name) => {
-  if (name === null || name === undefined) {
-    return '';
-  }
   name = name.replace('discontinuous_', '');
   name = name.replace('continuous_', '');
   return name;
@@ -140,6 +138,7 @@ self.getRealFileFileName = (name) => {
 
 self.createFile = (uuid, superid, proId, type, name, content) => {
   const file = {
+    // index: indexCounter += 1,
     uuid: uuid,
     superid: superid,
     type: type,
@@ -172,7 +171,7 @@ self.getProjInfo = (uuid) => {
 };
 
 self.isHasProj = (name) => {
-  const projTypeSelected = self.projTypeSelected;
+  const projTypeSelected = window.GlobalUtil.model.localTeach.projTypeSelected;
   const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
   for (let i = 0; i < self.curProjList.length; i += 1) {
     if (self.curProjList[i].name === `${pre}${name}`) {
@@ -186,21 +185,21 @@ self.isHasProj = (name) => {
 
 self.onSaveChange = (callback) => {
   // console.log(`on Save Change`);
-  const uuid = self.curEditingFileUUID;
-  const index = self.curSelectedIndex;
-  const point = self.curPoint;
-  const points = self.fileDatas[uuid];
+  const uuid = window.GlobalUtil.model.localTeach.curEditingFileUUID;
+  const index = window.GlobalUtil.model.localTeach.curSelectedIndex;
+  const point = window.GlobalUtil.model.localTeach.curPoint;
+  const points = window.GlobalUtil.model.localTeach.fileDatas[uuid];
   points[index] = point;
 
   const textDict = {
-    type: self.curProj.type,
+    type: window.GlobalUtil.model.localTeach.curProj.type,
     total: points.length,
     points: points,
   };
   const text = JSON.stringify(textDict);
 
   window.CommandsTeachSocket.saveOrUpdateFile(uuid, text, () => {
-    self.hasChange = false;
+    window.GlobalUtil.model.localTeach.hasChange = false;
     if (callback) {
       callback();
     }
@@ -238,7 +237,7 @@ self.remoteProjs2Local = (dict) => {
       continue;
     }
     // check which project
-    const projName = filepath.replace(`${window.CommandsTeachSocket.ROOT_DIR}/`, '').split('')[0];
+    const projName = filepath.replace(`${window.CommandsTeachSocket.ROOT_DIR}/`, '').split('/')[0];
     const projPath = path.join(window.CommandsTeachSocket.ROOT_DIR, projName);
     self.curProjExpandedKeys.push(projPath);
     let curProj = null;
@@ -269,8 +268,8 @@ self.remoteProjs2Local = (dict) => {
     let tempPath = filepath;
     while (tempPath !== projPath && tempPath !== window.CommandsTeachSocket.ROOT_DIR) {
       const isExistFile = filesDict[tempPath] !== undefined && filesDict[tempPath] !== null;
-      filesDict[tempPath] = '';
-      const uuid = tempPath;
+      filesDict[tempPath] = ''; // tempPath; //
+      const uuid = tempPath; // Base64.btoa(tempPath);
       let superpath = path.dirname(tempPath);
       if (superpath === projPath || superpath === window.CommandsTeachSocket.ROOT_DIR) {
         superpath = '';
@@ -279,6 +278,7 @@ self.remoteProjs2Local = (dict) => {
       const superid = superpath;
       const isProFile = path.basename(tempPath).indexOf('.') > 0;
       const fileType = isProFile ? self.PROJ_TREE_TYPE.FILE : self.PROJ_TREE_TYPE.FOLDER;
+      // console.log(`isProFile = ${isProFile}, isExistFile = ${isExistFile}`);
       if (isExistFile === false) {
         const file = self.createFile(uuid, superid, curProj.uuid, fileType, name, '');
         file.isContinus = curProj.type === 'continuous';
@@ -298,22 +298,22 @@ self.remoteProjs2Local = (dict) => {
 };
 
 self.onSelect = (e, index) => {
-  self.curSelectedIndex = index;
-  const point = self.getFileData(self.curEditingFileUUID, index);
+  window.GlobalUtil.model.localTeach.curSelectedIndex = index;
+  const point = window.GlobalUtil.model.localTeach.getFileData(window.GlobalUtil.model.localTeach.curEditingFileUUID, index);
   if (point === null || point === undefined) {
-    // self.curSelectedIndex = -1;
-    console.log(`point null null null cur id = ${self.curEditingFileUUID}`);
+    // GlobalUtil.model.localTeach.curSelectedIndex = -1;
+    console.log(`point null null null cur id = ${window.GlobalUtil.model.localTeach.curEditingFileUUID}`);
     return;
   }
-  self.curSelectedIndex = index;
+  window.GlobalUtil.model.localTeach.curSelectedIndex = index;
   console.log(`onSelect = ${index}, point = ${JSON.stringify(point)}`);
-  self.curPoint = point;
-  // self.curPoint.a1 = point[1];
-  // self.curPoint.a2 = point[2];
-  // self.curPoint.a3 = point[3];
-  // self.curPoint.a4 = point[4];
-  // self.curPoint.a5 = point[5];
-  // self.curPoint.a6 = point[6];
+  window.GlobalUtil.model.localTeach.curPoint = point;
+  // GlobalUtil.model.localTeach.curPoint.a1 = point[1];
+  // GlobalUtil.model.localTeach.curPoint.a2 = point[2];
+  // GlobalUtil.model.localTeach.curPoint.a3 = point[3];
+  // GlobalUtil.model.localTeach.curPoint.a4 = point[4];
+  // GlobalUtil.model.localTeach.curPoint.a5 = point[5];
+  // GlobalUtil.model.localTeach.curPoint.a6 = point[6];
 };
 
 self.curPro2Tree = () => {
@@ -559,7 +559,7 @@ self.genAndPushTestPoints = () => {
   self.chartOption.series[4].data.push(window.CommandsEditorSocket.getTestPost());
   self.chartOption.series[5].data.push(window.CommandsEditorSocket.getTestPost());
   self.chartOption.series[6].data.push(window.CommandsEditorSocket.getTestPost());
-  // if (true) {
+  // if (1 == 2) {
   //   self.chartOption.series[0].data.push(CommandsEditorSocket.getTestPost());
   //   self.chartOption.series[1].data.push(CommandsEditorSocket.getTestPost());
   //   self.chartOption.series[2].data.push(CommandsEditorSocket.getTestPost());
@@ -587,7 +587,6 @@ self.testData.ch3 = [190];
 self.testData.ch4 = [260];
 self.testData.ch5 = [300];
 self.testData.ch6 = [330];
-
 self.randomNumber = (begin, end) => {
   return Math.floor(Math.random() * (end - begin)) + begin;
 }
