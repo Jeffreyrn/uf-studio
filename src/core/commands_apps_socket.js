@@ -72,7 +72,30 @@ self.listLocalApps = (callback) => {
     }
   });
 };
-
+const runTaskApp = (path, category) => new Promise((resolve) => {
+  const CMD_LIST = {
+    python: window.GlobalConstant.APP_RUN_PYTHON,
+    teach: window.GlobalConstant.APP_RUN_TEACH,
+  }
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      appName: window.GlobalUtil.model.localAppsMgr.curProName,
+      projectPath: path,
+    }),
+  }
+  self.sendCmd(CMD_LIST[category], params, (dict) => {
+    // GlobalUtil.model.localAppsMgr.remoteProjs2Local(dict);
+    if (dict.code === 1111) { // run compeleted
+      resolve(1111)
+      console.log('app run compeleted')
+    }
+    else {
+      console.log(`app is running, ${dict.code}, ${path}`)
+    }
+  })
+})
+self.runTeach = path => runTaskApp(path, 'teach')
+self.runPython = path => runTaskApp(path, 'python')
 self.appControl = (appControl, category, appName, appVersion, callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
