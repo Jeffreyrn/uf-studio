@@ -61,6 +61,7 @@ export default {
   methods: {
     onDelete(name) {
       this.deleteAppTitle = `Delete app '${name}' ?`;
+      this.deleteAppName = name;
       this.isDeleteApp = true;
     },
     closeAlert() {
@@ -68,10 +69,12 @@ export default {
     },
     delApp() {
       this.isDeleteApp = false;
+      window.CommandsAppsSocket.delFile(this.deleteAppName, () => {
+      });
     },
   },
   components: {
-    DialogTeachAlert
+    DialogTeachAlert,
   },
   computed: {
     bgColor: () => ({

@@ -56,6 +56,17 @@ self.createFile = (name, content, callback1) => {
   });
 };
 
+self.delFile = (name, callback) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      appName: name,
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.APPSTORE_APP_REMOVE, params, () => {
+    self.listLocalApps(callback);
+  });
+};
+
 self.listLocalApps = (callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
