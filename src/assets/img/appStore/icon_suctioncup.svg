@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_suctioncup</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图专用" transform="translate(-339.000000, -58.000000)" fill="#444444">
+            <g id="icon_suctioncup" transform="translate(339.000000, 58.000000)">
+                <g transform="translate(8.000000, 10.000000)">
+                    <path d="M39.6841348,24.844785 C41.0302244,25.8090439 40.953023,27.2508424 39.5009262,28.0712192 L34.3168776,31 L7.75141209,31 L3.11495184,28.1576888 C1.70327426,27.2922815 1.62016583,25.7657987 2.93391988,24.7446217 L7.75141209,21 L34.3168776,21 L39.6841348,24.844785 Z" id="Polygon"></path>
+                    <path d="M38.85025,34.9470669 C40.0589726,36.0808705 39.6909642,37 38.0435176,37 L3.52320909,37 C1.86894051,37 1.50348796,36.0848722 2.71647668,34.9470669 L7.99043335,30 L33.5762933,30 L38.85025,34.9470669 Z" id="Polygon-Copy"></path>
+                    <rect id="Rectangle-4-Copy" x="9" y="0" width="24" height="24" rx="1"></rect>
+                    <rect id="Rectangle-4" x="0" y="4" width="41" height="12" rx="1"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

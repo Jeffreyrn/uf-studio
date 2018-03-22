@@ -92,6 +92,9 @@ export default {
   },
   watch: {
     name: () => {
+      if (this.name === undefined) {
+        this.name = '';
+      }
       this.name = this.name.substr(0, 50);
     },
     des: () => {

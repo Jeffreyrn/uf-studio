@@ -2,8 +2,8 @@
   <div>
     <div class="tab-contain">
       <ul>
-        <li v-for="(data, index) in model.localAppsMgr.allApps.thirdparty.data" class="app-thirdparty-icon">
-          <router-link :to="{name: 'AppDetail', params:{data: data}}">
+        <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="app-deault-icon">
+          <router-link :to="{name: 'AppSubmit', params:{data: data}}">
             <div style="width:100%;height:100%;">
             </div>
           </router-link>
@@ -30,7 +30,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.app-thirdparty-icon {
+.app-deault-icon {
   width: 136px;
   height: 136px;
   border-radius: 4px;

@@ -8,25 +8,20 @@
     <section class="section1-wrapper com-font-GM-20">
       <div class="tab-wrapper">
         <div class="tab" v-for="(item,index) in tab" @click="showTabContain(index)">
-          <span class="tab-text" :class="{'active':showApp === index}">{{ item }}</span>
+          <span class="tab-text" style="" :class="{'active':showApp === index}">{{ item }}</span>
         </div>
       </div>
       <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
-        <div class="tab-contain" v-for="(item,index) in tabContain" :key="index">Default App
-          <ul>
-            <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data">
-              <router-link :to="{name: 'AppDetail', params:{data: data}}">
-                <div style="width:100%;height:100%;">
-                  <img :src="shoppingBag"/><span>010{{ data.name }}</span>
-                </div>
-              </router-link>
-            </li>
-          </ul>
+        <div class="tab-contain" style="height:600px;" v-for="(item,index) in tabContain" :key="index">
+          Default App  
+          <DefaultApp></DefaultApp>
         </div>
-        <div class="tab-contain">Third-Party
+        <div class="tab-contain" style="height:600px;padding-top:40px;">
+          Third-Party
           <third-party></third-party>
         </div>
-        <div class="tab-contain">My App
+        <div class="tab-contain" style="height:600px;padding-top:40px;">
+          My App
           <my-app></my-app>
         </div>
       </div>
@@ -43,6 +38,8 @@
 <script>
 import MyApp from './appStore/MyApp';
 import ThirdParty from './appStore/ThirdParty';
+import DefaultApp from './appStore/DefaultApp';
+
 // import { setTimeout } from 'timers';
 export default {
   data() {
@@ -75,6 +72,7 @@ export default {
   components: {
     MyApp,
     ThirdParty,
+    DefaultApp,
   },
 };
 </script>
@@ -93,8 +91,11 @@ export default {
         height: 100%;
         margin-right: 10%;
         padding-top: 5rem;
+        // background: greenyellow;
         .tab {
+          width: 150px;
           height: 100%;
+          // background: yellow;
           cursor: pointer;
           .active {
             border-bottom: 2px solid #E27347;
@@ -112,16 +113,28 @@ export default {
 </style>
 <style>
 /**common css(AppStore MyApp ThirdParty)**/
-.appStore-wrapper .tab-contain { height: 100%;}
-.appStore-wrapper .tab-contain ul li{
-  width: 8rem;
-  height: 8rem;
+.appStore-wrapper .tab-contain {
+  height: 100%;
+  /* overflow-y: scroll; */
+}
+/* .appStore-wrapper .tab-contain ul li {
+  width: 136px;
+  height: 136px;
   margin: 1.4rem 3.2rem 1.4rem 0;
   display: inline-block;
   text-align: center;
-  background: #E2E2E2;
+  background: #F3F5F7;
   font-size: 1.2rem;
   border-radius: 4px;
   cursor: pointer;
+} */
+.app-title {
+  font-family: 'Gotham-Book';
+  font-size: 16px;
+  color: #4A4A4A;
+  letter-spacing: -0.67px;
+  /* background: yellow; */
+  height: 40px;
+  line-height: 40px;
 }
 </style>
