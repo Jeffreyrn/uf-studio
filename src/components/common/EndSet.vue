@@ -140,13 +140,14 @@ $liInputWidth : 50%;
       color: #6C6A6A;
       letter-spacing: -0.75px;
       font-family: "Gotham-Book";
+      outline: none;
     }
     button.cancel {
       color: #BEBEBE;
       background: #F2F3F5;
     }
   }
-  
+
 }
 
 ul.position-set li{
@@ -169,6 +170,7 @@ ul.position-set li{
     box-shadow: inset 0 0 2px 0 rgba(152,152,152,0.50);
     border-radius: 100px;
     text-align: center;
+    outline: none;
   }
   span {
     font-size: 0.8rem;

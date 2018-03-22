@@ -716,10 +716,11 @@ span.text {
     display: flex;
     position: relative;
     justify-content: space-around;
+    height: 215px;
     & > div {
-      margin: 3% 0;
+      /*margin: 3% 0;*/
       .joystick-wrapper {
-        padding: 20% 0;
+        /*padding: 20% 0;*/
         margin: 0;
       }
     }
@@ -727,11 +728,13 @@ span.text {
       width: 50%;
       display: flex;
       align-items: center;
+      justify-content: center;
       border-right: solid 1px white;
       .height-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-right: 120px;
         #z-control {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 120%;
@@ -773,6 +776,7 @@ span.text {
         position: absolute;
         left: 50%;
         right: 50%;
+        bottom: 44%;
       }
       // .el-slider {
       //   padding: 0 10%;
@@ -782,7 +786,7 @@ span.text {
       //   left: 10%;
       // }
       .yaw-wrapper {
-        padding-bottom: 45%;
+        padding-bottom: 150px;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
@@ -805,14 +809,14 @@ span.text {
       }
     }
   }
-  
+
 }
 .config-wrapper {
   display: flex;
   justify-content: space-around;
   & > div {
     width: 50%;
-    padding: 1% 4%;
+    padding: 2% 4%;
     color: white;
     display: flex;
     justify-content: flex-start;
@@ -854,24 +858,24 @@ span.text {
   border-radius: 8px;
 }
 .header-text {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: white;
   width: 50%;
-  padding: 1% 2% 0;
+  padding: 20px 20px 0;
   letter-spacing: -1px;
 }
 .joint-control {
   padding-bottom: 1vw;
   .degree-text {
     color: white;
-    padding: 0 3vw;
-    padding-top: 1vw;
+    padding: 0 3vw 10px 3vw;
+    /*padding-top: 1vw;*/
     text-align: right;
     font-size: 14px;
   }
   .joint-range {
     color: white;
-    padding: 0.9vw 1vw;
+    padding: 7px 0 6px 0.8vw;
     display: flex;
     align-items: center;
     span {
@@ -881,7 +885,7 @@ span.text {
     }
     .range-wrapper {
       position: relative;
-      width: 20vw;
+      width: 22vw;
       margin-right: 0.5vw;
       background: white;
       height: 2px;
@@ -917,7 +921,7 @@ span.text {
         z-index: 2;
       }
     }
-    
+
     input[type=number] {
       width: 5.5vw;
       border: none;
@@ -927,6 +931,7 @@ span.text {
       letter-spacing: -0.67px;
       font-size: 1rem;
       padding: 0.2vw 0;
+      outline:none;
     }
   }
 }
