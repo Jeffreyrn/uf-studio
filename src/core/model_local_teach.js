@@ -220,7 +220,7 @@ self.getTeachFileInfo = (proj, uuid) => {
 
 self.remoteProjs2Local = (dict) => {
   if (dict.code !== 0) {
-    console.log(`datas is not array`);
+    console.log('datas is not array');
     return;
   }
   const projs = [];
