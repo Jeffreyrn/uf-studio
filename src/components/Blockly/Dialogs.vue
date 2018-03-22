@@ -32,7 +32,7 @@
           @node-click="handleNodeClick">
         </el-tree>
 
-        <div v-if="curSelectedFileUUID.length>0&&(curSelectedFileUUID.indexOf('.py')>0||curSelectedFileUUID.indexOf('.json')>0||model.localAppsMgr.projListDialogType==='app')" class="btn-ok cursor-pointer" @click="onopen">
+        <div v-if="isSelectedApp()" class="btn-ok cursor-pointer" @click="onopen">
           Open
         </div>
         <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
@@ -52,6 +52,7 @@ export default {
     return {
       model: window.GlobalUtil.model,
       curSelectedFileUUID: '',
+      curSelectedUUID: '',
       curProTreeDatas: [],
       block: null,
       // dialog: {
@@ -77,7 +78,33 @@ export default {
     // }
   },
   methods: {
+    isSelectedApp() {
+      switch (this.model.localAppsMgr.projListDialogType) {
+        case 'app': {
+          if (this.curSelectedFileUUID.length > 0) {
+            return true;
+          }
+          break;
+        }
+        case 'ide': {
+          if (this.curSelectedFileUUID.indexOf('.py') > 0) {
+            return true;
+          }
+          break;
+        }
+        case 'teach': {
+          if (this.curSelectedUUID.length > 0) {
+            return true;
+          }
+          break;
+        }
+        default:
+          break;
+      }
+      return false;
+    },
     closeMyself() {
+      this.curSelectedUUID = '';
       this.curSelectedFileUUID = '';
       this.model.localAppsMgr.isProjListDialogShow = false;
     },
@@ -100,7 +127,11 @@ export default {
       this.closeMyself();
     },
     handleNodeClick(data) {
+      this.curSelectedUUID = data.uuid;
       if (data.type !== 'proj') {
+        this.curSelectedFileUUID = data.uuid;
+      }
+      if (this.model.localAppsMgr.projListDialogType === 'teach') {
         this.curSelectedFileUUID = data.uuid;
       }
     },
