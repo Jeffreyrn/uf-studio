@@ -48,7 +48,7 @@ module.exports = {
     }],
     'camelcase': 0,
     'no-console': 0,
-    'func-names': ["error", "always"],
+    // 'func-names': ["error", "always"],
     'space-before-function-paren': ["error", "never"],
     "no-unused-vars": ["error", { "args": "after-used" }],
     "max-len": ["error", 512],
@@ -57,5 +57,12 @@ module.exports = {
     "no-return-assign":0,
     "linebreak-style":0,
     "semi": 0,
+    "no-continue": 0,//禁止使用continue
+    // "func-names": 1,//函数表达式必须有名字
+    "no-cond-assign": 0,//禁止在条件表达式中使用赋值语句
+    "arrow-body-style": 0, // 要求箭头函数体使用大括号
+    "no-mixed-operators": 0, // 禁止混合使用不同的操作符
+    "func-names": 0, // 强制使用命名的 function 表达式
+    "object-shorthand": 0,
   }
 }

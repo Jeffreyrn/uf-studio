@@ -9,7 +9,10 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const x = Blockly.JavaScript.valueToCode(block, 'x', Blockly.JavaScript.ORDER_ATOMIC);
     const y = Blockly.JavaScript.valueToCode(block, 'y', Blockly.JavaScript.ORDER_ATOMIC);
     const z = Blockly.JavaScript.valueToCode(block, 'z', Blockly.JavaScript.ORDER_ATOMIC);
-    const params = { x, y, z };
+    const a = Blockly.JavaScript.valueToCode(block, 'a', Blockly.JavaScript.ORDER_ATOMIC);
+    const b = Blockly.JavaScript.valueToCode(block, 'b', Blockly.JavaScript.ORDER_ATOMIC);
+    const c = Blockly.JavaScript.valueToCode(block, 'c', Blockly.JavaScript.ORDER_ATOMIC);
+    const params = { x, y, z, a, b, c };
     return genFuncCode(params, block);
   };
   Blockly.JavaScript.position7 = (block) => {
@@ -25,7 +28,7 @@ function initBlocklyCode(Blockly, genFuncCode) {
   };
   Blockly.JavaScript.move_to = (block) => {
     const position = Blockly.JavaScript.valueToCode(block, 'position', Blockly.JavaScript.ORDER_ATOMIC);
-    // console.log(`position: ${position}`);
+    console.log(`position move to: ${position}`);
     const params = { position };
     return genFuncCode(params, block);
   };
@@ -118,6 +121,12 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { speed };
+    return genFuncCode(params, block);
+  };
+  Blockly.JavaScript.set_acceleration = (block) => {
+    const acceleration = Blockly.JavaScript.valueToCode(block, 'acceleration', Blockly.JavaScript.ORDER_ATOMIC);
+    // const speed = block.getFieldValue('speed');
+    const params = { acceleration };
     return genFuncCode(params, block);
   };
 
@@ -474,19 +483,19 @@ function initBlocklyCode(Blockly, genFuncCode) {
     const params = { gesture, statement };
     return genFuncCode(params, block);
   };
-  Blockly.JavaScript.ide_app = (block) => {
+  Blockly.JavaScript.studio_run_python = (block) => {
     const ide = Blockly.JavaScript.valueToCode(block, 'ide', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { ide };
     return genFuncCode(params, block);
   };
-  Blockly.JavaScript.record_app = (block) => {
+  Blockly.JavaScript.studio_play_recording = (block) => {
     const record = Blockly.JavaScript.valueToCode(block, 'record', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { record };
     return genFuncCode(params, block);
   };
-  Blockly.JavaScript.other_app = (block) => {
+  Blockly.JavaScript.studio_run_app = (block) => {
     const other = Blockly.JavaScript.valueToCode(block, 'other', Blockly.JavaScript.ORDER_ATOMIC);
     // const speed = block.getFieldValue('speed');
     const params = { other };

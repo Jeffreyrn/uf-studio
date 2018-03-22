@@ -1,8 +1,8 @@
 
-import LocalProjTreeDatas from './model_local_proj_tree_datas';
-import Base64 from '../lib/Base64';
-import { log } from 'util';
-import { setTimeout } from 'timers';
+// import LocalProjTreeDatas from './model_local_proj_tree_datas';
+// import Base64 from '../lib/Base64';
+// import { log } from 'util';
+// import { setTimeout } from 'timers';
 const uuidv4 = require('uuid/v4');
 const path = require('path')
 
@@ -42,7 +42,7 @@ self.isEditingPoints = false;
 self.inputsText = {};
 
 self.show = () => {
-  const e = window.event||arguments.callee.caller.arguments[0];
+  const e = window.event; // ||arguments.callee.caller.arguments[0];
   console.log(`self show = ${e.keyCode}`);
   if (e.keyCode === 13) {
     self.projsDialogShow = false;
@@ -54,7 +54,7 @@ self.show = () => {
 self.isHasProj = (name) => {
   for (let i = 0; i < self.curProjList.length; i += 1) {
     if (self.curProjList[i].name === name) {
-      GlobalUtil.model.localProjTree.dialogErrorTips = 'Project name is the same';
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = 'Project name is the same';
       return true;
     }
   }
@@ -66,7 +66,7 @@ self.isRepeatFile = (uuid) => {
   for (let i = 0; i < self.curProj.files.length; i += 1) {
     // console.log(`file uuid = ${self.curProj.files[i].uuid}`);
     if (self.curProj.files[i].uuid === uuid) {
-      GlobalUtil.model.localProjTree.dialogErrorTips = 'File name is the same';
+      window.GlobalUtil.model.localProjTree.dialogErrorTips = 'File name is the same';
       return true;
     }
   }
@@ -103,7 +103,6 @@ self.getCurSelectedFileUUIDs = () => {
     //     if (key === curUUID) {
     //       const editor = editors[key];
     //       if (editor !== null && editor !== undefined) {
-            
     //         let content = dict.data;
     //         if (content === null || content === undefined) {
     //           content = '';
@@ -120,10 +119,10 @@ self.getCurSelectedFileUUIDs = () => {
   return self.curSelectedFileUUID;
 };
 self.uuids2Files = (uuids) => {
-  let files = [];
-  for (let i = 0; i < uuids.length; i++) {
+  const files = [];
+  for (let i = 0; i < uuids.length; i += 1) {
     const uuid = uuids[i];
-    let file = self.getFileInfo(uuid);
+    const file = self.getFileInfo(uuid);
     if (file !== null && file !== undefined && file !== '') {
       files.push(file);
     }
@@ -194,18 +193,18 @@ self.onTreeNodeClick = (uuid, Expanded) => {
   // const treeRoot = document.getElementById('left-frame');
   // console.log(`treeRoot = ${treeRoot.innerHTML}`);
   // const uuid = data.uuid;
-  const isFile = GlobalUtil.model.localProjTree.isFile(uuid);
+  const isFile = window.GlobalUtil.model.localProjTree.isFile(uuid);
   // console.log(`isFile = ${isFile}`);
   if (Expanded === true) {
-    GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
+    window.GlobalUtil.model.localProjTree.curProjAddOrRemoveExpandedKeys(uuid);
   }
-  GlobalUtil.model.localProjTree.addOpenTab(uuid);
-  GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
+  window.GlobalUtil.model.localProjTree.addOpenTab(uuid);
+  window.GlobalUtil.model.localProjTree.setSelectedUUID(uuid);
   if (isFile === true) {
-    GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
+    window.GlobalUtil.model.localProjTree.curSelectedFileUUID = uuid;
   }
-  if (GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
-  }
+  // if (window.GlobalUtil.model.localProjTree.allCodeEditorVue[uuid] !== undefined) {
+  // }
 };
 
 // 关闭当前文件或者文件夹及以下子目录的所以文件的打开的tab
@@ -213,14 +212,14 @@ self.deleteOpenSonTabs = (fileId) => {
   let allFileIDs = [fileId];
   allFileIDs = allFileIDs.concat(self.findSonFileIDs(fileId));
   console.log(`deleteOpenSonTabs allFileIDs = ${JSON.stringify(allFileIDs)}`);
-  for (let i = 0; i < allFileIDs.length; i++) {
-    let fileID = allFileIDs[i];
+  for (let i = 0; i < allFileIDs.length; i += 1) {
+    const fileID = allFileIDs[i];
     self.removeOpenTab(fileID);
   }
 };
 self.findSonFileIDs = (fileId) => {
   let sonIDs = [];
-  for (var i = 0; i < self.curProj.files.length; i++) {
+  for (let i = 0; i < self.curProj.files.length; i += 1) {
     const sonFile = self.curProj.files[i];
     if (fileId === '') {
       sonIDs.push(sonFile.uuid);
@@ -245,7 +244,7 @@ self.removeOpenTab = (fileId) => {
     return;
   }
   let spliceIndex = 0;
-  let tempList = [];
+  const tempList = [];
   for (let i = 0; i < proTabsList.length; i += 1) {
     const file = proTabsList[i];
     if (file.uuid === fileId) {
@@ -261,7 +260,7 @@ self.removeOpenTab = (fileId) => {
   self.curOpenedFilesList = proTabsList;
   // const alltext = JSON.stringify(GlobalUtil.model.localProjTree.allCodeEditorVue);
   // console.log(`GlobalUtil.model.localProjTree.allCodeEditorVue = ${alltext}`);
-  GlobalUtil.model.localProjTree.allCodeEditorVue = GlobalUtil.model.localProjTree.allCodeEditorVue;
+  window.GlobalUtil.model.localProjTree.allCodeEditorVue = window.GlobalUtil.model.localProjTree.allCodeEditorVue;
   // 选中前一个
   if (fileId === self.getCurSelectedFileUUIDs()) {
     if (proTabsList.length > 0) {
@@ -272,7 +271,7 @@ self.removeOpenTab = (fileId) => {
       self.setCurSelectedFileUUIDs(null);
     }
   }
-  
+
   if (self.curOpenedFilesList.length === 0) {
     // self.setSelectedUI(null);
     // self.setSelectedEditor('');
@@ -291,7 +290,7 @@ self.isFile = (uuid) => {
 
 self.setSelectedUUID = (uuid) => {
   self.curSelectedUUID = uuid;
-  const proId = self.curProj.uuid;
+  // const proId = self.curProj.uuid;
   if (uuid === '' || uuid === null || uuid === undefined) {
     // self.curSelectedFileUUID = '';
     self.setCurSelectedFileUUIDs(uuid);
@@ -299,14 +298,13 @@ self.setSelectedUUID = (uuid) => {
     // self.setSelectedUI(uuid);
     return;
   }
-  // 
+
   const file = self.getFileInfo(uuid);
   if (file === null) {
     return;
   }
   if (file.type === self.PROJ_TREE_TYPE.FOLDER) {
     self.curSelectedFolderUUID = uuid;
-    return;
   }
   else {
     self.curSelectedFolderUUID = '';
@@ -320,12 +318,10 @@ self.setSelectedUUID = (uuid) => {
     //   self.curFile.remoteContent = content;
     //   self.setSelectedContent(file.uuid, content);
     // });
-    
   }
   // self.setSelectedUI(uuid);
   // self.setSelectedEditor(uuid);
   // ui
-  
 };
 
 // self.setSelectedUI = (uuid) => {
@@ -426,12 +422,12 @@ self.setSelectedUUID = (uuid) => {
 // };
 
 self.onwinresize = () => {
-  const leftFrame = document.getElementById("left-frame");
+  // const leftFrame = document.getElementById("left-frame");
   // leftFrame.style.width = `${leftFrameWidth}px`;
-  const rightFrame = document.getElementById("right-frame");
-  const totalFrame = document.getElementById("total-frame");
-  const pipInstallInput = document.getElementById("pip-install-input-id");
-  const totalFrameWidth = document.body.clientWidth;//- 120;
+  const rightFrame = document.getElementById('right-frame');
+  const totalFrame = document.getElementById('total-frame');
+  const pipInstallInput = document.getElementById('pip-install-input-id');
+  const totalFrameWidth = document.body.clientWidth; // - 120;
   const totalFrameHeight = document.body.clientHeight - 120;
   const leftFrameWidth = 200;
   const rightFrameWidth = totalFrameWidth - leftFrameWidth;
@@ -443,16 +439,16 @@ self.onwinresize = () => {
   if(rightFrame !==null && rightFrame !== undefined){
     rightFrame.style.width = `${rightFrameWidth}px`;
   }
-  const editors = GlobalUtil.model.localProjTree.editors;
+  const editors = window.GlobalUtil.model.localProjTree.editors;
   for (const key in editors) {
     const editor = editors[key];
     if (editor !== null && editor !== undefined) {
       // editor.setSize('auto', `${totalFrameHeight - 200}px`);
-      const editorHeight = GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
+      const editorHeight = window.GlobalUtil.model.localProjTree.isResultFrameDisplay ? totalFrameHeight - 190 : totalFrameHeight - 70;
       editor.setSize('auto', `${editorHeight}px`);
     }
   }
-  if(pipInstallInput !==null && pipInstallInput !== undefined){
+  if (pipInstallInput !== null && pipInstallInput !== undefined) {
     pipInstallInput.style.width = `${rightFrameWidth - 61}px`;
   }
   // document.getElementById("pip-install-input-id").style.width = `${rightFrameWidth - 61}px`;
@@ -785,11 +781,11 @@ self.remoteCmdResult2Local = (dict) => {
   }
 
   if (stdout !== undefined) {
-    GlobalUtil.model.localProjTree.runningCmdResult += stdout + "\n";
+    window.GlobalUtil.model.localProjTree.runningCmdResult += stdout + "\n";
     // GlobalUtil.model.localProjTree.runningCmdResult = stdout;
   }
   if (programID !== undefined) {
-    GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
+    window.GlobalUtil.model.localProjTree.runningCmdProgramID = programID;
   }
   const show = document.getElementById("result-text");
   show.scrollTop = show.scrollHeight;

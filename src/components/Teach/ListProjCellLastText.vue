@@ -1,25 +1,25 @@
 <template lang="html">
   <div>
-      <div class="line-block-text-right">
-        <div v-if="model.localTeach.curEditingFileUUID==='' && index===model.localTeach.fileDatas['temp'].length-1">
-            <div v-if="(index+1) % 10 === 0">
-                {{ parseInt((index+1) / 10) }}.0s
-            </div>
-            <div v-else>
-                .{{ (index+1) % 10 }}
-            </div>
+    <div class="line-block-text-right">
+      <div v-if="model.localTeach.curEditingFileUUID==='' && index===model.localTeach.fileDatas['temp'].length-1">
+        <div v-if="(index+1) % 10 === 0">
+          {{ parseInt((index+1) / 10) }}.0s
         </div>
         <div v-else>
-            <div v-if="index===model.localTeach.fileDatas[file.uuid].length-1">
-                <div v-if="(index+1) % 10 === 0">
-                    {{ parseInt((index+1) / 10) }}.0s
-                </div>
-                <div v-else>
-                    .{{ (index+1) % 10 }}
-                </div>
-            </div>
+          .{{ (index+1) % 10 }}
         </div>
       </div>
+      <div v-else>
+        <div v-if="index===model.localTeach.fileDatas[file.uuid].length-1">
+          <div v-if="(index+1) % 10 === 0">
+            {{ parseInt((index+1) / 10) }}.0s
+          </div>
+          <div v-else>
+            .{{ (index+1) % 10 }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -28,7 +28,7 @@ export default {
   props: ['file', 'index'],
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {

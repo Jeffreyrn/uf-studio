@@ -17,7 +17,7 @@
             <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data">
               <router-link :to="{name: 'AppDetail', params:{data: data}}">
                 <div style="width:100%;height:100%;">
-                  <img :src="shoppingBag"/><span>{{ data.name }}</span>
+                  <img :src="shoppingBag"/><span>010{{ data.name }}</span>
                 </div>
               </router-link>
             </li>
@@ -43,19 +43,18 @@
 <script>
 import MyApp from './appStore/MyApp';
 import ThirdParty from './appStore/ThirdParty';
-import { setTimeout } from 'timers';
-
+// import { setTimeout } from 'timers';
 export default {
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
       showApp: 'allApp',
       tab: {
         allApp: 'All Apps',
         thirdParty: 'Third-Party',
         myApp: 'My App',
       },
-      shoppingBag: require('../assets/img/appStore/shopping_bag.svg'), 
+      shoppingBag: require('../assets/img/appStore/shopping_bag.svg'),
       tabContain: {
         1: {
           1: {
@@ -113,17 +112,16 @@ export default {
 </style>
 <style>
 /**common css(AppStore MyApp ThirdParty)**/
-  .appStore-wrapper .tab-contain { height: 100%;}
-  .appStore-wrapper .tab-contain ul li{
-    width: 8rem;
-    height: 8rem;
-    margin: 1.4rem 3.2rem 1.4rem 0;
-    display: inline-block;
-    text-align: center;
-    background: #E2E2E2;
-    font-size: 1.2rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.appStore-wrapper .tab-contain { height: 100%;}
+.appStore-wrapper .tab-contain ul li{
+  width: 8rem;
+  height: 8rem;
+  margin: 1.4rem 3.2rem 1.4rem 0;
+  display: inline-block;
+  text-align: center;
+  background: #E2E2E2;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
 </style>
-

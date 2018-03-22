@@ -19,13 +19,11 @@
 </template>
 
 <script>
-
-const path = require('path')
-
+// const path = require('path')
 export default {
-  data () {
+  data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
     }
   },
   methods: {
@@ -34,7 +32,7 @@ export default {
     },
     ondelete() {
       this.model.localProjTree.deleteDialogShow = false;
-      GlobalUtil.model.localProjTree.onDeleteDialog();
+      window.GlobalUtil.model.localProjTree.onDeleteDialog();
     },
   },
   components: {

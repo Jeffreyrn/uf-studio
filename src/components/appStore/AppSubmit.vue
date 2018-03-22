@@ -40,65 +40,65 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        model: GlobalUtil.model,
-        name: '',
-        data: {},
-        des: '',
-        nameNum: 50,
-        desNum: 1000,
-        // state: 'normal', // normal, cansubmit, uploaded, reviewing, approve, failed
-      };
+export default {
+  data() {
+    return {
+      model: window.GlobalUtil.model,
+      name: '',
+      data: {},
+      des: '',
+      nameNum: 50,
+      desNum: 1000,
+      // state: 'normal', // normal, cansubmit, uploaded, reviewing, approve, failed
+    };
+  },
+  mounted() {
+    window.GlobalUtil.model.localAppsMgr.curUploadState = 'normal';
+  },
+  activated: function() {
+    console.log(`params = ${JSON.stringify(this.$route.params)}`);
+    this.data = this.$route.params.data;
+    this.name = this.data.name;
+    this.des = this.data.des;
+  },
+  methods: {
+  },
+  computed: {
+    classObject: () => ({
+      'app-submit-btn-normal': window.GlobalUtil.model.localAppsMgr.curUploadState === 'normal',
+      'app-submit-btn-cansubmit': window.GlobalUtil.model.localAppsMgr.curUploadState === 'cansubmit',
+      'app-submit-btn-uploaded': window.GlobalUtil.model.localAppsMgr.curUploadState === 'uploaded',
+      'app-submit-btn-reviewing': window.GlobalUtil.model.localAppsMgr.curUploadState === 'reviewing',
+      'app-submit-btn-approve': window.GlobalUtil.model.localAppsMgr.curUploadState === 'approve',
+      'app-submit-btn-failed': window.GlobalUtil.model.localAppsMgr.curUploadState === 'failed',
+    }),
+    submitButtonValue() {
+      switch (window.GlobalUtil.model.localAppsMgr.curUploadState) {
+        case 'normal':
+        case 'cansubmit':
+          return 'Summit';
+        case 'uploaded':
+          return 'Uploaded';
+        case 'reviewing':
+          return 'Reviewing';
+        case 'approve':
+          return 'Approve';
+        case 'failed':
+          return 'Failed';
+        default:
+          return '';
+      }
     },
-    mounted() {
-      GlobalUtil.model.localAppsMgr.curUploadState = 'approve';
+  },
+  watch: {
+    name: () => {
+      this.name = this.name.substr(0, 50);
     },
-    activated: function () {
-      console.log(`params = ${JSON.stringify(this.$route.params)}`);
-      this.data = this.$route.params.data;
-      this.name = this.data.name;
-      this.des = this.data.des;
+    des: () => {
+      this.des = this.des.substr(0, 1000);
     },
-    methods: {
-    },
-    computed: {
-      classObject: () => {
-        return {
-          'app-submit-btn-normal': GlobalUtil.model.localAppsMgr.curUploadState==='normal',
-          'app-submit-btn-cansubmit': GlobalUtil.model.localAppsMgr.curUploadState==='cansubmit',
-          'app-submit-btn-uploaded': GlobalUtil.model.localAppsMgr.curUploadState==='uploaded',
-          'app-submit-btn-reviewing': GlobalUtil.model.localAppsMgr.curUploadState==='reviewing',
-          'app-submit-btn-approve': GlobalUtil.model.localAppsMgr.curUploadState==='approve',
-          'app-submit-btn-failed': GlobalUtil.model.localAppsMgr.curUploadState==='failed',
-        }
-      },
-      submitButtonValue() {
-        switch (GlobalUtil.model.localAppsMgr.curUploadState) {
-          case 'normal':
-          case 'cansubmit':
-            return 'Summit';
-          case 'uploaded':
-            return 'Uploaded';
-          case 'reviewing':
-            return 'Reviewing';
-          case 'approve':
-            return 'Approve';
-          case 'failed':
-            return "Failed";
-        }
-      },
-    },
-    watch:{
-      "name": function() {
-        this.name = this.name.substr(0,50);
-      },
-      "des": function() {
-        this.des = this.des.substr(0,1000);
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style scoped lang="scss">

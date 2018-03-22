@@ -3,7 +3,7 @@ const GlobalConstant = {};
 const self = GlobalConstant;
 window.GlobalConstant = self;
 
-self.VERSION = {version: 'xarm7'};
+self.VERSION = { version: 'xarm7' };
 self.userId = 'test';
 
 self.COMMON_PARAMS = {
@@ -38,6 +38,7 @@ self.APPSTORE_GET_LOCAL_APPS = 'get_local_apps';
 self.APPSTORE_APP_INSTALL = 'app_install';
 self.APPSTORE_APP_UNINSTALL = 'app_uninstall';
 self.APPSTORE_APP_REMOVE = 'app_remove';
+self.APPSTORE_APP_CREATE = 'app_create';
 
 self.DEBUG_SET_BEART = 'debug_set_beart';
 

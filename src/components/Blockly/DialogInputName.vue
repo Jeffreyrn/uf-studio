@@ -10,14 +10,10 @@
           <div class="dialog-close" @click="closeMyself">
           </div>
         </div> -->
-        <div v-if="isExtInput">
-          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext" />
-          <custom-select class="position-absolute dialog-select-origin dialog-select-bg dialog-select-size" style=""></custom-select>
+        <div>
+          <input id="input-text" v-model="model.localAppsMgr.curProName" type="text" class="position-absolute dialog-input" />
         </div>
-        <div v-if="!isExtInput">
-          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
-        </div>
-        <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div>
+        <!-- <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div> -->
         <div class="position-absolute" style="bottom:0px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
@@ -39,9 +35,7 @@
 </template>
 
 <script>
-import CustomSelect from './CustomSelect';
-
-const path = require('path')
+// const path = require('path')
 
 export default {
   data() {
@@ -58,76 +52,79 @@ export default {
       }
     },
     closeMyself() {
-      this.model.localProjTree.fileDialogShow = false;
+      this.$emit('hideInput')
+      // this.model.localProjTree.fileDialogShow = false;
     },
     oncreate() {
-      const text = this.model.localProjTree.curDialogInputText;
-      // console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
-      // console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
-      if (this.model.localProjTree.folderOrFile === 'folder') {
-        window.CommandsEditorSocket.createFile(text, false);
-        // const folder = GlobalUtil.model.localProjTree.createFolder(text);
-        // GlobalUtil.model.localProjTree.curProj.files.push(folder);
-      }
-      if (this.model.localProjTree.folderOrFile === 'file') {
-        window.CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
-        // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
-        // GlobalUtil.model.localProjTree.curProj.files.push(file);
-        // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
-      }
-      if (this.model.localProjTree.folderOrFile === 'proj') {
-        window.CommandsEditorSocket.createProj(text);
-        // const proj = GlobalUtil.model.localProjTree.createProj(text);
-        // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
-      }
-      if (this.model.localProjTree.folderOrFile === 'rename') {
-        // GlobalUtil.model.localProjTree.renameFile(text);
-        const curUUID = window.GlobalUtil.model.localProjTree.curSelectedUUID;
-        window.CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
-      }
-      if (this.model.localProjTree.folderOrFile === 'renameproj') {
-        // GlobalUtil.model.localProjTree.renameProj(text);
-        window.CommandsEditorSocket.renameProj(text);
-      }
-      this.model.localProjTree.projsDialogShow = false;
-      this.model.localProjTree.fileDialogShow = false;
-      this.model.localProjTree.deleteDialogShow = false;
+      // const text = this.model.localProjTree.curDialogInputText;
+      this.$emit('saveProject')
+      // // console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
+      // // console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
+      // if (this.model.localProjTree.folderOrFile === 'folder') {
+      //   window.CommandsEditorSocket.createFile(text, false);
+      //   // const folder = GlobalUtil.model.localProjTree.createFolder(text);
+      //   // GlobalUtil.model.localProjTree.curProj.files.push(folder);
+      // }
+      // if (this.model.localProjTree.folderOrFile === 'file') {
+      //   window.CommandsEditorSocket.createFile(`${text}${this.model.localProjTree.fileSelected}`, true);
+      //   // const file = GlobalUtil.model.localProjTree.createSimpleFile(text);
+      //   // GlobalUtil.model.localProjTree.curProj.files.push(file);
+      //   // GlobalUtil.model.localProjTree.setSelectedUUID(file.uuid);
+      // }
+      // if (this.model.localProjTree.folderOrFile === 'proj') {
+      //   window.CommandsEditorSocket.createProj(text);
+      //   // const proj = GlobalUtil.model.localProjTree.createProj(text);
+      //   // GlobalUtil.model.localProjTree.changeProj(proj.uuid);
+      // }
+      // if (this.model.localProjTree.folderOrFile === 'rename') {
+      //   // GlobalUtil.model.localProjTree.renameFile(text);
+      //   const curUUID = window.GlobalUtil.model.localProjTree.curSelectedUUID;
+      //   window.CommandsEditorSocket.renameFile(curUUID, `${text}${this.model.localProjTree.fileSelected}`)
+      // }
+      // if (this.model.localProjTree.folderOrFile === 'renameproj') {
+      //   // GlobalUtil.model.localProjTree.renameProj(text);
+      //   window.CommandsEditorSocket.renameProj(text);
+      // }
+      // this.model.localProjTree.projsDialogShow = false;
+      // this.model.localProjTree.fileDialogShow = false;
+      // this.model.localProjTree.deleteDialogShow = false;
     },
   },
   components: {
-    CustomSelect,
   },
   computed: {
     isFileNameCorrect() {
-      const isFileStr = window.GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
-      const text = this.model.localProjTree.curDialogInputText;
-      const folderOrFile = this.model.localProjTree.folderOrFile;
+      // const isFileStr = window.GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
+      const text = this.model.localAppsMgr.curProName;
+      // const folderOrFile = this.model.localProjTree.folderOrFile;
 
-      if (folderOrFile === 'proj' || folderOrFile === 'renameproj') {
-        const isHasProj = window.GlobalUtil.model.localProjTree.isHasProj(text);
-        return isFileStr && !isHasProj;
-      }
-      if (folderOrFile === 'file' || folderOrFile === 'rename' || folderOrFile === 'folder') {
-        const ext = this.model.localProjTree.fileSelected;
-        let getFileSuperid = this.model.localProjTree.getFileSuperid();
-        if (getFileSuperid === '') {
-          getFileSuperid = this.model.localProjTree.curProj.uuid;
-        }
-        let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
-        if (folderOrFile === 'folder') {
-          toAddFile = path.join(getFileSuperid, `${text}`);
-        }
-        const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
-        console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
-        if (text === null || text === '') {
-          window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
-        }
-        return isFileStr && !isRepeatFile;
-      }
+      // if (folderOrFile === 'proj' || folderOrFile === 'renameproj') {
+      //   const isHasProj = window.GlobalUtil.model.localProjTree.isHasProj(text);
+      //   return isFileStr && !isHasProj;
+      // }
+      // if (folderOrFile === 'file' || folderOrFile === 'rename' || folderOrFile === 'folder') {
+      //   const ext = this.model.localProjTree.fileSelected;
+      //   let getFileSuperid = this.model.localProjTree.getFileSuperid();
+      //   if (getFileSuperid === '') {
+      //     getFileSuperid = this.model.localProjTree.curProj.uuid;
+      //   }
+      //   let toAddFile = path.join(getFileSuperid, `${text}${ext}`);
+      //   if (folderOrFile === 'folder') {
+      //     toAddFile = path.join(getFileSuperid, `${text}`);
+      //   }
+      //   const isRepeatFile = this.model.localProjTree.isRepeatFile(toAddFile);
+      //   console.log(`getFileSuperid = ${getFileSuperid}, toAddFile = ${toAddFile}, isRepeatFile = ${isRepeatFile}`);
+      //   if (text === null || text === '') {
+      //     window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      //   }
+      //   return isFileStr && !isRepeatFile;
+      // }
+      // TODO Validate
       if (text === null || text === '') {
-        window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        // window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+        return false
       }
-      return isFileStr;
+      return true
     },
     isExtInput() {
       if (this.model.localProjTree.curDialogIsExtend === false) {
@@ -208,7 +205,7 @@ export default {
     border: 0;
     outline:none;
     /* border: 0.02 solid #4E4C4C; */
-    background-image: url('./../assets/img/pop/frame01.svg');
+    background-image: url('./../../assets/img/pop/frame01.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 288px 34px;
@@ -224,7 +221,7 @@ export default {
   .dialog-input-ext {
     width:252px;
     /* background: green; */
-    background-image: url('./../assets/img/pop/frame02.svg');
+    background-image: url('./../../assets/img/pop/frame02.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 252px 34px;
@@ -242,7 +239,7 @@ export default {
     padding-left: 5px;
     padding-top: 10px;
     /* opacity: 0; */
-    background-image: url('./../assets/img/pop/frame03_fileselection.svg');
+    background-image: url('./../../assets/img/pop/frame03_fileselection.svg');
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -251,7 +248,7 @@ export default {
     left:284px;
   }
   .dialog-select-bg {
-    background-image: url('./../assets/img/pop/frame03_fileselection.svg');
+    background-image: url('./../../assets/img/pop/frame03_fileselection.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 46px 34px;

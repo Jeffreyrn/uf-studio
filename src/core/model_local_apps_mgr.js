@@ -8,6 +8,7 @@ self.isProjListDialogShow = false;
 self.curDialogTitle = '';
 self.projListDialogType = '';
 self.curProTreeDatas = [];
+self.curProName = ''
 self.appTreeDatas = [
   {
     uuid: '',
@@ -80,24 +81,24 @@ self.curUploadState = 'normal';
 
 self.allApps = {
   thirdparty: {
-    data:[],
+    data: [],
   },
   default: {
-    data:[],
+    data: [],
   },
   my: {
-    data:[],
+    data: [],
   },
 }
 
 self.remoteProjs2Local = (dict) => {
   if (dict.code !== 0) {
-    console.log(`datas is not right`);
+    console.log('datas is not right');
     return;
   }
   const defaults = dict.data.default;
   const thirdpartys = dict.data.thirdparty;
-  
+
   self.allApps.default.data = [];
   self.allApps.thirdparty.data = [];
 
@@ -160,7 +161,7 @@ self.remoteProjs2Local = (dict) => {
 
 self.remoteMyProjs2Local = (dict) => {
   if (dict.code !== 0) {
-    console.log(`datas is not right`);
+    console.log('datas is not right');
     return;
   }
   const data = dict.data;

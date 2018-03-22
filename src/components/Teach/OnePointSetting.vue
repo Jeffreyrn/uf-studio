@@ -84,7 +84,7 @@
 export default {
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
       aMin: 0,
       aMax: 360,
     };
@@ -93,50 +93,43 @@ export default {
   },
   methods: {
     onChange(uid, value) {
-      const curSelectedIndex = GlobalUtil.model.localTeach.curSelectedIndex;
-      const curEditingFileUUID = GlobalUtil.model.localTeach.curEditingFileUUID;
+      const curSelectedIndex = window.GlobalUtil.model.localTeach.curSelectedIndex;
+      const curEditingFileUUID = window.GlobalUtil.model.localTeach.curEditingFileUUID;
       console.log(`${uid} change = ${value}, curSelectedIndex = ${curSelectedIndex}`);
       switch (uid) {
-        case 'a0':
-        {
+        case 'a0': {
           // GlobalUtil.model.localTeach.setPoint(0, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 0, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 0, value);
           break;
         }
-        case 'a1':
-        {
+        case 'a1': {
           // GlobalUtil.model.localTeach.setPoint(1, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 1, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 1, value);
           break;
         }
-        case 'a2':
-        {
+        case 'a2': {
           // GlobalUtil.model.localTeach.setPoint(2, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 2, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 2, value);
           break;
         }
-        case 'a3':
-        {
+        case 'a3': {
           // GlobalUtil.model.localTeach.setPoint(3, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 3, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 3, value);
           break;
         }
-        case 'a4':
-        {
+        case 'a4': {
           // GlobalUtil.model.localTeach.setPoint(4, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 4, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 4, value);
           break;
         }
-        case 'a5':
-        {
+        case 'a5': {
           // GlobalUtil.model.localTeach.setPoint(5, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 5, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 5, value);
           break;
         }
-        case 'a6':
-        {
+        case 'a6': {
           // GlobalUtil.model.localTeach.setPoint(6, curSelectedIndex, value);
-          GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 6, value);
+          window.GlobalUtil.model.localTeach.updateFileData(curEditingFileUUID, curSelectedIndex, 6, value);
           break;
         }
         default:

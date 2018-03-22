@@ -48,7 +48,6 @@
             <p class="gray-title">Size</p>
             <p class="black-text">{{ data.size }}</p>
           </div>
-
         </div>
       </section>
       <!-- <section class="section2">
@@ -78,65 +77,65 @@
 
 <script>
 
-  import DialogAlert from './../DialogAlert';
+import DialogAlert from './../DialogAlert';
+// import { setTimeout } from 'timers';
 
-  export default {
-    data() {
-      return {
-        data: {},
-        errorAlert: false,
-      };
+export default {
+  data() {
+    return {
+      data: {},
+      errorAlert: false,
+    };
+  },
+  mounted() {
+    // console.log(`mounted app detail route = ${JSON.stringify(this.$route)}`);
+  },
+  activated: function() {
+    this.data = this.$route.params.data;
+  },
+  components: {
+    DialogAlert,
+  },
+  methods: {
+    oninstall() {
+      window.CommandsAppsSocket.appInstall(this.data.category, this.data.name, this.data.version, (dict) => {
+        console.log(`CommandsAppsSocket appInstall = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          this.data.control = 'run';
+          // this.errorAlert = true;
+        }
+        else {
+          this.errorAlert = true;
+        }
+      });
     },
-    mounted() {
+    onok() {
+      this.errorAlert = false;
     },
-    activated: function () {
-      this.data = this.$route.params.data;
-      console.log(`app detail params = ${JSON.stringify(this.data)}`);
+    onrun() {
     },
-    components: {
-      DialogAlert,
+    onuninstall() {
+      window.CommandsAppsSocket.appUninstall(this.data.category, this.data.name, (dict) => {
+        console.log(`CommandsAppsSocket appUninstall = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          this.data.control = 'install';
+          // this.errorAlert = true;
+        }
+        else {
+          this.errorAlert = true;
+        }
+      });
     },
-    methods: {
-      oninstall() {
-        CommandsAppsSocket.appInstall(this.data.category, this.data.name, this.data.version, (dict) => {
-          console.log(`CommandsAppsSocket appInstall = ${JSON.stringify(dict)}`);
-          if (dict.code === 0) {
-            this.data.control = 'run';
-            // this.errorAlert = true;
-          }
-          else {
-            this.errorAlert = true;
-          }
-        });
-      },
-      onok() {
-        this.errorAlert = false;
-      },
-      onrun() {
-
-      },
-      onuninstall() {
-        CommandsAppsSocket.appUninstall(this.data.category, this.data.name, (dict) => {
-          console.log(`CommandsAppsSocket appUninstall = ${JSON.stringify(dict)}`);
-          if (dict.code === 0) {
-            this.data.control = 'install';
-            // this.errorAlert = true;
-          }
-          else {
-            this.errorAlert = true;
-          }
-        });
-      },
-      // onreinstall() {
-      //   CommandsAppsSocket.appReinstall(this.data.category, this.data.name, this.data.version, (dict) => {
-      //     console.log(`CommandsAppsSocket appReinstall = ${JSON.stringify(dict)}`);
-      //     if (dict.code === 0) {
-      //       this.data.control = 'run';
-      //     }
-      //   });
-      // }
-    },
-  };
+    // onreinstall() {
+    //   CommandsAppsSocket.appReinstall(this.data.category, this.data.name, this.data.version, (dict) => {
+    //     console.log(`CommandsAppsSocket appReinstall = ${JSON.stringify(dict)}`);
+    //     if (dict.code === 0) {
+    //       this.data.control = 'run';
+    //     }
+    //   });
+    // }
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

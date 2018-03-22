@@ -64,52 +64,48 @@ import TopTab from './editor/TopTab';
 import DialogProjs from './DialogProjs';
 import DialogText from './DialogText';
 import DialogDelete from './DialogDelete';
-
 // import FilesOpenTab from './editor/FilesOpenTab';
-
 import '../assets/css/reseet.css';
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 
 export default {
   data() {
     return {
-      model: GlobalUtil.model,
+      model: window.GlobalUtil.model,
       clientWidth: 100,
       clientHeight: 200,
       leftFrameWidth: 200,
     };
   },
   mounted() {
-    console.log(`mounted mounted mounted`);
-    const curFile = GlobalUtil.model.localProjTree.curFile;
+    // console.log(`mounted mounted mounted`);
+    const curFile = window.GlobalUtil.model.localProjTree.curFile;
     if (curFile !== null && curFile !== undefined && curFile.uuid !== undefined) {
       // GlobalUtil.model.localProjTree.setSelectedEditor(curFile.uuid);
     }
     else {
       // GlobalUtil.model.localProjTree.setSelectedEditor('');
     }
-    window.addEventListener('resize', GlobalUtil.model.localProjTree.onwinresize, false);
-    GlobalUtil.model.localProjTree.onwinresize();
-    CommandsEditorSocket.listProjs((dict) => {
-
+    window.addEventListener('resize', window.GlobalUtil.model.localProjTree.onwinresize, false);
+    window.GlobalUtil.model.localProjTree.onwinresize();
+    window.CommandsEditorSocket.listProjs(() => {
     });
-
     document.onkeydown = () => {
-      GlobalUtil.model.localProjTree.show();
+      window.GlobalUtil.model.localProjTree.show();
     };
   },
-  activated: function () {
+  activated: function() {
     // console.log(3);
-    GlobalUtil.model.localProjTree.onwinresize();
+    window.GlobalUtil.model.localProjTree.onwinresize();
   },
-  deactivated: function () {
+  deactivated: function() {
     // console.log(4)
-    GlobalUtil.model.localProjTree.onwinresize();
+    window.GlobalUtil.model.localProjTree.onwinresize();
   },
   methods: {
     onCloseResult() {
-      GlobalUtil.model.localProjTree.isResultFrameDisplay = false;
-      GlobalUtil.model.localProjTree.onwinresize();
+      window.GlobalUtil.model.localProjTree.isResultFrameDisplay = false;
+      window.GlobalUtil.model.localProjTree.onwinresize();
     },
   },
   beforeDestroy() {
@@ -132,22 +128,18 @@ export default {
 </script>
 
 <style scoped>
-
 .editor-wrapper {
   text-align: left;
 }
-
 a {
   color: white;
 }
-
 .top-style {
   position:absolute;
   height:67px;
   width:100%;
   background: #3C3F41;
 }
-
 .back-icon {
   position: absolute;
   left: 20px;
@@ -157,7 +149,6 @@ a {
   transform: translateY(-50%);
   background-image: url('./../assets/img/ide/icon_back.svg');
 }
-
 .title-ide {
   position: absolute;
   left: 62px;
@@ -168,7 +159,6 @@ a {
   color: #FFFFFF;
   letter-spacing: -1px; 
 }
-
 .total-frame {
   /*background-color:gray;*/
   width:100%;
@@ -180,11 +170,9 @@ a {
   /*top: 200px;
   left: 100px;*/
 }
-
 body {
   scrollbar-track-color: #3C3F41;
 }
-
 .left-frame {
   /* width:200px; */
   width: 200px;
@@ -195,7 +183,6 @@ body {
   /* scrollbar-track-color: #3C3F41; */
   /* SCROLLBAR-TRACK-COLOR: aquamarine; */
 }
-
 .left-frame::-webkit-scrollbar {/*滚动条整体样式*/
   width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
   height: 4px;
@@ -206,7 +193,6 @@ body {
 .left-frame::-webkit-scrollbar-track {/*滚动条里面轨道*/
   background: #2F2F2F;
 }
-
 .right-frame {
   left: 200px;
   /* width:90%; */
@@ -216,7 +202,6 @@ body {
   /*background-color:#e9e6d3;*/
   background: #3C3F41;
 }
-
 .result-frame {
   /*position: absolute;*/
   background-color:#e9e6d3;
@@ -226,14 +211,12 @@ body {
   padding:0px;
   margin:0px;
 }
-
 .top-tab-color {
   width: 100%;
   /* background: #313335; */
   /* background-color: yellow; */
   background: #282828;
 }
-
 .result-close {
   top:0px;
   right:10px;
@@ -246,5 +229,4 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-
 </style>

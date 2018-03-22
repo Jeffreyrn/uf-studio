@@ -5,16 +5,16 @@ const LocalParamsSetting = {};
 const self = LocalParamsSetting;
 self.params = Params;
 
-Array.prototype.contains = (obj) => {
-  let i = this.length;
-  while (i >= 0) {
-    if (this[i] === obj) {
-      return true;
-    }
-  }
-  i -= 1;
-  return false;
-};
+// Array.prototype.contains = (obj) => {
+//   let i = this.length;
+//   while (i >= 0) {
+//     if (this[i] === obj) {
+//       return true;
+//     }
+//   }
+//   i -= 1;
+//   return false;
+// };
 
 self.groups = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9'];
 self.curGroup = 1;
@@ -22,10 +22,10 @@ self.curGroup = 1;
 self.filterGroups = (page) => {
   const p = `P${page}`;
   const tmpArr = [];
-  // const filterGroups = {};
-  for (const [key, value] of Object.entries(Params)) {
-  // for (const key in Params) {
-    const row = value; // Params[key];
+  const keys = Object.keys(Params);
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    const row = Params[key];
     if (p === row.group) {
       tmpArr.push(Params[key]);
     }
