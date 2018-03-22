@@ -375,9 +375,9 @@ CodeGenerator.event_leap_gesture = (params) => {
 };
 
 CodeGenerator.event_button_pressed_stop = () => 'UArm.Button.clearEventListener();\n';
-CodeGenerator.studio_run_python = (name) => `ideExcute(${name.ide});\n`;
-CodeGenerator.studio_play_recording = (name) => `recordExcute(${name.record});\n`;
-CodeGenerator.studio_run_app = (name) => `console.log(this, window.xArmVuex.commit('GET_ROBOT_STATUS'));\n`;
+CodeGenerator.studio_run_python = (name) => `await window.CommandsAppsSocket.runTeach(${name.ide});\n`;
+CodeGenerator.studio_play_recording = (name) => `await window.CommandsAppsSocket.runPython(${name.record});\n`;
+CodeGenerator.studio_run_app = (name) => `console.log('TODO');\n`;
 /* Code generator*/
 const genFuncCode = (params, block) => CodeGenerator[block.type](params);
 

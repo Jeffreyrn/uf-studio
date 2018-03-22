@@ -172,13 +172,13 @@ footer{
       position: absolute;
       width: 100%;
       .end-col {
-        width: 24vw;
+        width: 20vw;
         height: 100%;
       }
       .model-container{
         padding-right: 1vw;
         border-radius: 0px;
-        width: 73vw;
+        width: 78vw;
         height: 100%;
       }
     }
