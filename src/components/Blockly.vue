@@ -102,7 +102,7 @@ export default {
       this.myAppData = this.$route.params.data;
       const name = this.myAppData.name;
       this.backStr = 'AppStore';
-      this.loadProject(name);
+      this.getProject(name);
     }
   },
   components: {
