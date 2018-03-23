@@ -48,6 +48,7 @@ self.show = () => {
     self.projsDialogShow = false;
     self.fileDialogShow = false;
     self.deleteDialogShow = false;
+    window.GlobalUtil.model.localTeach.saveDialogShow = false;
   }
 }
 

@@ -4,7 +4,7 @@
     <div v-else class="app-title" @click="chanegEdit()">{{ data.omitname }}</div>
 
     <DialogAlert
-      title='Rename fails.'
+      :title='alertTitle'
       subtitle=''
       :onok='onok'
       v-if="errorAlert===true">
@@ -24,6 +24,7 @@ export default {
       titleEditing: false,
       titleEditingStr: '',
       errorAlert: false,
+      alertTitle: '',
     };
   },
   mounted() {
@@ -46,10 +47,25 @@ export default {
     },
     onblur() {
       this.titleEditing = false;
+      const checkFileNamePass = window.GlobalUtil.checkFileName(this.titleEditingStr);
+      if (!checkFileNamePass) {
+        setTimeout(() => {
+          this.alertTitle = 'New name is not correct .';
+          this.errorAlert = true;
+        }, 50);
+        return;
+      }
       if (this.data.name !== this.titleEditingStr) {
         window.CommandsAppsSocket.renameFile(this.data.name, this.titleEditingStr, (dict) => {
           if (dict.code !== 0) {
             setTimeout(() => {
+              this.alertTitle = 'Rename fails .';
+              this.errorAlert = true;
+            }, 50);
+          }
+          else {
+            setTimeout(() => {
+              this.alertTitle = 'Rename success .';
               this.errorAlert = true;
             }, 50);
           }
