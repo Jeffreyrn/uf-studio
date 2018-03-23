@@ -1,16 +1,23 @@
 <template>
 <div class="blockly-wrapper">
   <div class="blockly-header-wrapper">
+<<<<<<< HEAD
     <div>
       <router-link :to="{name: backStr}">
         <img src="../assets/img/ide/icon_back.svg" alt="back"/>
       </router-link>
+=======
+    <div class="back-wrapper">
+      <span @click="quitPage" class="btn">
+        <img src="../assets/img/ide/icon_back.svg" alt="back"/>
+      </span>
+>>>>>>> 1994b085b3982819a88efcc885332a425a27d600
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
       <div @click="saveProject"><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
       <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
-      <div @click="runProject"><img src="../assets/img/ide/icon_running.svg"/></div>
+      <div @click="runProject" class="run-btn"><img src="../assets/img/blockly/icon_start.svg"/></div>
     </div>
   </div>
   <div class="main-wrapper">
@@ -50,6 +57,7 @@ export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      saveStatus: true,
       model: window.GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
@@ -145,6 +153,22 @@ export default {
     // load project
   },
   methods: {
+    quitPage() {
+      if (this.saveStatus) {
+        this.$router.push({ name: 'EditHome' })
+      }
+      else {
+        this.$confirm('Are you sure quit without save?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }).then(() => {
+          this.$router.push({ name: 'EditHome' })
+        }).catch(() => {
+          console.log('quit canceled')
+        })
+      }
+    },
     insertProject(path) {
       console.log(path, this.block)
       const children = this.block.childBlocks_
@@ -165,6 +189,7 @@ export default {
         window.CommandsAppsSocket.createFile(name, this.projectContent(), () => {
           this.$message('Saved')
           this.uiData.inputName = false
+          this.saveStatus = true
         })
       }
     },
@@ -206,6 +231,9 @@ export default {
         console.log(block.type)
         console.log('onchange 2')
       }
+      else {
+        this.saveStatus = false
+      }
     },
     toggleSideShow() {
       this.uiData.sideShow = !this.uiData.sideShow
@@ -237,10 +265,31 @@ export default {
     //   });
     // },
     loadProject(path) {
+      if (this.saveStatus) {
+        this.getProject(path)
+      }
+      else {
+        this.$confirm('Are you sure load app without save?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }).then(() => {
+          this.getProject(path)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'load app canceled',
+          })
+        })
+      }
+    },
+    getProject(path) {
       window.CommandsAppsSocket.getProject(path).then((xml) => {
         console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
+        Blockly.BlockWorkspace.clear();
         Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
+        this.model.localAppsMgr.curProName = path
       }, (error) => {
         this.$message(`get xml error code${error.code}`)
       })
@@ -363,7 +412,6 @@ export default {
   .blockly-header-wrapper {
     height: 60px;
     line-height: 60px;
-    padding: 0 2rem;
     background: #575C62;
     display: flex;
     justify-content: space-between;
@@ -377,6 +425,12 @@ export default {
       color: #fff;
       letter-spacing: -1px;
     }
+  }
+  .back-wrapper {
+    .btn {
+      cursor: pointer;
+    }
+    padding-left: 1vw;
   }
   .menu-wrapper {
     display: flex;
@@ -394,6 +448,14 @@ export default {
         margin: 0;
         line-height: 1.2vw;
         text-transform: capitalize;
+      }
+    }
+    .run-btn {
+      background-color: #52BF53;
+      line-height: 0.2;
+      padding: 1.2vw;
+      img{
+        width: 120%;
       }
     }
   }
@@ -777,5 +839,4 @@ export default {
       background-color: #0a5;
     }
   }
-
 </style>
