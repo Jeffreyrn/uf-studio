@@ -2,9 +2,9 @@
 <div class="blockly-wrapper">
   <div class="blockly-header-wrapper">
     <div class="back-wrapper">
-      <router-link :to="{name: 'EditHome'}">
+      <span @click="quitPage" class="btn">
         <img src="../assets/img/ide/icon_back.svg" alt="back"/>
-      </router-link>
+      </span>
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
@@ -135,6 +135,22 @@ export default {
     // load project
   },
   methods: {
+    quitPage() {
+      if (this.saveStatus) {
+        this.$router.push({ name: 'EditHome' })
+      }
+      else {
+        this.$confirm('Are you sure quit without save?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }).then(() => {
+          this.$router.push({ name: 'EditHome' })
+        }).catch(() => {
+          console.log('quit canceled')
+        })
+      }
+    },
     insertProject(path) {
       console.log(path, this.block)
       const children = this.block.childBlocks_
@@ -392,6 +408,9 @@ export default {
     }
   }
   .back-wrapper {
+    .btn {
+      cursor: pointer;
+    }
     padding-left: 1vw;
   }
   .menu-wrapper {
@@ -801,5 +820,4 @@ export default {
       background-color: #0a5;
     }
   }
-
 </style>
