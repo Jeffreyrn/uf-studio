@@ -1,17 +1,10 @@
 <template>
 <div class="blockly-wrapper">
   <div class="blockly-header-wrapper">
-<<<<<<< HEAD
     <div>
       <router-link :to="{name: backStr}">
         <img src="../assets/img/ide/icon_back.svg" alt="back"/>
       </router-link>
-=======
-    <div class="back-wrapper">
-      <span @click="quitPage" class="btn">
-        <img src="../assets/img/ide/icon_back.svg" alt="back"/>
-      </span>
->>>>>>> 1994b085b3982819a88efcc885332a425a27d600
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
