@@ -1,7 +1,7 @@
 
 <template>
   <div id="app-list" class="applist">
-    <div v-for="item in model.children" :key="item.uuid" class="block">
+    <div v-for="item in model.children" :key="item.uuid" @click="loadProject(item.label)" class="block">
       <div class="file-icon"><span v-text="item.label.slice(0,1)"></span></div>
       <div class="file-name">{{item.label}}</div>
     </div>
@@ -24,6 +24,9 @@ export default {
   mounted() {
   },
   methods: {
+    loadProject(path) {
+      this.$emit('loadProject', path)
+    },
   },
 }
 </script>
@@ -37,6 +40,7 @@ export default {
     padding: 2%;
     margin: 5%;
     display: inline-block;
+    cursor: pointer;
     .file-icon {
       color: white;
       background: green;

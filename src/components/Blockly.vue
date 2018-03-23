@@ -18,7 +18,7 @@
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="file-list">
-        <file-list></file-list>
+        <file-list @loadProject="loadProject"></file-list>
       </div>
       <div class="emulator-wrapper">
 
@@ -213,15 +213,23 @@ export default {
       BlocklyLib.KeyPressEvent.clearEventListener();
       Blockly.Running = false;
     },
-    loadProject(projectName) {
-      return new Promise((resolve, reject) => {
-        window.FileManager.loadProject(this.moduleName, projectName).then((xmlText) => {
-          window.UserConfig.setItem(this.moduleName, 'LastProjectName', projectName);
-          Blockly.loadWorkspace(xmlText, this.onChangeEvent);
-          // this.containVisionBlock();
-          resolve();
-        }).catch(err => reject(err));
-      });
+    // loadProject(projectName) {
+    //   return new Promise((resolve, reject) => {
+    //     window.FileManager.loadProject(this.moduleName, projectName).then((xmlText) => {
+    //       window.UserConfig.setItem(this.moduleName, 'LastProjectName', projectName);
+    //       Blockly.loadWorkspace(xmlText, this.onChangeEvent);
+    //       // this.containVisionBlock();
+    //       resolve();
+    //     }).catch(err => reject(err));
+    //   });
+    // },
+    loadProject(path) {
+      window.CommandsAppsSocket.getProject(path).then((xml) => {
+        // console.log('get xml return', xml.xmlData)
+        Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
+      }, (error) => {
+        this.$message(`get xml error code${error.code}`)
+      })
     },
     resizeWorkspace() {
       const blocklyArea = document.getElementById('blockly-area');
