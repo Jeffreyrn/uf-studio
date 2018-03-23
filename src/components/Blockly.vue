@@ -312,6 +312,7 @@ export default {
 };
 
 </script>
+<style lang="scss" src="./../assets/css/blockly.scss"></style>
 <style lang="scss" scoped>
   $themeOrange:#D95E2E;
   .main-wrapper {
