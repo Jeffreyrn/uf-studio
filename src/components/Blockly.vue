@@ -1,8 +1,10 @@
 <template>
 <div class="blockly-wrapper">
   <div class="blockly-header-wrapper">
-    <div><router-link :to="{name: 'EditHome'}">
-      <img src="../assets/img/ide/icon_back.svg" alt="back"/></router-link>
+    <div>
+      <router-link :to="{name: backStr}">
+        <img src="../assets/img/ide/icon_back.svg" alt="back"/>
+      </router-link>
       <span>Blockly</span>
     </div>
     <div class="menu-wrapper">
@@ -51,6 +53,8 @@ export default {
       model: window.GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
+      myAppData: {},
+      backStr: 'EditHome',
       constData: {
         tabName: {
           JS: 'Javascript',
@@ -90,6 +94,15 @@ export default {
     Blockly.removeEndListener(this.endCallback);
     window.removeEventListener('resize', self.resizeWorkspace, false); // avoid fire event listener twice or more
     // Blockly.BlockWorkspace.removeChangeListener(self.onChangeEvent);
+  },
+  activated: function() {
+    console.log(`params = ${JSON.stringify(this.$route.params.data)}`);
+    if (this.$route.params.data !== undefined) {
+      this.myAppData = this.$route.params.data;
+      const name = this.myAppData.name;
+      this.backStr = 'AppStore';
+      this.loadProject(name);
+    }
   },
   components: {
     Dialogs,
@@ -225,6 +238,7 @@ export default {
     // },
     loadProject(path) {
       window.CommandsAppsSocket.getProject(path).then((xml) => {
+        console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
         Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
       }, (error) => {
