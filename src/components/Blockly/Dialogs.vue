@@ -26,6 +26,7 @@
           class="blockly-project-list noselected"
           :data="model.localAppsMgr.curProTreeDatas"
           node-key="uuid"
+          :expand-on-click-node="false"
           :indent=12
           :render-content="renderContent"
           :default-expanded-keys="[]"
@@ -142,7 +143,10 @@ export default {
       // console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
       const curUUID = this.curSelectedFileUUID;
       // const fileInfo = GlobalUtil.model.localProjTree.getFileInfo(data.uuid);
-      const isSelected = curUUID.length > 0 && data.uuid === curUUID && (data.uuid.indexOf('.py') > 0 || data.uuid.indexOf('.json') > 0 || this.model.localAppsMgr.projListDialogType === 'app');
+      let isSelected = curUUID.length > 0 && data.uuid === curUUID && (data.uuid.indexOf('.py') > 0 || data.uuid.indexOf('.json') > 0 || this.model.localAppsMgr.projListDialogType === 'app');
+      if (this.model.localAppsMgr.projListDialogType === 'teach' && data.uuid === this.curSelectedUUID) {
+        isSelected = true;
+      }
       let textColorStyle = isSelected ? 'color:#4F7597;' : 'color:#A6A6A6;';
       textColorStyle = `${textColorStyle}font-family:'Gotham-Book';letter-spacing:-0.8px;padding-left:20px;`;
       let url = '';
