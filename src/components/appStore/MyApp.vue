@@ -26,7 +26,7 @@
             </router-link>
             <div class="icon-btn delete-btn" @click="onDelete(data.name)"></div>
           </div>
-          <div class="app-title">{{ data.omitname }}</div>
+          <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
     </div>
@@ -47,6 +47,7 @@
 <script>
 
 import DialogTeachAlert from './../DialogTeachAlert';
+import AppTitle from './AppTitle';
 
 export default {
   data() {
@@ -75,6 +76,7 @@ export default {
   },
   components: {
     DialogTeachAlert,
+    AppTitle,
   },
   computed: {
     bgColor: () => ({

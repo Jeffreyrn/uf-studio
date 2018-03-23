@@ -4,10 +4,10 @@
       <ul>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="app-deault-icon">
           <router-link :to="{name: 'AppDetail', params:{data: data}}">
-            <div style="width:100%;height:100%;">
+            <div style="width:100%;height:100%;cursor: pointer;">
             </div>
           </router-link>
-          <div class="app-title">{{ data.omitname }}</div>
+          <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
     </div>
@@ -15,15 +15,22 @@
 </template>
 
 <script>
+
+import AppTitle from './AppTitle';
+
 export default {
   data() {
     return {
       model: window.GlobalUtil.model,
+      titleEditing: true,
     };
   },
   mounted() {
   },
   methods: {
+  },
+  components: {
+    AppTitle,
   },
 };
 </script>
@@ -38,17 +45,5 @@ export default {
   display: inline-block;
   text-align: center;
   background: #F3F5F7;
-  cursor: pointer;
-}
-.app-title {
-  font-family: 'Gotham-Book';
-  // font-size: 16px;
-  font-size: 1.2rem;
-  color: #4A4A4A;
-  letter-spacing: -0.67px;
-  /* background: yellow; */
-  height: 40px;
-  // line-height: 40px;
-  // line-height: 1.2rem;
 }
 </style>
