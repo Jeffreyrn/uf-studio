@@ -14,7 +14,7 @@
   <div class="main-wrapper">
     <div id="blockly-area" class="blockly-workspace" tabindex="0">
       <div id="tab-blocks"></div>
-      <div class="hide-button" @click="toggleSideShow">></div>
+      <div class="hide-button el-icon-arrow-right" @click="toggleSideShow"></div>
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="file-list">
@@ -241,7 +241,7 @@ export default {
       blocklyDiv.style.left = `${x}px`;
       blocklyDiv.style.top = `${y}px`;
       blocklyDiv.style.width = `${blocklyArea.offsetWidth}px`;
-      blocklyDiv.style.height = `${blocklyArea.offsetHeight}px`;
+      blocklyDiv.style.height = `${blocklyArea.offsetHeight - 1}px`;
       Blockly.svgResize(Blockly.BlockWorkspace);
     },
     handleTabChange(val) {
@@ -316,11 +316,18 @@ export default {
       position: relative;
       .hide-button {
         position: absolute;
-        background: #5A93D7;
+        /*height: 40px;*/
+        width: 10px;
+        border-bottom: 8px solid transparent;
+        border-right: 12px solid #F5F5F5;
+        border-top: 8px solid transparent;
+        line-height: 30px;
         right: 0;
-        top: 0;    
+        top: 0;
         z-index: 39;
         cursor: pointer;
+        text-align: center;
+        color: #767676;
       }
     }
     #slide-area {
@@ -351,7 +358,7 @@ export default {
   .menu-wrapper {
     display: flex;
     & > div {
-      padding: 0 1vw;    
+      padding: 0 1vw;
       color: #fff;
       display: flex;
       flex-direction: column;
