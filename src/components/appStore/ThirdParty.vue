@@ -7,7 +7,7 @@
             <div style="width:100%;height:100%;">
             </div>
           </router-link>
-          <div class="app-title">{{ data.omitname }}</div>
+          <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
     </div>
@@ -15,6 +15,9 @@
 </template>
 
 <script>
+
+import AppTitle from './AppTitle';
+
 export default {
   data() {
     return {
@@ -24,6 +27,9 @@ export default {
   mounted() {
   },
   methods: {
+  },
+  components: {
+    AppTitle,
   },
 };
 </script>

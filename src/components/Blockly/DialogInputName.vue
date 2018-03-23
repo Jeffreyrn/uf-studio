@@ -13,7 +13,7 @@
         <div>
           <input id="input-text" v-model="model.localAppsMgr.curProName" type="text" class="position-absolute dialog-input" />
         </div>
-        <!-- <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div> -->
+        <!-- <div class="position-absolute dialog-error" v-show="true"> {{ model.localProjTree.dialogErrorTips }} </div> -->
         <div class="position-absolute" style="bottom:0px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
@@ -57,7 +57,16 @@ export default {
     },
     oncreate() {
       // const text = this.model.localProjTree.curDialogInputText;
-      this.$emit('saveProject')
+      // TODO regex check input name
+      const inputName = this.model.localAppsMgr.curProName
+      const rs = window.GlobalUtil.checkFileName(inputName)
+      if (rs) {
+        this.$emit('saveProject') // this.$message('valid')
+      }
+      else {
+        this.$message('Input name not valid')
+      }
+      // this.$emit('saveProject')
       // // console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
       // // console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
       // if (this.model.localProjTree.folderOrFile === 'folder') {

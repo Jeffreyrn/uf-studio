@@ -39,6 +39,7 @@ self.APPSTORE_APP_INSTALL = 'app_install';
 self.APPSTORE_APP_UNINSTALL = 'app_uninstall';
 self.APPSTORE_APP_REMOVE = 'app_remove';
 self.APPSTORE_APP_CREATE = 'app_create';
+self.APPSTORE_APP_RENAME = 'app_rename';
 self.APPSTORE_APP_UPLOAD = 'app_upload';
 self.APP_RUN_PYTHON = 'app_run_python_project';
 self.APP_RUN_TEACH = 'app_run_teach_project';

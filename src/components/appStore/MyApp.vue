@@ -18,15 +18,15 @@
             {{ data.name[0].toUpperCase() }}
           </div>
           <div style="width:100%;height:36px;margin-top:-36px;">
-            <router-link :to="{name: 'AppSubmit', params:{data: data}}">
-              <div class="icon-btn edit-btn"></div>
+            <router-link :to="{ name: 'Blockly', params:{data: data}}">
+              <div class="icon-btn edit-btn" @click="onEdit()"></div>
             </router-link>
             <router-link :to="{name: 'AppSubmit', params:{data: data}}">
               <div class="icon-btn upload-btn"></div>
             </router-link>
             <div class="icon-btn delete-btn" @click="onDelete(data.name)"></div>
           </div>
-          <div class="app-title">{{ data.omitname }}</div>
+          <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
     </div>
@@ -47,6 +47,7 @@
 <script>
 
 import DialogTeachAlert from './../DialogTeachAlert';
+import AppTitle from './AppTitle';
 
 export default {
   data() {
@@ -72,9 +73,21 @@ export default {
       window.CommandsAppsSocket.delFile(this.deleteAppName, () => {
       });
     },
+    onEdit() {
+      // const path = this.data.name;
+      // Blockly
+
+      // window.CommandsAppsSocket.getProject(path).then((xml) => {
+      //   // console.log('get xml return', xml.xmlData)
+      //   Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
+      // }, (error) => {
+      //   this.$message(`get xml error code${error.code}`)
+      // })
+    },
   },
   components: {
     DialogTeachAlert,
+    AppTitle,
   },
   computed: {
     bgColor: () => ({

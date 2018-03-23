@@ -145,5 +145,7 @@ self.getUrlParam = (lan) => {
   }
   return unescape(r[2]);
 };
-
+self.checkFileName = (name) => {
+  return /^[\w-]+$/g.test(name)
+}
 export default self;

@@ -56,6 +56,18 @@ self.createFile = (name, content, callback1) => {
   });
 };
 
+self.renameFile = (oldName, newName, callback) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      oldName,
+      newName,
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.APPSTORE_APP_RENAME, params, () => {
+    self.listLocalApps(callback);
+  });
+};
+
 self.delFile = (name, callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
