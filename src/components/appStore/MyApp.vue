@@ -18,8 +18,8 @@
             {{ data.name[0].toUpperCase() }}
           </div>
           <div style="width:100%;height:36px;margin-top:-36px;">
-            <router-link :to="{name: 'AppSubmit', params:{data: data}}">
-              <div class="icon-btn edit-btn"></div>
+            <router-link :to="{ name: 'Blockly', params:{data: data}}">
+              <div class="icon-btn edit-btn" @click="onEdit()"></div>
             </router-link>
             <router-link :to="{name: 'AppSubmit', params:{data: data}}">
               <div class="icon-btn upload-btn"></div>
@@ -72,6 +72,17 @@ export default {
       this.isDeleteApp = false;
       window.CommandsAppsSocket.delFile(this.deleteAppName, () => {
       });
+    },
+    onEdit() {
+      // const path = this.data.name;
+      // Blockly
+
+      // window.CommandsAppsSocket.getProject(path).then((xml) => {
+      //   // console.log('get xml return', xml.xmlData)
+      //   Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
+      // }, (error) => {
+      //   this.$message(`get xml error code${error.code}`)
+      // })
     },
   },
   components: {

@@ -54,6 +54,8 @@ export default {
       model: window.GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
+      myAppData: {},
+      backStr: 'EditHome',
       constData: {
         tabName: {
           JS: 'Javascript',
@@ -93,6 +95,15 @@ export default {
     Blockly.removeEndListener(this.endCallback);
     window.removeEventListener('resize', self.resizeWorkspace, false); // avoid fire event listener twice or more
     // Blockly.BlockWorkspace.removeChangeListener(self.onChangeEvent);
+  },
+  activated: function() {
+    console.log(`params = ${JSON.stringify(this.$route.params.data)}`);
+    if (this.$route.params.data !== undefined) {
+      this.myAppData = this.$route.params.data;
+      const name = this.myAppData.name;
+      this.backStr = 'AppStore';
+      this.getProject(name);
+    }
   },
   components: {
     Dialogs,
@@ -137,7 +148,7 @@ export default {
   methods: {
     quitPage() {
       if (this.saveStatus) {
-        this.$router.push({ name: 'EditHome' })
+        this.$router.push({ name: this.backStr })
       }
       else {
         this.$confirm('Are you sure quit without save?', 'Warning', {
@@ -145,7 +156,7 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning',
         }).then(() => {
-          this.$router.push({ name: 'EditHome' })
+          this.$router.push({ name: this.backStr })
         }).catch(() => {
           console.log('quit canceled')
         })
@@ -267,6 +278,7 @@ export default {
     },
     getProject(path) {
       window.CommandsAppsSocket.getProject(path).then((xml) => {
+        console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
         Blockly.BlockWorkspace.clear();
         Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
