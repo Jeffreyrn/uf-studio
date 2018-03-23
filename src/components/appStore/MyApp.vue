@@ -127,4 +127,15 @@ export default {
 .delete-btn {
   background-image: url('./../../assets/img/appStore/btn_delete.svg');
 }
+.app-title {
+  font-family: 'Gotham-Book';
+  // font-size: 16px;
+  font-size: 1.2rem;
+  color: #4A4A4A;
+  letter-spacing: -0.67px;
+  /* background: yellow; */
+  height: 40px;
+  // line-height: 40px;
+  // line-height: 1.2rem;
+}
 </style>

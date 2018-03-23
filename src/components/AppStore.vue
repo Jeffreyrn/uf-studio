@@ -96,9 +96,10 @@ export default {
       .tab-wrapper {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        margin-right: 10%;
-        padding-top: 5rem;
+        // height: 100%;
+        height: 600px;
+        margin-right: 30px;
+        padding-top: 70px;
         // background: greenyellow;
         .tab {
           width: 150px;
@@ -118,31 +119,31 @@ export default {
     }
   }
 
-</style>
-<style>
-/**common css(AppStore MyApp ThirdParty)**/
-.appStore-wrapper .tab-contain {
-  height: 100%;
-  /* overflow-y: scroll; */
-}
-/* .appStore-wrapper .tab-contain ul li {
-  width: 136px;
-  height: 136px;
-  margin: 1.4rem 3.2rem 1.4rem 0;
-  display: inline-block;
-  text-align: center;
-  background: #F3F5F7;
-  font-size: 1.2rem;
-  border-radius: 4px;
-  cursor: pointer;
-} */
-.app-title {
-  font-family: 'Gotham-Book';
-  font-size: 16px;
-  color: #4A4A4A;
-  letter-spacing: -0.67px;
-  /* background: yellow; */
-  height: 40px;
-  line-height: 40px;
-}
+  /**common css(AppStore MyApp ThirdParty)**/
+  .appStore-wrapper .tab-contain {
+    height: 100%;
+    /* overflow-y: scroll; */
+  }
+  /* .appStore-wrapper .tab-contain ul li {
+    width: 136px;
+    height: 136px;
+    margin: 1.4rem 3.2rem 1.4rem 0;
+    display: inline-block;
+    text-align: center;
+    background: #F3F5F7;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+  } */
+  // .app-title {
+  //   font-family: 'Gotham-Book';
+  //   font-size: 16px;
+  //   // font-size: 0.6rem;
+  //   color: #4A4A4A;
+  //   letter-spacing: -0.67px;
+  //   /* background: yellow; */
+  //   height: 40px;
+  //   line-height: 40px;
+  //   // line-height: 0.6rem;
+  // }
 </style>
