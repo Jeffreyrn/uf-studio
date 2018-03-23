@@ -8,9 +8,9 @@
       <!--<div class="file-icon"><span v-text="item.label.slice(0,1)"></span></div>-->
       <!--<div class="file-name">{{item.label}}</div>-->
 
-    </div>-->
+    </div>
     <div id="app-list" class="app-list">
-      <div v-for="item in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block">
+      <div v-for="(item, index) in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block">
         <div class="file-icon" style="background:#9CC5F7;" v-if="index % 5 === 0"><span v-text="item.label.slice(0,1)"></span></div>
         <div class="file-icon" style="background:#F8C6DE;" v-if="index % 5 === 1"><span v-text="item.label.slice(0,1)"></span></div>
         <div class="file-icon" style="background:#B8E986;" v-if="index % 5 === 2"><span v-text="item.label.slice(0,1)"></span></div>
