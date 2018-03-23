@@ -46,14 +46,15 @@ export default {
     },
     onblur() {
       this.titleEditing = false;
-      window.CommandsAppsSocket.renameFile(this.data.name, this.titleEditingStr, (dict) => {
-        // console.log(`cansubmit dict = ${JSON.stringify(dict)}`);
-        if (dict.code !== 0) {
-          setTimeout(() => {
-            this.errorAlert = true;
-          }, 50);
-        }
-      });
+      if (this.data.name !== this.titleEditingStr) {
+        window.CommandsAppsSocket.renameFile(this.data.name, this.titleEditingStr, (dict) => {
+          if (dict.code !== 0) {
+            setTimeout(() => {
+              this.errorAlert = true;
+            }, 50);
+          }
+        });
+      }
     },
     onok() {
       this.errorAlert = false;
