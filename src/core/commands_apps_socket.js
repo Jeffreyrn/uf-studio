@@ -121,6 +121,21 @@ const runTaskApp = (path, category) => new Promise((resolve) => {
 })
 self.runTeach = path => runTaskApp(path, 'teach')
 self.runPython = path => runTaskApp(path, 'python')
+self.getProject = path => new Promise((resolve, reject) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      appName: path,
+    }),
+  }
+  self.sendCmd(window.GlobalConstant.APP_GET_PROJECT, params, (dict) => {
+    if (dict.code === 0) {
+      resolve(dict.data)
+    }
+    else {
+      reject(dict)
+    }
+  })
+})
 self.appControl = (appControl, category, appName, appVersion, callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {

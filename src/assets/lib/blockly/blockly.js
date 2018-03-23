@@ -14,6 +14,7 @@ import BlocklyLib from './uarm/blockly_lib';
 import { BlocklyDefaultColor, initBlocklyColor } from './uarm/blocks_color';
 import toolbox from './toolbox.xml';
 import format from 'string-format';
+// import '../../css/blockly.scss';
 
 function callOnDelete(blockXml) {
   let blockType;

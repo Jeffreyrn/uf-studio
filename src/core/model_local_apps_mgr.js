@@ -62,7 +62,7 @@ self.createApp = (params) => {
     params.size = 0;
   }
   let omitname = params.name;
-  const ll = 13;
+  const ll = 10;
   if (omitname.length > ll) {
     omitname = omitname.substr(0, ll);
     omitname = `${omitname}...`
