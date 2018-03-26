@@ -7,12 +7,12 @@
     <div>
       <div v-for="(item, index) in info">
         <h2 class="title">{{ item.title }}</h2>
-        <div class="content">
+        <div class="content" v-for="itemName in item.data">
           <div class="left">
-            <span class="name" v-for="(itemArr, indexArr) in item.name">{{ itemArr }} :</span>
+            <span class="name">{{ itemName.name }} :</span>
           </div>
           <div class="right">
-            <span class="name" v-for="(itemArr, indexArr) in item.nameValue">{{ itemArr }}</span>
+            <span class="name">{{ itemName.nameValue }}</span>
           </div>
         </div>
       </div>
@@ -27,22 +27,80 @@ export default {
       info: {
         deviceInfo: {
           title: 'Device infomation',
-          name: ['device', 'Port Number', 'Firmware Version:', 'Serial Number', 'Device Version', 'Machine Unique'],
-          nameValue: ['123', '345', '123', '345', '123', '345'],
+          data: {
+            device: {
+              name: 'device',
+              nameValue: '',
+            },
+            deviceVersion: {
+              name: 'Device Version',
+            },
+            firmwareVersion: {
+              name: 'Firmware Version',
+            },
+            machineUnique: {
+              name: 'Machine Unique',
+            },
+            portNumber: {
+              name: 'Port Number',
+            },
+            serialNumber: {
+              name: 'Serial Number',
+            },
+          },
         },
         studioInfo: {
           title: 'Studio infomation',
-          name: ['Version', 'xArmCore Version', 'Firmware Version:', 'xArmJedi Version', 'xArmDaemon Version', 'xArmStudio Version', 'Studio Language'],
-          nameValue: [],
+          data: {
+            version: {
+              name: 'Version',
+              nameValue: '',
+            },
+            xArmCoreVersion: {
+              name: 'xArmCore Version',
+            },
+            xArmJediVersion: {
+              name: 'xArmJedi Version',
+            },
+            xArmDaemonVersion: {
+              name: 'xArmDaemon Version',
+            },
+            xArmStudioVersion: {
+              name: 'xArmStudio Version',
+            },
+            studioLanguage: {
+              name: 'Studio Language',
+            },
+          },
         },
       },
     };
   },
   created() {
+    this.getInfo(window.GlobalConstant.SETTING_GET_DEVICE_INFO, this.info.deviceInfo.data);
+    this.getInfo(window.GlobalConstant.SETTING_GET_STUDIO_INFO, this.info.studioInfo.data);
   },
   mounted() {
   },
-  methods: {},
+  methods: {
+    getInfo(cmd, type) {
+      const data = {};
+      window.GlobalUtil.socketCom.sendCmd(cmd, data, (response) => {
+        const responseData = (response.data !== undefined) ? response.data : response;
+        if (responseData) {
+          for (const key in responseData) {
+            for (const key2 in type) {
+              if (key === key2) {
+                type[key2].nameValue = responseData[key];
+              }
+            }
+          }
+        }
+      });
+    },
+  },
+  watch: {
+  },
 };
 </script>
 

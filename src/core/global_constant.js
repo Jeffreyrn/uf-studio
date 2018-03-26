@@ -51,6 +51,8 @@ self.DEBUG_SET_BEART = 'debug_set_beart';
 self.SETTING_GET_LOG_INFO = 'get_log_info';
 self.SETTING_CHECK_SOFTWARE_UPDATE = 'check_software_update';
 self.SETTING_START_SOFTWARE_UPDATE = 'start_software_update';
+self.SETTING_GET_DEVICE_INFO = 'get_device_info';
+self.SETTING_GET_STUDIO_INFO = 'get_studio_info';
 
 self.userId = 'test';
 
