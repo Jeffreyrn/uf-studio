@@ -13,17 +13,17 @@
       </div>
       <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
         <div class="tab-contain" style="height:600px; font-size: 1.4rem;" v-for="(item,index) in tabContain" :key="index">
-          Default App
+          <!-- Default App -->
           <DefaultApp></DefaultApp>
         </div>
-        <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
+        <!-- <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
           Third-Party
           <third-party></third-party>
         </div>
         <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
           My App
           <my-app></my-app>
-        </div>
+        </div> -->
       </div>
       <div class="tab-contain-wrapper" v-else-if="showApp === 'thirdParty'">
         <third-party></third-party>
@@ -47,7 +47,7 @@ export default {
       model: window.GlobalUtil.model,
       showApp: 'allApp',
       tab: {
-        allApp: 'All Apps',
+        allApp: 'Default App',
         thirdParty: 'Third-Party',
         myApp: 'My App',
       },
