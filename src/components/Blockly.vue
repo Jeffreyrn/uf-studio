@@ -322,7 +322,11 @@ export default {
       }
     },
     getProject(path) {
-      window.CommandsAppsSocket.getProject(path).then((xml) => {
+      const data = {
+        category: 'myapp',
+        name: path,
+      }
+      window.CommandsAppsSocket.getBlockXml(data).then((xml) => {
         console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
         Blockly.BlockWorkspace.clear();
