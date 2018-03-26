@@ -7,6 +7,7 @@
       </span>
       <span>Blockly</span>
     </div>
+    <div class="file-name" v-text="this.model.localAppsMgr.curProName"></div>
     <div class="menu-wrapper">
       <div @click="saveProject"><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
       <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
@@ -56,6 +57,7 @@ export default {
   data() {
     return {
       saveStatus: true,
+      block: {},
       model: window.GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
@@ -169,9 +171,17 @@ export default {
       }
     },
     insertProject(path) {
-      console.log(path, this.block)
+      console.log(path)
       if (this.block.type === BLOCK_TYPES.app) {
-        console.log('get xml')
+        window.CommandsAppsSocket.getBlockXml(path).then((xml) => {
+          console.log('get xml text', xml.xmlData)
+          Blockly.appendXML(xml.xmlData)
+        }, (data) => {
+          this.$message({
+            type: 'info',
+            message: `get app xml failed, code${data.code}`,
+          })
+        })
       }
       else {
         const children = this.block.childBlocks_
@@ -251,6 +261,7 @@ export default {
         console.log(type)
         if (type === BLOCK_TYPES.app) {
           console.log('delete it')
+          this.block.type = type
           block.dispose(false)
         }
         else {
@@ -409,6 +420,7 @@ export default {
     display: flex;
     flex-direction: row;
     height: 100%;
+    overflow: hidden;
     #blockly-area {
       width: 56.2%;
       min-height: 500px;
@@ -451,6 +463,10 @@ export default {
       font-size: 2rem;
       color: #fff;
       letter-spacing: -1px;
+    }
+    .file-name {
+      color: white;
+      font-family: 'Gotham-Bold';
     }
   }
   .back-wrapper {

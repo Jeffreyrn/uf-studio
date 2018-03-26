@@ -44,6 +44,7 @@ self.APPSTORE_APP_UPLOAD = 'app_upload';
 self.APP_RUN_PYTHON = 'app_run_python_project';
 self.APP_RUN_TEACH = 'app_run_teach_project';
 self.APP_GET_PROJECT = 'get_app_xml';
+self.APP_GET_APP_XML = 'get_insert_app_xml';
 
 self.DEBUG_SET_BEART = 'debug_set_beart';
 

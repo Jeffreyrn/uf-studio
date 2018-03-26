@@ -33,7 +33,7 @@
           @node-click="handleNodeClick">
         </el-tree>
 
-        <div v-if="isSelectedApp()" class="btn-ok cursor-pointer" @click="onopen">
+        <div v-if="isSelectedApp" class="btn-ok cursor-pointer" @click="onopen">
           Open
         </div>
         <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
@@ -78,11 +78,11 @@ export default {
     //   }
     // }
   },
-  methods: {
+  computed: {
     isSelectedApp() {
       switch (this.model.localAppsMgr.projListDialogType) {
         case 'app': {
-          if (this.curSelectedFileUUID.length > 0) {
+          if (this.curSelectedFileUUID.category) {
             return true;
           }
           break;
@@ -104,6 +104,8 @@ export default {
       }
       return false;
     },
+  },
+  methods: {
     closeMyself() {
       this.curSelectedUUID = '';
       this.curSelectedFileUUID = '';
@@ -112,7 +114,12 @@ export default {
     onopen() {
       console.log(`onopen onopen curSelectedFileUUID = ${this.curSelectedFileUUID}`);
       // curSelectedUUID
-      this.$emit('insertProject', this.curSelectedUUID)
+      if (this.model.localAppsMgr.projListDialogType === 'app') {
+        this.$emit('insertProject', this.curSelectedFileUUID)
+      }
+      else {
+        this.$emit('insertProject', this.curSelectedUUID)
+      }
       // switch (this.model.localAppsMgr.projListDialogType) {
       //   case 'app': {
       //     break;
@@ -136,6 +143,12 @@ export default {
       }
       if (this.model.localAppsMgr.projListDialogType === 'teach') {
         this.curSelectedFileUUID = data.uuid;
+      }
+      else if (this.model.localAppsMgr.projListDialogType === 'app') {
+        this.curSelectedFileUUID = {
+          category: data.category,
+          name: data.label,
+        }
       }
     },
     renderContent(h, { node, data, store }) {
