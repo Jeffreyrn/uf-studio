@@ -46,11 +46,11 @@
 /*}*/
 
 .noselected {
-  -moz-user-select: none; 
-  -webkit-user-select: none; 
-  -ms-user-select: none; 
-  -khtml-user-select: none; 
-  user-select: none; 
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
 }
 
 .limitWH {
@@ -169,6 +169,15 @@
 }
 .com-module-name {                    /**组件的模块名**/
   padding: 0 1.5rem 0 3rem;
+}
+.com-app-icon {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 4px;
+  margin: 1.4rem 3.2rem 1.4rem 0;
+  display: inline-block;
+  text-align: center;
+  background: #F3F5F7;
 }
 
 

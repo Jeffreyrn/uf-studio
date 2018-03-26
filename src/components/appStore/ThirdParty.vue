@@ -2,7 +2,7 @@
   <div>
     <div class="tab-contain">
       <ul>
-        <li v-for="(data, index) in model.localAppsMgr.allApps.thirdparty.data" class="app-thirdparty-icon">
+        <li v-for="(data, index) in model.localAppsMgr.allApps.thirdparty.data" class="com-app-icon">
           <router-link :to="{name: 'AppDetail', params:{data: data}}">
             <div style="width:100%;height:100%;">
             </div>
@@ -36,25 +36,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.app-thirdparty-icon {
-  width: 136px;
-  height: 136px;
-  border-radius: 4px;
-  margin: 1.4rem 3.2rem 1.4rem 0;
-  display: inline-block;
-  text-align: center;
-  background: #F3F5F7;
-  cursor: pointer;
-}
-.app-title {
-  font-family: 'Gotham-Book';
-  // font-size: 16px;
-  font-size: 1.2rem;
-  color: #4A4A4A;
-  letter-spacing: -0.67px;
-  /* background: yellow; */
-  height: 40px;
-  // line-height: 40px;
-  // line-height: 1.2rem;
-}
+/*.app-thirdparty-icon {*/
+  /*width: 136px;*/
+  /*height: 136px;*/
+  /*border-radius: 4px;*/
+  /*margin: 1.4rem 3.2rem 1.4rem 0;*/
+  /*display: inline-block;*/
+  /*text-align: center;*/
+  /*background: #F3F5F7;*/
+  /*cursor: pointer;*/
+/*}*/
 </style>

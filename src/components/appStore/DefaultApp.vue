@@ -2,7 +2,7 @@
   <div>
     <div class="tab-contain">
       <ul>
-        <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="app-deault-icon">
+        <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="com-app-icon">
           <router-link :to="{name: 'AppDetail', params:{data: data}}">
             <div style="width:100%;height:100%;cursor: pointer;">
             </div>
@@ -37,13 +37,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.app-deault-icon {
-  width: 136px;
-  height: 136px;
-  border-radius: 4px;
-  margin: 1.4rem 3.2rem 1.4rem 0;
-  display: inline-block;
-  text-align: center;
-  background: #F3F5F7;
-}
+/*.app-deault-icon {*/
+  /*width: 136px;*/
+  /*height: 136px;*/
+  /*border-radius: 4px;*/
+  /*margin: 1.4rem 3.2rem 1.4rem 0;*/
+  /*display: inline-block;*/
+  /*text-align: center;*/
+  /*background: #F3F5F7;*/
+/*}*/
 </style>

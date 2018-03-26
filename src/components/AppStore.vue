@@ -12,15 +12,15 @@
         </div>
       </div>
       <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
-        <div class="tab-contain" style="height:600px;" v-for="(item,index) in tabContain" :key="index">
-          Default App  
+        <div class="tab-contain" style="height:600px; font-size: 1.4rem;" v-for="(item,index) in tabContain" :key="index">
+          Default App
           <DefaultApp></DefaultApp>
         </div>
-        <div class="tab-contain" style="height:600px;padding-top:40px;">
+        <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
           Third-Party
           <third-party></third-party>
         </div>
-        <div class="tab-contain" style="height:600px;padding-top:40px;">
+        <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
           My App
           <my-app></my-app>
         </div>

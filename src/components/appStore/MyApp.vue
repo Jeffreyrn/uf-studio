@@ -2,7 +2,7 @@
   <div>
     <div class="tab-contain">
       <ul>
-        <li v-for="(data ,index) in model.localAppsMgr.allApps.my.data" class="app-my-icon">
+        <li v-for="(data ,index) in model.localAppsMgr.allApps.my.data" class="com-app-icon">
           <!-- <router-link :to="{name: 'AppSubmit', params:{data: data}}">
           </router-link> -->
           <div class="icon-text-style" style="background:#9CC5F7;" v-if="index % 4 === 0">
@@ -17,7 +17,7 @@
           <div class="icon-text-style" style="background:#D5D5D5" v-if="index % 4 === 3">
             {{ data.name[0].toUpperCase() }}
           </div>
-          <div style="width:100%;height:36px;margin-top:-36px;">
+          <div class="btn-wrapper">
             <router-link :to="{ name: 'Blockly', params:{data: data}}">
               <div class="icon-btn edit-btn" @click="onEdit()"></div>
             </router-link>
@@ -113,22 +113,27 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  // background:yellow;
-  font-family: Gotham-Medium;
-  font-size: 36px;
-  color: #FFFFFF;
+  font-family: 'Gotham-Medium';
+  font-size: 2rem;
+  color: #FFF;
   letter-spacing: -0.66px;
   text-align: center;
-  padding-top: 50px;
+  padding-top: 2rem;
+  cursor: pointer;
+}
+.btn-wrapper {
+  width:100%;
+  /*height: 2.4rem;*/
+  margin-top:-2.4rem;
 }
 .icon-btn {
-  width: 36px;
-  height: 36px;
+  width: 2rem;
+  height: 2rem;
   float: left;
-  margin-left: 7px;
+  margin-left: 0.5rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 36px 36px;
+  background-size: 2rem 2rem;
   cursor: pointer;
 }
 .edit-btn {
@@ -140,15 +145,5 @@ export default {
 .delete-btn {
   background-image: url('./../../assets/img/appStore/btn_delete.svg');
 }
-.app-title {
-  font-family: 'Gotham-Book';
-  // font-size: 16px;
-  font-size: 1.2rem;
-  color: #4A4A4A;
-  letter-spacing: -0.67px;
-  /* background: yellow; */
-  height: 40px;
-  // line-height: 40px;
-  // line-height: 1.2rem;
-}
+
 </style>
