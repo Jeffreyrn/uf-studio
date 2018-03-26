@@ -13,17 +13,17 @@
       </div>
       <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
         <div class="tab-contain" style="height:600px; font-size: 1.4rem;" v-for="(item,index) in tabContain" :key="index">
-          Default App
+          <!-- Default App -->
           <DefaultApp></DefaultApp>
         </div>
-        <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
+        <!-- <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
           Third-Party
           <third-party></third-party>
         </div>
         <div class="tab-contain" style="height:600px;padding-top:40px;font-size: 1.4rem;">
           My App
           <my-app></my-app>
-        </div>
+        </div> -->
       </div>
       <div class="tab-contain-wrapper" v-else-if="showApp === 'thirdParty'">
         <third-party></third-party>
@@ -47,7 +47,7 @@ export default {
       model: window.GlobalUtil.model,
       showApp: 'allApp',
       tab: {
-        allApp: 'All Apps',
+        allApp: 'Default App',
         thirdParty: 'Third-Party',
         myApp: 'My App',
       },
@@ -88,23 +88,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .appStore-wrapper {
+    height: 100%;
+    overflow-y: hidden;
     .section1-wrapper {
-      width: 80%;
       height: 90%;
       margin: 0 auto;
       display: flex;
       .tab-wrapper {
         display: flex;
         flex-direction: column;
-        // height: 100%;
         height: 600px;
-        margin-right: 30px;
         padding-top: 70px;
-        // background: greenyellow;
+        width: 20%;
+        padding-left: 5%;
         .tab {
-          width: 150px;
           height: 100%;
-          // background: yellow;
           cursor: pointer;
           .active {
             border-bottom: 2px solid #E27347;
@@ -115,6 +113,10 @@ export default {
         display: flex;
         flex-direction: column;
         padding-top: 5rem;
+        width: 80%;
+        height: 100%;
+        overflow-y: auto;
+        padding-bottom: 3rem;
       }
     }
   }
@@ -122,28 +124,5 @@ export default {
   /**common css(AppStore MyApp ThirdParty)**/
   .appStore-wrapper .tab-contain {
     height: 100%;
-    /* overflow-y: scroll; */
   }
-  /* .appStore-wrapper .tab-contain ul li {
-    width: 136px;
-    height: 136px;
-    margin: 1.4rem 3.2rem 1.4rem 0;
-    display: inline-block;
-    text-align: center;
-    background: #F3F5F7;
-    font-size: 1.2rem;
-    border-radius: 4px;
-    cursor: pointer;
-  } */
-  // .app-title {
-  //   font-family: 'Gotham-Book';
-  //   font-size: 16px;
-  //   // font-size: 0.6rem;
-  //   color: #4A4A4A;
-  //   letter-spacing: -0.67px;
-  //   /* background: yellow; */
-  //   height: 40px;
-  //   line-height: 40px;
-  //   // line-height: 0.6rem;
-  // }
 </style>

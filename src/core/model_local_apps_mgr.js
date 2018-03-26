@@ -134,6 +134,7 @@ self.remoteProjs2Local = (dict) => {
       label: one.name,
       type: 'file',
       uuid: uuidv4(),
+      category: 'default',
     });
   }
   for (let i = 0; i < thirdpartys.length; i += 1) {
@@ -157,6 +158,7 @@ self.remoteProjs2Local = (dict) => {
       label: one.name,
       type: 'file',
       uuid: uuidv4(),
+      category: 'thirdparty',
     });
   }
   // test
@@ -199,6 +201,7 @@ self.remoteMyProjs2Local = (dict) => {
       label: one.name,
       type: 'file',
       uuid: uuidv4(),
+      category: 'myapp',
     });
   }
 };

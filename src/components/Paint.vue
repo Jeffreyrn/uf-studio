@@ -134,6 +134,7 @@ export default {
   data() {
     return {
       playground: null,
+      backStr: 'EditHome',
       state: {
         buffer: [],
         saved: true,
@@ -178,6 +179,13 @@ export default {
     this.fabricModified();
     this.loadEmotions();
     console.log(this.playground.toSVG());
+  },
+  activated: function() {
+    this.backStr = 'EditHome'
+    if (this.$route.params.data !== undefined) {
+      this.myAppData = this.$route.params.data;
+      this.backStr = 'AppStore';
+    }
   },
   methods: {
     startPrint() {

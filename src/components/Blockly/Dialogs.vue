@@ -129,6 +129,7 @@ export default {
       this.closeMyself();
     },
     handleNodeClick(data) {
+      console.log(`data uuid = ${data.uuid}, category = ${data.category}`);
       this.curSelectedUUID = data.uuid;
       if (data.type !== 'proj') {
         this.curSelectedFileUUID = data.uuid;

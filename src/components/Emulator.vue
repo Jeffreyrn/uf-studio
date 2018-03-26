@@ -3,7 +3,7 @@
     <header height="50px">
       <el-row :gutter="20" class="header-wrapper">
         <el-col :span="18">
-          <router-link :to="{ name: 'Home'}">
+          <router-link :to="{ name: backStr}">
             <img src="./../assets/img/control/icon_back.svg" alt="back home">
           </router-link>
           <span class="title-ide">Control</span>
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       test: null,
+      backStr: 'Home',
       testtest: 0,
       state: {
         speed: 500,
@@ -87,6 +88,12 @@ export default {
       },
       msg: 'Emulator',
     };
+  },
+  activated: function() {
+    this.backStr = 'Home';
+    if (this.$route.params.data !== undefined) {
+      this.backStr = 'AppStore';
+    }
   },
   methods: {
     setRobotState(index, value) {

@@ -7,13 +7,13 @@
       <!--<span id='show'>{{ model.localDeviceStatus.socket_connected ? 'Linked' : 'Unlinked' }}</span>-->
       <!--<h1>{{ msg }}</h1>-->
       <!--<h2></h2>-->
-      <router-link :to="{ name: 'Paint'}"><el-button round>Paint</el-button></router-link>
-      <router-link :to="{ name: 'Editor'}"><el-button round>Editor</el-button></router-link>
-      <router-link :to="{ name: 'Control'}"><el-button round>Control</el-button></router-link>
-      <router-link :to="{ name: 'Emulator'}"><el-button round>Emulator</el-button></router-link>
-      <router-link :to="{ name: 'Blockly'}"><el-button round>Blockly</el-button></router-link>
-      <router-link :to="{ name: 'Params'}"><el-button round>Params</el-button></router-link>
-      <router-link :to="{ name: 'Teach'}"><el-button round>Teach</el-button></router-link>
+      <!-- <router-link :to="{ name: 'Paint'}"><el-button round>Paint</el-button></router-link> -->
+      <!-- <router-link :to="{ name: 'Editor'}"><el-button round>Editor</el-button></router-link> -->
+      <!-- <router-link :to="{ name: 'Control'}"><el-button round>Control</el-button></router-link> -->
+      <!-- <router-link :to="{ name: 'Emulator'}"><el-button round>Emulator</el-button></router-link> -->
+      <!-- <router-link :to="{ name: 'Blockly'}"><el-button round>Blockly</el-button></router-link> -->
+      <!-- <router-link :to="{ name: 'Params'}"><el-button round>Params</el-button></router-link> -->
+      <!-- <router-link :to="{ name: 'Teach'}"><el-button round>Teach</el-button></router-link> -->
     </section>
     <section class="section1-wrapper com-text-center com-gradual-middle">
       <img class="img-block" src="../assets/img/home/img_xarm.png"/>
