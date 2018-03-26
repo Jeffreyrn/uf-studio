@@ -74,6 +74,7 @@ export default {
       height: 5rem;
       line-height: 5rem;
       text-align: center;
+      text-transform: uppercase;
     }
     .file-name {
       padding-top: 6px;

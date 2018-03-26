@@ -8,7 +8,7 @@
     <section class="section1-wrapper com-font-GB-22 ">
       <div class="box1-wrapper com-text-center">
         <a class="com-text-center">General</a>
-        <a class="com-text-center">Studio info</a>
+        <router-link class="com-text-center" :to="{name: 'studioInfo'}">Studio info</router-link>
         <router-link class="com-text-center" :to="{name: 'LogInfo'}">System Log</router-link>
         <router-link class="com-text-center" :to="{name: 'softwareUpdate'}">Software Update</router-link>
       </div>

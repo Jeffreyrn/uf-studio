@@ -98,7 +98,8 @@ export default {
     },
     checkCanSubmit() {
       const isNoEmpty = this.name.length > 0 && this.des.length > 100;
-      window.GlobalUtil.model.localAppsMgr.curUploadState = isNoEmpty ? 'cansubmit' : 'normal';
+      const checkFileNamePass = window.GlobalUtil.checkFileName(this.name);
+      window.GlobalUtil.model.localAppsMgr.curUploadState = isNoEmpty && checkFileNamePass ? 'cansubmit' : 'normal';
     },
     appNameClick() {
       // console.log('appNameClick appNameClick appNameClickappNameClick' + this.name);

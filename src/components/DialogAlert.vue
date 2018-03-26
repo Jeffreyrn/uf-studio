@@ -2,7 +2,7 @@
 <template>
   <div id="root-delete" class="noselected">
     <div class="dialog-wrap">
-      <div class="dialog-cover" @click="closeMyself"></div>
+      <div class="dialog-cover" @click="onok"></div>
       <div class="dialog-content">
         <span class="top-title">System Notice</span>
         <div class="save-dialog-text">
@@ -30,16 +30,16 @@ export default {
     }
   },
   mounted() {
+    document.onkeydown = () => {
+      if (window.event.keyCode === 13) {
+        this.onok();
+      }
+    };
   },
   methods: {
     closeMyself() {
       window.GlobalUtil.model.localTeach.saveDialogShow = false;
     },
-    // onsave() {
-    //   GlobalUtil.model.localTeach.onSaveChange(() => {
-    //     GlobalUtil.model.localTeach.saveDialogShow = false;
-    //   });
-    // },
   },
   components: {
   },
