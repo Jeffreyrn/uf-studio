@@ -118,13 +118,13 @@ export default {
     .content {
       display: flex;
       justify-content: center;
-      align-items: center;
       font-size: 1.4rem;
-      text-align: left;
       .left {
-        width: 20%;
+        width: 40%;
         display: flex;
         flex-direction: column;
+        padding-right: 4%;
+        text-align: right;
         span {
           font-family: 'Gotham-Book';
           letter-spacing: -1.33px;
@@ -132,13 +132,14 @@ export default {
         }
       }
       .right {
-        width: 24%;
+        width: 40%;
         display: flex;
         flex-direction: column;
+        text-align: left;
+        padding-left: 4%;
         span {
           font-family: 'Gotham-Medium';
           letter-spacing: -1.33px;
-          text-align: center;
           padding: 6px 0;
         }
       }
