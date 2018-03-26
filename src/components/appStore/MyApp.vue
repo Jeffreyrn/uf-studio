@@ -100,14 +100,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.app-my-icon {
-  width: 136px;
-  height: 136px;
-  border-radius: 4px;
-  margin: 1.4rem 3.2rem 1.4rem 0;
-  display: inline-block;
-  text-align: center;
-  background: #F3F5F7;
+/*.app-my-icon {*/
+  /*width: 136px;*/
+  /*height: 136px;*/
+  /*border-radius: 4px;*/
+  /*margin: 1.4rem 3.2rem 1.4rem 0;*/
+  /*display: inline-block;*/
+  /*text-align: center;*/
+  /*background: #F3F5F7;*/
+/*}*/
+.com-app-icon:hover, .com-app-icon:focus {
+  .btn-wrapper {
+    transform: scale(1) ;
+  }
 }
 .icon-text-style {
   width: 100%;
@@ -118,13 +123,14 @@ export default {
   color: #FFF;
   letter-spacing: -0.66px;
   text-align: center;
-  padding-top: 2rem;
-  cursor: pointer;
+  padding-top: 2.7rem;
 }
 .btn-wrapper {
   width:100%;
   /*height: 2.4rem;*/
-  margin-top:-2.4rem;
+  margin-top: -2.4rem;
+  transform: scale(0) ;
+  transition: all .8s;
 }
 .icon-btn {
   width: 2rem;
