@@ -1,19 +1,13 @@
 <template>
 <div class="blockly-wrapper">
-  <div class="blockly-header-wrapper">
-    <div class="back-wrapper">
-      <span @click="quitPage" class="btn">
-        <img src="../assets/img/ide/icon_back.svg" alt="back"/>
-      </span>
-      <span>Blockly</span>
-    </div>
-    <div class="file-name" v-text="this.model.localAppsMgr.curProName"></div>
-    <div class="menu-wrapper">
-      <div @click="saveProject"><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
-      <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
-      <div @click="runProject" class="run-btn"><img src="../assets/img/blockly/icon_start.svg"/></div>
-    </div>
-  </div>
+  <CommonTopMenu
+    title='Blockly'
+    :curFileName='model.localAppsMgr.curProName'
+    :onback='quitPage'
+    :onsave='saveProject'
+    :onnew='newProject'
+    :onstart='startRun'>
+  </CommonTopMenu>
   <div class="main-wrapper">
     <div id="blockly-area" class="blockly-workspace" tabindex="0">
       <div id="tab-blocks"></div>
@@ -46,6 +40,7 @@ import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
 import Dialogs from './Blockly/Dialogs'
 import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
+import CommonTopMenu from './common/CommonTopMenu';
 
 const BLOCK_TYPES = {
   python: 'studio_run_python',
@@ -117,6 +112,7 @@ export default {
     Dialogs,
     FileList,
     DialogInputName,
+    CommonTopMenu,
   },
   mounted() {
     const self = this;
@@ -154,9 +150,12 @@ export default {
     // load project
   },
   methods: {
+    startRun() {
+      console.log('start run');
+    },
     quitPage() {
       if (this.saveStatus) {
-        this.$router.push({ name: this.backStr })
+        this.$router.push({ name: this.backStr });
       }
       else {
         this.$confirm('Are you sure quit without save?', 'Warning', {
@@ -164,7 +163,7 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning',
         }).then(() => {
-          this.$router.push({ name: this.backStr })
+          this.$router.push({ name: this.backStr });
         }).catch(() => {
           console.log('quit canceled')
         })
@@ -452,60 +451,6 @@ export default {
     }
   }
   /*==========*/
-  .blockly-header-wrapper {
-    height: 60px;
-    line-height: 60px;
-    background: #575C62;
-    display: flex;
-    justify-content: space-between;
-    img {
-      width: 1.6rem;
-    }
-    span {
-      margin-left: 1rem;
-      font-family: 'Gotham-Bold';
-      font-size: 2rem;
-      color: #fff;
-      letter-spacing: -1px;
-    }
-    .file-name {
-      color: white;
-      font-family: 'Gotham-Bold';
-    }
-  }
-  .back-wrapper {
-    .btn {
-      cursor: pointer;
-    }
-    padding-left: 1vw;
-  }
-  .menu-wrapper {
-    display: flex;
-    & > div {
-      padding: 0 1vw;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      span {
-        font-size: 0.7em;
-        padding: 0;
-        margin: 0;
-        line-height: 1.2vw;
-        text-transform: capitalize;
-      }
-    }
-    .run-btn {
-      background-color: #52BF53;
-      line-height: 0.2;
-      padding: 1.2vw;
-      img{
-        width: 120%;
-      }
-    }
-  }
   .blockly-wrapper {
     width: 100%;
     height: 100%;

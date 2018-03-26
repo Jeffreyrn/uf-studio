@@ -1,18 +1,12 @@
 <template>
   <div class="main-wrapper" id="paint-wrapper">
-    <div class="menu-bar">
-      <div class="paint-mode">
-        {{$t('paintApp.dailog.setting.mode')}}: 
-        <span v-if="state.mode === 'greyscale'" v-text="$t('paintApp.dailog.addImage.option1')"></span>
-        <span v-else-if="state.mode === 'outline'" v-text="$t('paintApp.dailog.addImage.option2')"></span>
-      </div>
-      <el-button @click="newProject()" type="info" round>
-        <img src="../assets/img/icon_new_project.svg" alt="New Project">
-      </el-button>
-      <el-button @click="visible.setting = true" type="info" round>
-        <img src="../assets/img/icon_start.svg" alt="start print">
-      </el-button>
-    </div>
+    <CommonTopMenu
+      title='Draw/Laser'
+      :onback='onBack'
+      :onsave='saveProject'
+      :onnew='newProject'
+      :onstart='startPrint'>
+    </CommonTopMenu>
     <div class="fabric-container">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
@@ -88,7 +82,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible.setting = false">{{$t('paintApp.dailog.cancelBtn')}}</el-button>
-        <el-button type="primary" @click="startPrint()">{{$t('paintApp.dailog.setting.startButton')}}</el-button>
+        <!-- <el-button type="primary" @click="startPrint()">{{$t('paintApp.dailog.setting.startButton')}}</el-button> -->
       </span>
     </el-dialog>
     <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​
@@ -98,6 +92,7 @@
 import { fabric } from 'fabric-webpack';
 import opentype from 'opentype.js';
 import Potrace from '../assets/lib/potrace';
+import CommonTopMenu from './common/CommonTopMenu';
 // import robot from '../assets/lib/robot';
 
 const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
@@ -134,7 +129,7 @@ export default {
   data() {
     return {
       playground: null,
-      backStr: 'EditHome',
+      backStr: 'AppStore',
       state: {
         buffer: [],
         saved: true,
@@ -181,14 +176,18 @@ export default {
     console.log(this.playground.toSVG());
   },
   activated: function() {
-    this.backStr = 'EditHome'
+    this.backStr = 'AppStore'
     if (this.$route.params.data !== undefined) {
       this.myAppData = this.$route.params.data;
       this.backStr = 'AppStore';
     }
   },
   methods: {
+    saveProject() {
+      console.log('save project');
+    },
     startPrint() {
+      console.log('start print');
       const sendStrategy = {
         outline() {
           return this.playground.toSVG();
@@ -433,6 +432,9 @@ export default {
       SVG_LIST2.keys().forEach(key => this.emotions[key] = SVG_LIST2(key));
       SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
     },
+    onBack() {
+      this.$router.push({ name: 'AppStore' });
+    },
   },
   beforeDestroy() {
     this.playground = null;
@@ -442,6 +444,7 @@ export default {
   computed: {
   },
   components: {
+    CommonTopMenu,
   },
 };
 </script>
@@ -471,6 +474,65 @@ a {
     background-color: #eee;
   }
 }
+
+.paint-header-wrapper {
+  height: 60px;
+  line-height: 60px;
+  background: #575C62;
+  display: flex;
+  justify-content: space-between;
+  img {
+    width: 1.6rem;
+  }
+  span {
+    margin-left: 1rem;
+    font-family: 'Gotham-Bold';
+    font-size: 2rem;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+}
+.back-wrapper {
+  .btn {
+    cursor: pointer;
+  }
+  padding-left: 1vw;
+}
+.menu-wrapper {
+  display: flex;
+  & > div {
+    padding: 0 1vw;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    span {
+      font-size: 0.7em;
+      padding: 0;
+      margin: 0;
+      line-height: 1.2vw;
+      text-transform: capitalize;
+    }
+  }
+  .run-btn {
+    background-color: #52BF53;
+    line-height: 0.2;
+    padding: 1.2vw;
+    img{
+      width: 120%;
+    }
+  }
+}
+// .blockly-wrapper {
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   position: relative;
+// }
+// .blockly-wrapper.notfull{
+//   width: 80%;
+// }
 </style>
-
-
