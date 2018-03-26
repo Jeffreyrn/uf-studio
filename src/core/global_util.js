@@ -6,7 +6,6 @@ import NativeCom from './native_com';
 import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
 import CommandsAppsSocket from './commands_apps_socket';
-// import CommandsBlocklySocket from './commands_blockly_socket';
 
 // const args = {
 //   // host: '192.168.1.166',

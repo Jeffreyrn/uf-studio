@@ -204,9 +204,25 @@ export default {
     onApp() {
       this.model.localAppsMgr.setProjListDialogType('app');
     },
-    newProject() {
+    clearBlockly() {
       Blockly.BlockWorkspace.clear();
       this.model.localAppsMgr.curProName = ''
+    },
+    newProject() {
+      if (this.saveStatus) {
+        this.clearBlockly()
+      }
+      else {
+        this.$confirm('Discard current changes and create new?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }).then(() => {
+          this.clearBlockly()
+        }).catch(() => {
+          console.log('quit canceled')
+        })
+      }
     },
     genxml() {
       this.xmlCode = this.projectContent()
