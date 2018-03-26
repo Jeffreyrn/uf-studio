@@ -10,8 +10,8 @@
     <div class="fabric-container">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
-    
-    <el-button @click="undoEvent()">
+    <BottomTools></BottomTools>
+    <!-- <el-button @click="undoEvent()">
       <img src="../assets/img/tool-undo.svg" alt="undo">
     </el-button>
     <el-button @click="undoEvent('redo')">
@@ -33,7 +33,7 @@
     </el-button>
     <el-button @click="removeAll()" :disabled="state.empty">
       <img src="../assets/img/tool-clear.svg" alt="clear">
-    </el-button>
+    </el-button> -->
     <el-dialog
       :title="$t('paintApp.sidebar.picture_name')"
       :visible.sync="visible.pattern"
@@ -93,6 +93,7 @@ import { fabric } from 'fabric-webpack';
 import opentype from 'opentype.js';
 import Potrace from '../assets/lib/potrace';
 import CommonTopMenu from './common/CommonTopMenu';
+import BottomTools from './Paint/BottomTools';
 // import robot from '../assets/lib/robot';
 
 const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
@@ -445,6 +446,7 @@ export default {
   },
   components: {
     CommonTopMenu,
+    BottomTools,
   },
 };
 </script>
