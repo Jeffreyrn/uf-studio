@@ -111,7 +111,8 @@ export default {
     },
     onopen() {
       console.log(`onopen onopen curSelectedFileUUID = ${this.curSelectedFileUUID}`);
-      this.$emit('insertProject', this.curSelectedFileUUID)
+      // curSelectedUUID
+      this.$emit('insertProject', this.curSelectedUUID)
       // switch (this.model.localAppsMgr.projListDialogType) {
       //   case 'app': {
       //     break;

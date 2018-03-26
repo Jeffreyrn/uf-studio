@@ -133,6 +133,7 @@ const runTaskApp = (path, category) => new Promise((resolve) => {
 })
 self.runTeach = path => runTaskApp(path, 'teach')
 self.runPython = path => runTaskApp(path, 'python')
+// self.getBlockXml = path => 
 self.getProject = path => new Promise((resolve, reject) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {

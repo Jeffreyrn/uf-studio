@@ -46,6 +46,11 @@ import Dialogs from './Blockly/Dialogs'
 import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
 
+const BLOCK_TYPES = {
+  python: 'studio_run_python',
+  record: 'studio_play_recording',
+  app: 'studio_run_app',
+}
 export default {
   props: ['blocklyData', 'moduleName'],
   data() {
@@ -79,14 +84,15 @@ export default {
       sideToggle: true,
       toggleSideVisible: true,
       dialog: {
-        studio_run_python: () => {
+        [BLOCK_TYPES.python]: () => {
           this.onIDE()
         },
-        studio_play_recording: () => {
+        [BLOCK_TYPES.record]: () => {
           this.onTeach()
         },
-        studio_run_app: () => {
-          console.log('open other app')
+        [BLOCK_TYPES.app]: () => {
+          this.onApp()
+          // console.log('open other app')
         },
       },
     };
@@ -164,13 +170,18 @@ export default {
     },
     insertProject(path) {
       console.log(path, this.block)
-      const children = this.block.childBlocks_
-      const inputField = children[0].inputList[0].fieldRow[1]
-      inputField.setText(path)
+      if (this.block.type === BLOCK_TYPES.app) {
+        console.log('get xml')
+      }
+      else {
+        const children = this.block.childBlocks_
+        const inputField = children[0].inputList[0].fieldRow[1]
+        inputField.setText(path)
+      }
     },
-    popDialog(block) {
-      if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
-        this.dialog[block.type]()
+    popDialog(type) {
+      if (Object.prototype.hasOwnProperty.call(this.dialog, type)) {
+        this.dialog[type]()
       }
     },
     saveProject() {
@@ -235,10 +246,17 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
         // eventBus.$emit('show', block)
-        this.block = block
-        this.popDialog(block)
-        console.log(block.type)
-        console.log('onchange 2')
+        const type = block.type
+        this.popDialog(type)
+        console.log(type)
+        if (type === BLOCK_TYPES.app) {
+          console.log('delete it')
+          block.dispose(false)
+        }
+        else {
+          this.block = block
+          console.log('onchange 2')
+        }
       }
       else {
         this.saveStatus = false
