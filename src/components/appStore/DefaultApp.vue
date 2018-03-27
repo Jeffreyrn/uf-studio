@@ -3,18 +3,18 @@
     <div class="tab-contain">
       <ul>
         <li class="com-app-icon">
+          <router-link :to="{name: 'Emulator', params:{data: {name: null}} }">
+            <div style="width:100%;height:100%;cursor: pointer;">
+            </div>
+          </router-link>
+          <AppTitle :data="{omitname: 'Control'}"></AppTitle>
+        </li>
+        <li class="com-app-icon">
           <router-link :to="{name: 'Paint', params:{data: {name: null}} }">
             <div style="width:100%;height:100%;cursor: pointer;">
             </div>
           </router-link>
           <AppTitle :data="{omitname: 'Paint'}"></AppTitle>
-        </li>
-        <li class="com-app-icon">
-          <router-link :to="{name: 'Emulator', params:{data: {name: null}} }">
-            <div style="width:100%;height:100%;cursor: pointer;">
-            </div>
-          </router-link>
-          <AppTitle :data="{omitname: 'Emulator'}"></AppTitle>
         </li>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="com-app-icon">
           <router-link :to="{name: 'AppDetail', params:{data: data}}">
