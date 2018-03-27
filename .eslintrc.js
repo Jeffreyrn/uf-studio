@@ -65,5 +65,6 @@ module.exports = {
     "func-names": 0, // 强制使用命名的 function 表达式
     "object-shorthand": 0,
     "no-restricted-syntax":0, // 禁止使用特定的语法
+    "guard-for-in":0, // for in循环要用if语句过滤
   }
 }
