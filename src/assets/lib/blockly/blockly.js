@@ -302,7 +302,12 @@ function init(languageCode) {
     //   loadWorkspace(xmlDom, disableEvent);
     // }
   };
-
+  Blockly.clearWorkspace = () => {
+    return new Promise((resolve) => {
+      Blockly.BlockWorkspace.clear();
+      resolve()
+    })
+  }
   /* eslint-disable no-eval */
   Blockly.executeCode = () => {
     return new Promise((resolve, reject) => {

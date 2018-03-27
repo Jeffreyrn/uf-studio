@@ -264,22 +264,22 @@
         </block>
         <block type="buzzer_notes"></block>
         <block type="buzzer_beats"></block>
-    </category>
-    <category name="{MSG.CATEGORY_INPUT}" colour="{COLOR.COLOR_INPUT}">
-            <block type="condition_tip_sensor"></block>
-            <block type="condition_face_detection"></block>
-            <block type="condition_key_pressed"></block>
-            <block type="condition_button_pressed"></block>
-            <block type="condition_current_position"></block>
-            <block type="event_keypressed"></block>
-            <block type="event_face_detection"></block>
-            <block type="event_tip_sensor"></block>
-            <block type="event_button_pressed"></block>
-            <block type="event_keypressed_stop"></block>
-            <block type="event_face_detection_stop"></block>
-            <block type="event_tip_sensor_stop"></block>
-            <block type="event_button_pressed_stop"></block>
     </category> -->
+    <category name="{MSG.CATEGORY_INPUT}" colour="{COLOR.COLOR_INPUT}">
+            <!-- <block type="condition_tip_sensor"></block> 
+            <block type="condition_face_detection"></block>-->
+            <block type="condition_key_pressed"></block>
+            <!-- <block type="condition_button_pressed"></block>
+            <block type="condition_current_position"></block> -->
+            <block type="event_keypressed"></block>
+            <!-- <block type="event_face_detection"></block>
+            <block type="event_tip_sensor"></block>
+            <block type="event_button_pressed"></block> -->
+            <block type="event_keypressed_stop"></block>
+            <!-- <block type="event_face_detection_stop"></block>
+            <block type="event_tip_sensor_stop"></block>
+            <block type="event_button_pressed_stop"></block> -->
+    </category> 
 <!--<block type="stop_grove_fan"></block>-->
     <!-- <category name="Grove" colour="{COLOR.COLOR_GROVE}">
         <label text="{MSG.LABEL_MINI_FAN}"></label>
@@ -650,7 +650,7 @@
     </category>
 
 
-    <sep></sep>
+    <!-- <sep></sep>
     <category name="{MSG.CATEGORY_ADVANCE}" colour="{COLOR.COLOR_ADVANCE}">
         <category name="{MSG.CATEGORY_TEXT}" colour="{COLOR.COLOR_TEXT}">
             <block type="text_charAt">
@@ -823,6 +823,6 @@
         </category>
         <category name="{MSG.CATEGORY_VARIABLE}" colour="{COLOR.COLOR_VARIABLE}" custom="VARIABLE"></category>
         <category name="{MSG.CATEGORY_FUNCTION}" colour="{COLOR.COLOR_FUNCTION}" custom="PROCEDURE"></category>
-    </category>
+    </category> -->
 
 </xml>
