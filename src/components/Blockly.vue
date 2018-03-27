@@ -1,8 +1,8 @@
 <template>
 <div class="blockly-wrapper">
   <CommonTopMenu
-    title='Blockly'
-    :curFileName='model.localAppsMgr.curProName'
+    title='App Editor'
+    :curFileName='model.localAppsMgr.curProName + notSaved'
     :onback='quitPage'
     :onsave='saveProject'
     :onnew='newProject'
@@ -14,18 +14,20 @@
       <div class="hide-button el-icon-arrow-right" @click="toggleSideShow"></div>
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
+      <div class="emulator-wrapper">
+        <div class="for-dev">
+          <button class="button" @click="genjs">gen</button>
+          <div v-html="jsCode"></div>
+          <button class="button" @click="genxml">gen xml</button>
+          <button class="button" @click="onIDE()">test ide list</button>
+          <button class="button" @click="onTeach()">test teach list</button>
+          <button class="button" @click="onApp()">test app list</button>
+          <div v-text="xmlCode"></div>
+        </div>
+        <!-- <xarm-model></xarm-model> -->
+      </div>
       <div class="file-list">
         <file-list @loadProject="loadProject"></file-list>
-      </div>
-      <div class="emulator-wrapper">
-
-        <button class="button" @click="genjs">gen</button>
-        <div v-html="jsCode"></div>
-        <button class="button" @click="genxml">gen xml</button>
-        <button class="button" @click="onIDE()">test ide list</button>
-        <button class="button" @click="onTeach()">test teach list</button>
-        <button class="button" @click="onApp()">test app list</button>
-        <div v-text="xmlCode"></div>
       </div>
     </div>
   </div>
@@ -41,6 +43,7 @@ import Dialogs from './Blockly/Dialogs'
 import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
 import CommonTopMenu from './common/CommonTopMenu';
+import XarmModel from './common/XarmModel';
 
 const BLOCK_TYPES = {
   python: 'studio_run_python',
@@ -109,6 +112,7 @@ export default {
     }
   },
   components: {
+    XarmModel,
     Dialogs,
     FileList,
     DialogInputName,
@@ -154,7 +158,7 @@ export default {
       console.log('start run');
     },
     quitPage() {
-      if (this.saveStatus) {
+      if (this.saveStatus || this.emptyProject()) {
         this.$router.push({ name: this.backStr });
       }
       else {
@@ -229,7 +233,7 @@ export default {
       this.model.localAppsMgr.curProName = ''
     },
     newProject() {
-      if (this.saveStatus) {
+      if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
       }
       else {
@@ -302,7 +306,7 @@ export default {
     //   });
     // },
     loadProject(path) {
-      if (this.saveStatus) {
+      if (this.saveStatus || this.emptyProject()) {
         this.getProject(path)
       }
       else {
@@ -331,6 +335,7 @@ export default {
         Blockly.BlockWorkspace.clear();
         Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
         this.model.localAppsMgr.curProName = path
+        this.saveStatus = true
       }, (error) => {
         this.$message(`get xml error code${error.code}`)
       })
@@ -375,6 +380,9 @@ export default {
       }
       return null;
     },
+    emptyProject() {
+      return !this.blocksLength() && !this.model.localAppsMgr.curProName
+    },
     blocksLength() {
       if (Blockly.BlockWorkspace !== null) {
         return Blockly.BlockWorkspace.getAllBlocks().length;
@@ -406,6 +414,9 @@ export default {
     displayProjectTitle() {
       return this.blocklyData.projectName !== null ?
         this.blocklyData.projectName : this.constData.untitledProject;
+    },
+    notSaved() {
+      return this.saveStatus ? '' : '*'
     },
   },
   watch: {
@@ -448,6 +459,16 @@ export default {
       background: #ccc;
       width: 43.8%;
       position: relative;
+      .file-list {
+        height: 50%;
+      }
+      .emulator-wrapper {
+        position: relative;
+        height: 50%;
+        .for-dev{
+          position: absolute;
+        }
+      }
     }
   }
   /*==========*/
