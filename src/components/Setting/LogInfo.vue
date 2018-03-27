@@ -2,7 +2,7 @@
   <div class="log-wrapper com-module-wrapper">
     <div class="com-back-home-wrapper com-text-center" style="position: relative">
       <a @click="goBack()"><img class="com-icon-back" src="../../assets/img/common/icon_back.svg"/></a>
-      <span class="com-font-GB-24 com-module-name">System Log</span>
+      <span class="com-font-GB-24 com-module-name">Studio Log</span>
       <el-button type="primary" icon="el-icon-download" style="position: absolute;right: 4vw;" @click="downloadDoc()">Download</el-button>
     </div>
     <div class="log-content" id="log-content" @scroll="scrollToBottom()">
@@ -56,10 +56,10 @@ export default {
       }
     },
     downloadDoc() {
-      fetch('http://192.168.1.67:18333/test/log/download').then(response => response.blob().then((blob) => {
+      fetch('http://192.168.1.67:18333/handler/log/download').then(response => response.blob().then((blob) => {
         const a = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
-        const filename = 'system log.zip';
+        const filename = 'studio-log.tar.gz';
         a.href = url;
         a.download = filename;
         a.click();
