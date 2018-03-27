@@ -82,9 +82,9 @@ export default {
   position:absolute;
   width:621px;
   height:63px;
-  left:0;
-  right:0;
-  bottom:0;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   margin:auto;
   border: 1px solid #D8D8D8;
   // background:lightgreen;
@@ -100,44 +100,52 @@ export default {
   .size {
     width: 100%;
     height: 100%;
-    margin-top: 15px;
     background-position: center;
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: top;
   }
   .icon-text {
+    position: absolute;
     color: white;
-    padding-top: 25px;
+    top: 42px;
     padding-left: 12px;
-    font-family: Gotham-Book;
+    font-family: 'Gotham-Book';
     font-size: 10px;
     color: #787878;
     letter-spacing: -0.8px;
     // text-align: center;
   }
   .undo {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-undo.svg');
   }
   .redo {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-redo.svg');
   }
   .text {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-text.svg');
   }
   .image {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-image.svg');
   }
   .copy {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-copy.svg');
   }
   .add {
-    background-image: url('./../../assets/img/paint/tool-copy.svg');
+    margin-top: 10px;
+    background-image: url('./../../assets/img/paint/icon_addsticker.svg');
   }
   .delete {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-delete.svg');
   }
   .clear {
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/tool-clear.svg');
   }
 }

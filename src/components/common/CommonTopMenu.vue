@@ -12,6 +12,7 @@
     <div class="menu-wrapper">
       <div @click='onsave'><img src="./../../assets/img/blockly/btn_save.svg"/><span>save</span></div>
       <div @click='onnew'><img src="./../../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
+      <div v-if="type==='paint'" @click='onlist'><img src="./../../assets/img/blockly/btn_list.svg"/><span>list</span></div>
       <div @click="onstart" class="run-btn"><img src="./../../assets/img/blockly/icon_start.svg"/></div>
     </div>
   </div>
@@ -20,7 +21,7 @@
 <script>
 
 export default {
-  props: ['title', 'onback', 'onsave', 'onnew', 'onstart', 'curFileName'],
+  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onlist', 'curFileName'],
   name: 'common-top-menu',
   data() {
     return {
@@ -92,7 +93,7 @@ export default {
   .run-btn {
     background-color: #52BF53;
     line-height: 0.2;
-    padding: 1.2vw;
+    // padding: 1.2vw;
     img{
       width: 120%;
     }

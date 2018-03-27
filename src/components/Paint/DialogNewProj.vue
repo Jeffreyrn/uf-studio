@@ -2,31 +2,40 @@
 <template>
   <div id="root-dialog1" class="noselected">
     <div class="dialog-wrap">
-      <div class="dialog-cover" @click="closeMyself"></div>
+      <div class="dialog-cover" @click="onclose"></div>
       <div class="dialog-content" id="dialog-content">
         <div class="position-absolute top-bar">
-          <span class="top-title">{{ title }}</span>
-          <div class="position-absolute dialog-close" @click="closeMyself">
+          <span class="top-title">
+            <!-- {{ title }} -->
+            Please choose the way you want the pattern to be <span style="color:lightgreen;">Drawn/Engraved</span>
+          </span>
+          <div class="position-absolute dialog-close" @click="onclose">
           </div>
         </div>
-        <span v-if="showSelected===true">
-          <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
-            Waypoint
-            <div class="position-absolute waypoint-icon">
-            </div>
+        <!-- <span v-if="showSelected===true">
+        </span> -->
+        <div class="position-absolute point-selected-bg text-select" v-bind:class="bgColor2" style="left:110px;" @click="typeSelect('outline')">
+          <div class="text-a-com text-a-outline">
+            A
           </div>
-          <div class="position-absolute point-selected-bg" v-bind:class="classObject2" style="right:110px;" @click="typeSelect('2')">
-            Single Point
-            <div class="position-absolute single-icon">
-            </div>
+          <span class="text-bottom" style="">Outline</span>
+          <div v-if="model.localPaintMgr.projTypeSelected==='outline'" class="mode-selected-icon"></div>
+        </div>
+
+        <div class="position-absolute point-selected-bg text-select" v-bind:class="bgColor1" style="right:110px;" @click="typeSelect('gray')">
+          <div class="text-a-com text-a-gray">
+            A
           </div>
-        </span>
+          <div class="text-bottom" style="">Grayscale</div>
+          <div v-if="model.localPaintMgr.projTypeSelected==='gray'" class="mode-selected-icon"></div>
+        </div>
+
         <input
           id="teach-input-text"
-          v-model="model.localTeach.curDialogProjInputText"
+          v-model="model.localPaintMgr.curDialogProjInputText"
           type="text" class="position-absolute dialog-input"
           placeholder="Please enter a project name"/>
-        <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
+        <div class="position-absolute dialog-error"> {{ model.localPaintMgr.dialogErrorTips }} </div>
         <span v-if="isFileNameCorrect">
           <div class="position-absolute btn-create cursor-pointer" @click="onok">
             OK
@@ -46,12 +55,14 @@
 <script>
 
 export default {
-  props: ['width', 'height', 'title', 'show_selected', 'input_top', 'onok'],
+  props: ['width', 'height', 'title', 'show_selected', 'input_top', 'onok', 'onclose'],
   data() {
     return {
       model: window.GlobalUtil.model,
       showSelected: true,
     }
+  },
+  activated: function() {
   },
   mounted() {
     const dialogContent = document.getElementById('dialog-content');
@@ -73,44 +84,36 @@ export default {
   },
   methods: {
     typeSelect(type) {
-      window.GlobalUtil.model.localTeach.projTypeSelected = type;
-    },
-    closeMyself() {
-      window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
-      window.GlobalUtil.model.localTeach.projRenameShow = false;
+      this.model.localPaintMgr.projTypeSelected = type;
     },
   },
   components: {
   },
   computed: {
     isFileNameCorrect() {
-      const text = this.model.localTeach.curDialogProjInputText;
+      const text = this.model.localPaintMgr.curDialogProjInputText;
       if (text === null || text === '') {
-        window.GlobalUtil.model.localTeach.dialogErrorTips = '';
+        this.model.localPaintMgr.dialogErrorTips = '';
       }
-      const isHasProj = window.GlobalUtil.model.localTeach.isHasProj(text);
-      if (!isHasProj) {
-        return false;
-      }
-      const isFileStr = window.GlobalUtil.isFileStr(this.model.localTeach.curDialogProjInputText);
+      const isFileStr = window.GlobalUtil.isFileStr(this.model.localPaintMgr.curDialogProjInputText);
       if (!isFileStr) {
         return false;
       }
-      return isFileStr && isHasProj;
+      return isFileStr;
     },
-    classObject1: () => ({
-      'point-selected-selected0': window.GlobalUtil.model.localTeach.projTypeSelected !== '1',
-      'point-selected-selected1': window.GlobalUtil.model.localTeach.projTypeSelected === '1',
+    bgColor1: () => ({
+      'selected-bg-color': window.GlobalUtil.model.localPaintMgr.projTypeSelected === 'gray',
+      'unselected-bg-color': window.GlobalUtil.model.localPaintMgr.projTypeSelected === 'outline',
     }),
-    classObject2: () => ({
-      'point-selected-selected0': window.GlobalUtil.model.localTeach.projTypeSelected === '1',
-      'point-selected-selected1': window.GlobalUtil.model.localTeach.projTypeSelected !== '1',
+    bgColor2: () => ({
+      'selected-bg-color': window.GlobalUtil.model.localPaintMgr.projTypeSelected === 'outline',
+      'unselected-bg-color': window.GlobalUtil.model.localPaintMgr.projTypeSelected === 'gray',
     }),
   },
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .top-title {
   position: absolute;
   left: 25px;
@@ -147,7 +150,7 @@ export default {
   text-align:center;
   line-height: 40px;
   cursor: pointer;
-  background-image: url('./../assets/img/edit/recording/icon_close.svg');
+  background-image: url('./../../assets/img/edit/recording/icon_close.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 16px 16px;
@@ -175,47 +178,16 @@ export default {
   letter-spacing: -0.56px;
 }
 .point-selected-bg {
-  background: #ECECEC;
-  width: 130px;
-  height: 130px;
+  width: 128px;
+  height: 128px;
   top: 110px;
-  font-family: Gotham-Medium;
-  font-size: 14px;
-  color: #444444;
-  letter-spacing: -0.78px;
-  padding-top: 75px;
-  text-align: center;
   cursor: pointer;
 }
-.waypoint-icon {
-  top: 48px;
-  left: 0px;
-  right: 0px;
-  margin: auto;
-  width: 16px;
-  height: 16px;
-  background-image: url('./../assets/img/edit/recording/icon_waypoint_16x16.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 16px 16px;
-}
-.single-icon {
-  top: 48px;
-  left: 0px;
-  right: 0px;
-  margin: auto;
-  width: 16px;
-  height: 16px;
-  background-image: url('./../assets/img/edit/recording/icon_singlepoint_16x16.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 16px 16px;
-}
-.point-selected-selected1 {
-  border: 2px solid #5A93D7;
-}
-.point-selected-selected0 {
-  border: 0px;
+.text-select {
+  font-family: 'Gotham-Book';
+  font-size: 14px;
+  letter-spacing: -0.78px;
+  text-align: center;
 }
 .btn-create-opacity {
   width: 100%;
@@ -261,5 +233,50 @@ input::-ms-input-placeholder{ /*Internet Explorer*/
   color: #D4D4D4;
   letter-spacing: -0.5px;
   text-align: center;
+}
+.mode-selected-icon {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-image: url('./../../assets/img/pop/icon_select.svg');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  left: 0;
+  right: 0;
+  top: 130px;
+  margin: auto;
+}
+.text-a-com {
+  font-family: 'Gotham-Book';
+  font-size: 80px;
+  text-align: center;
+  padding-top: 5px;
+}
+.unselected-bg-color {
+  background:#EFF3F5;
+  .text-a-gray {
+    color:#555555;
+  }
+  .text-a-outline {  
+    color: transparent;  
+    -webkit-text-stroke: 1px #444444;  
+  }
+  .text-bottom {
+    color:#444444;
+  }
+}
+.selected-bg-color {
+  background:#61656F;
+  .text-a-gray {
+    color: white;
+  }
+  .text-a-outline {  
+    color: transparent;  
+    -webkit-text-stroke: 1px white;  
+  }  
+  .text-bottom {
+    color:#ffffff;
+  }
 }
 </style>

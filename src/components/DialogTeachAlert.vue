@@ -59,34 +59,6 @@ export default {
 </script>
 
 <style scoped>
-.drop-enter-active {
-  transition: all .5s ease;
-}
-.drop-leave-active {
-  transition: all .3s ease;
-}
-.drop-enter {
-  transform: translateY(-500px);
-}
-.drop-leave-active {
-  transform: translateY(-500px);
-}
-.dialog-wrap {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-}
-.dialog-cover {
-  background: #000;
-  opacity: .3;
-  position: fixed;
-  z-index: 5;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 .top-title {
   position: absolute;
   width: 100px;

@@ -6,7 +6,7 @@ import LocalTeach from './model_local_teach';
 import Robot from './model_local_robot';
 import LocalProjTree from './model_local_proj_tree';
 import LocalAppsMgr from './model_local_apps_mgr';
-
+import localPaintMgr from './model_local_paint_mgr';
 
 const Model = {};
 Model.localParamsSetting = LocalParamsSetting;
@@ -16,5 +16,6 @@ Model.localTeach = LocalTeach;
 Model.robot = Robot;
 Model.localProjTree = LocalProjTree;
 Model.localAppsMgr = LocalAppsMgr;
+Model.localPaintMgr = localPaintMgr;
 
 export default Model;

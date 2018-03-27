@@ -1,6 +1,8 @@
 <template>
   <div class="main-wrapper" id="paint-wrapper">
     <CommonTopMenu
+      type='paint'
+      :onlist='listProjects'
       title='Draw/Laser'
       :onback='onBack'
       :onsave='saveProject'
@@ -11,30 +13,13 @@
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
     <BottomTools></BottomTools>
-    <!-- <el-button @click="undoEvent()">
-      <img src="../assets/img/tool-undo.svg" alt="undo">
-    </el-button>
-    <el-button @click="undoEvent('redo')">
-      <img src="../assets/img/tool-redo.svg" alt="redo">
-    </el-button>
-    <el-button @click="visible.text = true">
-      <img src="../assets/img/tool-text.svg" alt="text">
-    </el-button>
-    <el-button @click="$refs.addFile.click()">
-      <img src="../assets/img/tool-image.svg" alt="image">
-    </el-button>
-    <el-button @click="visible.pattern = true" icon="el-icon-plus">
-    </el-button>
-    <el-button @click="duplicate()">
-      <img src="../assets/img/tool-copy.svg" alt="copy">
-    </el-button>
-    <el-button @click="removeSelected()">
-      <img src="../assets/img/tool-delete.svg" alt="delete">
-    </el-button>
-    <el-button @click="removeAll()" :disabled="state.empty">
-      <img src="../assets/img/tool-clear.svg" alt="clear">
-    </el-button> -->
-    <el-dialog
+    <DialogNewProj
+      :onclose='closeDialog'
+      :onok='creatProj'
+      v-if="model.localPaintMgr.visible.pattern">
+    </DialogNewProj>
+
+    <!-- <el-dialog
       :title="$t('paintApp.sidebar.picture_name')"
       :visible.sync="visible.pattern"
       width="80%">
@@ -42,8 +27,6 @@
         <img v-for="(src, index) in emotions" :src="src" :key="index" :alt="index" @click="addEmotion(index)"/>
       </div>
       <span slot="footer" class="dialog-footer">
-        <!-- <el-button @click="visible.text = false">Cancel</el-button> -->
-        <!-- <el-button type="primary" >Confirm</el-button> -->
       </span>
     </el-dialog>
     <el-dialog
@@ -63,7 +46,6 @@
         </el-select>
       </span>
       <span slot="footer" class="dialog-footer">
-        <!-- <el-button @click="visible.text = false">Cancel</el-button> -->
         <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
       </span>
     </el-dialog>
@@ -82,10 +64,9 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible.setting = false">{{$t('paintApp.dailog.cancelBtn')}}</el-button>
-        <!-- <el-button type="primary" @click="startPrint()">{{$t('paintApp.dailog.setting.startButton')}}</el-button> -->
       </span>
-    </el-dialog>
-    <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​
+    </el-dialog> -->
+    <!-- <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​ -->
   </div>
 </template>
 <script>
@@ -94,6 +75,7 @@ import opentype from 'opentype.js';
 import Potrace from '../assets/lib/potrace';
 import CommonTopMenu from './common/CommonTopMenu';
 import BottomTools from './Paint/BottomTools';
+import DialogNewProj from './Paint/DialogNewProj';
 // import robot from '../assets/lib/robot';
 
 const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
@@ -129,8 +111,9 @@ export default {
   },
   data() {
     return {
+      model: window.GlobalUtil.model,
       playground: null,
-      backStr: 'AppStore',
+      // backStr: 'AppStore',
       state: {
         buffer: [],
         saved: true,
@@ -139,11 +122,6 @@ export default {
         mode: 'outline',
         zero: 50,
         speed: 200,
-      },
-      visible: {
-        text: false,
-        setting: false,
-        pattern: false,
       },
       dialog: {
         textInput: '', // text value
@@ -177,13 +155,21 @@ export default {
     console.log(this.playground.toSVG());
   },
   activated: function() {
-    this.backStr = 'AppStore'
-    if (this.$route.params.data !== undefined) {
-      this.myAppData = this.$route.params.data;
-      this.backStr = 'AppStore';
-    }
+    // this.backStr = 'AppStore'
+    // if (this.$route.params.data !== undefined) {
+    //   this.myAppData = this.$route.params.data;
+    //   this.backStr = 'AppStore';
+    // }
   },
   methods: {
+    closeDialog() {
+      this.model.localPaintMgr.visible.text = false;
+      this.model.localPaintMgr.visible.setting = false;
+      this.model.localPaintMgr.visible.pattern = false;
+    },
+    listProjects() {
+      console.log('list projects');
+    },
     saveProject() {
       console.log('save project');
     },
@@ -205,20 +191,25 @@ export default {
       console.log(work(), setting);
       // robot.printing.startPrinting(work(), setting);
     },
+    creatProj() {
+      console.log('create proj');
+      this.closeDialog();
+    },
     newProject() {
       this.playground.clear().renderAll();
       this.state.buffer = [];
-      this.$confirm(this.$t('selectMode.title'), {
-        confirmButtonText: this.$t('selectMode.outline'),
-        cancelButtonText: this.$t('selectMode.grayscale'),
-        type: 'info',
-        showClose: false,
-        closeOnClickModal: false,
-      }).then(() => {
-        this.state.mode = 'outline';
-      }).catch(() => {
-        this.state.mode = 'greyscale';
-      });
+      this.model.localPaintMgr.visible.pattern = true;
+      // this.$confirm(this.$t('selectMode.title'), {
+      //   confirmButtonText: this.$t('selectMode.outline'),
+      //   cancelButtonText: this.$t('selectMode.grayscale'),
+      //   type: 'info',
+      //   showClose: false,
+      //   closeOnClickModal: false,
+      // }).then(() => {
+      //   this.state.mode = 'outline';
+      // }).catch(() => {
+      //   this.state.mode = 'greyscale';
+      // });
     },
     initFabric() {
       this.playground = new fabric.Canvas('fabric', {
@@ -447,6 +438,7 @@ export default {
   components: {
     CommonTopMenu,
     BottomTools,
+    DialogNewProj,
   },
 };
 </script>
