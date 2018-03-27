@@ -5,7 +5,7 @@
       <span class="com-font-GB-24 com-module-name">Studio Info</span>
     </div>
     <div>
-      <div v-for="(item, index) in info">
+      <div v-for="(item, index) in info" class="info-wrapper">
         <h2 class="title">{{ item.title }}</h2>
         <div class="content" v-for="itemName in item.data">
           <div class="left">
@@ -107,18 +107,27 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .studio-wrapper {
-    text-align: center;
     color: #444;
+    .info-wrapper {
+      border-bottom:  1px solid #979797;
+      width: 90%;
+      margin: 0 auto;
+      padding: 2rem 0 4rem;
+    }
+    .info-wrapper:last-child {
+      border: none;
+    }
     .title {
       font-family: 'Gotham-Bold';
-      font-size: 2.4rem;
+      font-size: 1.8rem;
       letter-spacing: -1.67px;
       padding: 2%;
+      text-align: center;
     }
     .content {
       display: flex;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       .left {
         width: 40%;
         display: flex;
