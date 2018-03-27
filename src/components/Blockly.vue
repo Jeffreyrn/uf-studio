@@ -1,8 +1,8 @@
 <template>
 <div class="blockly-wrapper">
   <CommonTopMenu
-    title='Blockly'
-    :curFileName='model.localAppsMgr.curProName'
+    title='App Editor'
+    :curFileName='model.localAppsMgr.curProName + notSaved'
     :onback='quitPage'
     :onsave='saveProject'
     :onnew='newProject'
@@ -24,7 +24,7 @@
           <button class="button" @click="onApp()">test app list</button>
           <div v-text="xmlCode"></div>
         </div>
-        <xarm-model></xarm-model>
+        <!-- <xarm-model></xarm-model> -->
       </div>
       <div class="file-list">
         <file-list @loadProject="loadProject"></file-list>
@@ -158,7 +158,7 @@ export default {
       console.log('start run');
     },
     quitPage() {
-      if (this.saveStatus) {
+      if (this.saveStatus || this.emptyProject()) {
         this.$router.push({ name: this.backStr });
       }
       else {
@@ -233,7 +233,7 @@ export default {
       this.model.localAppsMgr.curProName = ''
     },
     newProject() {
-      if (this.saveStatus) {
+      if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
       }
       else {
@@ -306,7 +306,7 @@ export default {
     //   });
     // },
     loadProject(path) {
-      if (this.saveStatus) {
+      if (this.saveStatus || this.emptyProject()) {
         this.getProject(path)
       }
       else {
@@ -335,6 +335,7 @@ export default {
         Blockly.BlockWorkspace.clear();
         Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
         this.model.localAppsMgr.curProName = path
+        this.saveStatus = true
       }, (error) => {
         this.$message(`get xml error code${error.code}`)
       })
@@ -379,6 +380,9 @@ export default {
       }
       return null;
     },
+    emptyProject() {
+      return !this.blocksLength() && !this.model.localAppsMgr.curProName
+    },
     blocksLength() {
       if (Blockly.BlockWorkspace !== null) {
         return Blockly.BlockWorkspace.getAllBlocks().length;
@@ -410,6 +414,9 @@ export default {
     displayProjectTitle() {
       return this.blocklyData.projectName !== null ?
         this.blocklyData.projectName : this.constData.untitledProject;
+    },
+    notSaved() {
+      return this.saveStatus ? '' : '*'
     },
   },
   watch: {
