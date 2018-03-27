@@ -38,6 +38,9 @@ export const openWebsocket = ({ commit }) => {
     window.CommandsAppsSocket.listLocalApps((dict) => {
       console.log(dict);
     });
+    window.CommandsPaintSocket.listProjs((dict) => {
+      console.log(dict);
+    });
     commit(types.SET_ERROR, false);
   });
   GlobalUtil.socketCom.init_onclose((evt) => {

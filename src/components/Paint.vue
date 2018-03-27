@@ -18,6 +18,11 @@
       :onok='creatProj'
       v-if="model.localPaintMgr.visible.pattern">
     </DialogNewProj>
+    <DialogProjs
+      :onclose='closeDialog'
+      :onopen='selectProj'
+      v-if="model.localPaintMgr.visible.projs">
+    </DialogProjs>
 
     <!-- <el-dialog
       :title="$t('paintApp.sidebar.picture_name')"
@@ -76,7 +81,7 @@ import Potrace from '../assets/lib/potrace';
 import CommonTopMenu from './common/CommonTopMenu';
 import BottomTools from './Paint/BottomTools';
 import DialogNewProj from './Paint/DialogNewProj';
-// import robot from '../assets/lib/robot';
+import DialogProjs from './Paint/DialogProjs';
 
 const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -155,23 +160,24 @@ export default {
     console.log(this.playground.toSVG());
   },
   activated: function() {
-    // this.backStr = 'AppStore'
-    // if (this.$route.params.data !== undefined) {
-    //   this.myAppData = this.$route.params.data;
-    //   this.backStr = 'AppStore';
-    // }
   },
   methods: {
     closeDialog() {
       this.model.localPaintMgr.visible.text = false;
       this.model.localPaintMgr.visible.setting = false;
       this.model.localPaintMgr.visible.pattern = false;
+      this.model.localPaintMgr.visible.projs = false;
     },
     listProjects() {
       console.log('list projects');
+      this.model.localPaintMgr.visible.projs = true;
     },
     saveProject() {
       console.log('save project');
+    },
+    selectProj() {
+      console.log(`select project = ${JSON.stringify(this.model.localPaintMgr.curProj)}`);
+      this.closeDialog();
     },
     startPrint() {
       console.log('start print');
@@ -189,15 +195,17 @@ export default {
         speed: this.state.speed,
       };
       console.log(work(), setting);
-      // robot.printing.startPrinting(work(), setting);
     },
     creatProj() {
       console.log('create proj');
       this.closeDialog();
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, (dict) => {
+      });
     },
     newProject() {
       this.playground.clear().renderAll();
       this.state.buffer = [];
+      this.model.localPaintMgr.curDialogProjInputText = '';
       this.model.localPaintMgr.visible.pattern = true;
       // this.$confirm(this.$t('selectMode.title'), {
       //   confirmButtonText: this.$t('selectMode.outline'),
@@ -439,6 +447,7 @@ export default {
     CommonTopMenu,
     BottomTools,
     DialogNewProj,
+    DialogProjs,
   },
 };
 </script>
