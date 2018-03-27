@@ -1,18 +1,13 @@
 <template>
 <div class="blockly-wrapper">
-  <div class="blockly-header-wrapper">
-    <div class="back-wrapper">
-      <span @click="quitPage" class="btn">
-        <img src="../assets/img/ide/icon_back.svg" alt="back"/>
-      </span>
-      <span>Blockly</span>
-    </div>
-    <div class="menu-wrapper">
-      <div @click="saveProject"><img src="../assets/img/blockly/btn_save.svg"/><span>save</span></div>
-      <div @click="newProject"><img src="../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
-      <div @click="runProject" class="run-btn"><img src="../assets/img/blockly/icon_start.svg"/></div>
-    </div>
-  </div>
+  <CommonTopMenu
+    title='Blockly'
+    :curFileName='model.localAppsMgr.curProName'
+    :onback='quitPage'
+    :onsave='saveProject'
+    :onnew='newProject'
+    :onstart='startRun'>
+  </CommonTopMenu>
   <div class="main-wrapper">
     <div id="blockly-area" class="blockly-workspace" tabindex="0">
       <div id="tab-blocks"></div>
@@ -45,12 +40,19 @@ import BlocklyLib from '../assets/lib/blockly/uarm/blockly_lib';
 import Dialogs from './Blockly/Dialogs'
 import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
+import CommonTopMenu from './common/CommonTopMenu';
 
+const BLOCK_TYPES = {
+  python: 'studio_run_python',
+  record: 'studio_play_recording',
+  app: 'studio_run_app',
+}
 export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
       saveStatus: true,
+      block: {},
       model: window.GlobalUtil.model,
       jsCode: '',
       xmlCode: '',
@@ -79,14 +81,15 @@ export default {
       sideToggle: true,
       toggleSideVisible: true,
       dialog: {
-        studio_run_python: () => {
+        [BLOCK_TYPES.python]: () => {
           this.onIDE()
         },
-        studio_play_recording: () => {
+        [BLOCK_TYPES.record]: () => {
           this.onTeach()
         },
-        studio_run_app: () => {
-          console.log('open other app')
+        [BLOCK_TYPES.app]: () => {
+          this.onApp()
+          // console.log('open other app')
         },
       },
     };
@@ -109,6 +112,7 @@ export default {
     Dialogs,
     FileList,
     DialogInputName,
+    CommonTopMenu,
   },
   mounted() {
     const self = this;
@@ -146,9 +150,12 @@ export default {
     // load project
   },
   methods: {
+    startRun() {
+      console.log('start run');
+    },
     quitPage() {
       if (this.saveStatus) {
-        this.$router.push({ name: this.backStr })
+        this.$router.push({ name: this.backStr });
       }
       else {
         this.$confirm('Are you sure quit without save?', 'Warning', {
@@ -156,21 +163,34 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning',
         }).then(() => {
-          this.$router.push({ name: this.backStr })
+          this.$router.push({ name: this.backStr });
         }).catch(() => {
           console.log('quit canceled')
         })
       }
     },
     insertProject(path) {
-      console.log(path, this.block)
-      const children = this.block.childBlocks_
-      const inputField = children[0].inputList[0].fieldRow[1]
-      inputField.setText(path)
+      console.log(path)
+      if (this.block.type === BLOCK_TYPES.app) {
+        window.CommandsAppsSocket.getBlockXml(path).then((xml) => {
+          console.log('get xml text', xml.xmlData)
+          Blockly.appendXML(xml.xmlData)
+        }, (data) => {
+          this.$message({
+            type: 'info',
+            message: `get app xml failed, code${data.code}`,
+          })
+        })
+      }
+      else {
+        const children = this.block.childBlocks_
+        const inputField = children[0].inputList[0].fieldRow[1]
+        inputField.setText(path)
+      }
     },
-    popDialog(block) {
-      if (Object.prototype.hasOwnProperty.call(this.dialog, block.type)) {
-        this.dialog[block.type]()
+    popDialog(type) {
+      if (Object.prototype.hasOwnProperty.call(this.dialog, type)) {
+        this.dialog[type]()
       }
     },
     saveProject() {
@@ -235,10 +255,18 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       if (block !== null && event.type === Blockly.Events.CREATE) {
         // eventBus.$emit('show', block)
-        this.block = block
-        this.popDialog(block)
-        console.log(block.type)
-        console.log('onchange 2')
+        const type = block.type
+        this.popDialog(type)
+        console.log(type)
+        if (type === BLOCK_TYPES.app) {
+          console.log('delete it')
+          this.block.type = type
+          block.dispose(false)
+        }
+        else {
+          this.block = block
+          console.log('onchange 2')
+        }
       }
       else {
         this.saveStatus = false
@@ -293,7 +321,11 @@ export default {
       }
     },
     getProject(path) {
-      window.CommandsAppsSocket.getProject(path).then((xml) => {
+      const data = {
+        category: 'myapp',
+        name: path,
+      }
+      window.CommandsAppsSocket.getBlockXml(data).then((xml) => {
         console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
         Blockly.BlockWorkspace.clear();
@@ -391,6 +423,7 @@ export default {
     display: flex;
     flex-direction: row;
     height: 100%;
+    overflow: hidden;
     #blockly-area {
       width: 56.2%;
       min-height: 500px;
@@ -418,56 +451,6 @@ export default {
     }
   }
   /*==========*/
-  .blockly-header-wrapper {
-    height: 60px;
-    line-height: 60px;
-    background: #575C62;
-    display: flex;
-    justify-content: space-between;
-    img {
-      width: 1.6rem;
-    }
-    span {
-      margin-left: 1rem;
-      font-family: 'Gotham-Bold';
-      font-size: 2rem;
-      color: #fff;
-      letter-spacing: -1px;
-    }
-  }
-  .back-wrapper {
-    .btn {
-      cursor: pointer;
-    }
-    padding-left: 1vw;
-  }
-  .menu-wrapper {
-    display: flex;
-    & > div {
-      padding: 0 1vw;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      span {
-        font-size: 0.7em;
-        padding: 0;
-        margin: 0;
-        line-height: 1.2vw;
-        text-transform: capitalize;
-      }
-    }
-    .run-btn {
-      background-color: #52BF53;
-      line-height: 0.2;
-      padding: 1.2vw;
-      img{
-        width: 120%;
-      }
-    }
-  }
   .blockly-wrapper {
     width: 100%;
     height: 100%;

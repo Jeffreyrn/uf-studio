@@ -254,7 +254,10 @@ function init(languageCode) {
   //     console.log('Blockly-Event-no-stop');
   //   }
   // };
-
+  Blockly.appendXML = (xmlText) => {
+    const xmlDom = Blockly.Xml.textToDom(xmlText)
+    Blockly.Xml.appendDomToWorkspace(xmlDom, Blockly.BlockWorkspace)
+  }
   Blockly.generateXML = (save) => {
     if (Blockly.BlockWorkspace !== null) {
       if (save && Blockly.Running) Blockly.setBlocksDeletable(true);

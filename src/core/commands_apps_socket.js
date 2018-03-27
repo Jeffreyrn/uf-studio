@@ -133,13 +133,14 @@ const runTaskApp = (path, category) => new Promise((resolve) => {
 })
 self.runTeach = path => runTaskApp(path, 'teach')
 self.runPython = path => runTaskApp(path, 'python')
-self.getProject = path => new Promise((resolve, reject) => {
+self.getBlockXml = path => new Promise((resolve, reject) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-      appName: path,
+      category: path.category,
+      appName: path.name,
     }),
   }
-  self.sendCmd(window.GlobalConstant.APP_GET_PROJECT, params, (dict) => {
+  self.sendCmd(window.GlobalConstant.APP_GET_XML, params, (dict) => {
     if (dict.code === 0) {
       resolve(dict.data)
     }

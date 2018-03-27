@@ -303,11 +303,11 @@ export default {
         groups[i] = new THREE.Group();
       }
       // groups[6].add(joints[7]);
-      const angles = this.control ? this.control : this.joints; // TODO
       const animate = () => {
         requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
+        const angles = this.control ? this.control : this.joints; // TODO
         groups[0].rotation.z = this.valueToRotation(angles[0] + 135);
         groups[1].rotation.x = -this.valueToRotation(angles[1]);
         groups[2].rotation.z = this.valueToRotation(angles[2]);
