@@ -14,18 +14,20 @@
       <div class="hide-button el-icon-arrow-right" @click="toggleSideShow"></div>
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
+      <div class="emulator-wrapper">
+        <div class="for-dev">
+          <button class="button" @click="genjs">gen</button>
+          <div v-html="jsCode"></div>
+          <button class="button" @click="genxml">gen xml</button>
+          <button class="button" @click="onIDE()">test ide list</button>
+          <button class="button" @click="onTeach()">test teach list</button>
+          <button class="button" @click="onApp()">test app list</button>
+          <div v-text="xmlCode"></div>
+        </div>
+        <xarm-model></xarm-model>
+      </div>
       <div class="file-list">
         <file-list @loadProject="loadProject"></file-list>
-      </div>
-      <div class="emulator-wrapper">
-
-        <button class="button" @click="genjs">gen</button>
-        <div v-html="jsCode"></div>
-        <button class="button" @click="genxml">gen xml</button>
-        <button class="button" @click="onIDE()">test ide list</button>
-        <button class="button" @click="onTeach()">test teach list</button>
-        <button class="button" @click="onApp()">test app list</button>
-        <div v-text="xmlCode"></div>
       </div>
     </div>
   </div>
@@ -41,6 +43,7 @@ import Dialogs from './Blockly/Dialogs'
 import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
 import CommonTopMenu from './common/CommonTopMenu';
+import XarmModel from './common/XarmModel';
 
 const BLOCK_TYPES = {
   python: 'studio_run_python',
@@ -109,6 +112,7 @@ export default {
     }
   },
   components: {
+    XarmModel,
     Dialogs,
     FileList,
     DialogInputName,
@@ -448,6 +452,16 @@ export default {
       background: #ccc;
       width: 43.8%;
       position: relative;
+      .file-list {
+        height: 50%;
+      }
+      .emulator-wrapper {
+        position: relative;
+        height: 50%;
+        .for-dev{
+          position: absolute;
+        }
+      }
     }
   }
   /*==========*/
