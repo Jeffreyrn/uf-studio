@@ -157,7 +157,7 @@ export default {
   methods: {
     startRun() {
       console.log('start run');
-      this.runProject()
+      // this.runProject()
     },
     quitPage() {
       if (this.saveStatus || this.emptyProject()) {
