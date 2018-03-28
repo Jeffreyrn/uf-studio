@@ -6,6 +6,8 @@ import NativeCom from './native_com';
 import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
 import CommandsAppsSocket from './commands_apps_socket';
+import CommandsPaintSocket from './commands_paint_socket';
+
 
 // const args = {
 //   // host: '192.168.1.166',
@@ -33,6 +35,10 @@ window.CommandsTeachSocket = CommandsTeachSocket;
 CommandsAppsSocket.socketCom = SocketCom;
 CommandsAppsSocket.model = Model;
 window.CommandsAppsSocket = CommandsAppsSocket;
+
+CommandsPaintSocket.socketCom = SocketCom;
+CommandsPaintSocket.model = Model;
+window.CommandsPaintSocket = CommandsPaintSocket;
 
 // CommandsBlocklySocket.socketCom = SocketCom;
 // CommandsBlocklySocket.model = Model;

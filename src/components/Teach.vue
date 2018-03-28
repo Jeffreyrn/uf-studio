@@ -67,7 +67,7 @@
         <EmulatorControl></EmulatorControl>
       </div>
       <div v-else class="projects-list-wrapper">
-        <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>Project</button></h3>
+        <h3>My Projects <button class="add-file" @click="newProj()"><i class="el-icon-circle-plus"></i>PROJECT</button></h3>
         <div class="tree-wrapper" id="tree-wrapper">
           <el-tree
             class="recording-project-list"
@@ -834,8 +834,9 @@ export default {
           cursor: pointer;
           font-size: 14px;
           color: #8E959D;
+          font-family: 'Gotham-Book';
           .el-icon-circle-plus {
-            margin-right: 14px;
+            margin-right: 6px;
           }
         }
       }
@@ -928,6 +929,7 @@ export default {
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Gotham-Book';
   }
   .recording-project-list {
     background: #fff;

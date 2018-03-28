@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="onimage">
       <div class="size image" alt="Image">
         <div class="icon-text">Image</div>
       </div>
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="onadd()">
       <div class="size add" alt="Add">
         <div class="icon-text">Add</div>
       </div>
@@ -55,10 +55,11 @@
 <script>
 
 export default {
-  props: [''],
+  props: ['onimage'],
   name: 'bottom-tools',
   data() {
     return {
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {
@@ -66,6 +67,10 @@ export default {
   activated: function() {
   },
   methods: {
+    onadd() {
+      this.model.localPaintMgr.selectedIcon = null;
+      this.model.localPaintMgr.visible.icons = true;
+    },
   },
   beforeDestroy() {
   },

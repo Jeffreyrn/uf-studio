@@ -12,61 +12,26 @@
     <div class="fabric-container">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
-    <BottomTools></BottomTools>
+    <BottomTools
+      :onimage="openImage">
+
+    </BottomTools>
     <DialogNewProj
       :onclose='closeDialog'
       :onok='creatProj'
       v-if="model.localPaintMgr.visible.pattern">
     </DialogNewProj>
-
-    <!-- <el-dialog
-      :title="$t('paintApp.sidebar.picture_name')"
-      :visible.sync="visible.pattern"
-      width="80%">
-      <div class="emotion-wrapper">
-        <img v-for="(src, index) in emotions" :src="src" :key="index" :alt="index" @click="addEmotion(index)"/>
-      </div>
-      <span slot="footer" class="dialog-footer">
-      </span>
-    </el-dialog>
-    <el-dialog
-      :title="$t('paintApp.dailog.addText.title')"
-      :visible.sync="visible.text"
-      width="30%"
-      @close="dialog.textInput=''">
-      <span>
-        <el-input type="textarea" :rows="2" placeholder="Please input" v-model="dialog.textInput" :autofocus="true"></el-input>
-        <el-select v-model="dialog.fontSelect" placeholder="Select">
-          <el-option
-            v-for="(item, index) in FONT_LIST"
-            :key="index"
-            :label="item.name"
-            :value="index">
-          </el-option>
-        </el-select>
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      :title="$t('paintApp.dailog.setting.title')"
-      :visible.sync="visible.setting"
-      width="80%">
-      <div class="setting-wrapper">
-        <span class="set-item">{{$t('paintApp.dailog.setting.adjustzero')}}</span>
-        <el-slider
-          v-model="state.zero"
-          show-input>
-        </el-slider>
-        <span class="set-item">{{$t('paintApp.dailog.setting.speed')}}</span>
-        <el-slider v-model="state.speed"></el-slider>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible.setting = false">{{$t('paintApp.dailog.cancelBtn')}}</el-button>
-      </span>
-    </el-dialog> -->
-    <!-- <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​ -->
+    <DialogProjs
+      :onclose='closeDialog'
+      :onopen='selectProj'
+      v-if="model.localPaintMgr.visible.projs">
+    </DialogProjs>
+    <DialogIcons
+      :onclose='closeDialog'
+      :onok='addEmotion'
+      v-if="model.localPaintMgr.visible.icons">
+    </DialogIcons>
+    <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
   </div>
 </template>
 <script>
@@ -76,10 +41,12 @@ import Potrace from '../assets/lib/potrace';
 import CommonTopMenu from './common/CommonTopMenu';
 import BottomTools from './Paint/BottomTools';
 import DialogNewProj from './Paint/DialogNewProj';
-// import robot from '../assets/lib/robot';
+import DialogProjs from './Paint/DialogProjs';
+import DialogIcons from './Paint/DialogIcons';
 
-const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
-const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
+// const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
+// const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
+
 const CONFIG = {
   addPosition: {
     left: 350,
@@ -155,23 +122,25 @@ export default {
     console.log(this.playground.toSVG());
   },
   activated: function() {
-    // this.backStr = 'AppStore'
-    // if (this.$route.params.data !== undefined) {
-    //   this.myAppData = this.$route.params.data;
-    //   this.backStr = 'AppStore';
-    // }
   },
   methods: {
     closeDialog() {
       this.model.localPaintMgr.visible.text = false;
       this.model.localPaintMgr.visible.setting = false;
       this.model.localPaintMgr.visible.pattern = false;
+      this.model.localPaintMgr.visible.projs = false;
+      this.model.localPaintMgr.visible.icons = false;
     },
     listProjects() {
       console.log('list projects');
+      this.model.localPaintMgr.visible.projs = true;
     },
     saveProject() {
       console.log('save project');
+    },
+    selectProj() {
+      console.log(`select project = ${JSON.stringify(this.model.localPaintMgr.curProj)}`);
+      this.closeDialog();
     },
     startPrint() {
       console.log('start print');
@@ -189,27 +158,18 @@ export default {
         speed: this.state.speed,
       };
       console.log(work(), setting);
-      // robot.printing.startPrinting(work(), setting);
     },
     creatProj() {
       console.log('create proj');
       this.closeDialog();
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, () => {
+      });
     },
     newProject() {
       this.playground.clear().renderAll();
       this.state.buffer = [];
+      this.model.localPaintMgr.curDialogProjInputText = '';
       this.model.localPaintMgr.visible.pattern = true;
-      // this.$confirm(this.$t('selectMode.title'), {
-      //   confirmButtonText: this.$t('selectMode.outline'),
-      //   cancelButtonText: this.$t('selectMode.grayscale'),
-      //   type: 'info',
-      //   showClose: false,
-      //   closeOnClickModal: false,
-      // }).then(() => {
-      //   this.state.mode = 'outline';
-      // }).catch(() => {
-      //   this.state.mode = 'greyscale';
-      // });
     },
     initFabric() {
       this.playground = new fabric.Canvas('fabric', {
@@ -225,8 +185,10 @@ export default {
         },
       });
     },
-    addEmotion(index) {
-      fabric.loadSVGFromURL(this.emotions[index], (objects, options) => {
+    addEmotion() {
+      this.closeDialog();
+      const data = this.model.localPaintMgr.selectedIcon;
+      fabric.loadSVGFromURL(data, (objects, options) => {
         Object.keys(objects).forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(objects, 'key')) {
             objects[key].set({ strokeWidth: 0.3 });
@@ -251,6 +213,9 @@ export default {
         this.fabricModified();
         this.visible.pattern = false;
       });
+    },
+    openImage() {
+      this.$refs.addFile.click();
     },
     addImage() {
       const file = this.$refs.addFile.files[0];
@@ -420,9 +385,12 @@ export default {
       }).catch(() => {});
     },
     loadEmotions() {
-      [1, 2, 3].findIndex(() => 0);
-      SVG_LIST2.keys().forEach(key => this.emotions[key] = SVG_LIST2(key));
-      SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
+      // [1, 2, 3].findIndex(() => 0);
+      // this.emotions.list2 = SVG_LIST2;
+      // this.emotions.list1 = SVG_LIST1;
+      // SVG_LIST2.keys().forEach(key => this.emotions.list2 = SVG_LIST2(key));
+      // SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
+      // console.log(`this.emotions = ${JSON.stringify(this.emotions)}`);
     },
     onBack() {
       this.$router.push({ name: 'AppStore' });
@@ -439,6 +407,8 @@ export default {
     CommonTopMenu,
     BottomTools,
     DialogNewProj,
+    DialogProjs,
+    DialogIcons,
   },
 };
 </script>
@@ -529,4 +499,17 @@ a {
 // .blockly-wrapper.notfull{
 //   width: 80%;
 // }
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .2s ease;
+}
+.slide-fade-leave-active {
+  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  // opacity: 0;
+}
 </style>
