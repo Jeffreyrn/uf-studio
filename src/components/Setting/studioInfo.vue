@@ -4,8 +4,8 @@
       <router-link :to="{name:'Setting'}"><img class="com-icon-back" src="../../assets/img/common/icon_back.svg"/></router-link>
       <span class="com-font-GB-24 com-module-name">Studio Info</span>
     </div>
-    <div>
-      <div v-for="(item, index) in info" class="info-wrapper">
+    <div class="content-wrapper com-flex-center">
+      <div v-for="(item, index) in info" class="info-wrapper com-flex-center">
         <h2 class="title">{{ item.title }}</h2>
         <div class="content" v-for="itemName in item.data">
           <div class="left">
@@ -108,11 +108,16 @@ export default {
 <style scoped lang="scss">
   .studio-wrapper {
     color: #444;
+    overflow-y: hidden;
+    .content-wrapper {
+      height: 90%;
+      overflow-y: auto;
+      align-items: center;
+    }
     .info-wrapper {
       border-bottom:  1px solid #979797;
+      height: 50%;
       width: 90%;
-      margin: 0 auto;
-      padding: 2rem 0 4rem;
     }
     .info-wrapper:last-child {
       border: none;
@@ -121,7 +126,7 @@ export default {
       font-family: 'Gotham-Bold';
       font-size: 1.8rem;
       letter-spacing: -1.67px;
-      padding: 2%;
+      padding-bottom: 2%;
       text-align: center;
     }
     .content {
@@ -137,7 +142,7 @@ export default {
         span {
           font-family: 'Gotham-Book';
           letter-spacing: -1.33px;
-          padding: 6px 0;
+          padding: 1% 0;
         }
       }
       .right {
@@ -149,9 +154,14 @@ export default {
         span {
           font-family: 'Gotham-Medium';
           letter-spacing: -1.33px;
-          padding: 6px 0;
+          padding: 1% 0;
         }
       }
     }
+  }
+  .com-flex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 </style>
