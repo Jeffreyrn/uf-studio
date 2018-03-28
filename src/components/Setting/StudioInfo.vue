@@ -100,6 +100,12 @@ export default {
     },
   },
   watch: {
+    $route() {
+      if (this.$route.name === 'StudioInfo') {
+        this.getInfo(window.GlobalConstant.SETTING_GET_DEVICE_INFO, this.info.deviceInfo.data);
+        this.getInfo(window.GlobalConstant.SETTING_GET_STUDIO_INFO, this.info.studioInfo.data);
+      }
+    },
   },
 };
 </script>

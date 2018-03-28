@@ -91,6 +91,13 @@ export default {
 //      return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
 //    },
   },
+  watch: {
+    $route() {
+      if (this.$route.name === 'LogInfo') {
+        this.getLogInfo();
+      }
+    },
+  },
 };
 </script>
 

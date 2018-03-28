@@ -14,8 +14,8 @@ import Setting from '@/components/Setting';
 import AppStore from '@/components/AppStore';
 import AppDetail from '@/components/appStore/AppDetail';
 import LogInfo from '@/components/Setting/LogInfo';
-import softwareUpdate from '@/components/Setting/softwareUpdate';
-import studioInfo from '@/components/Setting/studioInfo';
+import SoftwareUpdate from '@/components/Setting/SoftwareUpdate';
+import StudioInfo from '@/components/Setting/StudioInfo';
 import AppSubmit from '@/components/appStore/AppSubmit';
 
 Vue.use(Router);
@@ -45,13 +45,13 @@ export default new Router({
     },
     {
       path: '/studioInfo',
-      name: 'studioInfo',
-      component: studioInfo,
+      name: 'StudioInfo',
+      component: StudioInfo,
     },
     {
       path: '/softwareUpdate',
-      name: 'softwareUpdate',
-      component: softwareUpdate,
+      name: 'SoftwareUpdate',
+      component: SoftwareUpdate,
     },
     {
       path: '/AppStore',

@@ -116,7 +116,7 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.name === 'softwareUpdate') {
+      if (this.$route.name === 'SoftwareUpdate') {
         this.checkUpdate();
       }
     },
