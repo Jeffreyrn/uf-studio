@@ -9,12 +9,36 @@
       :onnew='newProject'
       :onstart='startPrint'>
     </CommonTopMenu>
+
     <div class="fabric-container">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
-    <BottomTools
-      :onimage="openImage">
 
+    <!-- <el-dialog
+      :title="$t('paintApp.dailog.addText.title')"
+      :visible.sync="model.localPaintMgr.visible.text"
+      width="30%"
+      @close="dialog.textInput=''">
+      <span>
+        <el-input type="textarea" :rows="2" placeholder="Please input" v-model="dialog.textInput" :autofocus="true"></el-input>
+        <el-select v-model="dialog.fontSelect" placeholder="Select">
+          <el-option
+            v-for="(item, index) in FONT_LIST"
+            :key="index"
+            :label="item.name"
+            :value="index">
+          </el-option>
+        </el-select>
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
+      </span>
+    </el-dialog> -->
+
+    <BottomTools
+      :onimage="openImage"
+      :onadd="addIconsDialog"
+      :ontext="textDialog">
     </BottomTools>
     <DialogNewProj
       :onclose='closeDialog'
@@ -31,9 +55,18 @@
       :onok='addEmotion'
       v-if="model.localPaintMgr.visible.icons">
     </DialogIcons>
+
+    <DialogFontSelect
+      :onclose='closeDialog'
+      :onopen='addTextAsPath'
+      v-if="model.localPaintMgr.visible.text">
+    </DialogFontSelect>
+
     <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
+
   </div>
 </template>
+
 <script>
 import { fabric } from 'fabric-webpack';
 import opentype from 'opentype.js';
@@ -43,6 +76,7 @@ import BottomTools from './Paint/BottomTools';
 import DialogNewProj from './Paint/DialogNewProj';
 import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
+import DialogFontSelect from './Paint/DialogFontSelect';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -90,6 +124,7 @@ export default {
         zero: 50,
         speed: 200,
       },
+      emotions: {},
       dialog: {
         textInput: '', // text value
         fontSelect: 0, // select font
@@ -97,22 +132,21 @@ export default {
       FONT_LIST: [
         {
           name: this.$t('paintApp.fontNameList.blacklight'),
-          src: require('../assets/fonts/blackLight.ttf'),
+          src: require('./../assets/fonts/blackLight.ttf'),
         },
         {
           name: this.$t('paintApp.fontNameList.xingkai'),
-          src: require('../assets/fonts/STXingkai-SC-Bold.ttf'),
+          src: require('./../assets/fonts/STXingkai-SC-Bold.ttf'),
         },
         {
           name: this.$t('paintApp.fontNameList.lanting'),
-          src: require('../assets/fonts/lanting.ttf'),
+          src: require('./../assets/fonts/lanting.ttf'),
         },
         {
           name: this.$t('paintApp.fontNameList.kaiti'),
-          src: require('../assets/fonts/kanti.ttf'),
+          src: require('./../assets/fonts/kanti.ttf'),
         },
       ],
-      emotions: {},
     };
   },
   mounted() {
@@ -130,6 +164,15 @@ export default {
       this.model.localPaintMgr.visible.pattern = false;
       this.model.localPaintMgr.visible.projs = false;
       this.model.localPaintMgr.visible.icons = false;
+      this.model.localPaintMgr.visible.text = false;
+    },
+    addIconsDialog() {
+      this.model.localPaintMgr.selectedIcon = null;
+      this.model.localPaintMgr.visible.icons = true;
+    },
+    textDialog() {
+      this.model.localPaintMgr.curDialogFontInputText = '';
+      this.model.localPaintMgr.visible.text = true;
     },
     listProjects() {
       console.log('list projects');
@@ -263,7 +306,9 @@ export default {
         }
       }
     },
-    addTextAsPath(text) {
+    addTextAsPath() {
+      this.closeDialog();
+      const text = this.model.localPaintMgr.curDialogFontInputText;
       if (text.trim()) {
         opentype.load(this.FONT_LIST[this.dialog.fontSelect].src, (err, font) => {
           if (err) {
@@ -409,6 +454,7 @@ export default {
     DialogNewProj,
     DialogProjs,
     DialogIcons,
+    DialogFontSelect,
   },
 };
 </script>

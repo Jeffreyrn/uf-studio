@@ -13,6 +13,7 @@ self.visible = {
 
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
+self.curDialogFontInputText = '';
 
 self.projTypeSelected = 'outline'; // outline gray
 

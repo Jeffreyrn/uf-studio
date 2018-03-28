@@ -6,54 +6,27 @@
       <div class="dialog-content">
         <div class="dialog-top">
           <span class="top-title">
-            Select a Project
+            Insert Text
           </span>
           <div class="dialog-close" @click="onclose">
           </div>
         </div>
-        <!-- @current-change="handleCurrentChange" -->
-        <el-table
-          id="proj-id"
-          height="220"
-          ref='singleTable'
-          :data="model.localPaintMgr.projList"
-          highlight-current-row
-          @current-change="handleCurrentChange"
-          :row-class-name="tableRowClassName"
-          style="width:100%;border:0;">
-          <el-table-column
-            style="background:yellow;"
-            prop="name"
-            label="Project name"
-            width="200">
-            <template slot-scope="scope">
-              <div class="table-td">
-                {{ model.localPaintMgr.projList[scope.$index].name }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="created"
-            label="Date"
-            width="200">
-            <template slot-scope="scope">
-              <div class="table-td">
-                {{ model.localPaintMgr.projList[scope.$index].created }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="type"
-            label="Type">
-            <template slot-scope="scope">
-              <div class="table-td">
-                {{ model.localPaintMgr.projList[scope.$index].type }}
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
 
-        <div v-if="isSelectedApp" class="btn-ok cursor-pointer" @click="onopen">
+        <input
+          v-model="model.localPaintMgr.curDialogFontInputText"
+          type="text" class="position-absolute dialog-input"
+          placeholder="Please enter text"/>
+
+        <el-select v-model="dialog.fontSelect" placeholder="Select" class="position-absolute font-selected">
+          <el-option
+            v-for="(item, index) in FONT_LIST"
+            :key="index"
+            :label="item.name"
+            :value="index">
+          </el-option>
+        </el-select>
+
+        <div v-if="isCorrectText" class="btn-ok cursor-pointer" @click="onopen">
           Open
         </div>
         <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
@@ -68,10 +41,33 @@
 
 export default {
   props: ['onopen', 'onclose'],
+  name: 'dialog-font-select',
   data() {
     return {
       model: window.GlobalUtil.model,
       currentRow: -1,
+      dialog: {
+        textInput: '', // text value
+        fontSelect: 0, // select font
+      },
+      FONT_LIST: [
+        {
+          name: this.$t('paintApp.fontNameList.blacklight'),
+          src: require('./../../assets/fonts/blackLight.ttf'),
+        },
+        {
+          name: this.$t('paintApp.fontNameList.xingkai'),
+          src: require('./../../assets/fonts/STXingkai-SC-Bold.ttf'),
+        },
+        {
+          name: this.$t('paintApp.fontNameList.lanting'),
+          src: require('./../../assets/fonts/lanting.ttf'),
+        },
+        {
+          name: this.$t('paintApp.fontNameList.kaiti'),
+          src: require('./../../assets/fonts/kanti.ttf'),
+        },
+      ],
     };
   },
   mounted() {
@@ -81,8 +77,8 @@ export default {
     });
   },
   computed: {
-    isSelectedApp() {
-      return this.currentRow >= 0;
+    isCorrectText() {
+      return this.model.localPaintMgr.curDialogFontInputText.length > 0;
     },
   },
   methods: {
@@ -148,18 +144,31 @@ export default {
   margin-left:auto;
   margin-right:auto;
   z-index: 10;
-  // background: white;
+  background: white;
   overflow: hidden;
+}
+.dialog-input {
+  width: 350px;
+  height: 40px;
+  top: 100px;
+  /* left:118px; */
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  padding-left: 15px;
+  border: 1px solid #575C62;
+  outline:none;
+}
+.font-selected {
+  left:115px;
+  top:150px;
+  width:200px;
 }
 .btn-ok {
   position: absolute;
   width: 100%;
   height: 40px;
   bottom: 0px;
-  /* margin-top: 0px; */
-  /* margin-left: 178px; */
-  /* background-color: green; */
-  /* margin-bottom: 0px; */
   background: #52BF53;
   text-align: center;
   letter-spacing: -0.88px;
@@ -168,36 +177,6 @@ export default {
   font-size: 12px;
   color: #FFFFFF;
   letter-spacing: -0.5px;
-  /* cursor: pointer; */
 }
-
-// .el-table {
-  // background: yellow;
-// }
-// .el-table .normal-bg1 {
-//   text-align: center;
-// }
-// .el-table .cell {
-//   // background: yellow;
-//   color: blue;
-// }
-// .el-table .success-row {
-//   background: #f0f9eb;
-// }
-.table-td1{
-  font-family: 'Gotham-Book';
-  font-size: 12px;
-  color: #3C3C3C;
-  letter-spacing: -0.38px;
-  text-align: center;
-}
-.table-head {
-  font-family: 'Gotham-Medium';
-  font-size: 16px;
-  color: #3C3C3C;
-  letter-spacing: -1px;
-  text-align: center;
-}
-
 
 </style>

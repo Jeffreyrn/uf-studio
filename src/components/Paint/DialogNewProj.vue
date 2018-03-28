@@ -31,7 +31,6 @@
         </div>
 
         <input
-          id="teach-input-text"
           v-model="model.localPaintMgr.curDialogProjInputText"
           type="text" class="position-absolute dialog-input"
           placeholder="Please enter a project name"/>
@@ -55,7 +54,7 @@
 <script>
 
 export default {
-  props: ['width', 'height', 'title', 'show_selected', 'input_top', 'onok', 'onclose'],
+  props: ['onok', 'onclose'],
   data() {
     return {
       model: window.GlobalUtil.model,
@@ -65,22 +64,10 @@ export default {
   activated: function() {
   },
   mounted() {
-    const dialogContent = document.getElementById('dialog-content');
-    const inputText = document.getElementById('teach-input-text');
-    if (this.width !== undefined) {
-      dialogContent.style.width = `${this.width}px`;
-    }
-    if (this.height !== undefined) {
-      dialogContent.style.height = `${this.height}px`;
-    }
-    if (this.input_top !== undefined) {
-      inputText.style.top = `${this.input_top}px`;
-    }
     this.showSelected = true;
     if (this.show_selected === false || this.show_selected === 'false') {
       this.showSelected = false;
     }
-    console.log(`dialogContent width = ${this.width}, height = ${this.height}`);
   },
   methods: {
     typeSelect(type) {
