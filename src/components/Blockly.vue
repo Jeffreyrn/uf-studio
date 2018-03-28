@@ -11,7 +11,7 @@
   <div class="main-wrapper">
     <div id="blockly-area" class="blockly-workspace" tabindex="0">
       <div id="tab-blocks"></div>
-      <div class="hide-button el-icon-arrow-right" @click="toggleSideShow"></div>
+      <div class="hide-button el-icon-arrow-right" v-bind:class="{rotate: !uiData.sideShow}" @click="toggleSideShow"></div>
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="emulator-wrapper">
@@ -474,7 +474,7 @@ export default {
     height: 100%;
     overflow: hidden;
     #blockly-area {
-      width: 56.2%;
+      width: 66.2%;
       min-height: 500px;
       position: relative;
       .hide-button {
@@ -492,17 +492,20 @@ export default {
         text-align: center;
         color: #767676;
       }
+      .hide-button.rotate {
+        transform: rotate(-180deg);
+      }
     }
     #slide-area {
       background: #ccc;
-      width: 43.8%;
+      width: 33.8%;
       position: relative;
       .file-list {
-        height: 50%;
+        height: 55%;
       }
       .emulator-wrapper {
         position: relative;
-        height: 50%;
+        height: 45%;
         .for-dev{
           position: absolute;
         }
