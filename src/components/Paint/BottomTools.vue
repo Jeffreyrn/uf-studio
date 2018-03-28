@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="onimage()">
       <div class="size image" alt="Image">
         <div class="icon-text">Image</div>
       </div>
@@ -59,6 +59,7 @@ export default {
   name: 'bottom-tools',
   data() {
     return {
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {
@@ -66,6 +67,9 @@ export default {
   activated: function() {
   },
   methods: {
+    onimage() {
+      this.model.localPaintMgr.visible.icons = true;
+    },
   },
   beforeDestroy() {
   },
