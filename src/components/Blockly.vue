@@ -27,7 +27,7 @@
         <!-- <xarm-model></xarm-model> -->
       </div>
       <div class="file-list">
-        <file-list @loadProject="loadProject"></file-list>
+        <file-list @loadProject="loadProject" :selected="model.localAppsMgr.curProName"></file-list>
       </div>
     </div>
   </div>
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       saveStatus: true,
+      pre: '',
       block: {},
       model: window.GlobalUtil.model,
       jsCode: '',
@@ -280,8 +281,15 @@ export default {
           console.log('onchange 2')
         }
       }
-      else if (this.model.localAppsMgr.curProName) {
+      else if (this.blocksLength() > 0 && event.type !== 'ui') {
         this.saveStatus = false
+        console.log(this.blocksLength())
+        if (!this.model.localAppsMgr.curProName) {
+          this.pre = 'Untitled'
+        }
+        else {
+          this.pre = ''
+        }
         console.log(`event ${event.type} emit change save status to false`)
       }
       else {
@@ -318,8 +326,11 @@ export default {
     //   });
     // },
     loadProject(path) {
-      if (path === this.model.localAppsMgr.curProName || this.disableLoadProject) {
-        console.log('selected or click too fast')
+      if (path === this.model.localAppsMgr.curProName) {
+        console.log('selected')
+      }
+      else if (this.disableLoadProject) {
+        this.$message('Click too fast')
       }
       else if (this.saveStatus || this.emptyProject()) {
         this.getProject(path)
@@ -436,14 +447,16 @@ export default {
         this.blocklyData.projectName : this.constData.untitledProject;
     },
     notSaved() {
-      let pre = ''
-      if (!this.model.localAppsMgr.curProName && this.blocksLength()) {
-        pre = 'Untitled'
-      }
-      return this.saveStatus ? '' : `${pre}*`
+      console.log('block length', this.blocksLength())
+      return this.saveStatus ? '' : `${this.pre}*`
     },
   },
   watch: {
+    'model.localAppsMgr.curProName'() {
+      if (this.model.localAppsMgr.curProName) {
+        this.pre = ''
+      }
+    },
     uarmConnectStatus() {
       if (this.uarmConnectStatus) setTimeout(Blockly.onUArmConnect, 5000);
     },

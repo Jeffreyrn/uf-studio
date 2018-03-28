@@ -11,9 +11,10 @@
           </div>
         </div> -->
         <div>
-          <input id="input-text" v-model="model.localAppsMgr.curProName" type="text" class="position-absolute dialog-input" />
+          <input id="input-text" v-model="inputName" type="text" class="position-absolute dialog-input" />
         </div>
-        <!-- <div class="position-absolute dialog-error" v-show="true"> {{ model.localProjTree.dialogErrorTips }} </div> -->
+        <div class="position-absolute dialog-error"> {{errorTip}}</div>
+        <!-- {{ model.localProjTree.dialogErrorTips }} -->
         <div class="position-absolute" style="bottom:0px;">
           <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
@@ -41,6 +42,8 @@ export default {
   data() {
     return {
       model: window.GlobalUtil.model,
+      inputName: '',
+      errorTip: '',
     }
   },
   methods: {
@@ -53,19 +56,18 @@ export default {
     },
     closeMyself() {
       this.$emit('hideInput')
+      this.model.localAppsMgr.curProName = ''
       // this.model.localProjTree.fileDialogShow = false;
+    },
+    validateInput() {
+
     },
     oncreate() {
       // const text = this.model.localProjTree.curDialogInputText;
       // TODO regex check input name
-      const inputName = this.model.localAppsMgr.curProName
-      const rs = window.GlobalUtil.checkFileName(inputName)
-      if (rs) {
-        this.$emit('saveProject') // this.$message('valid')
-      }
-      else {
-        this.$message('Input name not valid')
-      }
+      // const inputName = this.model.localAppsMgr.curProName
+      this.model.localAppsMgr.curProName = this.inputName
+      this.$emit('saveProject') // this.$message('valid')
       // this.$emit('saveProject')
       // // console.log(`cur = ${GlobalUtil.model.localProjTree.curSelectedUUID}`);
       // // console.log(`text = ${text}, selected = ${this.model.localProjTree.fileSelected} , folderOrFile = ${this.model.localProjTree.folderOrFile}`);
@@ -104,7 +106,25 @@ export default {
   computed: {
     isFileNameCorrect() {
       // const isFileStr = window.GlobalUtil.isFileStr(this.model.localProjTree.curDialogInputText);
-      const text = this.model.localAppsMgr.curProName;
+      // const text = this.inputName;
+      const rs = window.GlobalUtil.checkFileName(this.inputName)
+      // TODO: check duplicate name
+      const listData = this.model.localAppsMgr.appTreeDatas[2].children
+      const duplicate = Object.keys(listData).some((key) => {
+        return listData[key].label === this.inputName
+      })
+      if (duplicate) {
+        this.errorTip = 'Input name existed'
+        return false
+      }
+      else if (!rs) {
+        if (this.inputName !== '') {
+          this.errorTip = 'Input name format is not valid'
+        }
+        return false
+      }
+      this.errorTip = ''
+      return true
       // const folderOrFile = this.model.localProjTree.folderOrFile;
 
       // if (folderOrFile === 'proj' || folderOrFile === 'renameproj') {
@@ -129,11 +149,11 @@ export default {
       //   return isFileStr && !isRepeatFile;
       // }
       // TODO Validate
-      if (text === null || text === '') {
-        // window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
-        return false
-      }
-      return true
+      // if (text === null || text === '') {
+      //   // window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
+      //   return false
+      // }
+      // return true
     },
     isExtInput() {
       if (this.model.localProjTree.curDialogIsExtend === false) {
