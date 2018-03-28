@@ -25,9 +25,9 @@ self.listProjs = (callback) => {
   self.sendCmd(window.GlobalConstant.FILE_ID_LIST_DIR, params, (dict) => {
     console.log(`list paint projs = ${JSON.stringify(dict)}`);
     self.model.localPaintMgr.remoteProjs2Local(dict);
-    // if (callback) {
-    //   callback(dict);
-    // }
+    if (callback) {
+      callback(dict);
+    }
   });
 };
 

@@ -12,7 +12,10 @@
     <div class="fabric-container">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
-    <BottomTools></BottomTools>
+    <BottomTools
+      :onimage="openImage">
+
+    </BottomTools>
     <DialogNewProj
       :onclose='closeDialog'
       :onok='creatProj'
@@ -28,6 +31,7 @@
       :onok='addEmotion'
       v-if="model.localPaintMgr.visible.icons">
     </DialogIcons>
+    <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
   </div>
 </template>
 <script>
@@ -158,7 +162,7 @@ export default {
     creatProj() {
       console.log('create proj');
       this.closeDialog();
-      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, (dict) => {
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, () => {
       });
     },
     newProject() {
@@ -184,7 +188,6 @@ export default {
     addEmotion() {
       this.closeDialog();
       const data = this.model.localPaintMgr.selectedIcon;
-      const index = 0;
       fabric.loadSVGFromURL(data, (objects, options) => {
         Object.keys(objects).forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(objects, 'key')) {
@@ -210,6 +213,9 @@ export default {
         this.fabricModified();
         this.visible.pattern = false;
       });
+    },
+    openImage() {
+      this.$refs.addFile.click();
     },
     addImage() {
       const file = this.$refs.addFile.files[0];

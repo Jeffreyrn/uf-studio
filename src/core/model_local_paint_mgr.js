@@ -441,9 +441,7 @@ self.emotions = [
     name: 'universe',
     list: self.icons06,
   },
-]
-
-
+];
 
 // SVG_LIST2.keys() = data.map((key) => { return SVG_LIST2[key]; });
 

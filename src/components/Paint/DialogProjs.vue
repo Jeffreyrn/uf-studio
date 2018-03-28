@@ -86,23 +86,9 @@ export default {
     },
   },
   methods: {
-    // headerRowClassName({row, rowIndex}) {
-    //   return 'head-text';
-    // },
-    tableRowClassName({row, rowIndex}) {
-      // return 'warning-row';
-      // if (rowIndex === 1) {
-      //   return 'warning-row';
-      // } else if (rowIndex === 3) {
-      //   return 'success-row';
-      // }
-      // return '';
-      if (rowIndex === this.currentRow) {
-        return 'selected';
-      }
-      else {
-        return 'normal';
-      }
+    tableRowClassName({ row, rowIndex }) {
+      console.log(`row = ${row}, rowIndex = ${rowIndex}`);
+      return rowIndex === this.currentRow ? 'selected' : 'normal';
     },
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
