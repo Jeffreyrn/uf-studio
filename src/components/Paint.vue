@@ -40,8 +40,9 @@ import DialogNewProj from './Paint/DialogNewProj';
 import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
 
-const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
-const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
+// const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
+// const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
+
 const CONFIG = {
   addPosition: {
     left: 350,
@@ -182,8 +183,9 @@ export default {
     },
     addEmotion() {
       this.closeDialog();
+      const data = this.model.localPaintMgr.selectedIcon;
       const index = 0;
-      fabric.loadSVGFromURL(this.emotions[index], (objects, options) => {
+      fabric.loadSVGFromURL(data, (objects, options) => {
         Object.keys(objects).forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(objects, 'key')) {
             objects[key].set({ strokeWidth: 0.3 });
@@ -377,9 +379,12 @@ export default {
       }).catch(() => {});
     },
     loadEmotions() {
-      [1, 2, 3].findIndex(() => 0);
-      SVG_LIST2.keys().forEach(key => this.emotions[key] = SVG_LIST2(key));
-      SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
+      // [1, 2, 3].findIndex(() => 0);
+      // this.emotions.list2 = SVG_LIST2;
+      // this.emotions.list1 = SVG_LIST1;
+      // SVG_LIST2.keys().forEach(key => this.emotions.list2 = SVG_LIST2(key));
+      // SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
+      // console.log(`this.emotions = ${JSON.stringify(this.emotions)}`);
     },
     onBack() {
       this.$router.push({ name: 'AppStore' });

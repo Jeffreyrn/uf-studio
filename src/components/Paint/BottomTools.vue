@@ -68,6 +68,7 @@ export default {
   },
   methods: {
     onimage() {
+      this.model.localPaintMgr.selectedIcon = null;
       this.model.localPaintMgr.visible.icons = true;
     },
   },
