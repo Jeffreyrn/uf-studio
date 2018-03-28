@@ -15,7 +15,7 @@
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="emulator-wrapper">
-        <div class="for-dev">
+        <!-- <div class="for-dev">
           <button class="button" @click="genjs">gen</button>
           <div v-html="jsCode"></div>
           <button class="button" @click="genxml">gen xml</button>
@@ -23,16 +23,16 @@
           <button class="button" @click="onTeach()">test teach list</button>
           <button class="button" @click="onApp()">test app list</button>
           <div v-text="xmlCode"></div>
-        </div>
-        <!-- <xarm-model></xarm-model> -->
+        </div> -->
+        <xarm-model></xarm-model>
       </div>
       <div class="file-list">
-        <file-list @loadProject="loadProject"></file-list>
+        <file-list @loadProject="loadProject" :selected="model.localAppsMgr.curProName"></file-list>
       </div>
     </div>
   </div>
   <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true" @insertProject="insertProject"></dialogs>
-  <dialog-input-name v-show="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
+  <dialog-input-name v-if="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
 </div>
 </template>
 <script>
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       saveStatus: true,
+      pre: '',
       block: {},
       model: window.GlobalUtil.model,
       jsCode: '',
@@ -156,6 +157,7 @@ export default {
   methods: {
     startRun() {
       console.log('start run');
+      // this.runProject()
     },
     quitPage() {
       if (this.saveStatus || this.emptyProject()) {
@@ -179,6 +181,7 @@ export default {
         window.CommandsAppsSocket.getBlockXml(path).then((xml) => {
           console.log('get xml text', xml.xmlData)
           Blockly.appendXML(xml.xmlData)
+          this.block = {}
         }, (data) => {
           this.$message({
             type: 'info',
@@ -190,6 +193,7 @@ export default {
         const children = this.block.childBlocks_
         const inputField = children[0].inputList[0].fieldRow[1]
         inputField.setText(path)
+        this.block = {}
       }
     },
     popDialog(type) {
@@ -229,8 +233,11 @@ export default {
       this.model.localAppsMgr.setProjListDialogType('app');
     },
     clearBlockly() {
-      Blockly.BlockWorkspace.clear();
-      this.model.localAppsMgr.curProName = ''
+      Blockly.clearWorkspace().then(() => {
+        this.model.localAppsMgr.curProName = ''
+        this.saveStatus = true
+        console.log('workspace cleared')
+      });
     },
     newProject() {
       if (this.saveStatus || this.emptyProject()) {
@@ -257,13 +264,16 @@ export default {
     onChangeEvent(event) {
       const blockId = event.blockId
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
+      // console.log(`on change ${event.type}`)
+      // console.log(event, block)
       if (block !== null && event.type === Blockly.Events.CREATE) {
         // eventBus.$emit('show', block)
         const type = block.type
         this.popDialog(type)
-        console.log(type)
+        console.log('sss', type, block)
         if (type === BLOCK_TYPES.app) {
-          console.log('delete it')
+          console.log('delete block type: APP')
+          this.block = {}
           this.block.type = type
           block.dispose(false)
         }
@@ -272,8 +282,19 @@ export default {
           console.log('onchange 2')
         }
       }
-      else {
+      else if (this.blocksLength() > 0 && event.type !== 'ui') {
         this.saveStatus = false
+        console.log(this.blocksLength())
+        if (!this.model.localAppsMgr.curProName) {
+          this.pre = 'Untitled'
+        }
+        else {
+          this.pre = ''
+        }
+        console.log(`event ${event.type} emit change save status to false`)
+      }
+      else {
+        console.log('not handled', event)
       }
     },
     toggleSideShow() {
@@ -306,7 +327,13 @@ export default {
     //   });
     // },
     loadProject(path) {
-      if (this.saveStatus || this.emptyProject()) {
+      if (path === this.model.localAppsMgr.curProName) {
+        console.log('selected')
+      }
+      else if (this.disableLoadProject) {
+        this.$message('Click too fast')
+      }
+      else if (this.saveStatus || this.emptyProject()) {
         this.getProject(path)
       }
       else {
@@ -325,6 +352,10 @@ export default {
       }
     },
     getProject(path) {
+      this.disableLoadProject = true
+      window.setTimeout(() => {
+        this.disableLoadProject = false
+      }, 1500)
       const data = {
         category: 'myapp',
         name: path,
@@ -332,10 +363,11 @@ export default {
       window.CommandsAppsSocket.getBlockXml(data).then((xml) => {
         console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
-        Blockly.BlockWorkspace.clear();
-        Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
-        this.model.localAppsMgr.curProName = path
-        this.saveStatus = true
+        Blockly.clearWorkspace().then(() => {
+          Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)
+          this.model.localAppsMgr.curProName = path
+          this.saveStatus = true
+        })
       }, (error) => {
         this.$message(`get xml error code${error.code}`)
       })
@@ -384,7 +416,7 @@ export default {
       return !this.blocksLength() && !this.model.localAppsMgr.curProName
     },
     blocksLength() {
-      if (Blockly.BlockWorkspace !== null) {
+      if (Blockly.BlockWorkspace) {
         return Blockly.BlockWorkspace.getAllBlocks().length;
       }
       return 0;
@@ -416,10 +448,16 @@ export default {
         this.blocklyData.projectName : this.constData.untitledProject;
     },
     notSaved() {
-      return this.saveStatus ? '' : '*'
+      console.log('block length', this.blocksLength())
+      return this.saveStatus ? '' : `${this.pre}*`
     },
   },
   watch: {
+    'model.localAppsMgr.curProName'() {
+      if (this.model.localAppsMgr.curProName) {
+        this.pre = ''
+      }
+    },
     uarmConnectStatus() {
       if (this.uarmConnectStatus) setTimeout(Blockly.onUArmConnect, 5000);
     },

@@ -10,7 +10,7 @@
 
     </div>
     <div id="app-list" class="app-list">
-      <div v-for="(item, index) in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block" v-bind:class="{ selected: curSelectedFileUUID === item.label}">
+      <div v-for="(item, index) in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block" v-bind:class="{ selected: selected === item.label}">
         <div class="file-icon" :style="'background:#'+colorList[index % 5]+';'"><span v-text="item.label.slice(0,1)"></span></div>
         <div class="file-name">{{item.label}}</div>
       </div>
@@ -21,11 +21,11 @@
 // import eventBus from './eventBus'
 
 export default {
-  // props: ['onok'],
+  props: ['selected'],
   data() {
     return {
       model: window.GlobalUtil.model.localAppsMgr.appTreeDatas[2],
-      curSelectedFileUUID: '',
+      // curSelectedFileUUID: '',
       curProTreeDatas: [],
       block: null,
       colorList: ['9CC5F7', 'F8C6DE', 'B8E986', 'D5D5D5', '9EE0D2'],
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     loadProject(path) {
-      this.curSelectedFileUUID = path;
+      // this.curSelectedFileUUID = path;
       this.$emit('loadProject', path)
     },
   },

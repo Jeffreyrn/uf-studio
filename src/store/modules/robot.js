@@ -37,7 +37,7 @@ const state = {
       yaw: null,
       pitch: null,
     },
-    axis: [],
+    axis: [0, 0, 0, 0, 0, 0, 0],
     test: null,
     socket: null,
     speed: 50,

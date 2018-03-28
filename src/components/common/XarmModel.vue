@@ -85,7 +85,7 @@ const GROUP_POSITION = [
   [35.47, 27.6, -0.05],
   [-34.6, 6.4, -60.8],
 ];
-const SCENE_ZOOM = 64;
+const SCENE_ZOOM = 50; // 64
 
 export default {
   name: 'XarmModel',
