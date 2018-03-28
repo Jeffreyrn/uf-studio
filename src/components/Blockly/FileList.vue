@@ -48,16 +48,16 @@ export default {
   font-size: 1.8rem;
   color: #444;
   letter-spacing: -1.56px;
-  padding: 1.6rem 2.2rem;
+  padding: 1.6rem 2.2rem 0;
 }
 .app-list {
-  height: 40vh;
+  height: 44vh;
   overflow-y: auto;
   padding: 10px 1.6rem;
   display: inline-block;
   width: 100%;
   .selected {
-    background-color: red;
+    background-color: #fff;
   }
   .block {
     display: inline-flex;
@@ -65,13 +65,14 @@ export default {
     align-items: center;
     width: 20%;
     cursor: pointer;
-    margin-bottom: 24px;
+    padding: 1% 1%;
+    margin: 3% 0;
     .file-icon {
       color: white;
       font-family: 'Gotham-Book';
       font-size: 1.8rem;
-      width: 5rem;
-      height: 5rem;
+      width: 100%;
+      height: 4rem;
       line-height: 5rem;
       text-align: center;
       text-transform: uppercase;
