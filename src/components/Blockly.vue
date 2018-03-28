@@ -15,7 +15,7 @@
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="emulator-wrapper">
-        <div class="for-dev">
+        <!-- <div class="for-dev">
           <button class="button" @click="genjs">gen</button>
           <div v-html="jsCode"></div>
           <button class="button" @click="genxml">gen xml</button>
@@ -23,8 +23,8 @@
           <button class="button" @click="onTeach()">test teach list</button>
           <button class="button" @click="onApp()">test app list</button>
           <div v-text="xmlCode"></div>
-        </div>
-        <!-- <xarm-model></xarm-model> -->
+        </div> -->
+        <xarm-model></xarm-model>
       </div>
       <div class="file-list">
         <file-list @loadProject="loadProject" :selected="model.localAppsMgr.curProName"></file-list>
@@ -32,7 +32,7 @@
     </div>
   </div>
   <dialogs v-if="model.localAppsMgr.isProjListDialogShow===true" @insertProject="insertProject"></dialogs>
-  <dialog-input-name v-show="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
+  <dialog-input-name v-if="uiData.inputName" @hideInput="uiData.inputName = false" @saveProject="saveProject"></dialog-input-name>
 </div>
 </template>
 <script>
@@ -157,6 +157,7 @@ export default {
   methods: {
     startRun() {
       console.log('start run');
+      this.runProject()
     },
     quitPage() {
       if (this.saveStatus || this.emptyProject()) {
