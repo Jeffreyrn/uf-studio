@@ -14,30 +14,14 @@
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
 
-    <!-- <el-dialog
-      :title="$t('paintApp.dailog.addText.title')"
-      :visible.sync="model.localPaintMgr.visible.text"
-      width="30%"
-      @close="dialog.textInput=''">
-      <span>
-        <el-input type="textarea" :rows="2" placeholder="Please input" v-model="dialog.textInput" :autofocus="true"></el-input>
-        <el-select v-model="dialog.fontSelect" placeholder="Select">
-          <el-option
-            v-for="(item, index) in FONT_LIST"
-            :key="index"
-            :label="item.name"
-            :value="index">
-          </el-option>
-        </el-select>
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
-      </span>
-    </el-dialog> -->
-
     <BottomTools
+      :onundo='undoEvent'
+      :onredo='undoEvent'
       :onimage="openImage"
       :onadd="addIconsDialog"
+      :ondelete="removeSelected"
+      :oncopy="duplicate"
+      :onremoveall='removeAll'
       :ontext="textDialog">
     </BottomTools>
     <DialogNewProj
@@ -62,6 +46,16 @@
       v-if="model.localPaintMgr.visible.text">
     </DialogFontSelect>
 
+    <DialogTeachAlert
+      title='Clear all ?'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='removeAllOK'
+      :isdelete=true
+      :oncancel='closeDialog'
+      v-if="model.localPaintMgr.visible.clear">
+    </DialogTeachAlert>
+
     <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
 
   </div>
@@ -77,6 +71,7 @@ import DialogNewProj from './Paint/DialogNewProj';
 import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
+import DialogTeachAlert from './DialogTeachAlert';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -125,28 +120,28 @@ export default {
         speed: 200,
       },
       emotions: {},
-      dialog: {
-        textInput: '', // text value
-        fontSelect: 0, // select font
-      },
-      FONT_LIST: [
-        {
-          name: this.$t('paintApp.fontNameList.blacklight'),
-          src: require('./../assets/fonts/blackLight.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.xingkai'),
-          src: require('./../assets/fonts/STXingkai-SC-Bold.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.lanting'),
-          src: require('./../assets/fonts/lanting.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.kaiti'),
-          src: require('./../assets/fonts/kanti.ttf'),
-        },
-      ],
+      // dialog: {
+      //   textInput: '', // text value
+      //   fontSelect: 0, // select font
+      // },
+      // FONT_LIST: [
+      //   {
+      //     name: this.$t('paintApp.fontNameList.blacklight'),
+      //     src: require('./../assets/fonts/blackLight.ttf'),
+      //   },
+      //   {
+      //     name: this.$t('paintApp.fontNameList.xingkai'),
+      //     src: require('./../assets/fonts/STXingkai-SC-Bold.ttf'),
+      //   },
+      //   {
+      //     name: this.$t('paintApp.fontNameList.lanting'),
+      //     src: require('./../assets/fonts/lanting.ttf'),
+      //   },
+      //   {
+      //     name: this.$t('paintApp.fontNameList.kaiti'),
+      //     src: require('./../assets/fonts/kanti.ttf'),
+      //   },
+      // ],
     };
   },
   mounted() {
@@ -165,6 +160,7 @@ export default {
       this.model.localPaintMgr.visible.projs = false;
       this.model.localPaintMgr.visible.icons = false;
       this.model.localPaintMgr.visible.text = false;
+      this.model.localPaintMgr.visible.clear = false;
     },
     addIconsDialog() {
       this.model.localPaintMgr.selectedIcon = null;
@@ -309,8 +305,10 @@ export default {
     addTextAsPath() {
       this.closeDialog();
       const text = this.model.localPaintMgr.curDialogFontInputText;
+      const fontList = this.model.localPaintMgr.FONT_LIST;
+      const fontSelect = this.model.localPaintMgr.dialog.fontSelect;
       if (text.trim()) {
-        opentype.load(this.FONT_LIST[this.dialog.fontSelect].src, (err, font) => {
+        opentype.load(fontList[fontSelect].src, (err, font) => {
           if (err) {
             this.$message(`Could not load font: ${err}`);
           }
@@ -331,7 +329,7 @@ export default {
             });
             this.playground.add(path);
             this.fabricModified();
-            this.visible.text = false; // close dialog
+            // this.visible.text = false; // close dialog
           }
           // console.log(font);
         });
@@ -419,15 +417,21 @@ export default {
       }
     },
     removeAll() {
-      this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
-        confirmButtonText: this.$t('paintApp.dailog.okBtn'),
-        cancelButtonText: this.$t('paintApp.dailog.cancelBtn'),
-        type: 'warning',
-        dangerouslyUseHTMLString: true,
-      }).then(() => {
-        this.playground.clear().renderAll();
-        this.fabricModified();
-      }).catch(() => {});
+      this.model.localPaintMgr.visible.clear = true;
+      // this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
+      //   confirmButtonText: this.$t('paintApp.dailog.okBtn'),
+      //   cancelButtonText: this.$t('paintApp.dailog.cancelBtn'),
+      //   type: 'warning',
+      //   dangerouslyUseHTMLString: true,
+      // }).then(() => {
+      //   this.playground.clear().renderAll();
+      //   this.fabricModified();
+      // }).catch(() => {});
+    },
+    removeAllOK() {
+      this.model.localPaintMgr.visible.clear = false;
+      this.playground.clear().renderAll();
+      this.fabricModified();
     },
     loadEmotions() {
       // [1, 2, 3].findIndex(() => 0);
@@ -455,6 +459,7 @@ export default {
     DialogProjs,
     DialogIcons,
     DialogFontSelect,
+    DialogTeachAlert
   },
 };
 </script>

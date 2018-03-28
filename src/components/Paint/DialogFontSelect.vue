@@ -6,18 +6,26 @@
       <div class="dialog-content">
         <div class="dialog-top">
           <span class="top-title">
-            Insert Text
+            Insert Text3
           </span>
           <div class="dialog-close" @click="onclose">
           </div>
         </div>
 
-        <input
+        <textarea
+          ref="fontText"
+          @keydown="textChange"
           v-model="model.localPaintMgr.curDialogFontInputText"
-          type="text" class="position-absolute dialog-input"
-          placeholder="Please enter text"/>
+          type="text"
+          class="position-absolute dialog-input"
+          placeholder="Please enter text" >
+        </textarea>
 
-        <el-select v-model="dialog.fontSelect" placeholder="Select" class="position-absolute font-selected">
+        <el-select
+          v-model="model.localPaintMgr.dialog.fontSelect"
+          @change="onSelectChange"
+          placeholder="Select"
+          class="position-absolute font-selected">
           <el-option
             v-for="(item, index) in FONT_LIST"
             :key="index"
@@ -45,36 +53,37 @@ export default {
   data() {
     return {
       model: window.GlobalUtil.model,
-      currentRow: -1,
-      dialog: {
-        textInput: '', // text value
-        fontSelect: 0, // select font
-      },
+      // dialog: {
+      //   textInput: '', // text value
+      //   fontSelect: 0, // select font
+      // },
       FONT_LIST: [
         {
           name: this.$t('paintApp.fontNameList.blacklight'),
           src: require('./../../assets/fonts/blackLight.ttf'),
+          family: 'black-light',
         },
         {
           name: this.$t('paintApp.fontNameList.xingkai'),
           src: require('./../../assets/fonts/STXingkai-SC-Bold.ttf'),
+          family: 'xing-kai',
         },
         {
           name: this.$t('paintApp.fontNameList.lanting'),
           src: require('./../../assets/fonts/lanting.ttf'),
+          family: 'lan-ting',
         },
         {
           name: this.$t('paintApp.fontNameList.kaiti'),
           src: require('./../../assets/fonts/kanti.ttf'),
+          family: 'kan-ti',
         },
       ],
     };
   },
   mounted() {
-    setTimeout(() => {
-      // const html = document.getElementById('proj-id').innerHTML;
-      // console.log(`html = ${html}`);
-    });
+    this.model.localPaintMgr.FONT_LIST = this.FONT_LIST;
+    this.onSelectChange();
   },
   computed: {
     isCorrectText() {
@@ -82,23 +91,15 @@ export default {
     },
   },
   methods: {
-    tableRowClassName({ row, rowIndex }) {
-      console.log(`row = ${row}, rowIndex = ${rowIndex}`);
-      return rowIndex === this.currentRow ? 'selected' : 'normal';
+    textChange() {
+      // this.$refs.fontText.style.fontFamily
     },
-    setCurrent(row) {
-      this.$refs.singleTable.setCurrentRow(row);
+    onSelectChange() {
+      console.log(`dialog.fontSelect = ${this.model.localPaintMgr.dialog.fontSelect}`);
+      this.$refs.fontText.style.fontFamily = this.model.localPaintMgr.FONT_LIST[this.model.localPaintMgr.dialog.fontSelect].family;
     },
-    handleCurrentChange(val) {
-      this.currentRow = val;
-      this.currentRow = val.index;
-      console.log(`set Current this.currentRow = ${this.currentRow}`);
-      this.model.localPaintMgr.curProj = val;
-    },
-    // rowClick(row, event, column) {
-    //   console.log(`set Current val = ${row}`);
-    //   this.setCurrent(row);
-    // },
+  },
+  watch: {
   },
 }
 </script>
@@ -149,20 +150,24 @@ export default {
 }
 .dialog-input {
   width: 350px;
-  height: 40px;
-  top: 100px;
+  height: 120px;
+  top: 90px;
   /* left:118px; */
   left: 0px;
   right: 0px;
   margin: auto;
   padding-left: 15px;
-  border: 1px solid #575C62;
+  padding-right: 15px;
+  background: rgba(223, 224, 227, 1);
+  font-size: 20px;
+  // border: 1px solid #575C62;
+  border: 0px;
   outline:none;
 }
 .font-selected {
-  left:115px;
-  top:150px;
-  width:200px;
+  left: 115px;
+  top: 220px;
+  width: 350px;
 }
 .btn-ok {
   position: absolute;

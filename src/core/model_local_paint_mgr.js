@@ -9,6 +9,7 @@ self.visible = {
   pattern: false,
   projs: false,
   icons: false,
+  clear: false,
 };
 
 self.curDialogProjInputText = '';
@@ -52,6 +53,11 @@ self.remoteProjs2Local = (dict) => {
     }
   }
   self.projList = projs;
+};
+
+self.dialog = {
+  textInput: '', // text value
+  fontSelect: 0, // select font
 };
 
 self.selectedIcon = null;
