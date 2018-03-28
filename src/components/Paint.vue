@@ -459,7 +459,7 @@ export default {
     DialogProjs,
     DialogIcons,
     DialogFontSelect,
-    DialogTeachAlert
+    DialogTeachAlert,
   },
 };
 </script>
