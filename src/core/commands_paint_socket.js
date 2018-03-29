@@ -23,7 +23,7 @@ self.listProjs = (callback) => {
     }),
   };
   self.sendCmd(window.GlobalConstant.FILE_ID_LIST_DIR, params, (dict) => {
-    console.log(`list paint projs = ${JSON.stringify(dict)}`);
+    // console.log(`list paint projs = ${JSON.stringify(dict)}`);
     self.model.localPaintMgr.remoteProjs2Local(dict);
     if (callback) {
       callback(dict);
@@ -84,123 +84,35 @@ self.delProj = (proId, callback) => {
   });
 };
 
-// self.createFile = (name, content, callback1, callback2) => {
-//   const curProj = self.model.localTeach.curProj;
-//   if (curProj === null || curProj === undefined || curProj === {}) {
-//     return;
-//   }
-//   const filePath = path.join(curProj.uuid, `${name}.json`);
-//   const params = {
-//     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-//       // userId: self.userId, // 默认是test，用来区分不同用户
-//       root: filePath, // 文件夹的父目录，必须
-//       file: '', // 文件夹名称, 可省略
-//       data: content, // 文件内容
-//     }),
-//   };
-//   self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_FILE, params, (dict) => {
-//     dict.uuid = filePath;
-//     // console.log(`TEACH_ID_CREATE_FILE dict = ${JSON.stringify(dict)}`);
-//     if (callback1) {
-//       callback1(dict);
-//     }
-//     self.listProjs(callback2);
-//   });
-// };
+self.saveOrUpdateFile = (uuid, text, callback) => {
+  const filePath = uuid;
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+      data: text, // 文件内容
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
 
-// self.delFiles = (uuid, callback) => {
-//   // return;
-//   const filePath = uuid;
-//   console.log(`filePath = ${filePath}`);
-//   const params = {
-//     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-//       // userId: self.userId, // 默认是test，用来区分不同用户
-//       root: filePath, // 文件夹的父目录，必须
-//       file: '', // 文件夹名称, 可省略
-//     }),
-//   };
-//   self.sendCmd(window.GlobalConstant.FILE_ID_DELETE_FILE, params, () => {
-//     window.GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
-//     self.listProjs(callback);
-//   });
-// };
-
-// self.saveOrUpdateFile = (uuid, text, callback) => {
-//   // text = 'test test';
-//   // let filePath = uuid; // self.model.localProjTree.getThisFileFullPath(uuid);
-//   // return;
-//   // const textDict = {
-//   //   type: isContinus === true ? 'continus' : 'discontinuous',
-//   //   points: self.model.localTeach.fileDatas[uuid],
-//   // };
-//   // const text = JSON.stringify(textDict);
-//   // JSON.stringify(self.model.localTeach.fileDatas[uuid]);
-//   // console.log(`saveOrUpdateFile filePath = ${filePath}, text = ${text}`);
-//   const params = {
-//     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-//       // userId: self.userId, // 默认是test，用来区分不同用户
-//       root: uuid, // 文件夹的父目录，必须
-//       file: '', // 文件夹名称, 可省略
-//       data: text, // 文件内容
-//     }),
-//   };
-//   self.sendCmd(window.GlobalConstant.FILE_ID_SAVE_FILE, params, (dict) => {
-//     // self.listProjs(callback);
-//     if (callback) {
-//       callback(dict);
-//     }
-//   });
-// };
-
-// self.getFile = (uuid, callback) => {
-//   const filePath = uuid;
-//   // console.log(`getFile filePath = ${filePath}`);
-//   // return;
-//   const params = {
-//     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-//       // userId: self.userId, // 默认是test，用来区分不同用户
-//       root: filePath, // 文件夹的父目录，必须
-//       file: '', // 文件夹名称, 可省略
-//     }),
-//   };
-//   self.sendCmd(window.GlobalConstant.FILE_ID_GET_FILE, params, (dict) => {
-//     // console.log(`get file = ${JSON.stringify(dict)}`);
-//     if (callback) {
-//       callback(dict);
-//     }
-//   });
-// };
-
-// self.getProjFiles = (uuid, callback) => {
-//   const filePath = uuid;
-//   // console.log(`getFile filePath = ${filePath}`);
-//   // return;
-//   const params = {
-//     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-//       // userId: self.userId, // 默认是test，用来区分不同用户
-//       root: filePath, // 文件夹的父目录，必须
-//     }),
-//   };
-//   self.sendCmd(window.GlobalConstant.FILE_ID_GET_PROJ_FILES, params, (dict) => {
-//     // console.log(`get file = ${JSON.stringify(dict)}`);
-//     if (callback) {
-//       callback(dict);
-//     }
-//   });
-// };
-
-// self.debugSetBeart = (isOpen, sleepTime, callback) => {
-//   const params = {
-//     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-//       isOpen,
-//       sleepTime,
-//     }),
-//   };
-//   self.sendCmd(window.GlobalConstant.DEBUG_SET_BEART, params, (dict) => {
-//     if (callback) {
-//       callback(dict);
-//     }
-//   });
-// };
+self.getFile = (uuid, callback) => {
+  const filePath = uuid;
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      root: filePath, // 文件夹的父目录，必须
+      file: '', // 文件夹名称, 可省略
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.FILE_ID_GET_FILE, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
 
 export default self;

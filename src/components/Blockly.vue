@@ -57,6 +57,7 @@ export default {
     return {
       saveStatus: true,
       pre: '',
+      xmlLoaded: true,
       block: {},
       model: window.GlobalUtil.model,
       jsCode: '',
@@ -127,7 +128,7 @@ export default {
   },
   mounted() {
     const self = this;
-    // this.model.localAppsMgr.curProName = ''
+    this.model.localAppsMgr.curProName = ''
     this.setOnline(true)
     window.xArmVuex = this.$store;
     if (this.uarmConnectStatus) {
@@ -140,9 +141,9 @@ export default {
     // init Blockly
     this.initBlocklyDiv().then(() => {
       self.resizeWorkspace();
-      if (this.model.localAppsMgr.curProName === '') {
-        this.newProject()
-      }
+      // if (this.model.localAppsMgr.curProName === '') {
+      //   this.newProject()
+      // }
     });
     window.addEventListener('resize', self.resizeWorkspace, false);
     Blockly.BlockWorkspace.addChangeListener(self.onChangeEvent);
@@ -228,6 +229,9 @@ export default {
         inputField.setText(path)
         this.block = {}
       }
+      window.setTimeout(() => {
+        this.xmlLoaded = true
+      }, 1800)
     },
     popDialog(type) {
       if (Object.prototype.hasOwnProperty.call(this.dialog, type)) {
@@ -267,8 +271,8 @@ export default {
     },
     clearBlockly() {
       Blockly.clearWorkspace().then(() => {
-        this.uiData.inputName = true
-        // this.model.localAppsMgr.curProName = ''
+        // this.uiData.inputName = true
+        this.model.localAppsMgr.curProName = ''
         this.saveStatus = true
         console.log('workspace cleared')
       });
@@ -276,7 +280,7 @@ export default {
     newProject() {
       if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
-        this.model.localAppsMgr.curProName = ''
+        // this.model.localAppsMgr.curProName = ''
       }
       else {
         this.$confirm('Discard current changes and create new?', 'Warning', {
@@ -301,16 +305,19 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       // console.log(`on change ${event.type}`)
       // console.log(event, block)
-      if (block !== null && event.type === Blockly.Events.CREATE) {
+      if (block !== null && event.type === Blockly.Events.CREATE && this.xmlLoaded) {
         // eventBus.$emit('show', block)
         const type = block.type
-        this.popDialog(type)
+        if (!Object.is(block, {})) {
+          this.popDialog(type)
+        }
         console.log('sss', type, block)
         if (type === BLOCK_TYPES.app) {
           console.log('delete block type: APP')
           this.block = {}
           this.block.type = type
           block.dispose(false)
+          this.xmlLoaded = false
         }
         else {
           this.block = block

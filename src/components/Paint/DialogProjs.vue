@@ -53,7 +53,7 @@
           </el-table-column>
         </el-table>
 
-        <div v-if="isSelectedApp" class="btn-ok cursor-pointer" @click="onopen">
+        <div v-if="isSelectedApp" class="btn-ok cursor-pointer" @click="onopen(currentRow)">
           Open
         </div>
         <div v-else class="btn-ok" style="background:#ECECEC;color: #BABABA;">
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      console.log(`row = ${row}, rowIndex = ${rowIndex}`);
+      // console.log(`row = ${row}, rowIndex = ${rowIndex}`);
       return rowIndex === this.currentRow ? 'selected' : 'normal';
     },
     setCurrent(row) {
@@ -97,7 +97,7 @@ export default {
       this.currentRow = val;
       this.currentRow = val.index;
       console.log(`set Current this.currentRow = ${this.currentRow}`);
-      this.model.localPaintMgr.curProj = val;
+      // this.model.localPaintMgr.curProj = val;
     },
     // rowClick(row, event, column) {
     //   console.log(`set Current val = ${row}`);

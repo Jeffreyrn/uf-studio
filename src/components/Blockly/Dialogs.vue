@@ -152,8 +152,7 @@ export default {
       }
     },
     renderContent(h, { node, data, store }) {
-      console.log(node);
-      console.log(store);
+      console.log(node, store);
       // const flag = data.uuid === this.curSelectedFileUUID;
       // console.log(`renderContent data uuid = ${data.uuid}, flag = ${flag}`);
       const curUUID = this.curSelectedFileUUID;
