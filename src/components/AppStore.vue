@@ -123,6 +123,7 @@ export default {
         height: 100%;
         overflow-y: auto;
         padding-bottom: 3rem;
+        position: relative;
       }
     }
   }

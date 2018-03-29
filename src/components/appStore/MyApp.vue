@@ -140,19 +140,19 @@ export default {
   width:100%;
   /*height: 2.4rem;*/
   // margin-top: -2.4rem;
-  top: 20px;
+  top: 16px;
   transform: scale(0) ;
   transition: all .8s;
 }
 .icon-btn {
   float: left;
-  width: 2rem;
-  height: 2rem;
+  width: 22px;
+  height: 22px;
   float: left;
   margin-left: 0.5rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 2rem 2rem;
+  background-size: 22px 22px;
   cursor: pointer;
 }
 .edit-btn {
