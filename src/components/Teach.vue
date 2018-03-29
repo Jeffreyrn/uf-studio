@@ -3,6 +3,12 @@
     <div class="recording-header-wrapper">
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
        <!-- {{ JSON.stringify(realData) }} -->
+       <div class="control-toggle">
+          <div class="title-online">Live Control</div>
+          <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true"
+            :labels="{checked: 'ON', unchecked: 'OFF'}"
+            :width="50" :height="20"/>
+        </div>
     </div>
     <div class="main-contain">
       <div class="recording-area-wrapper"  id="left-teach-frame">
@@ -158,9 +164,10 @@ import EmulatorControl from './common/EmulatorControl';
 import * as types from './../store/mutation-types';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogAlert from './DialogAlert';
-
+import ToggleButton from 'vue-js-toggle-button';
+import Vue from 'vue';
+Vue.use(ToggleButton);
 const path = require('path');
-
 export default {
   data() {
     return {
@@ -223,6 +230,13 @@ export default {
     this.onwinresize();
   },
   methods: {
+    setRobotState(index, value) {
+      const data = {
+        index,
+        value,
+      };
+      this.$store.commit(types.SET_ROBOT_STATE, data);
+    },
     oncreate() {
       const text = this.model.localTeach.curDialogProjInputText
       window.CommandsTeachSocket.createProj(text, window.GlobalUtil.model.localTeach.projTypeSelected);
@@ -622,6 +636,18 @@ export default {
       'save-change-btn': window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0,
       'save-change-btn-dark': !(window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0),
     }),
+    stateOnline: {
+      get() {
+        return this.$store.state.robot.info.online
+      },
+      set(value) {
+        this.setRobotState('online', value);
+        if (value) {
+          this.$store.commit(types.GET_ROBOT_STATUS, value);
+        }
+        // this.$store.commit('test', value);
+      },
+    },
   },
 };
 
@@ -646,6 +672,15 @@ export default {
       font-size: 2rem;
       color: #444;
       letter-spacing: -1px;
+    }
+    .control-toggle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .title-online {
+        padding-right: 14px;
+        font-family: 'Gotham-Bold';
+      }
     }
   }
   .main-contain {
