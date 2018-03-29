@@ -98,13 +98,15 @@ export default {
         display: flex;
         flex-direction: column;
         height: 600px;
-        padding-top: 70px;
+        padding-top: 80px;
         width: 20%;
         padding-left: 5%;
         .tab {
           height: 100%;
           cursor: pointer;
+          font-size: 1.6rem;
           .active {
+            padding-bottom: 5px;
             border-bottom: 2px solid #E27347;
           }
         }
@@ -112,7 +114,8 @@ export default {
       .tab-contain-wrapper {
         display: flex;
         flex-direction: column;
-        padding-top: 5rem;
+        // padding-top: 5rem;
+        padding-top: 65px;
         width: 80%;
         height: 100%;
         overflow-y: auto;
