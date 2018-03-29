@@ -8,7 +8,7 @@
       <!-- <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
       <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li> -->
       <li v-for="li in config.orientation.nameArray" :key="li">
-        <div>{{li}}</div><input v-model.number="orientation[li]" type="number" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><sup>&deg;</sup>
+        <div>{{li}}</div><input v-model.number="orientation[li]" type="number" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><span>degree </span>
       </li>
       <!-- <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><sup>&deg;</sup></li>
       <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><sup>&deg;</sup></li> -->
@@ -116,31 +116,41 @@ $liDivWidth : 25%;
 $liInputWidth : 50%;
 
 .end-container {
-  background: white;
-  border-radius: 8px;
+  background: #434343;
   height: 100%;
+  position: relative;
   .container-title {
-    padding: 2vh 1vw;
-    font-size: 1.5rem;
-    color: #444444;
-    letter-spacing: -1px;
+    padding: 1vh 1vw .6vh;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: -0.58px;
+  }
+  .position-set {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /*height: 62%;*/
   }
   .set-button {
-    margin-left: $liDivWidth;
-    width: $liInputWidth;
+    // margin-left: $liDivWidth;
+    // width: $liInputWidth;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     button {
       border: none;
-      background: #E9E9E9;
-      box-shadow: inset 0 0 1px 0 rgba(177,177,177,0.50);
-      border-radius: 100px;
+      background: #3E3E3E;
       cursor: pointer;
-      height: 4vh;
-      width: 45%;
-      margin: 1vh 1%;
-      color: #6C6A6A;
-      letter-spacing: -0.75px;
+      height: 32px;
+      width: 50%;
+      color: #fff;
+      letter-spacing: -0.42px;
+      font-size: 12px;
       font-family: "Gotham-Book";
       outline: none;
+      border-left: 1px solid #343232;
     }
     button.cancel {
       color: #BEBEBE;
@@ -151,31 +161,32 @@ $liInputWidth : 50%;
 }
 
 ul.position-set li{
-  margin-bottom: 0.5vh;
+  margin: 0.8vh 1vw;
+  background: #3D3D3D;
+  border-radius: 20px;
+  height: 33px;
+  line-height: 33px;
   div {
     width: $liDivWidth;
     font-family: "Gotham-Book";
-    font-size: 1rem;
-    color: #909293;
+    font-size: .9rem;
+    color: #FFf;
     letter-spacing: -0.67px;
     display: inline-block;
-    padding: 1vh 0;
     text-align: center;
   }
   input[type=number] {
-    height: 3vh;
     width: $liInputWidth;
-    background: #F2F3F5;
+    color: #B1B1B1;
+    background: #3D3D3D;
+    font-size: 10px;
     border: none;
-    box-shadow: inset 0 0 2px 0 rgba(152,152,152,0.50);
-    border-radius: 100px;
     text-align: center;
     outline: none;
   }
   span {
     font-size: 0.8rem;
-    color: #666;
-    margin-left: 0.3vw;
+    color: #AEAEAE;
   }
 }
 </style>
