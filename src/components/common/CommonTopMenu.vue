@@ -10,10 +10,25 @@
     </div>
     <div class="file-name" v-text="curFileName"></div>
     <div class="menu-wrapper">
-      <div @click='onsave'><img src="./../../assets/img/blockly/btn_save.svg"/><span>save</span></div>
-      <div @click='onnew'><img src="./../../assets/img/blockly/btn_addfile.svg"/><span>new</span></div>
-      <div v-if="type==='paint'" @click='onlist'><img src="./../../assets/img/blockly/btn_list.svg"/><span>list</span></div>
-      <div @click="onstart" class="run-btn"><img src="./../../assets/img/blockly/icon_start.svg"/></div>
+      <div class="cursor-pointer" v-if="issaved===false" @click='onsave'>
+        <img src="./../../assets/img/blockly/btn_save.svg"/>
+        <span>save</span>
+      </div>
+      <div v-else style="opacity: 0.3">
+        <img src="./../../assets/img/blockly/btn_save.svg"/>
+        <span>save</span>
+      </div>
+      <div class="cursor-pointer" @click='onnew'>
+        <img src="./../../assets/img/blockly/btn_addfile.svg"/>
+        <span>new</span>
+      </div>
+      <div class="cursor-pointer" v-if="type==='paint'" @click='onlist'>
+        <img src="./../../assets/img/blockly/btn_list.svg"/>
+        <span>list</span>
+      </div>
+      <div @click="onstart" class="run-btn cursor-pointer">
+        <img src="./../../assets/img/blockly/icon_start.svg"/>
+      </div>
     </div>
   </div>
 </template>
@@ -21,10 +36,11 @@
 <script>
 
 export default {
-  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onlist', 'curFileName'],
+  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onlist', 'curFileName', 'issaved'],
   name: 'common-top-menu',
   data() {
     return {
+      model: window.GlobalUtil.model,
     };
   },
   mounted() {
@@ -81,7 +97,6 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     span {
       font-size: 0.7em;
       padding: 0;
