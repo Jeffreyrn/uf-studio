@@ -9,12 +9,20 @@
       :onnew='newProject'
       :onstart='startPrint'>
     </CommonTopMenu>
+
     <div class="fabric-container">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
-    <BottomTools
-      :onimage="openImage">
 
+    <BottomTools
+      :onundo='undoEvent'
+      :onredo='undoEvent'
+      :onimage="openImage"
+      :onadd="addIconsDialog"
+      :ondelete="removeSelected"
+      :oncopy="duplicate"
+      :onremoveall='removeAll'
+      :ontext="textDialog">
     </BottomTools>
     <DialogNewProj
       :onclose='closeDialog'
@@ -31,9 +39,28 @@
       :onok='addEmotion'
       v-if="model.localPaintMgr.visible.icons">
     </DialogIcons>
+
+    <DialogFontSelect
+      :onclose='closeDialog'
+      :onopen='addTextAsPath'
+      v-if="model.localPaintMgr.visible.text">
+    </DialogFontSelect>
+
+    <DialogTeachAlert
+      title='Clear all ?'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='removeAllOK'
+      :isdelete=true
+      :oncancel='closeDialog'
+      v-if="model.localPaintMgr.visible.clear">
+    </DialogTeachAlert>
+
     <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
+
   </div>
 </template>
+
 <script>
 import { fabric } from 'fabric-webpack';
 import opentype from 'opentype.js';
@@ -43,6 +70,8 @@ import BottomTools from './Paint/BottomTools';
 import DialogNewProj from './Paint/DialogNewProj';
 import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
+import DialogFontSelect from './Paint/DialogFontSelect';
+import DialogTeachAlert from './DialogTeachAlert';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -90,29 +119,29 @@ export default {
         zero: 50,
         speed: 200,
       },
-      dialog: {
-        textInput: '', // text value
-        fontSelect: 0, // select font
-      },
-      FONT_LIST: [
-        {
-          name: this.$t('paintApp.fontNameList.blacklight'),
-          src: require('../assets/fonts/blackLight.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.xingkai'),
-          src: require('../assets/fonts/STXingkai-SC-Bold.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.lanting'),
-          src: require('../assets/fonts/lanting.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.kaiti'),
-          src: require('../assets/fonts/kanti.ttf'),
-        },
-      ],
       emotions: {},
+      // dialog: {
+      //   textInput: '', // text value
+      //   fontSelect: 0, // select font
+      // },
+      // FONT_LIST: [
+      //   {
+      //     name: this.$t('paintApp.fontNameList.blacklight'),
+      //     src: require('./../assets/fonts/blackLight.ttf'),
+      //   },
+      //   {
+      //     name: this.$t('paintApp.fontNameList.xingkai'),
+      //     src: require('./../assets/fonts/STXingkai-SC-Bold.ttf'),
+      //   },
+      //   {
+      //     name: this.$t('paintApp.fontNameList.lanting'),
+      //     src: require('./../assets/fonts/lanting.ttf'),
+      //   },
+      //   {
+      //     name: this.$t('paintApp.fontNameList.kaiti'),
+      //     src: require('./../assets/fonts/kanti.ttf'),
+      //   },
+      // ],
     };
   },
   mounted() {
@@ -130,6 +159,16 @@ export default {
       this.model.localPaintMgr.visible.pattern = false;
       this.model.localPaintMgr.visible.projs = false;
       this.model.localPaintMgr.visible.icons = false;
+      this.model.localPaintMgr.visible.text = false;
+      this.model.localPaintMgr.visible.clear = false;
+    },
+    addIconsDialog() {
+      this.model.localPaintMgr.selectedIcon = null;
+      this.model.localPaintMgr.visible.icons = true;
+    },
+    textDialog() {
+      this.model.localPaintMgr.curDialogFontInputText = '';
+      this.model.localPaintMgr.visible.text = true;
     },
     listProjects() {
       console.log('list projects');
@@ -143,7 +182,7 @@ export default {
       this.closeDialog();
     },
     startPrint() {
-      console.log('start print');
+      console.log(`start print = ${this.state.mode}`);
       const sendStrategy = {
         outline() {
           return this.playground.toSVG();
@@ -263,9 +302,13 @@ export default {
         }
       }
     },
-    addTextAsPath(text) {
+    addTextAsPath() {
+      this.closeDialog();
+      const text = this.model.localPaintMgr.curDialogFontInputText;
+      const fontList = this.model.localPaintMgr.FONT_LIST;
+      const fontSelect = this.model.localPaintMgr.dialog.fontSelect;
       if (text.trim()) {
-        opentype.load(this.FONT_LIST[this.dialog.fontSelect].src, (err, font) => {
+        opentype.load(fontList[fontSelect].src, (err, font) => {
           if (err) {
             this.$message(`Could not load font: ${err}`);
           }
@@ -286,7 +329,7 @@ export default {
             });
             this.playground.add(path);
             this.fabricModified();
-            this.visible.text = false; // close dialog
+            // this.visible.text = false; // close dialog
           }
           // console.log(font);
         });
@@ -374,15 +417,21 @@ export default {
       }
     },
     removeAll() {
-      this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
-        confirmButtonText: this.$t('paintApp.dailog.okBtn'),
-        cancelButtonText: this.$t('paintApp.dailog.cancelBtn'),
-        type: 'warning',
-        dangerouslyUseHTMLString: true,
-      }).then(() => {
-        this.playground.clear().renderAll();
-        this.fabricModified();
-      }).catch(() => {});
+      this.model.localPaintMgr.visible.clear = true;
+      // this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
+      //   confirmButtonText: this.$t('paintApp.dailog.okBtn'),
+      //   cancelButtonText: this.$t('paintApp.dailog.cancelBtn'),
+      //   type: 'warning',
+      //   dangerouslyUseHTMLString: true,
+      // }).then(() => {
+      //   this.playground.clear().renderAll();
+      //   this.fabricModified();
+      // }).catch(() => {});
+    },
+    removeAllOK() {
+      this.model.localPaintMgr.visible.clear = false;
+      this.playground.clear().renderAll();
+      this.fabricModified();
     },
     loadEmotions() {
       // [1, 2, 3].findIndex(() => 0);
@@ -409,6 +458,8 @@ export default {
     DialogNewProj,
     DialogProjs,
     DialogIcons,
+    DialogFontSelect,
+    DialogTeachAlert,
   },
 };
 </script>

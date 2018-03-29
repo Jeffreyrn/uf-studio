@@ -11,7 +11,7 @@
   <div class="main-wrapper">
     <div id="blockly-area" class="blockly-workspace" tabindex="0">
       <div id="tab-blocks"></div>
-      <div class="hide-button el-icon-arrow-right" @click="toggleSideShow"></div>
+      <div class="hide-button el-icon-arrow-right" v-bind:class="{rotate: !uiData.sideShow}" @click="toggleSideShow"></div>
     </div>
     <div id="slide-area" v-show="uiData.sideShow">
       <div class="emulator-wrapper">
@@ -44,6 +44,7 @@ import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
 import CommonTopMenu from './common/CommonTopMenu';
 import XarmModel from './common/XarmModel';
+import * as types from '../store/mutation-types';
 
 const BLOCK_TYPES = {
   python: 'studio_run_python',
@@ -99,6 +100,7 @@ export default {
     };
   },
   beforeDestroy() {
+    this.setOnline(false)
     Blockly.removeEndListener(this.endCallback);
     window.removeEventListener('resize', self.resizeWorkspace, false); // avoid fire event listener twice or more
     // Blockly.BlockWorkspace.removeChangeListener(self.onChangeEvent);
@@ -111,6 +113,10 @@ export default {
       this.backStr = 'AppStore';
       this.getProject(name);
     }
+    this.setOnline(true)
+  },
+  deactivated() {
+    this.setOnline(false)
   },
   components: {
     XarmModel,
@@ -121,7 +127,8 @@ export default {
   },
   mounted() {
     const self = this;
-    this.model.localAppsMgr.curProName = ''
+    // this.model.localAppsMgr.curProName = ''
+    this.setOnline(true)
     window.xArmVuex = this.$store;
     if (this.uarmConnectStatus) {
       window.UArm.set_acceleration({
@@ -133,11 +140,14 @@ export default {
     // init Blockly
     this.initBlocklyDiv().then(() => {
       self.resizeWorkspace();
+      if (this.model.localAppsMgr.curProName === '') {
+        this.newProject()
+      }
     });
     window.addEventListener('resize', self.resizeWorkspace, false);
     Blockly.BlockWorkspace.addChangeListener(self.onChangeEvent);
 
-    Blockly.Blocks.studio_run_python.onchange = (event) => {
+    Blockly.Blocks[BLOCK_TYPES.python].onchange = (event) => {
       // console.log('event change', event)
       // console.log('event type', event.type) // move change ui
       const blockId = event.blockId
@@ -146,8 +156,21 @@ export default {
       if (block && event.type === 'ui') {
         // eventBus.$emit('show', block)
         this.block = block
-        this.popDialog(block)
-        console.log('onchange 1')
+        this.popDialog(block.type)
+        console.log('onchange 1.1')
+      }
+    }
+    Blockly.Blocks[BLOCK_TYPES.record].onchange = (event) => {
+      // console.log('event change', event)
+      // console.log('event type', event.type) // move change ui
+      const blockId = event.blockId
+      const block = Blockly.BlockWorkspace.getBlockById(blockId)
+      // console.log('event block', block)
+      if (block && event.type === 'ui') {
+        // eventBus.$emit('show', block)
+        this.block = block
+        this.popDialog(block.type)
+        console.log('onchange 1.2')
       }
     }
 //    Blockly.addEndListener(this.endCallback);
@@ -155,9 +178,16 @@ export default {
     // load project
   },
   methods: {
+    setOnline(value) {
+      const data = {
+        index: 'online',
+        value,
+      };
+      this.$store.commit(types.SET_ROBOT_STATE, data);
+    },
     startRun() {
       console.log('start run');
-      // this.runProject()
+      this.runProject()
     },
     quitPage() {
       if (this.saveStatus || this.emptyProject()) {
@@ -176,6 +206,9 @@ export default {
       }
     },
     insertProject(path) {
+      if (path.name) {
+        path.project = this.model.localAppsMgr.curProName
+      }
       console.log(path)
       if (this.block.type === BLOCK_TYPES.app) {
         window.CommandsAppsSocket.getBlockXml(path).then((xml) => {
@@ -234,7 +267,8 @@ export default {
     },
     clearBlockly() {
       Blockly.clearWorkspace().then(() => {
-        this.model.localAppsMgr.curProName = ''
+        this.uiData.inputName = true
+        // this.model.localAppsMgr.curProName = ''
         this.saveStatus = true
         console.log('workspace cleared')
       });
@@ -242,6 +276,7 @@ export default {
     newProject() {
       if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
+        this.model.localAppsMgr.curProName = ''
       }
       else {
         this.$confirm('Discard current changes and create new?', 'Warning', {
@@ -360,7 +395,7 @@ export default {
         category: 'myapp',
         name: path,
       }
-      window.CommandsAppsSocket.getBlockXml(data).then((xml) => {
+      window.CommandsAppsSocket.getProject(data.name).then((xml) => {
         console.log(`path = ${path}`);
         // console.log('get xml return', xml.xmlData)
         Blockly.clearWorkspace().then(() => {
@@ -474,7 +509,7 @@ export default {
     height: 100%;
     overflow: hidden;
     #blockly-area {
-      width: 56.2%;
+      width: 66.2%;
       min-height: 500px;
       position: relative;
       .hide-button {
@@ -492,17 +527,20 @@ export default {
         text-align: center;
         color: #767676;
       }
+      .hide-button.rotate {
+        transform: rotate(-180deg);
+      }
     }
     #slide-area {
       background: #ccc;
-      width: 43.8%;
+      width: 33.8%;
       position: relative;
       .file-list {
-        height: 50%;
+        height: 55%;
       }
       .emulator-wrapper {
         position: relative;
-        height: 50%;
+        height: 45%;
         .for-dev{
           position: absolute;
         }

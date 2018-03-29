@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="tab-contain-wrapper" v-if="showApp === 'allApp'">
-        <div class="tab-contain" style="height:600px; font-size: 1.4rem;" v-for="(item,index) in tabContain" :key="index">
+        <div class="tab-contain" style="height:600px;" v-for="(item,index) in tabContain" :key="index">
           <!-- Default App -->
           <DefaultApp></DefaultApp>
         </div>
@@ -98,13 +98,18 @@ export default {
         display: flex;
         flex-direction: column;
         height: 600px;
-        padding-top: 70px;
-        width: 20%;
-        padding-left: 5%;
+        padding-top: 80px;
+        // width: 20%;
+        width: 160px;
+        // padding-left: 5%;
+        padding-left: 30px;
         .tab {
           height: 100%;
           cursor: pointer;
+          // font-size: 1.6rem;
+          font-size: 20px;
           .active {
+            padding-bottom: 5px;
             border-bottom: 2px solid #E27347;
           }
         }
@@ -112,7 +117,8 @@ export default {
       .tab-contain-wrapper {
         display: flex;
         flex-direction: column;
-        padding-top: 5rem;
+        // padding-top: 5rem;
+        padding-top: 65px;
         width: 80%;
         height: 100%;
         overflow-y: auto;

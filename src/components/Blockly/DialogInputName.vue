@@ -15,17 +15,17 @@
         </div>
         <div class="position-absolute dialog-error"> {{errorTip}}</div>
         <!-- {{ model.localProjTree.dialogErrorTips }} -->
-        <div class="position-absolute" style="bottom:0px;">
-          <div class="float-left btn-cancel" @click="closeMyself">
+        <div class="position-absolute" style="bottom:0px;width: 100%;">
+          <!-- <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
-          </div>
+          </div> -->
           <span v-if="isFileNameCorrect">
-            <div class="float-left btn-create cursor-pointer" @click="oncreate">
+            <div class="btn-ok cursor-pointer" @click="oncreate">
               OK
             </div>
           </span>
           <span v-else>
-            <div class="float-left btn-create btn-create-opacity">
+            <div class="btn-ok btn-create-opacity">
               OK
             </div>
           </span>
@@ -58,8 +58,12 @@ export default {
       }
     },
     closeMyself() {
-      this.$emit('hideInput')
-      this.model.localAppsMgr.curProName = ''
+      if (this.model.localAppsMgr.curProName) {
+        this.$emit('hideInput')
+      }
+      else {
+        this.$message('please save a project name')
+      }
       // this.model.localProjTree.fileDialogShow = false;
     },
     validateInput() {
@@ -305,6 +309,25 @@ export default {
   letter-spacing: -0.88px;
   line-height: 40px;
   cursor: pointer;
+}
+.btn-ok {
+  /* position: absolute; */
+  width: 100%;
+  height: 40px;
+  /* bottom: 0px; */
+  margin-top: 0px;
+  /* margin-left: 178px; */
+  /* background-color: green; */
+  /* margin-bottom: 0px; */
+  background: #52BF53;
+  text-align: center;
+  letter-spacing: -0.88px;
+  line-height: 40px;
+  font-family: 'Gotham-Book';
+  font-size: 12px;
+  color: #FFFFFF;
+  letter-spacing: -0.5px;
+  /* cursor: pointer; */
 }
 .btn-create {
   width: 178px;

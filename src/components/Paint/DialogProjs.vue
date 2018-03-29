@@ -76,8 +76,8 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      const html = document.getElementById('proj-id').innerHTML;
-      console.log(`html = ${html}`);
+      // const html = document.getElementById('proj-id').innerHTML;
+      // console.log(`html = ${html}`);
     });
   },
   computed: {
