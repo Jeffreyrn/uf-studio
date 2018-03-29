@@ -182,7 +182,7 @@ export default {
       this.closeDialog();
     },
     startPrint() {
-      console.log('start print');
+      console.log(`start print = ${this.state.mode}`);
       const sendStrategy = {
         outline() {
           return this.playground.toSVG();
