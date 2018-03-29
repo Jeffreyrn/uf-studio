@@ -74,6 +74,7 @@ import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
+import { setTimeout } from 'timers';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -112,15 +113,6 @@ export default {
       model: window.GlobalUtil.model,
       playground: null,
       // backStr: 'AppStore',
-      state: {
-        buffer: [],
-        saved: true,
-        empty: true,
-        backStep: 0,
-        mode: 'outline',
-        zero: 50,
-        speed: 200,
-      },
       emotions: {},
     };
   },
@@ -156,19 +148,11 @@ export default {
     },
     saveProject() {
       console.log('save project');
-      // const sendStrategy = {
-      //   outline() {
-      //     return this.playground.toSVG();
-      //   },
-      //   greyscale() {
-      //     return this.playground.toDataURL('png');
-      //   },
-      // };
-      // const work = sendStrategy[this.state.mode].bind(this);
       const jsonStr = JSON.stringify(this.playground);
       console.log(jsonStr);
       window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, (dict) => {
         console.log(`dict = ${JSON.stringify(dict)}`);
+        this.model.localPaintMgr.state.saved = true;
       });
     },
     selectProj(index) {
@@ -180,15 +164,18 @@ export default {
         if (dict.code === 0) {
           const canvas = this.playground;
           this.removeAllOK();
-          const jsonStr = dict.data; //GlobalUtil.decode(dict.data);
+          const jsonStr = dict.data; // GlobalUtil.decode(dict.data);
           console.log(`jsonStr = ${jsonStr}`);
           canvas.loadFromJSON(jsonStr, canvas.renderAll.bind(canvas));
           this.model.localPaintMgr.curProj = curProj;
+          setTimeout(() => {
+            this.model.localPaintMgr.state.saved = true;
+          });
         }
       });
     },
     startPrint() {
-      console.log(`start print = ${this.state.mode}`);
+      // console.log(`start print = ${this.state.mode}`);
       // const sendStrategy = {
       //   outline() {
       //     return this.playground.toSVG();
@@ -208,11 +195,12 @@ export default {
       console.log('create proj');
       this.closeDialog();
       window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, () => {
+        this.model.localPaintMgr.state.saved = false;
       });
     },
     newProject() {
       this.playground.clear().renderAll();
-      this.state.buffer = [];
+      this.model.localPaintMgr.state.buffer = [];
       this.model.localPaintMgr.curDialogProjInputText = '';
       this.model.localPaintMgr.visible.pattern = true;
     },
@@ -279,7 +267,7 @@ export default {
           });
         }
         else if (fileType.match('image.*')) { // not svg
-          const edge = (this.state.mode === 'outline');
+          const edge = (this.model.localPaintMgr.state.mode === 'outline');
           Potrace.loadImageFromFile(file);
           Potrace.setParameter({
             optcurve: true,
@@ -345,29 +333,29 @@ export default {
       }
     },
     fabricModified() {
-      this.state.buffer.push(JSON.stringify(this.playground));
-      this.state.saved = false;
+      this.model.localPaintMgr.state.buffer.push(JSON.stringify(this.playground));
+      this.model.localPaintMgr.state.saved = false;
       // fabric.log(myjson);
-      this.state.empty = this.playground.isEmpty();
+      this.model.localPaintMgr.state.empty = this.playground.isEmpty();
       // console.log(this.state.buffer.length, this.state.backStep);
     },
     undoEvent(reverse = false) { // do redo when reverse is true
       const canvas = this.playground;
-      const size = this.state.buffer.length;
+      const size = this.model.localPaintMgr.state.buffer.length;
       let checkValid;
       let nextStep;
       if (reverse) { // redo
-        checkValid = this.state.backStep > 0;
-        nextStep = this.state.backStep - 1;
+        checkValid = this.model.localPaintMgr.state.backStep > 0;
+        nextStep = this.model.localPaintMgr.state.backStep - 1;
       }
       else { // undo
-        checkValid = this.state.backStep < (size - 1);
-        nextStep = this.state.backStep + 1;
+        checkValid = this.model.localPaintMgr.state.backStep < (size - 1);
+        nextStep = this.model.localPaintMgr.state.backStep + 1;
       }
       if (checkValid) {
         canvas.clear().renderAll();
-        this.state.backStep = nextStep;
-        const loadJsonStr = this.state.buffer[size - nextStep - 1];
+        this.model.localPaintMgr.state.backStep = nextStep;
+        const loadJsonStr = this.model.localPaintMgr.state.buffer[size - nextStep - 1];
         canvas.loadFromJSON(loadJsonStr, canvas.renderAll.bind(canvas));
       }
     },

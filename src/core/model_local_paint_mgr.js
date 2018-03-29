@@ -15,6 +15,16 @@ self.visible = {
   clear: false,
 };
 
+self.state = {
+  buffer: [],
+  saved: true,
+  empty: true,
+  backStep: 0,
+  mode: 'outline',
+  zero: 50,
+  speed: 200,
+};
+
 self.curDialogProjInputText = '';
 self.dialogErrorTips = '';
 self.curDialogFontInputText = '';
