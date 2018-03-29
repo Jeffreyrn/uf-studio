@@ -757,7 +757,7 @@ span.text {
     position: relative;
     display: flex;
     justify-content: space-around;
-    height: 80%;
+    /*height: 80%;*/
     /*height: 263px;*/
     & > div {
       /*margin: 3% 0;*/

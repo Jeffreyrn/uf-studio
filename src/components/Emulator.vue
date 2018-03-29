@@ -183,9 +183,10 @@ footer{
       height: 100%;
       position: absolute;
       width: 100%;
-      padding: 10px;
+      padding: 6px;
       .end-col {
         width: 20vw;
+        /*width: 276px;*/
         height: 100%;
         background: #434343;
       }
