@@ -12,8 +12,8 @@
       :onstart='startPrint'>
     </CommonTopMenu>
 
-    <div class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
-      <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
+    <div style="" class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
+      <canvas style="" id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
 
     <BottomTools
@@ -127,6 +127,14 @@ export default {
     });
   },
   activated: function() {
+    setTimeout(() => {
+      if (this.model.localPaintMgr.projList.length === 0) {
+        this.newProject();
+      }
+      else if (this.model.localPaintMgr.curProj === null) {
+        this.listProjects();
+      }
+    }, 50);
   },
   methods: {
     closeDialog() {

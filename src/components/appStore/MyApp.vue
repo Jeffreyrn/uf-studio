@@ -5,7 +5,7 @@
         <li v-for="(data ,index) in model.localAppsMgr.allApps.my.data" class="com-app-icon">
           <!-- <router-link :to="{name: 'AppSubmit', params:{data: data}}">
           </router-link> -->
-          <div class="position-absolute">
+          <div class="position-absolute" style="width:100px;height: 100px;">
             <div class="icon-text-style" style="background:#9CC5F7;" v-if="index % 4 === 0">
               {{ data.name[0].toUpperCase() }}
             </div>
@@ -28,6 +28,7 @@
               <div class="icon-btn delete-btn" @click="onDelete(data.name)"></div>
             </div>
             <AppTitle class="position-absolute name-style" :data='data'></AppTitle>
+            <div v-if="data.des.length>0" class="position-absolute uploaded-gou"></div>  
           </div>
         </li>
       </ul>
@@ -118,8 +119,8 @@ export default {
 }
 .icon-text-style {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
   font-family: 'Gotham-Medium';
   // font-size: 2rem;
@@ -163,5 +164,17 @@ export default {
 }
 .delete-btn {
   background-image: url('./../../assets/img/appStore/btn_delete.svg');
+}
+.uploaded-gou {
+  width: 15px;
+  height: 15px;
+  // background: yellow;
+  right: 2px;
+  bottom: 2px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-image: url('./../../assets/img/appStore/gou.svg');
+  
 }
 </style>
