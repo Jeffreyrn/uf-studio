@@ -86,20 +86,24 @@ export default {
 <style scoped lang="scss">
 .app-title {
   font-family: 'Gotham-Book';
-  font-size: 1.2rem;
+  // font-size: 1.2rem;
+  font-size: 14px;
   color: #4A4A4A;
   letter-spacing: -0.67px;
   height: 40px;
+  width: 100px;
   line-height: 40px;
+  text-align: center;
   // padding-top: 5px;
 }
 .app-title-text {
   font-family: 'Gotham-Book';
-  font-size: 1.2rem;
+  // font-size: 1.2rem;
+  font-size: 14px;
   color: #4A4A4A;
   letter-spacing: -0.67px;
-  height: 30px;
-  width: 136px;
+  height: 25px;
+  width: 100px;
   outline: none;
   border: 1px solid #d9d9d9;
 }
