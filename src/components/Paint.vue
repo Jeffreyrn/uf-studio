@@ -4,17 +4,19 @@
       type='paint'
       :onlist='listProjects'
       title='Draw/Laser'
+      :curFileName='(model.localPaintMgr.curProj||{}).name'
       :onback='onBack'
       :onsave='saveProject'
       :onnew='newProject'
       :onstart='startPrint'>
     </CommonTopMenu>
 
-    <div class="fabric-container">
+    <div class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
       <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
 
     <BottomTools
+      v-if="model.localPaintMgr.curProj!==null"
       :onundo='undoEvent'
       :onredo='undoEvent'
       :onimage="openImage"
@@ -120,28 +122,6 @@ export default {
         speed: 200,
       },
       emotions: {},
-      // dialog: {
-      //   textInput: '', // text value
-      //   fontSelect: 0, // select font
-      // },
-      // FONT_LIST: [
-      //   {
-      //     name: this.$t('paintApp.fontNameList.blacklight'),
-      //     src: require('./../assets/fonts/blackLight.ttf'),
-      //   },
-      //   {
-      //     name: this.$t('paintApp.fontNameList.xingkai'),
-      //     src: require('./../assets/fonts/STXingkai-SC-Bold.ttf'),
-      //   },
-      //   {
-      //     name: this.$t('paintApp.fontNameList.lanting'),
-      //     src: require('./../assets/fonts/lanting.ttf'),
-      //   },
-      //   {
-      //     name: this.$t('paintApp.fontNameList.kaiti'),
-      //     src: require('./../assets/fonts/kanti.ttf'),
-      //   },
-      // ],
     };
   },
   mounted() {
@@ -176,27 +156,53 @@ export default {
     },
     saveProject() {
       console.log('save project');
+      // const sendStrategy = {
+      //   outline() {
+      //     return this.playground.toSVG();
+      //   },
+      //   greyscale() {
+      //     return this.playground.toDataURL('png');
+      //   },
+      // };
+      // const work = sendStrategy[this.state.mode].bind(this);
+      const jsonStr = JSON.stringify(this.playground);
+      console.log(jsonStr);
+      window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, (dict) => {
+        console.log(`dict = ${JSON.stringify(dict)}`);
+      });
     },
-    selectProj() {
-      console.log(`select project = ${JSON.stringify(this.model.localPaintMgr.curProj)}`);
+    selectProj(index) {
+      // console.log(`select project = ${JSON.stringify(this.model.localPaintMgr.curProj)}`);
       this.closeDialog();
+      const curProj = this.model.localPaintMgr.projList[index];
+      window.CommandsPaintSocket.getFile(curProj.uuid, (dict) => {
+        // console.log(`dict = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          const canvas = this.playground;
+          this.removeAllOK();
+          const jsonStr = dict.data; //GlobalUtil.decode(dict.data);
+          console.log(`jsonStr = ${jsonStr}`);
+          canvas.loadFromJSON(jsonStr, canvas.renderAll.bind(canvas));
+          this.model.localPaintMgr.curProj = curProj;
+        }
+      });
     },
     startPrint() {
       console.log(`start print = ${this.state.mode}`);
-      const sendStrategy = {
-        outline() {
-          return this.playground.toSVG();
-        },
-        greyscale() {
-          return this.playground.toDataURL('png');
-        },
-      };
-      const work = sendStrategy[this.state.mode].bind(this);
-      const setting = {
-        zero: this.state.zero,
-        speed: this.state.speed,
-      };
-      console.log(work(), setting);
+      // const sendStrategy = {
+      //   outline() {
+      //     return this.playground.toSVG();
+      //   },
+      //   greyscale() {
+      //     return this.playground.toDataURL('png');
+      //   },
+      // };
+      // const work = sendStrategy[this.state.mode].bind(this);
+      // const setting = {
+      //   zero: this.state.zero,
+      //   speed: this.state.speed,
+      // };
+      // console.log(work(), setting);
     },
     creatProj() {
       console.log('create proj');
@@ -418,15 +424,6 @@ export default {
     },
     removeAll() {
       this.model.localPaintMgr.visible.clear = true;
-      // this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
-      //   confirmButtonText: this.$t('paintApp.dailog.okBtn'),
-      //   cancelButtonText: this.$t('paintApp.dailog.cancelBtn'),
-      //   type: 'warning',
-      //   dangerouslyUseHTMLString: true,
-      // }).then(() => {
-      //   this.playground.clear().renderAll();
-      //   this.fabricModified();
-      // }).catch(() => {});
     },
     removeAllOK() {
       this.model.localPaintMgr.visible.clear = false;

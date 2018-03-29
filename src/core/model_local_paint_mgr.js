@@ -24,6 +24,21 @@ self.projTypeSelected = 'outline'; // outline gray
 self.projList = [];
 self.curProj = null;
 
+self.realProjName = (proj) => {
+  if (proj === null || proj === undefined) {
+    return '';
+  }
+  const dirname = path.dirname(proj.uuid);
+  return path.basename(dirname);
+};
+
+// self.curProjName = () => {
+//   if (self.curProj === null || self.curProj === undefined) {
+//     return '';
+//   }
+//   return self.curProj.name;
+// }
+
 self.createProj = (params) => {
   return {
     uuid: params.uuid,

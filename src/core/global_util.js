@@ -1,5 +1,6 @@
 
 import GlobalConstant from './global_constant';
+import Base64 from '../lib/Base64';
 import Model from './model';
 import SocketCom from './socket_com';
 import NativeCom from './native_com';
@@ -7,7 +8,6 @@ import CommandsEditorSocket from './commands_editor_socket';
 import CommandsTeachSocket from './commands_teach_socket';
 import CommandsAppsSocket from './commands_apps_socket';
 import CommandsPaintSocket from './commands_paint_socket';
-
 
 // const args = {
 //   // host: '192.168.1.166',
@@ -47,6 +47,14 @@ window.CommandsPaintSocket = CommandsPaintSocket;
 self.nativeCom = NativeCom;
 
 self.autoSizeScale = 0;
+
+self.encode = (str) => {
+  return Base64.btoa(str);
+};
+
+self.decode = (str) => {
+  return Base64.atob(str);
+};
 
 self.isFileStr = (str) => {
   const errStr = `'Name contains "only letter, numbers, '_' and no more than 15 characters in total.${[]}`;
