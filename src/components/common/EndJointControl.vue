@@ -1,67 +1,103 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="16">
+  <el-row :gutter="20" style="margin: 0;">
+    <el-col :span="16" style="padding-left: 6px;padding-right: 5px;">
       <div class="control-wrapper dark-backgroud">
         <div class="control-header">
-          <div class="header-text">Position Control</div>
-          <div class="header-text">Orientation Control</div>
+          <div class="header-text" style="width: 35%">Orientation Control</div>
+          <div class="header-text" style="width: 35%">Position Control</div>
+          <div class="header-text" style="width: 30%">Speed Control</div>
         </div>
         <div class="control-body">
-          <div class="control-left">
-            <div class="height-wrapper">
-              <!-- <el-button @click="setPositionZ(true)">Up</el-button>
-              <el-button @click="setPositionZ(false)">Down</el-button> -->
-              <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control" 
-                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
-            </div>
-            <div id="position-joystick" class="joystick-wrapper"></div>
-          </div>
           <div class="control-right">
             <div class="yaw-wrapper">
               <!-- <el-button @click="setYaw(true)">Left</el-button>
               <el-button @click="setYaw(false)">Right</el-button> -->
-              <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control" 
+              <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control"
                 @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> -->
-                <canvas id="angle-canvas" width="200" height="50"></canvas>
-                <!-- <div class="data-display" v-text="joystick.step.orientation.z"></div> -->
+              <canvas id="angle-canvas" width="200" height="50"></canvas>
+              <!-- <div class="data-display" v-text="joystick.step.orientation.z"></div> -->
             </div>
             <div id="orientation-joystick" class="joystick-wrapper"></div>
           </div>
-        </div>
-      </div>
-      <div class="config-wrapper dark-backgroud">
-        <div>
-          <span class="config-title">Speed</span>
-          <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
-          <img src="./../../assets/img/control/icon_speed2.svg" alt="">
-          <span class="config-value" v-text="stateSpeed"></span>
-        </div>
-        <div>
-          <span class="config-title">Acceleration</span>
-          <img src="./../../assets/img/control/icon_speed.svg" alt="">
-          <input type="range" v-model="stateAcceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
-          <img src="./../../assets/img/control/icon_speed2.svg" alt="">
-          <span class="config-value" v-text="stateAcceleration"></span>
-        </div>
-      </div>
-    </el-col>
-    <el-col :span="8">
-      <div class="dark-backgroud joint-control">
-        <div class="header-text" id="testtest">Joints Control</div>
-        <div class="degree-text">Degree</div>
-        <div class="block joint-range" v-for="j in 7" :key="j">
-          <span class="text">J{{j}}</span>
-          <div class="range-wrapper">
-            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" 
-            :max="config.jointMax" :min="config.jointMin" 
-            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
-            <p :id="'mask' + j" class="mask-bar"></p>
+          <div class="control-left">
+            <div class="height-wrapper">
+              <!-- <el-button @click="setPositionZ(true)">Up</el-button>
+              <el-button @click="setPositionZ(false)">Down</el-button> -->
+              <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control"
+                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
+            </div>
+            <div id="position-joystick" class="joystick-wrapper"></div>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" 
-          @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
-          :max="config.jointMax" :min="config.jointMin">
-          <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
+          <!--<div class="control-right">-->
+            <!--<div class="yaw-wrapper">-->
+              <!--&lt;!&ndash; <el-button @click="setYaw(true)">Left</el-button>-->
+              <!--<el-button @click="setYaw(false)">Right</el-button> &ndash;&gt;-->
+              <!--&lt;!&ndash; <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control"-->
+                <!--@mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> &ndash;&gt;-->
+                <!--<canvas id="angle-canvas" width="200" height="50"></canvas>-->
+                <!--&lt;!&ndash; <div class="data-display" v-text="joystick.step.orientation.z"></div> &ndash;&gt;-->
+            <!--</div>-->
+            <!--<div id="orientation-joystick" class="joystick-wrapper"></div>-->
+          <!--</div>-->
+          <div class="config-wrapper">
+            <div class="range-right">
+              <!--<img src="./../../assets/img/control/icon_speed.svg" alt="">-->
+              <span class="config-value" v-text="stateSpeed"></span>
+              <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
+              <!--<img src="./../../assets/img/control/icon_speed2.svg" alt="">-->
+              <span class="config-title">Speed</span>
+            </div>
+            <div class="img-middle">
+              <img class="img1" src="./../../assets/img/control/icon_speed.svg" alt="">
+              <img class="img2" src="./../../assets/img/control/icon_speed2.svg" alt="">
+            </div>
+            <div class="range-left">
+              <!--<img src="./../../assets/img/control/icon_speed.svg" alt="">-->
+              <span class="config-value" v-text="stateAcceleration"></span>
+              <input type="range" v-model="stateAcceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
+              <!--<img src="./../../assets/img/control/icon_speed2.svg" alt="">-->
+              <span class="config-title">Acceleration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="config-wrapper dark-backgroud">-->
+        <!--<div>-->
+          <!--<span class="config-title">Speed</span>-->
+          <!--<img src="./../../assets/img/control/icon_speed.svg" alt="">-->
+          <!--<input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">-->
+          <!--<img src="./../../assets/img/control/icon_speed2.svg" alt="">-->
+          <!--<span class="config-value" v-text="stateSpeed"></span>-->
+        <!--</div>-->
+        <!--<div>-->
+          <!--<span class="config-title">Acceleration</span>-->
+          <!--<img src="./../../assets/img/control/icon_speed.svg" alt="">-->
+          <!--<input type="range" v-model="stateAcceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">-->
+          <!--<img src="./../../assets/img/control/icon_speed2.svg" alt="">-->
+          <!--<span class="config-value" v-text="stateAcceleration"></span>-->
+        <!--</div>-->
+      <!--</div>-->
+    </el-col>
+    <el-col :span="8" style="padding-left: 0;padding-right: 6px">
+      <div class="dark-backgroud joint-control">
+        <div class="header-text " id="testtest">Joints Control</div>
+        <div class="degree-text">Degree</div>
+        <div class="joint-range-wrapper">
+          <div class="block joint-range" v-for="j in 7" :key="j">
+            <span class="text">J{{j}}</span>
+            <div class="range-wrapper">
+              <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step"
+              :max="config.jointMax" :min="config.jointMin"
+              @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
+              <p :id="'mask' + j" class="mask-bar"></p>
+            </div>
+            <span class="joints-number">
+              <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]"
+              @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
+              :max="config.jointMax" :min="config.jointMin">
+            </span>
+            <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
+          </div>
         </div>
       </div>
     </el-col>
@@ -299,7 +335,7 @@ export default {
         color,
         mode,
         position: {
-          left: '30%',
+          left: '56%',
         },
         restOpacity,
       });
@@ -693,30 +729,36 @@ input[type=range]:focus {
   outline: none;
 }
 .block {
-  padding: 0.2vw 1vw;
+  /*padding: 0.2vw 1vw;*/
 }
 span.text {
   display: block;
   float: left;
+  text-align: center;
 }
 .control-wrapper {
-  margin-bottom: 1%;
   display: flex;
   position: relative;
   justify-content: space-around;
   flex-direction: column;
   .control-header {
     display: flex;
-    flex-direction: row;
+    justify-content: space-around;
+    opacity: 0.69;
+    /*background: #484747;*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*width: 100%;*/
     .header-text {
-      width: 50%;
+      text-align: center;
     }
   }
   .control-body {
-    display: flex;
     position: relative;
+    display: flex;
     justify-content: space-around;
-    height: 215px;
+    height: 80%;
+    /*height: 263px;*/
     & > div {
       /*margin: 3% 0;*/
       .joystick-wrapper {
@@ -725,11 +767,11 @@ span.text {
       }
     }
     .control-left {
-      width: 50%;
+      width: 35%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-right: solid 1px white;
+      /*border-right: solid 1px white;*/
       .height-wrapper {
         display: flex;
         flex-direction: column;
@@ -766,7 +808,7 @@ span.text {
 
     }
     .control-right {
-      width: 50%;
+      width: 35%;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -813,84 +855,124 @@ span.text {
 }
 .config-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  width: 30%;
+  position: relative;
+  .range-right {
+    /*right: 130px;*/
+  }
+  .img-middle {
+    padding: 40px 0;
+  }
+  .range-left {
+    /*left: 130px;*/
+  }
   & > div {
-    width: 50%;
-    padding: 2% 4%;
+    /*width: 50%;*/
+    /*padding: 2% 4%;*/
+    height: 100%;
     color: white;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    img {
-      padding: 0 3%;
-      height: 80%;
+    flex-direction: column;
+    /*position: absolute;*/
+    width: 44px;
+    .img1 {
+      width: 14px;
+    }
+    .img2 {
+      width: 23px
     }
     input[type=range] {
       height: 8px;
-      width: 100%;
       border-radius: 100px;
-      background-image: linear-gradient(90deg, #8FFF94 0%, #FF6868 100%);
+      background-image: linear-gradient(90deg, #FF6868 0%, #8FFF94 100%);
+      transform: rotate(-90deg);
+      -webkit-appearance: none;
+      height: 40px;
+      /*width: 155px;*/
     }
     input[type=range]::-webkit-slider-thumb {
-      width: 22px;
-      height: 22px;
+      width: 59px;
+      height: 34px;
       -webkit-appearance: none;
       border: none;
-      border-radius: 50%;
+      border-radius: 100px;
       background: #FEFEFE;
       box-shadow: 0 0 8px 0 rgba(214,214,214,0.50);
     }
     .config-value {
-      padding: 2%;
+      /*padding: 2%;*/
       background: #444;
-      border-radius: 6px;
-      font-family: Gotham-Book;
-      font-size: 13px;
-      color: #FFFFFF;
+      font-family: 'Gotham-Book';
+      font-size: 10px;
+      color: #FFF;
       letter-spacing: -0.75px;
-      width: 7px;
       text-align: center;
+      padding-top: 10px;
+    }
+    .config-title {
+      font-size: 10px;
+      text-align: center;
+      padding-bottom: 10px;
+      font-family: 'Gotham-Book';
     }
   }
 }
 .dark-backgroud {
   background: #434343;
-  border-radius: 8px;
+  height: 36vh;
 }
 .header-text {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: white;
-  width: 50%;
-  padding: 20px 20px 0;
   letter-spacing: -1px;
+  height: 39px;
+  line-height: 39px;
 }
 .joint-control {
-  padding-bottom: 1vw;
+  /*padding-bottom: 1vw;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  .header-text {
+    opacity: 0.69;
+    padding-left: 2vw;
+  }
   .degree-text {
     color: white;
-    padding: 0 3vw 10px 3vw;
+    padding-right: 8% ;
     /*padding-top: 1vw;*/
     text-align: right;
-    font-size: 14px;
+    font-size: 12px;
+  }
+  .joint-range-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 76%;
   }
   .joint-range {
     color: white;
-    padding: 7px 0 6px 0.8vw;
+    /*padding: 7px 0 6px 0.8vw;*/
     display: flex;
     align-items: center;
+    justify-content: space-around;
+    width: 94%;
     span {
-      width: 2vw;
-      font-size: 1.2rem;
+      font-size: 12px;
       font-family: "Gotham-Book";
     }
     .range-wrapper {
       position: relative;
-      width: 22vw;
-      margin-right: 0.5vw;
-      background: white;
-      height: 2px;
+      width: 20vw;
+      background: #353535;
+      height: 4px;
+      border-radius: 10px;
       input[type=range] {
-        height: 2px;
+        height: 4px;
         background: transparent;
         width: 100%;
         vertical-align: middle;
@@ -900,8 +982,8 @@ span.text {
         position: absolute;
       }
       input[type=range]::-webkit-slider-thumb {
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
         -webkit-appearance: none;
         border: none;
         border-radius: 50%;
@@ -910,10 +992,10 @@ span.text {
       .mask-bar {
         position: absolute;
         background-color: #E27347;
-        height: 2px;
-        line-height: 2px;
+        height: 4px;
+        line-height: 4px;
         z-index: 200;
-        border-radius: 3px;
+        border-radius: 100px;
         padding: 0;
         margin: 0;
         pointer-events: none;
@@ -921,17 +1003,22 @@ span.text {
         z-index: 2;
       }
     }
-
-    input[type=number] {
-      width: 5.5vw;
-      border: none;
-      border-radius: 100px;
-      text-align: center;
-      color: #666;
-      letter-spacing: -0.67px;
-      font-size: 1rem;
-      padding: 0.2vw 0;
-      outline:none;
+    .joints-number {
+      /*width: 5vw;*/
+      input[type=number] {
+        border: none;
+        background: #434343;
+        text-align: center;
+        color: #fff;
+        letter-spacing: -0.5px;
+        font-size: 12px;
+        outline:none;
+        padding-right: 1px;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button{
+        -webkit-appearance: textfield;
+      }
     }
   }
 }

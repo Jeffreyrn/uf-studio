@@ -2,17 +2,17 @@
   <el-container class="hello emulator-container">
     <header height="50px">
       <el-row :gutter="20" class="header-wrapper">
-        <el-col :span="18">
+        <el-col>
           <router-link :to="{ name: backStr}">
             <img src="./../assets/img/control/icon_back.svg" alt="back home">
           </router-link>
           <span class="title-ide">Control</span>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5" class="control-toggle">
           <div class="title-online">Live Control</div>
-          <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
+          <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true"
             :labels="{checked: 'ON', unchecked: 'OFF'}"
-            :width="71" :height="36"/>
+            :width="50" :height="20"/>
         </el-col>
       </el-row>
     </header>
@@ -145,7 +145,7 @@ header {
 }
 footer{
   flex: 0 0 auto;
-  padding: 1.5vh 1vw;
+  margin: 4px 0;
 }
 .hello {
   font-family:'Gotham-Medium';
@@ -166,21 +166,28 @@ footer{
       display: flex;
       align-items: center;
     }
+    .control-toggle {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 2%;
+    }
   }
   .main-wrapper{
     flex: 1 0 auto;
-    padding: 10px 20px;
     position: relative;
     .main-view {
       display: flex;
       align-items: flex-start;
+      justify-content: space-between;
       overflow: hidden;
       height: 100%;
       position: absolute;
       width: 100%;
+      padding: 10px;
       .end-col {
         width: 20vw;
         height: 100%;
+        background: #434343;
       }
       .model-container{
         padding-right: 1vw;
@@ -204,8 +211,9 @@ footer{
 .title-online {
   margin-right: 5%;
   font-size: 1.2rem;
+  font-family: Gotham-Medium;
   color: #434343;
-  letter-spacing: -0.75px;
+  letter-spacing: -0.5px;
 }
 
 </style>
