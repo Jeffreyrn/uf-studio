@@ -127,7 +127,7 @@ export default {
   },
   mounted() {
     const self = this;
-    // this.model.localAppsMgr.curProName = ''
+    this.model.localAppsMgr.curProName = ''
     this.setOnline(true)
     window.xArmVuex = this.$store;
     if (this.uarmConnectStatus) {
@@ -140,9 +140,9 @@ export default {
     // init Blockly
     this.initBlocklyDiv().then(() => {
       self.resizeWorkspace();
-      if (this.model.localAppsMgr.curProName === '') {
-        this.newProject()
-      }
+      // if (this.model.localAppsMgr.curProName === '') {
+      //   this.newProject()
+      // }
     });
     window.addEventListener('resize', self.resizeWorkspace, false);
     Blockly.BlockWorkspace.addChangeListener(self.onChangeEvent);
@@ -267,8 +267,8 @@ export default {
     },
     clearBlockly() {
       Blockly.clearWorkspace().then(() => {
-        this.uiData.inputName = true
-        // this.model.localAppsMgr.curProName = ''
+        // this.uiData.inputName = true
+        this.model.localAppsMgr.curProName = ''
         this.saveStatus = true
         console.log('workspace cleared')
       });
@@ -276,7 +276,7 @@ export default {
     newProject() {
       if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
-        this.model.localAppsMgr.curProName = ''
+        // this.model.localAppsMgr.curProName = ''
       }
       else {
         this.$confirm('Discard current changes and create new?', 'Warning', {

@@ -5,27 +5,29 @@
       <div class="dialog-cover" @click="closeMyself"></div>
       <div class="dialog-content" @click="contentClick">
         <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
-        <!-- <div class="dialog-top">
+        <div class="dialog-top">
           <span class="top-title">{{ model.localProjTree.curDialogTitle }}</span>
           <div class="dialog-close" @click="closeMyself">
           </div>
-        </div> -->
+        </div>
         <div>
           <input id="input-text" v-model="inputName" type="text" autofocus="autofocus" class="position-absolute dialog-input" />
         </div>
         <div class="position-absolute dialog-error"> {{errorTip}}</div>
         <!-- {{ model.localProjTree.dialogErrorTips }} -->
         <div class="position-absolute" style="bottom:0px;width: 100%;">
-          <!-- <div class="float-left btn-cancel" @click="closeMyself">
+          <div class="float-left btn-cancel" @click="closeMyself">
             Cancel
-          </div> -->
+          </div>
           <span v-if="isFileNameCorrect">
-            <div class="btn-ok cursor-pointer" @click="oncreate">
+            <div class="float-left btn-create cursor-pointer" @click="oncreate">
+
               OK
             </div>
           </span>
           <span v-else>
-            <div class="btn-ok btn-create-opacity">
+              <div class="float-left btn-create btn-create-opacity">
+
               OK
             </div>
           </span>
@@ -58,12 +60,15 @@ export default {
       }
     },
     closeMyself() {
-      if (this.model.localAppsMgr.curProName) {
-        this.$emit('hideInput')
-      }
-      else {
-        this.$message('please save a project name')
-      }
+      this.$emit('hideInput')
+      this.model.localAppsMgr.curProName = ''
+
+      // if (this.model.localAppsMgr.curProName) {
+      //   this.$emit('hideInput')
+      // }
+      // else {
+      //   this.$message('please save a project name')
+      // }
       // this.model.localProjTree.fileDialogShow = false;
     },
     validateInput() {
