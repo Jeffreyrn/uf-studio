@@ -1,13 +1,13 @@
 <template>
   <div class="paint-bottom">
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click='onundo'>
       <div class="size undo" alt="Undo">
         <div class="icon-text">Undo</div>
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="onredo">
       <div class="size redo" alt="Redo">
         <div class="icon-text">Redo</div>
       </div>
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="oncopy">
       <div class="size copy" alt="Copy">
         <div class="icon-text">Copy</div>
       </div>
@@ -37,13 +37,13 @@
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="ondelete">
       <div class="size delete" alt="Delete">
         <div class="icon-text">Delete</div>
       </div>
     </div>
 
-    <div class="icon-btn" @click="removeAll()">
+    <div class="icon-btn" @click="onremoveall">
       <div class="size clear" alt="Clear">
         <div class="icon-text">Clear</div>
       </div>
@@ -55,7 +55,7 @@
 <script>
 
 export default {
-  props: ['onimage', 'onadd', 'ontext'],
+  props: ['onimage', 'onadd', 'ontext', 'ondelete', 'oncopy', 'onundo', 'onredo', 'onremoveall'],
   name: 'bottom-tools',
   data() {
     return {
@@ -67,6 +67,9 @@ export default {
   activated: function() {
   },
   methods: {
+    // onremoveall() {
+    //   console.log('onremoveall onremoveall onremoveall');
+    // },
   },
   beforeDestroy() {
   },

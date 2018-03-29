@@ -2,6 +2,7 @@
   <div class="app-container com-module-wrapper">
     <div class="recording-header-wrapper">
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
+       <!-- {{ JSON.stringify(realData) }} -->
     </div>
     <div class="main-contain">
       <div class="recording-area-wrapper"  id="left-teach-frame">
@@ -165,6 +166,7 @@ export default {
     return {
       socketCom: window.GlobalUtil.socketCom,
       model: window.GlobalUtil.model,
+      realData: [],
       protype: '',
       folderOrFile: '',
       title: '',
@@ -366,21 +368,26 @@ export default {
       // GlobalUtil.model.localTeach.curFileDatas = [];
       window.CommandsTeachSocket.debugSetBeart(true, 0.1, (dict) => {
         console.log(`SetBeart false = dict = ${JSON.stringify(dict)}`);
-        const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
-        window.GlobalUtil.model.localTeach.lastFileData = testData;
+        // test data
+        // const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
+        // window.GlobalUtil.model.localTeach.lastFileData = testData;
+        // real data
+        const realData = this.$store.getters.joints;
+        window.GlobalUtil.model.localTeach.lastFileData = realData;
         if (isContinus === false) {
           window.GlobalUtil.model.localTeach.curDuration -= -1;
           return;
         }
-
         if (window.GlobalUtil.model.localTeach.fileDatas.temp.length >= 1800) {
           this.finishRecordOK();
         }
         else {
           // test data
-          const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
-          // GlobalUtil.model.localTeach.curFileDatas.push(testData)
-          window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+          // const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
+          // window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+          // real data
+          const realData = this.$store.getters.joints;
+          window.GlobalUtil.model.localTeach.pushFileData('temp', realData);
           const tempArr = [];
           for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas.temp.length; i += 1) {
             tempArr.push(i);
@@ -399,9 +406,14 @@ export default {
       document.getElementById('bottom-right-frame').scrollLeft = 1800 * time; // 60 * (parseInt(time / 10) * 10);
     },
     addRecord() {
-      const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
-      // GlobalUtil.model.localTeach.curFileDatas.push(testData);
-      window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+      // test data
+      // const testData = window.GlobalUtil.model.localTeach.getTestData(window.GlobalUtil.model.localTeach.curDuration);
+      // window.GlobalUtil.model.localTeach.pushFileData('temp', testData);
+      // real data
+      const realData = this.$store.getters.joints;
+      window.GlobalUtil.model.localTeach.pushFileData('temp', realData);
+      this.realData = realData;
+      console.log(`realData = ${JSON.stringify(realData)}`);
       const tempArr = [];
       for (let i = 0; i < window.GlobalUtil.model.localTeach.fileDatas.temp.length; i += 1) {
         tempArr.push(i);

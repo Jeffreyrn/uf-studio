@@ -46,7 +46,7 @@ self.APP_RUN_TEACH = 'app_run_teach_project';
 self.APP_GET_XML = 'get_app_xml';
 self.APP_GET_INSERT_XML = 'get_insert_app_xml';
 
-self.DEBUG_SET_BEART = 'debug_set_beart';
+self.DEBUG_SET_BEART = 'set_beart';
 
 // setting cmd
 self.SETTING_GET_LOG_INFO = 'get_log_info';

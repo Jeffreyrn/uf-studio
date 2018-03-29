@@ -151,5 +151,4 @@ export default {
 .delete-btn {
   background-image: url('./../../assets/img/appStore/btn_delete.svg');
 }
-
 </style>
