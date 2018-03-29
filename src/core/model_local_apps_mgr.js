@@ -41,7 +41,7 @@ self.setProjListDialogType = (type) => {
     case 'ide': {
       self.curProTreeDatas = window.GlobalUtil.model.localProjTree.allProsTreeDatas;
       self.curDialogTitle = 'Select an IDE File';
-      console.log(`ide curProTreeDatas = ${JSON.stringify(self.curProTreeDatas)}`);
+      // console.log(`ide curProTreeDatas = ${JSON.stringify(self.curProTreeDatas)}`);
       break;
     }
     case 'teach': {

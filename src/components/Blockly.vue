@@ -57,6 +57,7 @@ export default {
     return {
       saveStatus: true,
       pre: '',
+      xmlLoaded: true,
       block: {},
       model: window.GlobalUtil.model,
       jsCode: '',
@@ -228,6 +229,9 @@ export default {
         inputField.setText(path)
         this.block = {}
       }
+      window.setTimeout(() => {
+        this.xmlLoaded = true
+      }, 1800)
     },
     popDialog(type) {
       if (Object.prototype.hasOwnProperty.call(this.dialog, type)) {
@@ -301,16 +305,19 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       // console.log(`on change ${event.type}`)
       // console.log(event, block)
-      if (block !== null && event.type === Blockly.Events.CREATE) {
+      if (block !== null && event.type === Blockly.Events.CREATE && this.xmlLoaded) {
         // eventBus.$emit('show', block)
         const type = block.type
-        this.popDialog(type)
+        if (!Object.is(block, {})) {
+          this.popDialog(type)
+        }
         console.log('sss', type, block)
         if (type === BLOCK_TYPES.app) {
           console.log('delete block type: APP')
           this.block = {}
           this.block.type = type
           block.dispose(false)
+          this.xmlLoaded = false
         }
         else {
           this.block = block
