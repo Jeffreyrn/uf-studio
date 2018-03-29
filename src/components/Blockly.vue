@@ -2,6 +2,7 @@
 <div class="blockly-wrapper">
   <CommonTopMenu
     title='App Editor'
+    :issaved='saveStatus'
     :curFileName='model.localAppsMgr.curProName + notSaved'
     :onback='quitPage'
     :onsave='saveProject'

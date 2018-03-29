@@ -4,6 +4,7 @@
       type='paint'
       :onlist='listProjects'
       title='Draw/Laser'
+      :issaved='model.localPaintMgr.state.saved'
       :curFileName='(model.localPaintMgr.curProj||{}).name'
       :onback='onBack'
       :onsave='saveProject'
@@ -121,6 +122,9 @@ export default {
     this.fabricModified();
     this.loadEmotions();
     console.log(this.playground.toSVG());
+    setTimeout(() => {
+      this.model.localPaintMgr.state.saved = true;
+    });
   },
   activated: function() {
   },

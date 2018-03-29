@@ -10,11 +10,11 @@
     </div>
     <div class="file-name" v-text="curFileName"></div>
     <div class="menu-wrapper">
-      <div class="cursor-pointer" v-show="model.localPaintMgr.state.saved===false" @click='onsave'>
+      <div class="cursor-pointer" v-if="issaved===false" @click='onsave'>
         <img src="./../../assets/img/blockly/btn_save.svg"/>
         <span>save</span>
       </div>
-      <div v-show="model.localPaintMgr.state.saved===true" style="opacity: 0.3">
+      <div v-else style="opacity: 0.3">
         <img src="./../../assets/img/blockly/btn_save.svg"/>
         <span>save</span>
       </div>
@@ -36,7 +36,7 @@
 <script>
 
 export default {
-  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onlist', 'curFileName'],
+  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onlist', 'curFileName', 'issaved'],
   name: 'common-top-menu',
   data() {
     return {
@@ -44,9 +44,6 @@ export default {
     };
   },
   mounted() {
-    setTimeout(() => {
-      this.model.localPaintMgr.state.saved = true;
-    });
   },
   activated: function() {
   },
