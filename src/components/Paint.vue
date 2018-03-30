@@ -29,7 +29,7 @@
     </BottomTools>
     <DialogNewProj
       :onclose='closeDialog'
-      :onok='creatProj'
+      :onok='createProj'
       v-if="model.localPaintMgr.visible.pattern">
     </DialogNewProj>
     <DialogProjs
@@ -75,7 +75,6 @@ import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
-import { setTimeout } from 'timers';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -203,10 +202,11 @@ export default {
       // };
       // console.log(work(), setting);
     },
-    creatProj() {
+    createProj() {
       console.log('create proj');
       this.closeDialog();
-      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, () => {
+      const projType = this.model.localPaintMgr.projTypeSelected;
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, () => {
         this.model.localPaintMgr.state.saved = false;
       });
     },
@@ -279,7 +279,7 @@ export default {
           });
         }
         else if (fileType.match('image.*')) { // not svg
-          const edge = (this.model.localPaintMgr.state.mode === 'outline');
+          const edge = (this.model.localPaintMgr.curProj.projType === 'outline');
           Potrace.loadImageFromFile(file);
           Potrace.setParameter({
             optcurve: true,

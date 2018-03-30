@@ -31,18 +31,21 @@ self.listProjs = (callback) => {
   });
 };
 
-self.createProj = (name) => {
-  name = path.join(name, 'app.json');
+self.createProj = (name, proType, callback) => {
+  const basename = proType === 'outline' ? 'outline.json' : 'gray.json';
+  name = path.join(name, basename);
   const filePath = path.join(self.ROOT_DIR, name);
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-      // userId: self.userId, // 默认是test，用来区分不同用户
-      root: filePath, // 文件夹的父目录，必须
-      name: '', // 文件夹名称, 可省略
+      root: filePath,
+      name: '',
     }),
   };
   self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_FILE, params, () => {
-    self.listProjs(() => {
+    self.listProjs((dict) => {
+      if (callback) {
+        callback(dict)
+      }
     });
   });
 };

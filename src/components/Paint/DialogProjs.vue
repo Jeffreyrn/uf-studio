@@ -14,7 +14,7 @@
         <!-- @current-change="handleCurrentChange" -->
         <el-table
           id="proj-id"
-          height="220"
+          height="223"
           ref='singleTable'
           :data="model.localPaintMgr.projList"
           highlight-current-row
@@ -47,7 +47,7 @@
             label="Type">
             <template slot-scope="scope">
               <div class="table-td">
-                {{ model.localPaintMgr.projList[scope.$index].type }}
+                {{ model.localPaintMgr.projList[scope.$index].projType }}
               </div>
             </template>
           </el-table-column>
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      // console.log(`row = ${row}, rowIndex = ${rowIndex}`);
+      console.log(`row = ${row}, rowIndex = ${rowIndex}`);
       return rowIndex === this.currentRow ? 'selected' : 'normal';
     },
     setCurrent(row) {
@@ -99,10 +99,6 @@ export default {
       console.log(`set Current this.currentRow = ${this.currentRow}`);
       // this.model.localPaintMgr.curProj = val;
     },
-    // rowClick(row, event, column) {
-    //   console.log(`set Current val = ${row}`);
-    //   this.setCurrent(row);
-    // },
   },
 }
 </script>
@@ -148,7 +144,7 @@ export default {
   margin-left:auto;
   margin-right:auto;
   z-index: 10;
-  // background: white;
+  background: white;
   overflow: hidden;
 }
 .btn-ok {
@@ -156,10 +152,6 @@ export default {
   width: 100%;
   height: 40px;
   bottom: 0px;
-  /* margin-top: 0px; */
-  /* margin-left: 178px; */
-  /* background-color: green; */
-  /* margin-bottom: 0px; */
   background: #52BF53;
   text-align: center;
   letter-spacing: -0.88px;
@@ -170,20 +162,6 @@ export default {
   letter-spacing: -0.5px;
   /* cursor: pointer; */
 }
-
-// .el-table {
-  // background: yellow;
-// }
-// .el-table .normal-bg1 {
-//   text-align: center;
-// }
-// .el-table .cell {
-//   // background: yellow;
-//   color: blue;
-// }
-// .el-table .success-row {
-//   background: #f0f9eb;
-// }
 .table-td1{
   font-family: 'Gotham-Book';
   font-size: 12px;
@@ -198,6 +176,4 @@ export default {
   letter-spacing: -1px;
   text-align: center;
 }
-
-
 </style>

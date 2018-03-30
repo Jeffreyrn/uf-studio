@@ -20,7 +20,7 @@ self.state = {
   saved: true,
   empty: true,
   backStep: 0,
-  mode: 'outline',
+  // mode: 'outline',
   zero: 50,
   speed: 200,
 };
@@ -67,7 +67,7 @@ self.remoteProjs2Local = (dict) => {
   let index = 0;
   for (let i = 0; i < datas.length; i += 1) {
     const data = datas[i];
-    if (data.path.indexOf('app.json') > 0) {
+    if (data.path.indexOf('.json') > 0) {
       // projs.map((item) => {
       //   return it
       // });
@@ -75,6 +75,7 @@ self.remoteProjs2Local = (dict) => {
       data.uuid = data.path;
       data.name = path.basename(dirname);
       data.created = data.ctime;
+      data.projType = data.path.indexOf('outline.json') > 0 ? 'outline' : 'gray';
       data.index = index;
       projs.push(data);
       index += 1;
