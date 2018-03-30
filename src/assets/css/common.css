@@ -180,7 +180,13 @@
   text-align: center;
   background: #F3F5F7;
 }
-
+.com-app-icon-hover {
+  transition: all .4s ease-in-out;
+  transform: scale(1);
+}
+.com-app-icon-hover:hover, .com-app-icon-hover:focus {
+  transform: scale(1.3);
+}
 
 
 

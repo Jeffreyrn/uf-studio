@@ -6,16 +6,7 @@
           <!-- <router-link :to="{name: 'AppSubmit', params:{data: data}}">
           </router-link> -->
           <div class="position-absolute" style="width:100px;height: 100px;">
-            <div class="icon-text-style" style="background:#9CC5F7;" v-if="index % 4 === 0">
-              {{ data.name[0].toUpperCase() }}
-            </div>
-            <div class="icon-text-style" style="background:#F8C6DE;" v-if="index % 4 === 1">
-              {{ data.name[0].toUpperCase() }}
-            </div>
-            <div class="icon-text-style" style="background:#B8E986;" v-if="index % 4 === 2">
-              {{ data.name[0].toUpperCase() }}
-            </div>
-            <div class="icon-text-style" style="background:#D5D5D5" v-if="index % 4 === 3">
+            <div class="icon-text-style" :style="'background:#'+colorList[index % 5]+';'">
               {{ data.name[0].toUpperCase() }}
             </div>
             <div class="btn-wrapper">
@@ -23,12 +14,13 @@
                 <div class="icon-btn edit-btn" @click="onEdit()"></div>
               </router-link>
               <router-link :to="{name: 'AppSubmit', params:{data: data}}">
-                <div class="icon-btn upload-btn"></div>
+                <div v-if="data.des.length>0" class="icon-btn uploaded-btn"></div>
+                <div v-else class="icon-btn upload-btn"></div>
               </router-link>
               <div class="icon-btn delete-btn" @click="onDelete(data.name)"></div>
             </div>
             <AppTitle class="position-absolute name-style" :data='data'></AppTitle>
-            <div v-if="data.des.length>0" class="position-absolute uploaded-gou"></div>  
+
           </div>
         </li>
       </ul>
@@ -58,6 +50,7 @@ export default {
       model: window.GlobalUtil.model,
       isDeleteApp: false,
       deleteAppTitle: '',
+      colorList: ['9CC5F7', 'F8C6DE', 'B8E986', 'D5D5D5', '9EE0D2'],
     };
   },
   mounted() {
@@ -150,7 +143,6 @@ export default {
   float: left;
   width: 22px;
   height: 22px;
-  float: left;
   margin-left: 0.5rem;
   background-position: center;
   background-repeat: no-repeat;
@@ -162,6 +154,9 @@ export default {
 }
 .upload-btn {
   background-image: url('./../../assets/img/appStore/btn_upload.svg');
+}
+.uploaded-btn {
+  background-image: url('./../../assets/img/appStore/btn_uploaded.svg');
 }
 .delete-btn {
   background-image: url('./../../assets/img/appStore/btn_delete.svg');
@@ -176,6 +171,6 @@ export default {
   background-repeat: no-repeat;
   background-size: 15px 15px;
   background-image: url('./../../assets/img/appStore/gou.svg');
-  
+
 }
 </style>

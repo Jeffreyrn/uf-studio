@@ -4,23 +4,24 @@
       <ul>
         <li class="com-app-icon">
           <router-link :to="{name: 'Emulator', params:{data: {name: null}} }">
-            <div class="background-icon-control">
+            <div class="background-icon-control com-app-icon-hover">
             </div>
           </router-link>
           <AppTitle :data="{omitname: 'Control'}"></AppTitle>
         </li>
         <li class="com-app-icon">
           <router-link :to="{name: 'Paint', params:{data: {name: null}} }">
-            <div class="background-icon-painting">
+            <div class="background-icon-painting com-app-icon-hover">
             </div>
           </router-link>
           <AppTitle :data="{omitname: 'Paint'}"></AppTitle>
         </li>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="com-app-icon">
           <router-link :to="{name: 'AppDetail', params:{data: data}}">
-            <div class="background-icon-default">
+            <div class="background-icon-default com-app-icon-hover">
             </div>
           </router-link>
+          <AppIcon :data='data'></AppIcon>
           <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
@@ -31,6 +32,7 @@
 <script>
 
 import AppTitle from './AppTitle';
+import AppIcon from './AppIcon';
 
 export default {
   data() {
@@ -45,11 +47,15 @@ export default {
   },
   components: {
     AppTitle,
+    AppIcon
   },
 };
 </script>
 
 <style scoped lang="scss">
+.tab-contain ul li {
+  position: relative;
+}
 .background-icon-painting {
   width: 100%;
   height: 100%;
@@ -74,4 +80,5 @@ export default {
   background-repeat: no-repeat;
   background-image: url('./../../assets/img/appStore/icon_default.svg');
 }
+
 </style>

@@ -4,9 +4,10 @@
       <ul>
         <li v-for="(data, index) in model.localAppsMgr.allApps.thirdparty.data" class="com-app-icon">
           <router-link :to="{name: 'AppDetail', params:{data: data}}">
-            <div class="background-icon">
+            <div class="background-icon com-app-icon-hover">
             </div>
           </router-link>
+          <AppIcon :data='data'></AppIcon>
           <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
@@ -17,6 +18,7 @@
 <script>
 
 import AppTitle from './AppTitle';
+import AppIcon from './AppIcon';
 
 export default {
   data() {
@@ -30,12 +32,15 @@ export default {
   },
   components: {
     AppTitle,
+    AppIcon,
   },
 };
 </script>
 
 <style scoped lang="scss">
-
+.tab-contain ul li {
+  position: relative;
+}
 .background-icon {
   width: 100%;
   height: 100%;
