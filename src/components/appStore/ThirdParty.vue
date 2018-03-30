@@ -3,7 +3,11 @@
     <div class="tab-contain">
       <ul>
         <li v-for="(data, index) in model.localAppsMgr.allApps.thirdparty.data" class="com-app-icon">
-          <router-link :to="{name: 'Blockly', params:{data: data}}">
+          <router-link v-if="data.control==='run'" :to="{name: 'Blockly', params:{data: data}}">
+            <div class="background-icon com-app-icon-hover">
+            </div>
+          </router-link>
+          <router-link v-if="data.control==='install'" :to="{name: 'AppDetail', params:{data: data}}">
             <div class="background-icon com-app-icon-hover">
             </div>
           </router-link>

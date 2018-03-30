@@ -59,6 +59,7 @@ export default {
     return {
       saveStatus: true,
       pre: '',
+      category: 'myapp',
       xmlLoaded: true,
       block: {},
       model: window.GlobalUtil.model,
@@ -110,10 +111,12 @@ export default {
   },
   activated: function() {
     console.log(`params = ${JSON.stringify(this.$route.params.data)}`);
+    this.category = 'myapp';
     if (this.$route.params.data !== undefined) {
       this.myAppData = this.$route.params.data;
       const name = this.myAppData.name;
       this.backStr = 'AppStore';
+      this.category = this.myAppData.category;
       this.getProject(name);
     }
     this.setOnline(true)
@@ -401,11 +404,11 @@ export default {
         this.disableLoadProject = false
       }, 1500)
       const data = {
-        category: 'myapp',
+        category: this.category,
         name: path,
       }
-      window.CommandsAppsSocket.getProject(data.name).then((xml) => {
-        console.log(`path = ${path}`);
+      console.log(`path = ${path}, category = ${this.category}`);
+      window.CommandsAppsSocket.getProject(data).then((xml) => {
         // console.log('get xml return', xml.xmlData)
         Blockly.clearWorkspace().then(() => {
           Blockly.loadWorkspace(xml.xmlData, this.onChangeEvent)

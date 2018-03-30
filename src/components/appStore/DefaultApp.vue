@@ -17,7 +17,11 @@
           <AppTitle :data="{omitname: 'Paint'}"></AppTitle>
         </li>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="com-app-icon">
-          <router-link :to="{name: 'Blockly', params:{data: data}}">
+          <router-link :to="{name: 'Blockly', params:{data: data}}" v-if="data.control==='run'">
+            <div class="background-icon-default com-app-icon-hover">
+            </div>
+          </router-link>
+          <router-link :to="{name: 'AppDetail', params:{data: data}}" v-if="data.control==='install'">
             <div class="background-icon-default com-app-icon-hover">
             </div>
           </router-link>
@@ -39,6 +43,7 @@ export default {
     return {
       model: window.GlobalUtil.model,
       titleEditing: true,
+      jumpTo: 'AppDetail',
     };
   },
   mounted() {

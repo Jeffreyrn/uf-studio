@@ -150,11 +150,11 @@ self.getBlockXml = path => new Promise((resolve, reject) => {
     }
   })
 })
-self.getProject = path => new Promise((resolve, reject) => {
+self.getProject = data => new Promise((resolve, reject) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-      category: 'myapp',
-      appName: path,
+      category: data.category, // 'myapp',
+      appName: data.name,
     }),
   }
   self.sendCmd(window.GlobalConstant.APP_GET_XML, params, (dict) => {
