@@ -211,4 +211,29 @@ self.debugSetBeart = (isOpen, sleepTime, callback) => {
   });
 };
 
+self.runTeach = (uuid, callback) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      path: uuid,
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.APP_RUN_TEACH, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
+self.stopTeach = (callback) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.APP_STOP_TEACH, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
 export default self;

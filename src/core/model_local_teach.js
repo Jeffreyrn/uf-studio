@@ -10,6 +10,7 @@ self.curProj = {};
 self.curProj.files = [];
 self.curProjExpandedKeys = [];
 self.curSelectedIndex = 0;
+self.isTeachRunningUUID = '';
 self.curSelectedTreeItem = {
   uuid: '',
   type: '',

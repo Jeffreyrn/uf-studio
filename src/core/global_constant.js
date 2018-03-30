@@ -47,7 +47,8 @@ self.APPSTORE_APP_CREATE = 'app_create';
 self.APPSTORE_APP_RENAME = 'app_rename';
 self.APPSTORE_APP_UPLOAD = 'app_upload';
 self.APP_RUN_PYTHON = 'app_run_python_project';
-self.APP_RUN_TEACH = 'app_run_teach_project';
+self.APP_RUN_TEACH = 'start_play_recording'; //'app_run_teach_project';
+self.APP_STOP_TEACH = 'stop_play_recording';
 self.APP_GET_XML = 'get_app_xml';
 self.APP_GET_INSERT_XML = 'get_insert_app_xml';
 

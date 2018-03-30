@@ -52,12 +52,20 @@
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='proj'">
                   <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
                   <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
-                  <button class="bottom-btn" v-bind:class="startBtn"><i class="el-icon-caret-right"></i></button>
+                  <!-- start btn -->
+                  <button v-if="model.localTeach.isTeachRunningUUID===''" @click="onstart" class="bottom-btn" v-bind:class="startBtn"><i class="el-icon-caret-right"></i></button>
+                  <button v-else class="bottom-btn edit-cancel-btn" @click="onstop">
+                    <div class="">Stop</div>
+                  </button>
                   <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
                 </div>
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
                   <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
-                  <button class="bottom-btn start-btn"><i class="el-icon-caret-right"></i></button>
+                  <!-- start btn -->
+                  <button v-if="model.localTeach.isTeachRunningUUID===''" class="bottom-btn start-btn" @click="onstart"><i class="el-icon-caret-right"></i></button>
+                  <button v-else class="bottom-btn edit-cancel-btn" @click="onstop">
+                    <div class="">Stop</div>
+                  </button>
                 </div>
               </div>
               <div v-if="editState===true">
@@ -243,6 +251,34 @@ export default {
       const text = this.model.localTeach.curDialogProjInputText
       window.CommandsTeachSocket.createProj(text, window.GlobalUtil.model.localTeach.projTypeSelected);
       window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
+    },
+    onstart() {
+      console.log('on start');
+      if (this.model.localTeach.curProj.files.length > 0) {
+        const uuid = this.model.localTeach.curSelectedTreeItem.uuid;
+        console.log(`curSelectedTreeItem.uuid = ${uuid}`);
+        window.CommandsTeachSocket.runTeach(uuid, (dict) => {
+          console.log(`run teach = ${JSON.stringify(dict)}`);
+          if (dict.code === 0) {
+            this.model.localTeach.isTeachRunningUUID = uuid;
+          }
+          if (dict.code === 1111) {
+            this.model.localTeach.isTeachRunningUUID = '';
+          }
+        });
+      }
+      else {
+        console.log(`proj length 0`);
+      }
+    },
+    onstop() {
+      console.log(`stop teach = 4`);
+      window.CommandsTeachSocket.stopTeach((dict) => {
+        console.log(`stop teach = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          this.model.localTeach.isTeachRunningUUID = '';
+        }
+      });
     },
     onsave() {
       window.GlobalUtil.model.localTeach.onSaveChange(() => {
