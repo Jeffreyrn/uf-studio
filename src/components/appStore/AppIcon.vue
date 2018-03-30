@@ -1,7 +1,7 @@
 <template>
   <div>
-    <span v-if="dataIcon ==='run'" class="icon-btn icon-run"></span>
-    <span v-if="dataIcon ==='install'" class="icon-btn icon-download"></span>
+    <span v-if="data.control ==='run'" class="icon-btn icon-run"></span>
+    <span v-if="data.control ==='install'" class="icon-btn icon-download" @click="oninstall()"></span>
   </div>
 </template>
 
@@ -14,11 +14,19 @@ export default {
     };
   },
   mounted() {
-    if (this.data !== undefined && this.data !== '') {
-      this.dataIcon = this.data;
-    }
   },
   methods: {
+    oninstall() {
+      window.CommandsAppsSocket.appInstall(this.data.category, this.data.name, this.data.version, (dict) => {
+//        console.log(`CommandsAppsSocket appInstall = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          this.data.control = 'run';
+        }
+        else {
+          this.errorAlert = true;
+        }
+      });
+    },
   },
   components: {
   },
