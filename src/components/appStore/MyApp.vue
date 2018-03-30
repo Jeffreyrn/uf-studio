@@ -141,7 +141,8 @@ export default {
   width:100%;
   /*height: 2.4rem;*/
   // margin-top: -2.4rem;
-  top: 16px;
+  bottom: 10px;
+  left: 3px;
   transform: scale(0) ;
   transition: all .8s;
 }
