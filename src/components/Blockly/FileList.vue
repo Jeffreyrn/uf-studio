@@ -10,8 +10,11 @@
 
     </div>
     <div id="app-list" class="app-list">
-      <div v-for="(item, index) in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block" v-bind:class="{ selected: selected === item.label}">
-        <div class="file-icon" :style="'background:#'+colorList[index % 5]+';'"><span v-text="item.label.slice(0,1)"></span></div>
+      <div v-for="(item, index) in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block">
+        <div class="file-icon" :style="'background:#'+colorList[index % 5]+';'">
+          <span v-text="item.label.slice(0,1)"></span>
+          <img v-if="selected === item.label" src="" alt="">
+        </div>
         <div class="file-name">{{item.label}}</div>
       </div>
     </div>
@@ -76,12 +79,21 @@ export default {
       line-height: 5rem;
       text-align: center;
       text-transform: uppercase;
+      position: relative;
+      img {
+        right: 0;
+        bottom: 0;
+        position: absolute;
+      }
     }
     .file-name {
       padding-top: 6px;
       text-align: center;
       width: 100%;
       font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }
