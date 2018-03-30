@@ -9,3 +9,5 @@
 - handle robot.status.error when disconnected or reconnected
 - loading model progress percentage show
 - $set(array, index, value) v-model not work, array compute set() not work
+
+- 统一一个window.resize 子组件监听这一个resize 事件
