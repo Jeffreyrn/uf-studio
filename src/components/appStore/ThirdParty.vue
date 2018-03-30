@@ -7,7 +7,7 @@
             <div class="background-icon com-app-icon-hover">
             </div>
           </router-link>
-          <AppIcon :data='data'></AppIcon>
+          <AppIcon :data='data.control'></AppIcon>
           <AppTitle :data='data'></AppTitle>
         </li>
       </ul>

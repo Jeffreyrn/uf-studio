@@ -21,7 +21,7 @@
             <div class="background-icon-default com-app-icon-hover">
             </div>
           </router-link>
-          <AppIcon :data='data'></AppIcon>
+          <AppIcon :data='data.control'></AppIcon>
           <AppTitle :data='data'></AppTitle>
         </li>
       </ul>
@@ -47,7 +47,7 @@ export default {
   },
   components: {
     AppTitle,
-    AppIcon
+    AppIcon,
   },
 };
 </script>

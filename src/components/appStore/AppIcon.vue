@@ -1,13 +1,13 @@
 <template>
   <div>
-    <span v-if="dataIcon.control==='run'" class="icon-btn icon-run"></span>
-    <span v-else class="icon-btn icon-download"></span>
+    <span v-if="dataIcon ==='run'" class="icon-btn icon-run"></span>
+    <span v-if="dataIcon ==='install'" class="icon-btn icon-download"></span>
   </div>
 </template>
 
 <script>
 export default {
-  prop: ['data'],
+  props: ['data'],
   data() {
     return {
       dataIcon: '',
@@ -17,7 +17,6 @@ export default {
     if (this.data !== undefined && this.data !== '') {
       this.dataIcon = this.data;
     }
-    console.log('dataicon', this.dataIcon)
   },
   methods: {
   },
