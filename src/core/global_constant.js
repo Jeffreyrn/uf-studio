@@ -32,7 +32,12 @@ self.FILE_ID_AUTOCOMPLETE_PYTHON = 'autocomplete_python';
 self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
 self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
+// paint cmd
+self.PAINT_OUTLINE_PRINT = 'start_outline_printing'
+self.PAINT_GREYSCALE_PRINT = 'start_grayscale_printing'
+self.PAINT_STOP_PRINT = 'xarm_stop_printing'
 
+// app cmd
 self.APPSTORE_GET_APPS = 'get_apps';
 self.APPSTORE_GET_LOCAL_APPS = 'get_local_apps';
 self.APPSTORE_APP_INSTALL = 'app_install';
