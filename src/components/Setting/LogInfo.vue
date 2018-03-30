@@ -108,11 +108,18 @@ export default {
     width:100%;
     .log-content {
       width: 100%;
-      padding: 2vw 10vw;
+      padding: 2vw 5vw;
       height: 90vh;
       margin: 0 auto;
       font-size: 14px;
       overflow-y: auto;
+      ul {
+        li {
+          width: 100%;
+          word-break: keep-all;
+          overflow: hidden;
+        }
+      }
     }
   }
 </style>
