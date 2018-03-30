@@ -141,6 +141,7 @@ export default {
   },
   data() {
     return {
+      resizeTick: true,
       test: null,
       testtest: 0,
       config: {
@@ -385,6 +386,12 @@ export default {
       window.addEventListener('resize', this.onWindowResize, false)
     },
     onWindowResize() {
+      if (this.resizeTick) {
+        requestAnimationFrame(this.updateWindow)
+        this.resizeTick = false
+      }
+    },
+    updateWindow() {
       const sizeArray = this.getRenderSize();
       this.three.renderer.setSize(...sizeArray);
       const halfSize = sizeArray.map(value => value / SCENE_ZOOM);
@@ -394,6 +401,7 @@ export default {
       this.three.camera.bottom = -halfSize[1];
       // camera.aspect = this.getCameraAspect();
       this.three.camera.updateProjectionMatrix();
+      this.resizeTick = true
     },
     // getCameraAspect() {
     //   if (this.size) {
