@@ -13,7 +13,7 @@
       <div v-for="(item, index) in model.children" :key="item.uuid" @click="loadProject(item.label)"  class="block">
         <div class="file-icon" :style="'background:#'+colorList[index % 5]+';'">
           <span v-text="item.label.slice(0,1)"></span>
-          <img v-if="selected === item.label" src="" alt="">
+          <img v-if="selected === item.label" src="./../../assets/img/appStore/gou.svg" alt="checked">
         </div>
         <div class="file-name">{{item.label}}</div>
       </div>

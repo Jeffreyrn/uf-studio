@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      // console.log(`row = ${row}, rowIndex = ${rowIndex}`);
+      console.log(`row = ${row}, rowIndex = ${rowIndex}`);
       return rowIndex === this.currentRow ? 'selected' : 'normal';
     },
     setCurrent(row) {

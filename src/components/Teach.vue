@@ -151,6 +151,8 @@
 </template>
 <script>
 
+import Vue from 'vue';
+import ToggleButton from 'vue-js-toggle-button';
 import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
 // import ElButton from "../../node_modules/element-ui/packages/button/src/button";
@@ -164,10 +166,10 @@ import EmulatorControl from './common/EmulatorControl';
 import * as types from './../store/mutation-types';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogAlert from './DialogAlert';
-import ToggleButton from 'vue-js-toggle-button';
-import Vue from 'vue';
+
 Vue.use(ToggleButton);
 const path = require('path');
+
 export default {
   data() {
     return {

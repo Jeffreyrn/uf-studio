@@ -75,7 +75,6 @@ import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
-import { setTimeout } from 'timers';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
