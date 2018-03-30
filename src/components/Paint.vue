@@ -61,6 +61,12 @@
       v-if="model.localPaintMgr.visible.clear">
     </DialogTeachAlert>
 
+    <DialogPaintSetting
+      :onclose='closeDialog'
+      :onok='startPrintOK'
+      v-if="model.localPaintMgr.visible.setting">
+    </DialogPaintSetting>
+
     <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
 
   </div>
@@ -77,6 +83,7 @@ import DialogProjs from './Paint/DialogProjs';
 import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
+import DialogPaintSetting from './Paint/DialogPaintSetting';
 
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -210,12 +217,12 @@ export default {
     //   sendData = null;
     // },
     startPrint() {
+      this.model.localPaintMgr.visible.setting = true;
+    },
+    startPrintOK() {
+      this.closeDialog();
       const projType = this.model.localPaintMgr.curProj.projType;
       const sendData = projType === 'outline' ? this.playground.toSVG() : this.playground.toDataURL('png');
-      const endType = {
-        0: 'pen',
-        1: 'laser',
-      };
       const config = {
         speed: this.model.localPaintMgr.state.speed || 100,
         canvasMode: projType === 'outline' ? 2 : 1, // 2. outline 1. gray
@@ -225,9 +232,8 @@ export default {
       };
       window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
         console.log(`start printing = ${JSON.stringify(dict)}`);
-        this.model.localPaintMgr.state.isRunnningPrint = true;
         if (dict.code === 0) {
-          
+          this.model.localPaintMgr.state.isRunnningPrint = true;  
         }
       });
     },
@@ -493,6 +499,7 @@ export default {
     DialogIcons,
     DialogFontSelect,
     DialogTeachAlert,
+    DialogPaintSetting,
   },
 };
 </script>

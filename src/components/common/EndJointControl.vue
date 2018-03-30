@@ -23,8 +23,8 @@
             <div class="height-wrapper">
               <!-- <el-button @click="setPositionZ(true)">Up</el-button>
               <el-button @click="setPositionZ(false)">Down</el-button> -->
-              <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control"
-                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
+              <!-- <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control"
+                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ"> -->
             </div>
             <div id="position-joystick" class="joystick-wrapper"></div>
           </div>

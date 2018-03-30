@@ -36,6 +36,7 @@ self.setProjListDialogType = (type) => {
     case 'app': {
       self.curDialogTitle = 'Select an Application';
       self.curProTreeDatas = self.appTreeDatas;
+      console.log(`self.curProTreeDatas app = ${JSON.stringify(self.appTreeDatas)}`);
       break;
     }
     case 'ide': {
@@ -130,12 +131,15 @@ self.remoteProjs2Local = (dict) => {
     const app = self.createApp(params);
     self.allApps.default.data.push(app);
 
-    self.appTreeDatas[0].children.push({
-      label: one.name,
-      type: 'file',
-      uuid: uuidv4(),
-      category: 'default',
-    });
+    if (one.control === 'run') {
+      self.appTreeDatas[0].children.push({
+        label: one.name, // + one.control,
+        type: 'file',
+        uuid: uuidv4(),
+        control: one.control,
+        category: 'default',
+      });
+    }
   }
   for (let i = 0; i < thirdpartys.length; i += 1) {
     const one = thirdpartys[i];
@@ -154,12 +158,16 @@ self.remoteProjs2Local = (dict) => {
     };
     const app = self.createApp(params);
     self.allApps.thirdparty.data.push(app);
-    self.appTreeDatas[1].children.push({
-      label: one.name,
-      type: 'file',
-      uuid: uuidv4(),
-      category: 'thirdparty',
-    });
+
+    if (one.control === 'run') {
+      self.appTreeDatas[1].children.push({
+        label: one.name, // + one.control,
+        type: 'file',
+        uuid: uuidv4(),
+        control: one.control,
+        category: 'thirdparty',
+      });
+    }
   }
   // test
   // const app1 = self.createApp({name: 'my-test-1'});
@@ -188,7 +196,7 @@ self.remoteMyProjs2Local = (dict) => {
       name: one.name,
       version: one.version,
       des: one.description,
-      // control: one.control,
+      control: one.control,
       created: one.created,
       userId: one.userId,
       size: one.size,
@@ -201,6 +209,7 @@ self.remoteMyProjs2Local = (dict) => {
       label: one.name,
       type: 'file',
       uuid: uuidv4(),
+      control: one.control,
       category: 'myapp',
     });
   }

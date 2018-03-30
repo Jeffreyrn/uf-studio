@@ -10,20 +10,20 @@
     </div>
     <div class="file-name" v-text="curFileName"></div>
     <div class="menu-wrapper">
-      <div class="cursor-pointer" v-if="issaved===false" @click='onsave'>
+      <div class="cursor-pointer" v-if="issaved===false" @click='onsave' style="width:35px;padding-right:18px;">
         <img src="./../../assets/img/blockly/btn_save.svg"/>
         <span>save</span>
       </div>
-      <div v-else style="opacity: 0.3">
-        <img src="./../../assets/img/blockly/btn_save.svg"/>
+      <div v-else style="opacity: 0.3;padding-right:18px;">
+        <img src="./../../assets/img/blockly/btn_save.svg" style="width:35px;"/>
         <span>save</span>
       </div>
-      <div class="cursor-pointer" @click='onnew'>
-        <img src="./../../assets/img/blockly/btn_addfile.svg"/>
+      <div class="cursor-pointer" @click='onnew' style="padding-right:10px;">
+        <img src="./../../assets/img/blockly/btn_addfile.svg"  style="width:35px;"/>
         <span>new</span>
       </div>
-      <div class="cursor-pointer" v-if="type==='paint'" @click='onlist'>
-        <img src="./../../assets/img/blockly/btn_list.svg"/>
+      <div class="cursor-pointer" v-if="type==='paint'" @click='onlist' style="padding-right:10px;">
+        <img src="./../../assets/img/blockly/btn_list.svg" style="width:35px;"/>
         <span>list</span>
       </div>
       <div v-if="isRunning===false" @click="onstart" class="run-btn cursor-pointer">
@@ -94,15 +94,18 @@ export default {
 .menu-wrapper {
   display: flex;
   & > div {
-    padding: 0 1vw;
+    // padding: 0 1vw;
+    // padding-left: 5px;
+    // padding-right: 10px;
     color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     span {
-      font-size: 0.7em;
-      padding: 0;
+      // font-size: 0.7em;
+      font-size: 10px;
+      padding-top: 5px;
       margin: 0;
       line-height: 1.2vw;
       text-transform: capitalize;

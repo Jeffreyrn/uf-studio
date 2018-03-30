@@ -126,12 +126,12 @@ self.getFile = (uuid, callback) => {
 //   UArm.send_and_callback(msg, callback);
 // }
 self.startPrinting = (data, config, callback) => {
-  if (config.mode === '0') {
-    config.drawing_feedrate = 500;
-  }
-  else {
-    config.drawing_feedrate = config.speed + 50;
-  }
+  // if (config.mode === '0') {
+  //   config.drawing_feedrate = 500;
+  // }
+  // else {
+  //   config.drawing_feedrate = config.speed + 50;
+  // }
   const cmdList = {
     1: window.GlobalConstant.PAINT_GREYSCALE_PRINT, // 黑白
     2: window.GlobalConstant.PAINT_OUTLINE_PRINT, // 轮廓
