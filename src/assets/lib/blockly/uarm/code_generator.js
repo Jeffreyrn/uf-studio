@@ -375,8 +375,8 @@ CodeGenerator.event_leap_gesture = (params) => {
 };
 
 CodeGenerator.event_button_pressed_stop = () => 'UArm.Button.clearEventListener();\n';
-CodeGenerator.studio_run_python = (name) => `await window.CommandsAppsSocket.runTeach(${name.ide});\n`;
-CodeGenerator.studio_play_recording = (name) => `await window.CommandsAppsSocket.runPython(${name.record});\n`;
+CodeGenerator.studio_run_python = (name) => `await window.CommandsAppsSocket.runPython(${name.ide});\n`;
+CodeGenerator.studio_play_recording = (name) => `await window.CommandsAppsSocket.runTeach(${name.record});\n`;
 CodeGenerator.studio_run_app = (name) => `console.log('TODO');\n`;
 /* Code generator*/
 const genFuncCode = (params, block) => CodeGenerator[block.type](params);

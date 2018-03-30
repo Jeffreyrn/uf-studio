@@ -118,4 +118,63 @@ self.getFile = (uuid, callback) => {
   });
 };
 
+// add by Jeffrey --- start
+// self.svgToGcode = (data, callback) => {
+//   const msg = {
+//     cmd: 'svg_to_gcode',
+//     data,
+//   };
+//   UArm.send_and_callback(msg, callback);
+// }
+self.startPrinting = (data, setting, callback) => {
+  setting = setting || {};
+  if (setting.canvasMode === undefined) setting.canvasMode = '1';
+  if (setting.mode === undefined) setting.mode = '0';
+  setting.speed = setting.speed || 100;
+  if (setting.zero === undefined) setting.zero = 0;
+  // get cmd
+  const cmdList = {
+    1: window.GlobalConstant.PAINT_GREYSCALE_PRINT, // 黑白
+    2: window.GlobalConstant.PAINT_OUTLINE_PRINT, // 轮廓
+  };
+  const cmd = cmdList[setting.canvasMode];
+  // get end type
+  // const endType = {
+  //   0: 'pen',
+  //   1: 'laser',
+  // };
+  // const end_type = endType[setting.mode];
+  let drawing_feedrate;
+  if (setting.mode === '0') {
+    drawing_feedrate = 500;
+  }
+  else {
+    drawing_feedrate = setting.speed + 50;
+  }
+  const config = {
+    drawing_feedrate,
+    zeropoint_height: Number(setting.zero),
+    // end_type,
+  };
+  const params = {
+    data,
+    config,
+  };
+  // console.log(msg);
+  self.sendCmd(cmd, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+  // UArm.printing.state = true;
+}
+self.stopPrinting = (callback) => {
+  // UArm.printing.state = false;
+  self.sendCmd(window.GlobalConstant.PAINT_STOP_PRINT, {}, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+}
+// add by Jeffrey --- end
 export default self;

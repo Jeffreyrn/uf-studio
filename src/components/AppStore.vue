@@ -98,16 +98,18 @@ export default {
         display: flex;
         flex-direction: column;
         height: 600px;
-        padding-top: 80px;
+        /*padding-top: 80px;*/
         // width: 20%;
         width: 160px;
         // padding-left: 5%;
         padding-left: 30px;
         .tab {
-          height: 100%;
+          height: 30%;
           cursor: pointer;
-          // font-size: 1.6rem;
           font-size: 20px;
+          text-align: center;
+          display: flex;
+          align-items: center;
           .active {
             padding-bottom: 5px;
             border-bottom: 2px solid #E27347;

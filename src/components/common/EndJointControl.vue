@@ -779,7 +779,7 @@ span.text {
         margin-right: 120px;
         #z-control {
           // appearance: slider-vertical; // abandoned, can not set width with css
-          width: 120%;
+          /*width: 120%;*/
           height: 18px;
           background: #fff;
           opacity: 1;

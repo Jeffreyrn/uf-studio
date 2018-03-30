@@ -185,6 +185,26 @@ export default {
         }
       });
     },
+    startPrinting(setting) {
+      setting.canvasMode = this.ui_data.canvasMode;
+      // console.log(setting);
+      let sendData;
+      if (setting.mode === '0') { // pen / outline mode
+        setting.zero = setting.zero0;
+      }
+      else { // laser mode
+        setting.zero = setting.zero1;
+      }
+      if (setting.canvasMode === '1') { // black white mode
+        sendData = this.mainCanvas.toDataURL('png');
+      }
+      else { // outline mode setting.canvasMode === 2
+        sendData = this.mainCanvas.toSVG();
+      }
+      // console.log(sendData, setting);
+      window.CommandsAppsSocket.startPrinting(sendData, setting)
+      sendData = null;
+    },
     startPrint() {
       const projType = this.model.localPaintMgr.curProj.projType;
       const key = projType === 'outline' ? 'outline' : 'greyscale';
