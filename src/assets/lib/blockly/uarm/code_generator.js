@@ -152,7 +152,7 @@ CodeGenerator.set_acceleration = (params) => {
   return `window.xArmVuex.commit('SET_ROBOT_STATE',${data});\n`;
 };
 
-CodeGenerator.reset = () => `await window.xArmVuex.commit('GO_HOME'));\n`;
+CodeGenerator.reset = () => `await window.xArmVuex.commit('GO_HOME');\n`;
 
 /** ****************************** Loop **************************************************************/
 // CodeGenerator.loop_repeat_times = (params) => {
