@@ -16,6 +16,7 @@ self.visible = {
 };
 
 self.state = {
+  isRunnningPrint: false,
   buffer: [],
   saved: true,
   empty: true,

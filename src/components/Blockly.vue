@@ -7,6 +7,7 @@
     :onback='quitPage'
     :onsave='saveProject'
     :onnew='newProject'
+    :isRunning='false'
     :onstart='startRun'>
   </CommonTopMenu>
   <div class="main-wrapper">

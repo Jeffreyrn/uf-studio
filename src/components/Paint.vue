@@ -9,7 +9,9 @@
       :onback='onBack'
       :onsave='saveProject'
       :onnew='newProject'
-      :onstart='startPrint'>
+      :isRunning='model.localPaintMgr.state.isRunnningPrint'
+      :onstart='startPrint'
+      :onstop='stopPrint'>
     </CommonTopMenu>
 
     <div style="" class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
@@ -176,7 +178,7 @@ export default {
           const canvas = this.playground;
           this.removeAllOK();
           const jsonStr = dict.data; // GlobalUtil.decode(dict.data);
-          console.log(`jsonStr = ${jsonStr}`);
+          // console.log(`jsonStr = ${jsonStr}`);
           canvas.loadFromJSON(jsonStr, canvas.renderAll.bind(canvas));
           this.model.localPaintMgr.curProj = curProj;
           setTimeout(() => {
@@ -185,44 +187,56 @@ export default {
         }
       });
     },
-    startPrinting(setting) {
-      setting.canvasMode = this.ui_data.canvasMode;
-      // console.log(setting);
-      let sendData;
-      if (setting.mode === '0') { // pen / outline mode
-        setting.zero = setting.zero0;
-      }
-      else { // laser mode
-        setting.zero = setting.zero1;
-      }
-      if (setting.canvasMode === '1') { // black white mode
-        sendData = this.mainCanvas.toDataURL('png');
-      }
-      else { // outline mode setting.canvasMode === 2
-        sendData = this.mainCanvas.toSVG();
-      }
-      // console.log(sendData, setting);
-      window.CommandsAppsSocket.startPrinting(sendData, setting)
-      sendData = null;
-    },
+    // startPrinting(setting) {
+    //   setting.canvasMode = this.ui_data.canvasMode;
+    //   // console.log(setting);
+    //   let sendData;
+    //   if (setting.mode === '0') { // pen / outline mode
+    //     setting.zero = setting.zero0;
+    //   }
+    //   else { // laser mode
+    //     setting.zero = setting.zero1;
+    //   }
+    //   if (setting.canvasMode === '1') { // black white mode
+    //     sendData = this.mainCanvas.toDataURL('png');
+    //   }
+    //   else { // outline mode setting.canvasMode === 2
+    //     sendData = this.mainCanvas.toSVG();
+    //   }
+    //   // console.log(sendData, setting);
+    //   window.CommandsAppsSocket.startPrinting(sendData, setting, (dict) => {
+    //     console.log(`start printing = ${JSON.stringify(dict)}`);
+    //   });
+    //   sendData = null;
+    // },
     startPrint() {
       const projType = this.model.localPaintMgr.curProj.projType;
-      const key = projType === 'outline' ? 'outline' : 'greyscale';
-      console.log(`start print = ${projType}`);
-      const sendStrategy = {
-        outline() {
-          return this.playground.toSVG();
-        },
-        greyscale() {
-          return this.playground.toDataURL('png');
-        },
+      const sendData = projType === 'outline' ? this.playground.toSVG() : this.playground.toDataURL('png');
+      const endType = {
+        0: 'pen',
+        1: 'laser',
       };
-      const work = sendStrategy[key].bind(this);
-      const setting = {
-        zero: this.model.localPaintMgr.state.zero,
-        speed: this.model.localPaintMgr.state.speed,
+      const config = {
+        speed: this.model.localPaintMgr.state.speed || 100,
+        canvasMode: projType === 'outline' ? 2 : 1, // 2. outline 1. gray
+        zeropoint_height: Number(this.model.localPaintMgr.state.zero),
+        end_type: 'pen', // 0: 'pen', 1: 'laser',
+        drawing_feedrate: 500,
       };
-      console.log(work(), setting);
+      window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
+        console.log(`start printing = ${JSON.stringify(dict)}`);
+        this.model.localPaintMgr.state.isRunnningPrint = true;
+        if (dict.code === 0) {
+          
+        }
+      });
+    },
+    stopPrint() {
+      window.CommandsPaintSocket.stopPrinting((dict) => {
+        if (dict.code === 0) {
+          this.model.localPaintMgr.state.isRunnningPrint = false;
+        }
+      });
     },
     createProj() {
       console.log('create proj');

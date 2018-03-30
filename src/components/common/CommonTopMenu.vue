@@ -26,8 +26,11 @@
         <img src="./../../assets/img/blockly/btn_list.svg"/>
         <span>list</span>
       </div>
-      <div @click="onstart" class="run-btn cursor-pointer">
-        <img src="./../../assets/img/blockly/icon_start.svg"/>
+      <div v-if="isRunning===false" @click="onstart" class="run-btn cursor-pointer">
+        <img src="./../../assets/img/blockly/icon_start.svg" style="width:30px;height:30px;"/>
+      </div>
+      <div v-else @click="onstop" class="stop-btn cursor-pointer">
+        <div style="width:10px;height:10px;background:white;"></div>
       </div>
     </div>
   </div>
@@ -36,7 +39,7 @@
 <script>
 
 export default {
-  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onlist', 'curFileName', 'issaved'],
+  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onstop', 'onlist', 'curFileName', 'issaved', 'isRunning'],
   name: 'common-top-menu',
   data() {
     return {
@@ -107,11 +110,20 @@ export default {
   }
   .run-btn {
     background-color: #52BF53;
-    line-height: 0.2;
-    // padding: 1.2vw;
-    img{
-      width: 120%;
-    }
+    width: 60px;
+    height: 60px;
+    border: 0;
+    // line-height: 0.2;
+    // // padding: 1.2vw;
+    // img{
+    //   width: 120%;
+    // }
+  }
+  .stop-btn {
+    width: 60px;
+    height: 60px;
+    border: 0;
+    background: rgba(224,78,77,1);
   }
 }
 
