@@ -17,7 +17,7 @@
       </div>
       <div v-if="data.control==='run'">
         <div style="width:250px;margin-right:5%;">
-          <el-button class="control-btn float-left run-btn" @click="onrun()">run</el-button>
+          <!--<el-button class="control-btn float-left run-btn" @click="onrun()">run</el-button>-->
           <el-button class="control-btn float-left uninstall-btn" @click="onuninstall()">uninstall</el-button>
         </div>
       </div>

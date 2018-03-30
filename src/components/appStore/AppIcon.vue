@@ -1,7 +1,9 @@
 <template>
   <div>
-    <span v-if="data.control ==='run'" class="icon-btn icon-run"></span>
-    <span v-if="data.control ==='install'" class="icon-btn icon-download" @click="oninstall()"></span>
+    <router-link :to="{name: 'AppDetail', params:{data: data}}">
+      <span v-if="data.control ==='run'" class="icon-btn icon-run"></span>
+      <span v-if="data.control ==='install'" class="icon-btn icon-download"></span>
+    </router-link>
   </div>
 </template>
 
@@ -51,7 +53,7 @@ export default {
     background-image: url('./../../assets/img/appStore/btn_undownload.svg');
   }
   .icon-run {
-    background-image: url('./../../assets/img/appStore/btn_play.svg');
+    background-image: url('./../../assets/img/appStore/btn_info.svg');
   }
 
 </style>

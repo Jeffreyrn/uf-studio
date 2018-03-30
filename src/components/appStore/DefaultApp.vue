@@ -17,7 +17,7 @@
           <AppTitle :data="{omitname: 'Paint'}"></AppTitle>
         </li>
         <li v-for="(data ,index) in model.localAppsMgr.allApps.default.data" class="com-app-icon">
-          <router-link :to="{name: 'AppDetail', params:{data: data}}">
+          <router-link :to="{name: 'Blockly', params:{data: data}}">
             <div class="background-icon-default com-app-icon-hover">
             </div>
           </router-link>
