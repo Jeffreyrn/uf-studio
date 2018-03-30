@@ -790,7 +790,7 @@ export default {
           }
           .start-recording-btn {
             bottom: 42px;
-            background: #E24D4A;
+            background: #4A90E2;
             cursor: pointer;
           }
           .finish-recording-btn {
