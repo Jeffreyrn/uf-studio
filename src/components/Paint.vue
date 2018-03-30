@@ -186,21 +186,23 @@ export default {
       });
     },
     startPrint() {
-      // console.log(`start print = ${this.state.mode}`);
-      // const sendStrategy = {
-      //   outline() {
-      //     return this.playground.toSVG();
-      //   },
-      //   greyscale() {
-      //     return this.playground.toDataURL('png');
-      //   },
-      // };
-      // const work = sendStrategy[this.state.mode].bind(this);
-      // const setting = {
-      //   zero: this.state.zero,
-      //   speed: this.state.speed,
-      // };
-      // console.log(work(), setting);
+      const projType = this.model.localPaintMgr.curProj.projType;
+      const key = projType === 'outline' ? 'outline' : 'greyscale';
+      console.log(`start print = ${projType}`);
+      const sendStrategy = {
+        outline() {
+          return this.playground.toSVG();
+        },
+        greyscale() {
+          return this.playground.toDataURL('png');
+        },
+      };
+      const work = sendStrategy[key].bind(this);
+      const setting = {
+        zero: this.model.localPaintMgr.state.zero,
+        speed: this.model.localPaintMgr.state.speed,
+      };
+      console.log(work(), setting);
     },
     createProj() {
       console.log('create proj');
