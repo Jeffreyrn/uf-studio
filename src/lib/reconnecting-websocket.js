@@ -158,6 +158,8 @@
         /** The URL as resolved by the constructor. This is always an absolute URL. Read only. */
         this.url = url;
 
+        console.log(`this.url = ${this.url}`);
+
         /** The number of attempted reconnects since starting, or the last successful connection. Read only. */
         this.reconnectAttempts = 0;
 

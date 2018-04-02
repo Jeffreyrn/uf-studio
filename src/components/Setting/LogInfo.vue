@@ -56,7 +56,7 @@ export default {
       }
     },
     downloadDoc() {
-      fetch(`http://${GlobalUtil.socketInfo.host}/handler/log/download`).then(response => response.blob().then((blob) => {
+      fetch(`http://${window.GlobalUtil.socketInfo.host}/handler/log/download`).then(response => response.blob().then((blob) => {
         const a = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
         const filename = 'studio-log.tar.gz';

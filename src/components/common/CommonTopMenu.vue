@@ -26,8 +26,9 @@
         <img src="./../../assets/img/blockly/btn_list.svg" style="width:35px;"/>
         <span>list</span>
       </div>
-      <div v-if="isRunning===false" @click="onstart" class="run-btn cursor-pointer">
-        <img src="./../../assets/img/blockly/icon_start.svg" style="width:30px;height:30px;"/>
+      <div v-if="isRunning===false">
+        <div v-if="isFileSelected" class="run-btn cursor-pointer" @click="onstart"></div>
+        <div v-else class="run-btn" style="opacity:0.4;"></div>
       </div>
       <div v-else @click="onstop" class="stop-btn cursor-pointer">
         <div style="width:10px;height:10px;background:white;"></div>
@@ -39,7 +40,7 @@
 <script>
 
 export default {
-  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onstop', 'onlist', 'curFileName', 'issaved', 'isRunning'],
+  props: ['type', 'title', 'onback', 'onsave', 'onnew', 'onstart', 'onstop', 'onlist', 'curFileName', 'issaved', 'isRunning', 'isFileSelected'],
   name: 'common-top-menu',
   data() {
     return {
@@ -57,12 +58,25 @@ export default {
   watch: {
   },
   computed: {
+    // classObject1: () => ({
+    //   'opacity0': this.isFileSelected === '0',
+    //   'opacity1': this.isFileSelected === '1',
+    // }),
   },
   components: {
   },
 };
 </script>
 <style scoped lang="scss">
+
+// .opacity0 {
+//   opacity: 0.4;
+// }
+
+// .opacity1 {
+//   opacity: 1;
+//   cursor: pointer;
+// }
 
 .com-header-wrapper {
   height: 60px;
@@ -116,11 +130,17 @@ export default {
     width: 60px;
     height: 60px;
     border: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px 30px;
+    background-image: url('./../../assets/img/blockly/icon_start.svg');
     // line-height: 0.2;
     // // padding: 1.2vw;
     // img{
     //   width: 120%;
     // }
+    // <img src="./../../assets/img/blockly/icon_start.svg" style="width:30px;height:30px;"/>
   }
   .stop-btn {
     width: 60px;

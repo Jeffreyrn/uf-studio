@@ -3,9 +3,10 @@
     <CommonTopMenu
       type='paint'
       :onlist='listProjects'
+      :isFileSelected="curProj!==null"
       title='Draw/Laser'
       :issaved='model.localPaintMgr.state.saved'
-      :curFileName='(model.localPaintMgr.curProj||{}).name'
+      :curFileName="topTitle"
       :onback='onBack'
       :onsave='saveProject'
       :onnew='newProject'
@@ -261,6 +262,8 @@ export default {
     initFabric() {
       this.playground = new fabric.Canvas('fabric', {
         fireRightClick: true,
+        backgroundColor: '#ECEFF1',
+        // selectionBorderColor: 'yellow',
       });
       this.playground.on({
         'object:modified': () => {
@@ -490,6 +493,13 @@ export default {
   watch: {
   },
   computed: {
+    curProj() {
+      return this.model.localPaintMgr.curProj || {};
+    },
+    topTitle() {
+      const fullname = `${this.curProj.name} (${this.curProj.projType})`;
+      return this.curProj.name !== undefined ? fullname : '';
+    },
   },
   components: {
     CommonTopMenu,
@@ -506,8 +516,9 @@ export default {
 <style scoped lang="scss">
 #paint-wrapper {
   #fabric {
-    background: white;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    background: '#ECEFF1';
+    // background: white;
+    // box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
 }
 .fabric-container {

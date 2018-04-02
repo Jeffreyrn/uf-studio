@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="49px" height="49px" viewBox="0 0 49 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>btn_slide</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="19.0814086" cy="19.0248798" r="18.6521739"></circle>
+        <filter x="-12.1%" y="-12.1%" width="124.1%" height="124.1%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.21838718   0 0 0 0 0.225074405   0 0 0 0 0.223577647  0 0 0 0.169327446 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="popup_draw&amp;laser_adjustzeropoint" transform="translate(-285.000000, -166.000000)">
+            <g id="Group-4">
+                <g transform="translate(37.000000, 166.000000)">
+                    <g id="updownbar" transform="translate(286.500000, 24.500000) rotate(-90.000000) translate(-286.500000, -24.500000) translate(262.500000, -133.500000)">
+                        <g id="btn_slide" transform="translate(-0.000000, 120.000000)">
+                            <g transform="translate(23.500000, 24.000000) rotate(-270.000000) translate(-23.500000, -24.000000) translate(4.000000, 5.000000)">
+                                <g id="Oval-5" transform="translate(19.081409, 19.024880) scale(-1, 1) rotate(-359.000000) translate(-19.081409, -19.024880) ">
+                                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                </g>
+                                <polygon id="Triangle-3" fill="#A1A5A9" points="12.0721765 18.807946 17.539865 15.6055946 17.539865 22.0102974"></polygon>
+                                <polygon id="Triangle-3" fill="#A1A5A9" points="27.4073778 18.8217391 21.9396893 22.0240905 21.9396893 15.6193877"></polygon>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

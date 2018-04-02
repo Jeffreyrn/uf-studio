@@ -35,13 +35,6 @@
           v-model="model.localPaintMgr.state.zero"
           class="show-input" />
 
-        <!-- <div class="btn-ok cursor-pointer" @click="onok">
-          Open
-        </div> -->
-
-        <!-- <div class="btn-cancel cursor-pointer" @click="onclose">
-          Cancel
-        </div> -->
         <div class="btn-ok cursor-pointer" @click="onok">
           OK
         </div>
