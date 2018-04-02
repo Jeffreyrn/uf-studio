@@ -22,7 +22,7 @@ self.state = {
   empty: true,
   backStep: 0,
   // mode: 'outline',
-  zero: 50,
+  zero: 20,
   speed: 200,
 };
 

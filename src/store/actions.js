@@ -6,11 +6,7 @@ import GlobalUtil from '../core/global_util';
 // import CommandsTeachSocket from '../core/commands_teach_socket';
 import * as types from './mutation-types';
 
-const socketInfo = {
-  // host: '192.168.1.166',
-  host: '192.168.1.67',
-  port: '18333',
-};
+
 export const openWebsocket = ({ commit }) => {
   // let i = 0;
   // const ti = setInterval(() => {
@@ -20,7 +16,7 @@ export const openWebsocket = ({ commit }) => {
   //     clearInterval(ti);
   //   }
   // }, 2000);
-  GlobalUtil.socketCom.init_socket(socketInfo);
+  GlobalUtil.socketCom.init_socket(GlobalUtil.socketInfo);
   GlobalUtil.socketCom.init_onopen(() => {
     console.log('onopen onopen onopen');
     GlobalUtil.model.localDeviceStatus.socket_connected = true;

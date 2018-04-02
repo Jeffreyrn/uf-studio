@@ -233,7 +233,7 @@ export default {
       window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
         console.log(`start printing = ${JSON.stringify(dict)}`);
         if (dict.code === 0) {
-          this.model.localPaintMgr.state.isRunnningPrint = true;  
+          this.model.localPaintMgr.state.isRunnningPrint = true;
         }
       });
     },

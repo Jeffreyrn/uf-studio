@@ -29,64 +29,6 @@ const robot = {
     id: 0,
   },
   connect: () => {
-    // const ip = '192.168.1.166'; // 67 196 166
-    // const url = `ws:${ip}:18333/ws`;
-    // robot.info.socket = new Websocket(url, null, {
-    //   debug: true,
-    //   logger: console,
-    //   reconnectInterval: 1000,
-    // });
-    // robot.info.socket.onclose = () => {
-    //   robot.info.connected = false;
-    // };
-    // robot.info.socket.onopen = () => {
-    //   robot.info.connected = true;
-    // };
-    // robot.info.socket.onmessage = (evt) => {
-    //   const temp_msg = JSON.parse(evt.data);
-    //   const data = temp_msg.data;
-    //   console.log('onmessage', temp_msg);
-    //   if (temp_msg.type === 'broadcast') {
-    //     if (robot.broadcast_message_process[temp_msg.cmd]) {
-    //       robot.broadcast_message_process[temp_msg.cmd](temp_msg.data);
-    //     }
-    //   }
-    //   else if (temp_msg.type === 'report') {
-    //     if (temp_msg.cmd === 'devices_info_report') {
-    //       console.log('device info broadcast:', data);
-    //       robot.info.port = data.xarm_port_name;
-    //       robot.info.serialNumber = data.xarm_port_serial_number;
-    //       robot.info.robotVersion = data.xarm_version;
-    //       robot.info.coreVersion = data.core_version;
-    //     }
-    //     else if (temp_msg.cmd === 'devices_status_report') {
-    //       console.log('device status broadcast:', data);
-    //       if (data.xarm_error_code > 2) {
-    //         const errorList = {
-    //           1: 'UX2_ERR_CODE',
-    //           2: 'UX2_WAR_CODE',
-    //           3: 'UX2_ERR_TOUT',
-    //           4: 'UX2_ERR_LENG',
-    //           5: 'UX2_ERR_OTHER',
-    //           1000: 'Exception',
-    //         };
-    //         if (errorList[data.xarm_error_code] !== undefined) {
-    //           robot.info.error = errorList[data.xarm_error_code];
-    //         }
-    //         else {
-    //           robot.info.error = 'unknow error';
-    //         }
-    //       }
-    //       else {
-    //         robot.info.connected = true;
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     const id = temp_msg.id;
-    //     robot.message.buffer[id] = temp_msg;
-    //   }
-    // };
   },
   printer: {
     progress: 0,

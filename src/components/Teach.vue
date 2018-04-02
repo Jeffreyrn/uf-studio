@@ -268,11 +268,11 @@ export default {
         });
       }
       else {
-        console.log(`proj length 0`);
+        // console.log(`proj length 0`);
       }
     },
     onstop() {
-      console.log(`stop teach = 4`);
+      // console.log(`stop teach = 4`);
       window.CommandsTeachSocket.stopTeach((dict) => {
         console.log(`stop teach = ${JSON.stringify(dict)}`);
         if (dict.code === 0) {
