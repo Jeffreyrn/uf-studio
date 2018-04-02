@@ -28,7 +28,7 @@
         </div> -->
         <xarm-model></xarm-model>
       </div>
-      <div class="file-list" v-bind:class="{'div-disable': divDisable}" >
+      <div class="file-list">
         <file-list @loadProject="loadProject" :selected="model.localAppsMgr.curProName"></file-list>
       </div>
     </div>
@@ -119,7 +119,9 @@ export default {
       this.backStr = 'AppStore';
       this.category = this.myAppData.category;
       this.getProject(name);
-      this.divDisable = true
+      if (this.category !== 'myapp') {
+        this.divDisable = true
+      }
     }
     this.setOnline(true)
   },
@@ -187,6 +189,10 @@ export default {
     // load project
   },
   methods: {
+    backToEdit() {
+      this.category = 'myapp'
+      this.divDisable = false
+    },
     setOnline(value) {
       const data = {
         index: 'online',
@@ -286,9 +292,9 @@ export default {
       });
     },
     newProject() {
-      if (this.divDisable) {
-        return false
-      }
+      // if (this.divDisable) {
+      //   return false
+      // }
       if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
         // this.model.localAppsMgr.curProName = ''
@@ -316,6 +322,7 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       // console.log(`on change ${event.type}`)
       // console.log(event, block)
+      this.backToEdit()
       if (block !== null && event.type === Blockly.Events.CREATE && this.xmlLoaded) {
         // eventBus.$emit('show', block)
         const type = block.type
@@ -380,6 +387,7 @@ export default {
     //   });
     // },
     loadProject(path) {
+      this.backToEdit()
       if (path === this.model.localAppsMgr.curProName) {
         console.log('selected')
       }
