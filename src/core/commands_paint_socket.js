@@ -149,11 +149,36 @@ self.startPrinting = (data, config, callback) => {
 }
 self.stopPrinting = (callback) => {
   // UArm.printing.state = false;
-  self.sendCmd(window.GlobalConstant.PAINT_STOP_PRINT, {}, (dict) => {
+  self.sendCmd(window.GlobalConstant.PAINT_STOP_PRINT, window.GlobalConstant.COMMON_PARAMS, (dict) => {
     if (callback) {
       callback(dict);
     }
   });
 }
+
+self.getZeroConfig = (callback) => {
+  self.sendCmd(window.GlobalConstant.PAINT_GET_ZERO_CONFIG, window.GlobalConstant.COMMON_PARAMS, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+}
+
+self.setZeroHeight = (height, callback) => {
+  const params = {
+    data: merge(window.GlobalConstant.COMMON_PARAMS, {
+      X: 0,
+      Y: 0,
+      Z: height,
+      A: -180,
+    }),
+  };
+  self.sendCmd(window.GlobalConstant.PAINT_MOVE_LINE, params, (dict) => {
+    if (callback) {
+      callback(dict);
+    }
+  });
+};
+
 // add by Jeffrey --- end
 export default self;

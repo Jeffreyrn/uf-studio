@@ -60,6 +60,9 @@ export const openWebsocket = ({ commit }) => {
     GlobalUtil.model.localParamsSetting.onmessage(evt);
     GlobalUtil.socketCom.onmessage(evt);
     // Model.robot.onmessage(evt);
+    // if (temp_msg.cmd === 'xarm_printing_progress') {progressNum
+    //   console.log(`temp_msg.data = ${JSON.stringify(temp_msg.data)}`);
+    // }
     if (temp_msg.type === 'report') {
       if (temp_msg.cmd === 'devices_status_report') {
         commit(types.SET_ROBOT_STATUS, temp_msg.data);

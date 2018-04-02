@@ -22,7 +22,16 @@ self.state = {
   empty: true,
   backStep: 0,
   // mode: 'outline',
-  zero: 20,
+  zero: {
+    grayscale: {
+      laser: 21,
+      pen: 22,
+    },
+    outline: {
+      laser: 33,
+      pen: 42,
+    },
+  },
   speed: 200,
 };
 

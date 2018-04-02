@@ -24,19 +24,20 @@
         </span>
 
         <input
-          v-model="model.localPaintMgr.state.zero"
+          v-model="curZeroHeight"
           type="range"
           min="-50"
           max="50"
           value="0"
+          @mouseup="onZeroUp"
           id="zero-control">
 
         <input
-          v-model="model.localPaintMgr.state.zero"
+          v-model="curZeroHeight"
           class="show-input" />
 
         <div class="btn-ok cursor-pointer" @click="onok">
-          OK
+          Print
         </div>
       </div>
     </div>
@@ -56,8 +57,38 @@ export default {
   mounted() {
   },
   computed: {
+    curZeroHeight: {
+      get() {
+        const projType = window.GlobalUtil.model.localPaintMgr.curProj.projType;
+        const end_type = 'pen'; // 0: 'pen', 1: 'laser',
+        const zeroHeightDict = projType === 'outline' ? window.GlobalUtil.model.localPaintMgr.state.zero.outline : window.GlobalUtil.model.localPaintMgr.state.zero.grayscale;
+        const zeropoint_height = end_type === 'pen' ? zeroHeightDict.pen : zeroHeightDict.laser;
+        return zeropoint_height;
+      },
+      set(value) {
+        const projType = window.GlobalUtil.model.localPaintMgr.curProj.projType;
+        const end_type = 'pen'; // 0: 'pen', 1: 'laser',
+        const zeroHeightDict = projType === 'outline' ? window.GlobalUtil.model.localPaintMgr.state.zero.outline : window.GlobalUtil.model.localPaintMgr.state.zero.grayscale;
+        switch (end_type) {
+          case 'pen':
+            zeroHeightDict.pen = value;
+            break;
+          case 'laser':
+            zeroHeightDict.laser = value;
+            break;
+          default:
+            break;  
+        }
+      },
+    },
   },
   methods: {
+    onZeroUp() {
+      console.log(`on Zero Up on Zero Up = ${this.curZeroHeight}`);
+      window.CommandsPaintSocket.setZeroHeight(this.curZeroHeight, (dict) => {
+        console.log(`on Zero Up on Zero Up = ${JSON.stringify(dict)}`);
+      });
+    },
   },
   // activated: function() {
   //   console.log(`activated model.localPaintMgr.state.zero = ${this.model.localPaintMgr.state.zero}`);

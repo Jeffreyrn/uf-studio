@@ -3,8 +3,8 @@
     <CommonTopMenu
       type='paint'
       :onlist='listProjects'
-      :isFileSelected="curProj!==null"
-      title='Draw/Laser'
+      :isFileSelected="model.localPaintMgr.curProj!==null"
+      title='Draw / Laser'
       :issaved='model.localPaintMgr.state.saved'
       :curFileName="topTitle"
       :onback='onBack'
@@ -19,10 +19,14 @@
       <canvas style="" id="fabric" tabindex='1' width="800" height="400"></canvas>
     </div>
 
+    <div class="bottom-progress" v-if="model.localPaintMgr.state.isRunnningPrint">
+      {{ Number(progressNum) * 1 }} %
+    </div>
+
     <BottomTools
       v-if="model.localPaintMgr.curProj!==null"
-      :onundo='undoEvent'
-      :onredo='undoEvent'
+      :onredo='onredo'
+      :onundo='onundo'
       :onimage="openImage"
       :onadd="addIconsDialog"
       :ondelete="removeSelected"
@@ -30,6 +34,7 @@
       :onremoveall='removeAll'
       :ontext="textDialog">
     </BottomTools>
+
     <DialogNewProj
       :onclose='closeDialog'
       :onok='createProj'
@@ -124,6 +129,7 @@ export default {
       playground: null,
       // backStr: 'AppStore',
       emotions: {},
+      progressNum: '0',
     };
   },
   mounted() {
@@ -165,6 +171,7 @@ export default {
     },
     listProjects() {
       console.log('list projects');
+      this.model.localPaintMgr.curProj = this.model.localPaintMgr.curProj;
       this.model.localPaintMgr.visible.projs = true;
     },
     saveProject() {
@@ -218,23 +225,35 @@ export default {
     //   sendData = null;
     // },
     startPrint() {
-      this.model.localPaintMgr.visible.setting = true;
+      CommandsPaintSocket.getZeroConfig((dict) => {
+        // this.model.localPaintMgr.state.zero = 
+        this.model.localPaintMgr.state.zero = dict.data;
+        this.model.localPaintMgr.visible.setting = true;
+      });
     },
     startPrintOK() {
       this.closeDialog();
       const projType = this.model.localPaintMgr.curProj.projType;
       const sendData = projType === 'outline' ? this.playground.toSVG() : this.playground.toDataURL('png');
+      const end_type = 'pen'; // 0: 'pen', 1: 'laser',
+      const zeroHeightDict = projType === 'outline' ? this.model.localPaintMgr.state.zero.outline : this.model.localPaintMgr.state.zero.grayscale;
       const config = {
         speed: this.model.localPaintMgr.state.speed || 100,
         canvasMode: projType === 'outline' ? 2 : 1, // 2. outline 1. gray
-        zeropoint_height: Number(this.model.localPaintMgr.state.zero),
-        end_type: 'pen', // 0: 'pen', 1: 'laser',
+        zeropoint_height: end_type === 'pen' ? zeroHeightDict.pen : zeroHeightDict.laser, // Number(this.model.localPaintMgr.state.zero),
+        end_type: end_type,
         drawing_feedrate: 500,
       };
       window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
         console.log(`start printing = ${JSON.stringify(dict)}`);
         if (dict.code === 0) {
           this.model.localPaintMgr.state.isRunnningPrint = true;
+        }
+        if (dict.code === 1) {
+          this.progressNum = dict.data.progress;
+        }
+        if (dict.code === 1111) {
+          this.model.localPaintMgr.state.isRunnningPrint = false;
         }
       });
     },
@@ -409,12 +428,20 @@ export default {
         checkValid = this.model.localPaintMgr.state.backStep < (size - 1);
         nextStep = this.model.localPaintMgr.state.backStep + 1;
       }
+      const backStep = this.model.localPaintMgr.state.backStep;
+      console.log(`model.localPaintMgr.state.buffer size = ${size}, backStep = ${backStep}, checkValid = ${checkValid}, reverse = ${reverse}`);
       if (checkValid) {
         canvas.clear().renderAll();
         this.model.localPaintMgr.state.backStep = nextStep;
         const loadJsonStr = this.model.localPaintMgr.state.buffer[size - nextStep - 1];
         canvas.loadFromJSON(loadJsonStr, canvas.renderAll.bind(canvas));
       }
+    },
+    onundo() {
+      this.undoEvent(false);
+    },
+    onredo() {
+      this.undoEvent(true);
     },
     duplicate() {
       const activeObject = this.playground.getActiveObject();
@@ -590,6 +617,19 @@ a {
       width: 120%;
     }
   }
+}
+
+.bottom-progress {
+  position:absolute;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  left: 0px;
+  right: 0px;
+  bottom: 100px;
+  margin: auto;
+  border: 1px solid #D8D8D8;
+  text-align: center;
 }
 // .blockly-wrapper {
 //   width: 100%;

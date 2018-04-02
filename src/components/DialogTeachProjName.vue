@@ -10,12 +10,14 @@
           </div>
         </div>
         <span v-if="showSelected===true">
-          <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
+          <!-- 暂时不要waypoint -->
+          <!-- <div class="position-absolute point-selected-bg" v-bind:class="classObject1" style="left:110px;" @click="typeSelect('1')">
             Waypoint
             <div class="position-absolute waypoint-icon">
             </div>
-          </div>
-          <div class="position-absolute point-selected-bg" v-bind:class="classObject2" style="right:110px;" @click="typeSelect('2')">
+          </div> -->
+          <!-- right:110px; cursor-pointer -->
+          <div class="position-absolute point-selected-bg" v-bind:class="classObject2" style="left:0;right:0;margin:auto;" @click="typeSelect('2')">
             Single Point
             <div class="position-absolute single-icon">
             </div>
@@ -185,7 +187,6 @@ export default {
   letter-spacing: -0.78px;
   padding-top: 75px;
   text-align: center;
-  cursor: pointer;
 }
 .waypoint-icon {
   top: 48px;
