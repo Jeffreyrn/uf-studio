@@ -167,7 +167,7 @@ self.getZeroConfig = (callback) => {
 self.setZeroHeight = (height, callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-      X: 0,
+      X: 300,
       Y: 0,
       Z: height,
       A: -180,

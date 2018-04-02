@@ -88,7 +88,7 @@ export default {
   height:63px;
   left: 0px;
   right: 0px;
-  bottom: 0px;
+  bottom: 60px;
   margin:auto;
   border: 1px solid #D8D8D8;
   // background:lightgreen;

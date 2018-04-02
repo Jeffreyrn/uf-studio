@@ -16,10 +16,17 @@
     </CommonTopMenu>
 
     <div style="" class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
-      <canvas style="" id="fabric" tabindex='1' width="800" height="400"></canvas>
+      <!-- <canvas style="" id="fabric" tabindex='1' width="825" height="385"></canvas> -->
+      <canvas style="" id="fabric" tabindex='1' width="1650" height="769"></canvas>
     </div>
 
-    <div class="bottom-progress" v-if="model.localPaintMgr.state.isRunnningPrint">
+    <div class="float-type" style="" v-show="model.localPaintMgr.curProj!==null">
+      <span class="point">
+      </span>
+      Mode: {{ curProj.projType }}
+    </div>
+
+    <div class="bottom-progress" v-if="model.localPaintMgr.state.isRunnningPrint && 1===2">
       {{ Number(progressNum) * 1 }} %
     </div>
 
@@ -170,16 +177,16 @@ export default {
       this.model.localPaintMgr.visible.text = true;
     },
     listProjects() {
-      console.log('list projects');
+      // console.log('list projects');
       this.model.localPaintMgr.curProj = this.model.localPaintMgr.curProj;
       this.model.localPaintMgr.visible.projs = true;
     },
     saveProject() {
-      console.log('save project');
+      // console.log('save project');
       const jsonStr = JSON.stringify(this.playground);
       console.log(jsonStr);
       window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, (dict) => {
-        console.log(`dict = ${JSON.stringify(dict)}`);
+        // console.log(`dict = ${JSON.stringify(dict)}`);
         this.model.localPaintMgr.state.saved = true;
       });
     },
@@ -225,8 +232,7 @@ export default {
     //   sendData = null;
     // },
     startPrint() {
-      CommandsPaintSocket.getZeroConfig((dict) => {
-        // this.model.localPaintMgr.state.zero = 
+      window.CommandsPaintSocket.getZeroConfig((dict) => {
         this.model.localPaintMgr.state.zero = dict.data;
         this.model.localPaintMgr.visible.setting = true;
       });
@@ -245,7 +251,7 @@ export default {
         drawing_feedrate: 500,
       };
       window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
-        console.log(`start printing = ${JSON.stringify(dict)}`);
+        // console.log(`start printing = ${JSON.stringify(dict)}`);
         if (dict.code === 0) {
           this.model.localPaintMgr.state.isRunnningPrint = true;
         }
@@ -265,7 +271,7 @@ export default {
       });
     },
     createProj() {
-      console.log('create proj');
+      // console.log('create proj');
       this.closeDialog();
       const projType = this.model.localPaintMgr.projTypeSelected;
       window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, () => {
@@ -524,7 +530,7 @@ export default {
       return this.model.localPaintMgr.curProj || {};
     },
     topTitle() {
-      const fullname = `${this.curProj.name} (${this.curProj.projType})`;
+      const fullname = `${this.curProj.name}`;
       return this.curProj.name !== undefined ? fullname : '';
     },
   },
@@ -544,7 +550,7 @@ export default {
 #paint-wrapper {
   #fabric {
     background: '#ECEFF1';
-    // background: white;
+    // background: white; #D95E2E 100%
     // box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
 }
@@ -630,6 +636,36 @@ a {
   margin: auto;
   border: 1px solid #D8D8D8;
   text-align: center;
+}
+
+.float-type {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:155px;
+  margin:auto;
+  width:145px;
+  height:30px;
+  line-height: 30px;
+  font-family: 'Gotham-Medium';
+  font-size: 14px;
+  color: #4A4A4A;
+  letter-spacing: -0.58px;
+  text-align: center;
+  background: #FFFFFF;
+  border-radius: 100px;
+  // border: 1px solid gray;
+  box-shadow: 0 0 4px 0 rgba(192,192,192,0.50);
+  // #D95E2E 100%  #E27347;
+  .point {
+    position: absolute;
+    left: 15px;
+    width: 4px;
+    height: 4px;
+    top: 13px;
+    border-radius: 2px;
+    background: #D95E2E
+  }
 }
 // .blockly-wrapper {
 //   width: 100%;

@@ -77,7 +77,7 @@ export default {
             zeroHeightDict.laser = value;
             break;
           default:
-            break;  
+            break;
         }
       },
     },
