@@ -11,7 +11,7 @@
     :onstart='startRun'>
   </CommonTopMenu>
   <div class="main-wrapper">
-    <div id="blockly-area" class="blockly-workspace" tabindex="0">
+    <div id="blockly-area" class="blockly-workspace" v-bind:class="{'div-disable': divDisable}" tabindex="0">
       <div id="tab-blocks"></div>
       <div class="hide-button el-icon-arrow-right" v-bind:class="{rotate: !uiData.sideShow}" @click="toggleSideShow"></div>
     </div>
@@ -28,7 +28,7 @@
         </div> -->
         <xarm-model></xarm-model>
       </div>
-      <div class="file-list">
+      <div class="file-list" v-bind:class="{'div-disable': divDisable}" >
         <file-list @loadProject="loadProject" :selected="model.localAppsMgr.curProName"></file-list>
       </div>
     </div>
@@ -57,6 +57,7 @@ export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      divDisable: false,
       saveStatus: true,
       pre: '',
       category: 'myapp',
@@ -118,11 +119,13 @@ export default {
       this.backStr = 'AppStore';
       this.category = this.myAppData.category;
       this.getProject(name);
+      this.divDisable = true
     }
     this.setOnline(true)
   },
   deactivated() {
     this.setOnline(false)
+    this.divDisable = false
   },
   components: {
     XarmModel,
@@ -283,6 +286,9 @@ export default {
       });
     },
     newProject() {
+      if (this.divDisable) {
+        return false
+      }
       if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
         // this.model.localAppsMgr.curProName = ''
@@ -515,6 +521,10 @@ export default {
 <style lang="scss" src="./../assets/css/blockly.scss"></style>
 <style lang="scss" scoped>
   $themeOrange:#D95E2E;
+  .div-disable {
+    pointer-events: none;
+    opacity: 0.8;
+  }
   .main-wrapper {
     display: flex;
     flex-direction: row;
