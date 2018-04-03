@@ -747,7 +747,7 @@ span.text {
     display: flex;
     justify-content: space-around;
     opacity: 0.69;
-    background: linear-gradient(-90deg,#434343 0%, #373737 80%, #5E5E5E 100%);
+    background: #4d4d4d;
     /*position: absolute;*/
     /*top: 0;*/
     /*width: 100%;*/
@@ -860,7 +860,7 @@ span.text {
   justify-content: center;
   width: 24%;
   position: relative;
-  background-image: linear-gradient(-90deg, #373737 0%, #5E5E5E 50%, #434343 100%);
+  background: #484848;
   .range-right {
     /*right: 130px;*/
   }
