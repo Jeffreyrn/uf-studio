@@ -489,10 +489,11 @@ export default {
       }
     },
     setJointCmd(index) {
-      this.$store.commit(types.MOVE_ONE_JOINT, {
-        index,
-        value: this.joints[index],
-      });
+      // this.$store.commit(types.MOVE_ONE_JOINT, {
+      //   index,
+      //   value: this.joints[index],
+      // });
+      this.$store.commit(types.ROBOT_MOVE_JOINT, this.joints);
     },
     setYaw() {
       console.log('set yaw interval')
