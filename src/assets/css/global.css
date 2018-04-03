@@ -54,10 +54,13 @@ html, body {
 }
 .nipple .back {
   opacity: 0.9 !important;
-  border: 1px solid #4A90E2;
 }
 .nipple .front {
   box-shadow: 0 0 12px 0 rgba(184,184,184,0.50);
+  width: 54px !important;
+  height: 54px !important;
+  margin-left: -27px !important;
+  margin-top: -27px !important;
 }
 
 /* common dialog */

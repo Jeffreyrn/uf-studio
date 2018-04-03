@@ -1,11 +1,11 @@
 <template>
-  <el-row :gutter="20" style="margin: 0;">
-    <el-col :span="16" style="padding-left: 6px;padding-right: 5px;">
+  <div style="display: flex; justify-content: space-between">
+    <div :style="{width: leftControlWidth + 'px'}" class="left-control">
       <div class="control-wrapper dark-backgroud">
         <div class="control-header">
-          <div class="header-text" style="width: 35%">Orientation Control</div>
-          <div class="header-text" style="width: 35%">Position Control</div>
-          <div class="header-text" style="width: 30%">Speed Control</div>
+          <div class="header-text" style="width: 38%">Orientation Control</div>
+          <div class="header-text" style="width: 38%">Position Control</div>
+          <div class="header-text" style="width: 24%">Speed Control</div>
         </div>
         <div class="control-body">
           <div class="control-right">
@@ -14,7 +14,7 @@
               <el-button @click="setYaw(false)">Right</el-button> -->
               <!-- <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control"
                 @mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> -->
-              <canvas id="angle-canvas" width="200" height="50"></canvas>
+              <canvas id="angle-canvas" width="250" height="80"></canvas>
               <!-- <div class="data-display" v-text="joystick.step.orientation.z"></div> -->
             </div>
             <div id="orientation-joystick" class="joystick-wrapper"></div>
@@ -23,28 +23,15 @@
             <div class="height-wrapper">
               <!-- <el-button @click="setPositionZ(true)">Up</el-button>
               <el-button @click="setPositionZ(false)">Down</el-button> -->
-              <!-- <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control"
-                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ"> -->
+              <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="z-control"
+                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ">
             </div>
             <div id="position-joystick" class="joystick-wrapper"></div>
           </div>
-          <!--<div class="control-right">-->
-            <!--<div class="yaw-wrapper">-->
-              <!--&lt;!&ndash; <el-button @click="setYaw(true)">Left</el-button>-->
-              <!--<el-button @click="setYaw(false)">Right</el-button> &ndash;&gt;-->
-              <!--&lt;!&ndash; <input v-model="joystick.step.orientation.z" type="range" min="-5" max="5" value="0" id="yaw-control"-->
-                <!--@mousedown="setYaw" @touchstart="setYaw" @touchend="resetYaw" @mouseup="resetYaw"> &ndash;&gt;-->
-                <!--<canvas id="angle-canvas" width="200" height="50"></canvas>-->
-                <!--&lt;!&ndash; <div class="data-display" v-text="joystick.step.orientation.z"></div> &ndash;&gt;-->
-            <!--</div>-->
-            <!--<div id="orientation-joystick" class="joystick-wrapper"></div>-->
-          <!--</div>-->
           <div class="config-wrapper">
             <div class="range-right">
-              <!--<img src="./../../assets/img/control/icon_speed.svg" alt="">-->
               <span class="config-value" v-text="stateSpeed"></span>
               <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
-              <!--<img src="./../../assets/img/control/icon_speed2.svg" alt="">-->
               <span class="config-title">Speed</span>
             </div>
             <div class="img-middle">
@@ -52,10 +39,8 @@
               <img class="img2" src="./../../assets/img/control/icon_speed2.svg" alt="">
             </div>
             <div class="range-left">
-              <!--<img src="./../../assets/img/control/icon_speed.svg" alt="">-->
               <span class="config-value" v-text="stateAcceleration"></span>
               <input type="range" v-model="stateAcceleration" @change="setAcceleration" :step="1" :max="1000" :min="100">
-              <!--<img src="./../../assets/img/control/icon_speed2.svg" alt="">-->
               <span class="config-title">Acceleration</span>
             </div>
           </div>
@@ -77,31 +62,31 @@
           <!--<span class="config-value" v-text="stateAcceleration"></span>-->
         <!--</div>-->
       <!--</div>-->
-    </el-col>
-    <el-col :span="8" style="padding-left: 0;padding-right: 6px">
-      <div class="dark-backgroud joint-control">
-        <div class="header-text " id="testtest">Joints Control</div>
-        <div class="degree-text">Degree</div>
-        <div class="joint-range-wrapper">
-          <div class="block joint-range" v-for="j in 7" :key="j">
-            <span class="text">J{{j}}</span>
-            <div class="range-wrapper">
-              <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step"
-              :max="config.jointMax" :min="config.jointMin"
-              @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
-              <p :id="'mask' + j" class="mask-bar"></p>
-            </div>
-            <span class="joints-number">
-              <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]"
-              @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
-              :max="config.jointMax" :min="config.jointMin">
-            </span>
-            <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
+    </div>
+
+    <div class="dark-backgroud joint-control">
+      <div class="header-text " id="testtest">Joints Control</div>
+      <div class="degree-text">Degree</div>
+      <div class="joint-range-wrapper">
+        <div class="block joint-range" v-for="j in 7" :key="j">
+          <span class="text j-text">J{{j}}</span>
+          <div class="range-wrapper">
+            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step"
+            :max="config.jointMax" :min="config.jointMin"
+            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable">
+            <p :id="'mask' + j" class="mask-bar"></p>
           </div>
+          <span class="joints-number">
+            <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]"
+            @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
+            :max="config.jointMax" :min="config.jointMin">
+          </span>
+          <!-- <el-slider v-model="state.joint[j-1]" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" show-input :show-input-controls="false" @change="setJoint(j-1, $event)"></el-slider> -->
         </div>
       </div>
-    </el-col>
-  </el-row>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -194,6 +179,7 @@ export default {
         rangeLength: [],
       },
       currentMoveIndex: null,
+      leftControlWidth: '',
     };
   },
   mounted() {
@@ -208,16 +194,16 @@ export default {
     const sCanvas = document.getElementById('angle-canvas');
     const sCtx = sCanvas.getContext('2d');
     let isDown = false;
-    const cx = 100;
-    const cy = 140;
-    const sRadius = 120;
-    const strokewidth = 18;
+    const cx = 130;
+    const cy = 200;
+    const sRadius = 180;
+    const strokewidth = 20;
     // const thumbAngle = Math.PI / 100;
     const value_from = (Math.PI * 4) / 3;
     const value_to = (Math.PI * 5) / 3;
     let mouseX;
     let mouseY;
-    const indicatorSize = 27;
+    const indicatorSize = 40;
     // default value
     // self.cData.r = self.radiansToDegrees(self.radianAngle); // default r value
     sCtx.lineCap = 'round';
@@ -225,7 +211,7 @@ export default {
     sCtx.lineWidth = 3;
 
     const indicator = new Image();
-    indicator.src = require('../../assets/img/control/btn_slide02.svg');
+    indicator.src = require('../../assets/img/control/btn_slide_yaw.svg');
     function drawAngle() { // draw uarm angle select
       // clear
       sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
@@ -234,7 +220,7 @@ export default {
       // circle
       sCtx.beginPath();
       sCtx.arc(cx, cy, sRadius, value_from, value_to);
-      sCtx.strokeStyle = '#5A93D7';
+//      sCtx.strokeStyle = '#5A93D7';
       sCtx.lineWidth = strokewidth;
       sCtx.stroke();
       // circle border
@@ -320,12 +306,14 @@ export default {
         this.setRangeMask(index, value);
       });
     };
+    this.getLeftControlSize();
     window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener('resize', this.getLeftControlSize, false);
   },
   methods: {
     createJoyStick() {
       // const NIPPLE_OPTION = {};
-      const size = 120;
+      const size = 160;
       const color = 'white';
       const mode = 'static';
       const restOpacity = 1;
@@ -335,7 +323,10 @@ export default {
         color,
         mode,
         position: {
-          left: '56%',
+          right: '50%',
+          left: '50%',
+          top: '50%',
+          bottom: '50%',
         },
         restOpacity,
       });
@@ -369,7 +360,10 @@ export default {
         color,
         mode,
         position: {
-          right: '25%',
+          right: '50%',
+          left: '50%',
+          top: '50%',
+          bottom: '50%',
         },
         restOpacity,
       });
@@ -608,6 +602,10 @@ export default {
     //     domInput.removeEventListener('keyup', this.setMaskInput);
     //   }
     // },
+    getLeftControlSize() {
+      const docWidth = document.body.clientWidth;
+      this.leftControlWidth = docWidth - 327;
+    },
   },
   beforeDestroy() {
     // for (let i = 1; i < 8; i += 1) {
@@ -719,6 +717,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.left-control {
+  padding-right: 3px;
+}
 input[type=range] {
   cursor: pointer;
 }
@@ -745,7 +746,7 @@ span.text {
     display: flex;
     justify-content: space-around;
     opacity: 0.69;
-    /*background: #484747;*/
+    background: linear-gradient(-90deg,#434343 0%, #373737 80%, #5E5E5E 100%);
     /*position: absolute;*/
     /*top: 0;*/
     /*width: 100%;*/
@@ -757,47 +758,49 @@ span.text {
     position: relative;
     display: flex;
     justify-content: space-around;
-    /*height: 80%;*/
-    /*height: 263px;*/
     & > div {
-      /*margin: 3% 0;*/
       .joystick-wrapper {
-        /*padding: 20% 0;*/
         margin: 0;
+        width: 169px;
+        height: 169px;
+        background: url("../../assets/img/control/outside_circle.svg") no-repeat center;
       }
     }
     .control-left {
-      width: 35%;
+      width: 38%;
       display: flex;
       align-items: center;
       justify-content: center;
-      /*border-right: solid 1px white;*/
+      position: relative;
+      .joystick-wrapper {
+        position: absolute;
+        margin-left: 40px;
+      }
       .height-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-right: 120px;
+        margin-right: 160px;
         #z-control {
           // appearance: slider-vertical; // abandoned, can not set width with css
-          /*width: 120%;*/
-          height: 18px;
+          width: 171px;
+          height: 23px;
           background: #fff;
           opacity: 1;
           transform: rotate(-90deg);
           border-radius: 100px;
-          border: #5A93D7 solid 1px;
           cursor: default;
         }
         #z-control::-webkit-slider-thumb {
-          width: 25px;
-          height: 25px;
+          width: 34px;
+          height: 34px;
           background-image: url('./../../assets/img/control/btn_slide02.svg');
           background-repeat: no-repeat;
           background-position: center center;
           -webkit-appearance: none;
           border: none;
           border-radius: 50%;
-        //  background: #5A93D7;
+          transform: rotate(-90deg);
           box-shadow: 0 0 2px 0 rgba(45,73,67,0.17);
         }
       }
@@ -808,7 +811,7 @@ span.text {
 
     }
     .control-right {
-      width: 35%;
+      width: 38%;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -816,9 +819,7 @@ span.text {
       align-items: center;
       .joystick-wrapper {
         position: absolute;
-        left: 50%;
-        right: 50%;
-        bottom: 44%;
+        bottom: 14px;
       }
       // .el-slider {
       //   padding: 0 10%;
@@ -828,7 +829,7 @@ span.text {
       //   left: 10%;
       // }
       .yaw-wrapper {
-        padding-bottom: 150px;
+        padding-bottom: 142px;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
@@ -856,8 +857,9 @@ span.text {
 .config-wrapper {
   display: flex;
   justify-content: center;
-  width: 30%;
+  width: 24%;
   position: relative;
+  background-image: linear-gradient(-90deg, #373737 0%, #5E5E5E 50%, #434343 100%);
   .range-right {
     /*right: 130px;*/
   }
@@ -877,12 +879,12 @@ span.text {
     align-items: center;
     flex-direction: column;
     /*position: absolute;*/
-    width: 44px;
+    width: 34px;
     .img1 {
-      width: 14px;
+      width: 8px;
     }
     .img2 {
-      width: 23px
+      width: 18px
     }
     input[type=range] {
       height: 8px;
@@ -890,84 +892,89 @@ span.text {
       background-image: linear-gradient(90deg, #FF6868 0%, #8FFF94 100%);
       transform: rotate(-90deg);
       -webkit-appearance: none;
-      height: 40px;
-      /*width: 155px;*/
+      height: 36px;
+      width: 168px;
     }
     input[type=range]::-webkit-slider-thumb {
-      width: 59px;
-      height: 34px;
+      width: 50px;
+      height: 32px;
       -webkit-appearance: none;
       border: none;
       border-radius: 100px;
       background: #FEFEFE;
       box-shadow: 0 0 8px 0 rgba(214,214,214,0.50);
     }
-    .config-value {
-      /*padding: 2%;*/
-      background: #444;
+    span {
       font-family: 'Gotham-Book';
       font-size: 10px;
       color: #FFF;
       letter-spacing: -0.75px;
       text-align: center;
+    }
+    .config-value {
       padding-top: 10px;
     }
     .config-title {
-      font-size: 10px;
-      text-align: center;
       padding-bottom: 10px;
-      font-family: 'Gotham-Book';
     }
   }
 }
 .dark-backgroud {
   background: #434343;
-  height: 36vh;
+  /*height: 36vh;*/
 }
 .header-text {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: white;
   letter-spacing: -1px;
   height: 39px;
   line-height: 39px;
 }
 .joint-control {
-  /*padding-bottom: 1vw;*/
+  width: 326px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+  position: relative;
   .header-text {
     opacity: 0.69;
     padding-left: 2vw;
   }
   .degree-text {
     color: white;
-    padding-right: 8% ;
-    /*padding-top: 1vw;*/
     text-align: right;
-    font-size: 12px;
+    font-size: 10px;
+    position: absolute;
+    top: 14px;
+    right: 14px;
   }
   .joint-range-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    height: 76%;
+    height: 233px;
+  }
+  .joint-range:last-child {
+    padding-bottom: 18px;
   }
   .joint-range {
     color: white;
-    /*padding: 7px 0 6px 0.8vw;*/
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    width: 94%;
+    justify-content: space-between;
+    width: 100%;
+    /*padding: 6px 0;*/
     span {
       font-size: 12px;
       font-family: "Gotham-Book";
     }
+    .j-text {
+      padding:0 12px;
+    }
     .range-wrapper {
       position: relative;
-      width: 20vw;
+      width: 218px;
       background: #353535;
       height: 4px;
       border-radius: 10px;
@@ -1000,7 +1007,6 @@ span.text {
         margin: 0;
         pointer-events: none;
         transform-origin: left;
-        z-index: 2;
       }
     }
     .joints-number {

@@ -161,7 +161,7 @@ $liInputWidth : 50%;
 }
 
 ul.position-set li{
-  margin: 0.8vh 1vw;
+  margin: 0.8vh 28px;
   background: #3D3D3D;
   border-radius: 20px;
   height: 33px;

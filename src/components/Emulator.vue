@@ -18,7 +18,7 @@
     </header>
     <div class="main-wrapper">
       <div class="main-view">
-        <div class="model-container">
+        <div class="model-container" :style="{width: modelCotainerWidth + 'px', height: modelCotainerHeight + 'px'}">
           <xarm-model></xarm-model>
         </div>
         <div class="end-col">
@@ -87,7 +87,13 @@ export default {
         height: 525 / 1030,
       },
       msg: 'Emulator',
+      modelCotainerWidth: '',
+      modelCotainerHeight: '',
     };
+  },
+  mounted() {
+    this.getModelCotainerSize();
+    window.addEventListener('resize', this.getModelCotainerSize);//
   },
   activated: function() {
     this.backStr = 'Home';
@@ -102,6 +108,12 @@ export default {
         value,
       };
       this.$store.commit(types.SET_ROBOT_STATE, data);
+    },
+    getModelCotainerSize() {
+      const docWidth = document.body.clientWidth;
+      const docHieght = document.body.clientHeight;
+      this.modelCotainerWidth = docWidth - 276;
+      this.modelCotainerHeight = docHieght - 327;
     },
   },
   watch: {
@@ -138,14 +150,13 @@ export default {
 
 <style scoped lang="scss">
 header {
-  height: 50px;
+  height: 60px;
   flex: 0 0 auto;
   padding-left: 2vw;
-  padding-top: 1vh;
 }
 footer{
   flex: 0 0 auto;
-  margin: 4px 0;
+  height: 263px;
 }
 .hello {
   font-family:'Gotham-Medium';
@@ -183,17 +194,17 @@ footer{
       height: 100%;
       position: absolute;
       width: 100%;
-      padding: 6px;
+      padding-bottom: 4px;
       .end-col {
-        width: 20vw;
-        /*width: 276px;*/
+        /*width: 20vw;*/
+        width: 276px;
         height: 100%;
         background: #434343;
       }
       .model-container{
         padding-right: 1vw;
         border-radius: 0px;
-        width: 78vw;
+        /*width: 78vw;*/
         height: 100%;
       }
     }
