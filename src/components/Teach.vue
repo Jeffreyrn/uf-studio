@@ -74,7 +74,7 @@
               </div>
             </div>
           </div>
-          <ListProj id="bottom-right-frame" :editState='editState'></ListProj>
+          <ListProj id="bottom-right-frame" :editState='editState' :parentWidth="bottomRightWidth"></ListProj>
         </div>
       </div>
 
@@ -192,6 +192,7 @@ export default {
       clientHeight: 200,
       rightFrameWidth: 320,
       bottomLeftWidth: 200,
+      bottomRightWidth: 0,
       pointWay: false,
       editState: false,
       isDeleteFileDialogShow: false,
@@ -551,7 +552,8 @@ export default {
         leftFrame.style.width = `${leftFrameWidth}px`;
       }
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
-        bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
+        this.bottomRightWidth = totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth
+        bottomRightFrame.style.width = `${this.bottomRightWidth}px`;
       }
       const bottomHeight = 300; // this.editState ? 200 : 300;
       if (leftBottomArea !== null && leftBottomArea !== undefined) {
