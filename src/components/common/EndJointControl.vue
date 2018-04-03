@@ -211,7 +211,7 @@ export default {
     sCtx.lineWidth = 3;
 
     const indicator = new Image();
-    indicator.src = require('../../assets/img/control/btn_slide_yaw.svg');
+    indicator.src = require('../../assets/img/control/btn_slide.svg');
     function drawAngle() { // draw uarm angle select
       // clear
       sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
@@ -939,7 +939,7 @@ span.text {
   position: relative;
   .header-text {
     opacity: 0.69;
-    padding-left: 2vw;
+    padding-left: 12px;
   }
   .degree-text {
     color: white;
