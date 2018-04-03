@@ -27,7 +27,7 @@
             style=""
             prop="name"
             label="Project name"
-            width="200">
+            width="150">
             <template slot-scope="scope">
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].name }}
@@ -37,7 +37,7 @@
           <el-table-column
             prop="created"
             label="Date"
-            width="200">
+            width="180">
             <template slot-scope="scope">
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].created }}
@@ -46,11 +46,19 @@
           </el-table-column>
           <el-table-column
             prop="type"
-            label="Type">
+            label="Type"
+            width="150">
             <template slot-scope="scope">
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].projType }}
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop=""
+            label="Done">
+            <template slot-scope="scope">
+              <div class="proj-icon-trash float-left" @click="onDelete(scope.$index)"></div>
             </template>
           </el-table-column>
         </el-table>
@@ -93,6 +101,10 @@ export default {
     },
   },
   methods: {
+    onDelete(index) {
+      this.model.localPaintMgr.curToDelIndex = index;
+      this.model.localPaintMgr.visible.del = true;
+    },
     tableRowClassName({ row, rowIndex }) {
       console.log(`row = ${row}, rowIndex = ${rowIndex}`);
       return rowIndex === this.currentRow ? 'selected' : 'normal';
@@ -182,9 +194,19 @@ export default {
 // }
 .table-head {
   font-family: 'Gotham-Medium';
-  font-size: 16px;
+  font-size: 12px;
   color: #3C3C3C;
   letter-spacing: -1px;
   text-align: center;
+}
+.proj-icon-trash {
+  margin-left: 20px;
+  width: 30px;
+  height: 30px;
+  background-image: url('./../../assets/img/pop/btn_trash.svg');
+  background-size: 8px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
 }
 </style>

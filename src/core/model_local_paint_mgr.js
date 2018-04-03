@@ -13,7 +13,10 @@ self.visible = {
   projs: false,
   icons: false,
   clear: false,
+  del: false,
 };
+
+self.curToDelIndex = -1;
 
 self.state = {
   isRunnningPrint: false,
@@ -74,7 +77,7 @@ self.remoteProjs2Local = (dict) => {
   self.projList = [];
   const datas = dict.data;
   const projs = [];
-  let index = 0;
+  // let index = 0;
   for (let i = 0; i < datas.length; i += 1) {
     const data = datas[i];
     if (data.path.indexOf('.json') > 0) {
@@ -86,14 +89,21 @@ self.remoteProjs2Local = (dict) => {
       data.name = path.basename(dirname);
       data.created = data.ctime;
       data.projType = data.path.indexOf('outline.json') > 0 ? 'outline' : 'gray';
-      data.index = index;
+      // data.index = index;
       projs.push(data);
-      index += 1;
+      // index += 1;
     }
   }
-  self.projList = window.GlobalUtil.bubbleSort(projs, (a, b) => {
+  const sortedProjs = window.GlobalUtil.bubbleSort(projs, (a, b) => {
     return a.ctime_secs < b.ctime_secs;
   });
+  let index = 0;
+  for (let i = 0; i < sortedProjs.length; i += 1) {
+    const oneProj = sortedProjs[i];
+    oneProj.index = index;
+    index += 1;
+  }
+  self.projList = sortedProjs;
 };
 
 self.findProjIndex = (uuid) => {
