@@ -2,7 +2,7 @@
 <div class="blockly-wrapper">
   <CommonTopMenu
     title='App Editor'
-    :isFileSelected=true
+    :isFileSelected='enableRun'
     :issaved='saveStatus'
     :curFileName='model.localAppsMgr.curProName + notSaved'
     :onback='quitPage'
@@ -58,6 +58,7 @@ export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      enableRun: false,
       divDisable: false,
       saveStatus: true,
       pre: '',
@@ -123,6 +124,7 @@ export default {
       if (this.category !== 'myapp') {
         this.divDisable = true
       }
+      this.enableRun = this.blocksNotEmpty()
     }
     this.setOnline(true)
   },
@@ -191,6 +193,7 @@ export default {
   },
   methods: {
     backToEdit() {
+      this.enableRun = this.blocksNotEmpty()
       this.category = 'myapp'
       this.divDisable = false
     },
@@ -231,6 +234,7 @@ export default {
           console.log('get xml text', xml.xmlData)
           Blockly.appendXML(xml.xmlData)
           this.block = {}
+          // this.enableRun = this.blocksNotEmpty() // ReferenceError: blocksNotEmpty is not defined FileList,vue
         }, (data) => {
           this.$message({
             type: 'info',
@@ -246,7 +250,8 @@ export default {
       }
       window.setTimeout(() => {
         this.xmlLoaded = true
-      }, 1800)
+        this.enableRun = this.blocksNotEmpty()
+      }, 1600)
     },
     popDialog(type) {
       if (Object.prototype.hasOwnProperty.call(this.dialog, type)) {
@@ -415,8 +420,10 @@ export default {
     },
     getProject(path) {
       this.disableLoadProject = true
+      self = this
       window.setTimeout(() => {
         this.disableLoadProject = false
+        this.enableRun = self.blocksNotEmpty()
       }, 1500)
       const data = {
         category: this.category,
@@ -476,6 +483,10 @@ export default {
     },
     emptyProject() {
       return !this.blocksLength() && !this.model.localAppsMgr.curProName
+    },
+    blocksNotEmpty() {
+      console.log('block length', this.blocksLength())
+      return this.blocksLength() > 0 ? true : false
     },
     blocksLength() {
       if (Blockly.BlockWorkspace) {
