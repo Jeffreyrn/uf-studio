@@ -17,8 +17,10 @@
 
     <div style="" class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
       <!-- <canvas style="" id="fabric" tabindex='1' width="825" height="385"></canvas> -->
-      <canvas style="" id="fabric" tabindex='1' width="1650" height="769"></canvas>
+      <canvas style="" id="fabric" tabindex='1' width="900" height="450"></canvas>
     </div>
+
+    <!-- buffer : {{ this.model.localPaintMgr.state.buffer.length }} -- backStep: {{ model.localPaintMgr.state.backStep }} -->
 
     <div class="float-type" style="" v-show="model.localPaintMgr.curProj!==null">
       <span class="point">
@@ -31,6 +33,7 @@
     </div>
 
     <BottomTools
+      class="paint-bottom"
       v-if="model.localPaintMgr.curProj!==null"
       :onredo='onredo'
       :onundo='onundo'
@@ -141,7 +144,7 @@ export default {
   },
   mounted() {
     this.initFabric();
-    this.fabricModified();
+    // this.fabricModified();
     this.loadEmotions();
     console.log(this.playground.toSVG());
     setTimeout(() => {
@@ -292,11 +295,11 @@ export default {
       });
       this.playground.on({
         'object:modified': () => {
-          this.fabricModified();
+          // this.fabricModified();
         },
         'object:added': (options) => {
           options.target.bringToFront();
-          this.fabricModified();
+          // this.fabricModified();
         },
       });
     },
@@ -415,11 +418,21 @@ export default {
       }
     },
     fabricModified() {
-      this.model.localPaintMgr.state.buffer.push(JSON.stringify(this.playground));
-      this.model.localPaintMgr.state.saved = false;
-      // fabric.log(myjson);
-      this.model.localPaintMgr.state.empty = this.playground.isEmpty();
-      // console.log(this.state.buffer.length, this.state.backStep);
+      const backStep = this.model.localPaintMgr.state.backStep;
+      const size = this.model.localPaintMgr.state.buffer.length;
+      const last = this.model.localPaintMgr.state.buffer[size - 1];
+      const current = JSON.stringify(this.playground);
+      if (backStep > 0) {
+        this.model.localPaintMgr.state.buffer = this.model.localPaintMgr.state.buffer.slice(0, size - backStep);
+        this.model.localPaintMgr.state.backStep = 0;
+      }
+      if (last !== current) {
+        this.model.localPaintMgr.state.buffer.push(current);
+        this.model.localPaintMgr.state.saved = false;
+        // fabric.log(myjson);
+        this.model.localPaintMgr.state.empty = this.playground.isEmpty();
+        // console.log(this.state.buffer.length, this.state.backStep);
+      }
     },
     undoEvent(reverse = false) { // do redo when reverse is true
       const canvas = this.playground;
@@ -555,7 +568,10 @@ export default {
   }
 }
 .fabric-container {
-  margin: auto;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: auto;
   width: fit-content;
 }
 a {
@@ -642,7 +658,7 @@ a {
   position:absolute;
   left:0;
   right:0;
-  bottom:155px;
+  bottom:100px;
   margin:auto;
   width:145px;
   height:30px;
@@ -666,6 +682,18 @@ a {
     border-radius: 2px;
     background: #D95E2E
   }
+}
+
+.paint-bottom {
+  position:absolute;
+  width:621px;
+  height:63px;
+  left: 0px;
+  right: 0px;
+  bottom: 30px;
+  margin:auto;
+  border: 1px solid #D8D8D8;
+  // background:lightgreen;
 }
 // .blockly-wrapper {
 //   width: 100%;
