@@ -223,6 +223,10 @@ const mutations = {
           data: {
             X: state.info.position.x,
             Y: state.info.position.y,
+            Z: state.info.position.z,
+            A: state.info.orientation.yaw,
+            B: state.info.orientation.roll,
+            C: state.info.orientation.pitch,
             F: state.info.speed,
             Q: state.info.acceleration,
           },
@@ -245,7 +249,12 @@ const mutations = {
         'xarm_move_line',
         {
           data: {
+            X: state.info.position.x,
+            Y: state.info.position.y,
             Z: state.info.position.z,
+            A: state.info.orientation.yaw,
+            B: state.info.orientation.roll,
+            C: state.info.orientation.pitch,
             F: state.info.speed,
             Q: state.info.acceleration,
           },
@@ -310,6 +319,10 @@ const mutations = {
         'xarm_move_line',
         {
           data: {
+            X: state.info.position.x,
+            Y: state.info.position.y,
+            Z: state.info.position.z,
+            A: state.info.orientation.yaw,
             B: state.info.orientation.roll,
             C: state.info.orientation.pitch,
             F: state.info.speed,
@@ -348,7 +361,12 @@ const mutations = {
         'xarm_move_line',
         {
           data: {
+            X: state.info.position.x,
+            Y: state.info.position.y,
+            Z: state.info.position.z,
             A: state.info.orientation.yaw,
+            B: state.info.orientation.roll,
+            C: state.info.orientation.pitch,
             F: state.info.speed,
             Q: state.info.acceleration,
           },
