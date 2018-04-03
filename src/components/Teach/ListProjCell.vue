@@ -223,6 +223,7 @@ export default {
   font-size: 10px;
   // text-align: center;
   padding-top: 3px;
+  z-index: 9;
   // cursor: pointer;
 }
 .line-single-ball:after {
