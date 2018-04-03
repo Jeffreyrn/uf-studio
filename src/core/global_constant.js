@@ -33,9 +33,13 @@ self.FILE_ID_RUN_PIP_COMMAND = 'run_pip_command';
 self.FILE_ID_RUN_PYTHON_SCRIPT = 'run_python_script';
 self.FILE_ID_STOP_PYTHON_SCRIPT = 'stop_python_script';
 // paint cmd
-self.PAINT_OUTLINE_PRINT = 'start_outline_printing'
-self.PAINT_GREYSCALE_PRINT = 'start_grayscale_printing'
-self.PAINT_STOP_PRINT = 'xarm_stop_printing'
+self.PAINT_OUTLINE_PRINT = 'start_outline_printing';
+self.PAINT_GREYSCALE_PRINT = 'start_grayscale_printing';
+self.PAINT_STOP_PRINT = 'xarm_stop_printing';
+self.PAINT_GET_ZERO_CONFIG = 'get_zeropoint_config';
+self.PAINT_MOVE_LINE = 'xarm_move_line';
+
+self.exampleData = {"objects":[{"type":"path-group","originX":"left","originY":"top","left":350,"top":70,"width":34,"height":34,"fill":"","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":4.41,"scaleY":4.41,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","transformMatrix":null,"paths":[{"type":"rect","originX":"left","originY":"top","left":26,"top":56,"width":32,"height":32,"fill":"","stroke":"#000","strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"evenodd","globalCompositeOperation":"source-over","transformMatrix":[1,0,0,1,-25,-55],"rx":0,"ry":0}]}],"background":"#ECEFF1"};
 
 // app cmd
 self.APPSTORE_GET_APPS = 'get_apps';

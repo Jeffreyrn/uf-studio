@@ -27,7 +27,7 @@ self.lastFileData = [];
 self.visible = {
   starRecording: false,
 }
-self.projTypeSelected = '1';
+self.projTypeSelected = '2';
 self.projTypeSelectedShow = false;
 self.projRenameShow = false;
 self.willOnSelectIndex = -1;
@@ -320,7 +320,7 @@ self.onSelect = (e, index) => {
 self.curPro2Tree = () => {
   const tempDatas = [];
   for (let i = 0; i < self.curProjList.length; i += 1) {
-    const proj = self.curProjList[i]
+    const proj = self.curProjList[i];
     const aChild = {};
     aChild.label = proj.name;
     aChild.uuid = proj.uuid;
@@ -332,6 +332,10 @@ self.curPro2Tree = () => {
     }
     else {
       aChild.proType = 'continuous';
+    }
+    // 先把 waypoint 去掉
+    if (aChild.proType === 'continuous') {
+      continue;
     }
     aChild.children = [];
     tempDatas.push(aChild);

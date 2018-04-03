@@ -74,7 +74,7 @@
               </div>
             </div>
           </div>
-          <ListProj id="bottom-right-frame" :editState='editState'></ListProj>
+          <ListProj id="bottom-right-frame" :editState='editState' :parentWidth="bottomRightWidth"></ListProj>
         </div>
       </div>
 
@@ -192,6 +192,7 @@ export default {
       clientHeight: 200,
       rightFrameWidth: 320,
       bottomLeftWidth: 200,
+      bottomRightWidth: 0,
       pointWay: false,
       editState: false,
       isDeleteFileDialogShow: false,
@@ -268,11 +269,11 @@ export default {
         });
       }
       else {
-        console.log(`proj length 0`);
+        // console.log(`proj length 0`);
       }
     },
     onstop() {
-      console.log(`stop teach = 4`);
+      // console.log(`stop teach = 4`);
       window.CommandsTeachSocket.stopTeach((dict) => {
         console.log(`stop teach = ${JSON.stringify(dict)}`);
         if (dict.code === 0) {
@@ -551,7 +552,8 @@ export default {
         leftFrame.style.width = `${leftFrameWidth}px`;
       }
       if (bottomRightFrame !== null && bottomRightFrame !== undefined) {
-        bottomRightFrame.style.width = `${totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth}px`;
+        this.bottomRightWidth = totalFrameWidth - this.rightFrameWidth - this.bottomLeftWidth
+        bottomRightFrame.style.width = `${this.bottomRightWidth}px`;
       }
       const bottomHeight = 300; // this.editState ? 200 : 300;
       if (leftBottomArea !== null && leftBottomArea !== undefined) {

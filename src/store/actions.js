@@ -6,11 +6,7 @@ import GlobalUtil from '../core/global_util';
 // import CommandsTeachSocket from '../core/commands_teach_socket';
 import * as types from './mutation-types';
 
-const socketInfo = {
-  // host: '192.168.1.166',
-  host: '192.168.1.67',
-  port: '18333',
-};
+
 export const openWebsocket = ({ commit }) => {
   // let i = 0;
   // const ti = setInterval(() => {
@@ -20,7 +16,7 @@ export const openWebsocket = ({ commit }) => {
   //     clearInterval(ti);
   //   }
   // }, 2000);
-  GlobalUtil.socketCom.init_socket(socketInfo);
+  GlobalUtil.socketCom.init_socket(GlobalUtil.socketInfo);
   GlobalUtil.socketCom.init_onopen(() => {
     console.log('onopen onopen onopen');
     GlobalUtil.model.localDeviceStatus.socket_connected = true;
@@ -64,6 +60,9 @@ export const openWebsocket = ({ commit }) => {
     GlobalUtil.model.localParamsSetting.onmessage(evt);
     GlobalUtil.socketCom.onmessage(evt);
     // Model.robot.onmessage(evt);
+    // if (temp_msg.cmd === 'xarm_printing_progress') {progressNum
+    //   console.log(`temp_msg.data = ${JSON.stringify(temp_msg.data)}`);
+    // }
     if (temp_msg.type === 'report') {
       if (temp_msg.cmd === 'devices_status_report') {
         commit(types.SET_ROBOT_STATUS, temp_msg.data);

@@ -19,10 +19,12 @@
           :data="model.localPaintMgr.projList"
           highlight-current-row
           @current-change="handleCurrentChange"
+          @cell-mouse-enter="cellMouse"
+          @cell-mouse-leave="cellMouse"
           :row-class-name="tableRowClassName"
           style="width:100%;border:0;">
           <el-table-column
-            style="background:yellow;"
+            style=""
             prop="name"
             label="Project name"
             width="200">
@@ -76,8 +78,13 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      // const html = document.getElementById('proj-id').innerHTML;
-      // console.log(`html = ${html}`);
+      const html = document.getElementById('proj-id').innerHTML;
+      console.log(`html = ${html}`);
+      // const trs = document.getElementsByTag("tr"); // .onmouseover = null;
+      // for (let i = 0; i < trs.length; i += 1) {
+      //   const tr = trs[i];
+      //   tr.onmouseover = null;
+      // }
     });
   },
   computed: {
@@ -90,23 +97,27 @@ export default {
       console.log(`row = ${row}, rowIndex = ${rowIndex}`);
       return rowIndex === this.currentRow ? 'selected' : 'normal';
     },
-    setCurrent(row) {
-      this.$refs.singleTable.setCurrentRow(row);
-    },
+    // setCurrent(row) {
+    //   this.$refs.singleTable.setCurrentRow(row);
+    // },
     handleCurrentChange(val) {
       this.currentRow = val;
       this.currentRow = val.index;
       console.log(`set Current this.currentRow = ${this.currentRow}`);
       // this.model.localPaintMgr.curProj = val;
     },
+    cellMouse(row, column, cell, event) {
+      console.log(`row = ${row}, column = ${column}, cell = ${cell}, event = ${event}`)
+      cell.style.backgroundColor = '';
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.head-text {
-  color: blue;
-}
+// .head-text {
+//   color: blue;
+// }
 .dialog-top {
   width: 100%;
   height: 67px;
@@ -162,13 +173,13 @@ export default {
   letter-spacing: -0.5px;
   /* cursor: pointer; */
 }
-.table-td1{
-  font-family: 'Gotham-Book';
-  font-size: 12px;
-  color: #3C3C3C;
-  letter-spacing: -0.38px;
-  text-align: center;
-}
+// .table-td1{
+//   font-family: 'Gotham-Book';
+//   font-size: 12px;
+//   // color: #3C3C3C;
+//   letter-spacing: -0.38px;
+//   text-align: center;
+// }
 .table-head {
   font-family: 'Gotham-Medium';
   font-size: 16px;

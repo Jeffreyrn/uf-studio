@@ -93,9 +93,9 @@ html, body {
   height: 100%;
 }
 
-.el-table tr:hover {
-  background: yellow;
-}
+/* .el-table tr:hover { */
+  /* background: yellow; */
+/* } */
 .el-table td {
   font-family: 'Gotham-Book';
   font-size: 12px;
@@ -116,14 +116,22 @@ html, body {
   letter-spacing: -1px;
   text-align: center;
 }
-.el-table tr:hover {
-  background-color:transparent;
-}
+/* .el-table tr:hover {
+  background: #A5A7A9;
+} */
 
 .el-table .normal {
   background: white;
 }
 
+el-table .normal .table-td {
+  color: #3C3C3C;
+}
+
 .el-table .selected {
   background: #A5A7A9;
+}
+
+.el-table .selected .table-td {
+  color: white;
 }

@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="list-project-wrapper" @scroll="checkscroll()">
-    <div v-if="model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)!==null || model.localTeach.curEditingFileUUID===''">
+    <div class="scroll-container" :style="{width: listWidth}" v-if="model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)!==null || model.localTeach.curEditingFileUUID===''">
       <!-- <div v-for='index in model.localTeach.showArr'>
         <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)'></ListProjCell>
         {{ index }}
@@ -10,7 +10,7 @@
         </div>
         <!-- <div v-if="model.localTeach.curProj.type==='discontinuous'" style="width:0px;">
         </div> -->
-        <div v-for='index in model.localTeach.showArr'>
+        <div class="cell-wrapper" v-for='index in visableList' :style="{left: (scrollLeft + (index-firstCellInView)*60)+ 'px'}">
           <ListProjCell :index='index' :file='model.localTeach.getFileInfo(model.localTeach.curEditingFileUUID)' :editState='editState'></ListProjCell>
         </div>
         <div style="width:100px;">
@@ -28,10 +28,12 @@
 import ListProjCell from './ListProjCell';
 
 export default {
-  props: ['editState'],
+  props: ['editState', 'parentWidth'],
   data() {
     return {
       model: window.GlobalUtil.model,
+      firstCellInView: 0,
+      scrollLeft: 0,
     };
   },
   mounted() {
@@ -46,8 +48,9 @@ export default {
       // const file = window.GlobalUtil.model.localTeach.getTeachFileInfo(window.GlobalUtil.model.localTeach.curProj, uuid);
     },
     checkscroll() {
-      const scrollLeft = document.getElementById('bottom-right-frame').scrollLeft;
-      console.log(`check scroll = ${scrollLeft}, index = ${parseInt(scrollLeft / 60)}`);
+      this.scrollLeft = document.getElementById('bottom-right-frame').scrollLeft;
+      console.log(`check scroll = ${this.scrollLeft}, index = ${parseInt(this.scrollLeft / 60)}`);
+      this.firstCellInView = this.scrollLeft / 60
     },
     onSelect(e, index) {
       window.GlobalUtil.model.localTeach.onSelect(e, index);
@@ -63,9 +66,21 @@ export default {
     //   'bgcolor0': !window.GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
     //   'bgcolor1': window.GlobalUtil.model.localProjTree.hasOpenFileInCurPro,
     // }),
+    listWidth() {
+      return `${this.model.localTeach.showArr.length * 60}px`
+    },
+    visableList() {
+      if (this.model.localTeach.showArr) {
+        return this.model.localTeach.showArr.slice(this.firstCellInView, this.firstCellInView + this.visableCount)
+      }
+      return []
+    },
     isMarginLeft: () => ({
       'list-margin-left': window.GlobalUtil.model.localTeach.curProj.type === 'discontinuous',
     }),
+    visableCount() {
+      return (this.parentWidth / 60) + 1
+    },
   },
 };
 
@@ -77,6 +92,10 @@ export default {
   background: #434343;
   display: flex;
   justify-content: flex-start;
+  position: relative;
+  .scroll-container {
+    position: absolute;
+  }
   // height: 250px;
   // align-items: center;
 }
@@ -109,6 +128,10 @@ export default {
   // justify-content: flex-start;
   // align-items: center;
   font-size: 5px;
+  position: relative;
+  .cell-wrapper {
+    position: absolute;
+  }
   // text-align: center;
 }
 </style>

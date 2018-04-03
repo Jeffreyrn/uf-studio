@@ -16,11 +16,14 @@ self.init_socket = (args) => {
   // if (self.socket_info.socket !== null) return;
   args = args || {};
   args.logger = args.logger || console;
-  args.host = args.host || 'localhost';
-  args.port = args.port || '18321';
-  self.socket_info.host = args.host;
-  self.socket_info.port = args.port;
-  const ws_url = `ws:${self.socket_info.host}:${self.socket_info.port}/ws`;
+  // args.host = args.host || 'localhost';
+  // args.port = args.port || '18321';
+  // self.socket_info.host = args.host;
+  // self.socket_info.port = args.port;
+  // const ws_url = `ws:${self.socket_info.host}:${self.socket_info.port}/ws`;
+  const ws_url = `ws:${args.host}/ws`;
+  // const ws_url = `ws:${self.socket_info.host}/ws`;
+  console.log(`ws_url ws_url = ${ws_url}`);
   self.socket_info.socket = new ReconnectingWebSocket(ws_url, null, {
     debug: true,
     logger: args.logger,

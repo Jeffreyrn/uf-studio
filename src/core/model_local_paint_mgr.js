@@ -22,7 +22,16 @@ self.state = {
   empty: true,
   backStep: 0,
   // mode: 'outline',
-  zero: 50,
+  zero: {
+    grayscale: {
+      laser: 21,
+      pen: 22,
+    },
+    outline: {
+      laser: 33,
+      pen: 42,
+    },
+  },
   speed: 200,
 };
 
@@ -83,6 +92,16 @@ self.remoteProjs2Local = (dict) => {
     }
   }
   self.projList = projs;
+};
+
+self.findProjIndex = (uuid) => {
+  for (let i = 0; i < self.projList.length; i += 1) {
+    const proj = self.projList[i];
+    if (proj.uuid === uuid) {
+      return i;
+    }
+  }
+  return -1;
 };
 
 self.dialog = {

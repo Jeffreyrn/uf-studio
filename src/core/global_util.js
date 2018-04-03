@@ -9,11 +9,16 @@ import CommandsTeachSocket from './commands_teach_socket';
 import CommandsAppsSocket from './commands_apps_socket';
 import CommandsPaintSocket from './commands_paint_socket';
 
-// const args = {
-//   // host: '192.168.1.166',
-//   host: '192.168.1.67',
-//   port: '18333',
-// };
+const DEBUG = true;
+
+const socketInfo = {
+  // host: '192.168.1.166:18333',
+  host: '192.168.1.67:18333',
+};
+
+if (DEBUG === false) {
+  socketInfo.host = window.location.host;
+}
 
 window.GlobalConstant = GlobalConstant;
 
@@ -23,6 +28,7 @@ window.GlobalUtil = self;
 self.store = {};
 self.model = Model;
 self.socketCom = SocketCom;
+self.socketInfo = socketInfo;
 
 CommandsEditorSocket.socketCom = SocketCom;
 CommandsEditorSocket.model = Model;

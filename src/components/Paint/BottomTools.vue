@@ -1,13 +1,13 @@
 <template>
-  <div class="paint-bottom">
+  <div class="">
 
-    <div class="icon-btn" @click='onundo'>
+    <div class="icon-btn" @click='onundo' v-bind:class="undoOpacity">
       <div class="size undo" alt="Undo">
         <div class="icon-text">Undo</div>
       </div>
     </div>
 
-    <div class="icon-btn" @click="onredo">
+    <div class="icon-btn" @click="onredo" v-bind:class="redoOpacity">
       <div class="size redo" alt="Redo">
         <div class="icon-text">Redo</div>
       </div>
@@ -76,23 +76,23 @@ export default {
   watch: {
   },
   computed: {
+    redoOpacity: () => ({
+      opacity0: window.GlobalUtil.model.localPaintMgr.state.backStep === 0,
+    }),
+    undoOpacity: () => ({
+      opacity0: window.GlobalUtil.model.localPaintMgr.state.buffer.length - window.GlobalUtil.model.localPaintMgr.state.backStep <= 1,
+    }),
   },
   components: {
   },
 };
 </script>
 <style scoped lang="scss">
-.paint-bottom {
-  position:absolute;
-  width:621px;
-  height:63px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  margin:auto;
-  border: 1px solid #D8D8D8;
-  // background:lightgreen;
+
+.opacity0 {
+  opacity: 0.4;
 }
+
 .icon-btn {
   border: 0;
   // background: yellow;
@@ -108,11 +108,12 @@ export default {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: top;
+    background-size: 15px 15px;
   }
   .icon-text {
     position: absolute;
     color: white;
-    top: 42px;
+    bottom: 10px;
     padding-left: 12px;
     font-family: 'Gotham-Book';
     font-size: 10px;
@@ -141,7 +142,7 @@ export default {
     background-image: url('./../../assets/img/paint/tool-copy.svg');
   }
   .add {
-    margin-top: 10px;
+    margin-top: 15px;
     background-image: url('./../../assets/img/paint/icon_addsticker.svg');
   }
   .delete {

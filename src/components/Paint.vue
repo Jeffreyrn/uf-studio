@@ -3,9 +3,10 @@
     <CommonTopMenu
       type='paint'
       :onlist='listProjects'
-      title='Draw/Laser'
+      :isFileSelected="model.localPaintMgr.curProj!==null"
+      title='Draw / Laser'
       :issaved='model.localPaintMgr.state.saved'
-      :curFileName='(model.localPaintMgr.curProj||{}).name'
+      :curFileName="curProj.name"
       :onback='onBack'
       :onsave='saveProject'
       :onnew='newProject'
@@ -15,13 +16,27 @@
     </CommonTopMenu>
 
     <div style="" class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
-      <canvas style="" id="fabric" tabindex='1' width="800" height="400"></canvas>
+      <!-- <canvas style="" id="fabric" tabindex='1' width="825" height="385"></canvas> -->
+      <canvas style="" id="fabric" tabindex='1' width="900" height="450"></canvas>
+    </div>
+
+    <!-- buffer : {{ this.model.localPaintMgr.state.buffer.length }} -- backStep: {{ model.localPaintMgr.state.backStep }} -->
+
+    <div class="float-type" style="" v-show="model.localPaintMgr.curProj!==null">
+      <span class="point">
+      </span>
+      Mode: {{ curProj.projType }}
+    </div>
+
+    <div class="bottom-progress" v-if="model.localPaintMgr.state.isRunnningPrint && 1===2">
+      {{ Number(progressNum) * 1 }} %
     </div>
 
     <BottomTools
+      class="paint-bottom"
       v-if="model.localPaintMgr.curProj!==null"
-      :onundo='undoEvent'
-      :onredo='undoEvent'
+      :onredo='onredo'
+      :onundo='onundo'
       :onimage="openImage"
       :onadd="addIconsDialog"
       :ondelete="removeSelected"
@@ -29,6 +44,7 @@
       :onremoveall='removeAll'
       :ontext="textDialog">
     </BottomTools>
+
     <DialogNewProj
       :onclose='closeDialog'
       :onok='createProj'
@@ -84,7 +100,8 @@ import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogPaintSetting from './Paint/DialogPaintSetting';
-
+// import { setTimeout } from 'timers';
+// const path = require('path');
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
 
@@ -123,11 +140,12 @@ export default {
       playground: null,
       // backStr: 'AppStore',
       emotions: {},
+      progressNum: '0',
     };
   },
   mounted() {
     this.initFabric();
-    this.fabricModified();
+    // this.fabricModified();
     this.loadEmotions();
     console.log(this.playground.toSVG());
     setTimeout(() => {
@@ -163,15 +181,16 @@ export default {
       this.model.localPaintMgr.visible.text = true;
     },
     listProjects() {
-      console.log('list projects');
+      // console.log('list projects');
+      this.model.localPaintMgr.curProj = this.model.localPaintMgr.curProj;
       this.model.localPaintMgr.visible.projs = true;
     },
     saveProject() {
-      console.log('save project');
+      // console.log('save project');
       const jsonStr = JSON.stringify(this.playground);
       console.log(jsonStr);
-      window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, (dict) => {
-        console.log(`dict = ${JSON.stringify(dict)}`);
+      window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, () => {
+        // console.log(`dict = ${JSON.stringify(dict)}`);
         this.model.localPaintMgr.state.saved = true;
       });
     },
@@ -217,23 +236,34 @@ export default {
     //   sendData = null;
     // },
     startPrint() {
-      this.model.localPaintMgr.visible.setting = true;
+      window.CommandsPaintSocket.getZeroConfig((dict) => {
+        this.model.localPaintMgr.state.zero = dict.data;
+        this.model.localPaintMgr.visible.setting = true;
+      });
     },
     startPrintOK() {
       this.closeDialog();
       const projType = this.model.localPaintMgr.curProj.projType;
       const sendData = projType === 'outline' ? this.playground.toSVG() : this.playground.toDataURL('png');
+      const end_type = 'pen'; // 0: 'pen', 1: 'laser',
+      const zeroHeightDict = projType === 'outline' ? this.model.localPaintMgr.state.zero.outline : this.model.localPaintMgr.state.zero.grayscale;
       const config = {
         speed: this.model.localPaintMgr.state.speed || 100,
         canvasMode: projType === 'outline' ? 2 : 1, // 2. outline 1. gray
-        zeropoint_height: Number(this.model.localPaintMgr.state.zero),
-        end_type: 'pen', // 0: 'pen', 1: 'laser',
+        zeropoint_height: end_type === 'pen' ? zeroHeightDict.pen : zeroHeightDict.laser, // Number(this.model.localPaintMgr.state.zero),
+        end_type: end_type,
         drawing_feedrate: 500,
       };
       window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
-        console.log(`start printing = ${JSON.stringify(dict)}`);
+        // console.log(`start printing = ${JSON.stringify(dict)}`);
         if (dict.code === 0) {
-          this.model.localPaintMgr.state.isRunnningPrint = true;  
+          this.model.localPaintMgr.state.isRunnningPrint = true;
+        }
+        if (dict.code === 1) {
+          this.progressNum = dict.data.progress;
+        }
+        if (dict.code === 1111) {
+          this.model.localPaintMgr.state.isRunnningPrint = false;
         }
       });
     },
@@ -245,11 +275,15 @@ export default {
       });
     },
     createProj() {
-      console.log('create proj');
+      // console.log('create proj');
       this.closeDialog();
       const projType = this.model.localPaintMgr.projTypeSelected;
-      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, () => {
-        this.model.localPaintMgr.state.saved = false;
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, (dict, filePath) => {
+        console.log(`dict = ${JSON.stringify(dict)}`);
+        this.model.localPaintMgr.state.saved = true;
+        const curProjIndex = this.model.localPaintMgr.findProjIndex(filePath);
+        console.log(`curProjIndex = ${curProjIndex}`);
+        this.selectProj(curProjIndex);
       });
     },
     newProject() {
@@ -261,14 +295,16 @@ export default {
     initFabric() {
       this.playground = new fabric.Canvas('fabric', {
         fireRightClick: true,
+        backgroundColor: '#ECEFF1',
+        // selectionBorderColor: 'yellow',
       });
       this.playground.on({
         'object:modified': () => {
-          this.fabricModified();
+          // this.fabricModified();
         },
         'object:added': (options) => {
           options.target.bringToFront();
-          this.fabricModified();
+          // this.fabricModified();
         },
       });
     },
@@ -387,11 +423,21 @@ export default {
       }
     },
     fabricModified() {
-      this.model.localPaintMgr.state.buffer.push(JSON.stringify(this.playground));
-      this.model.localPaintMgr.state.saved = false;
-      // fabric.log(myjson);
-      this.model.localPaintMgr.state.empty = this.playground.isEmpty();
-      // console.log(this.state.buffer.length, this.state.backStep);
+      const backStep = this.model.localPaintMgr.state.backStep;
+      const size = this.model.localPaintMgr.state.buffer.length;
+      const last = this.model.localPaintMgr.state.buffer[size - 1];
+      const current = JSON.stringify(this.playground);
+      if (backStep > 0) {
+        this.model.localPaintMgr.state.buffer = this.model.localPaintMgr.state.buffer.slice(0, size - backStep);
+        this.model.localPaintMgr.state.backStep = 0;
+      }
+      if (last !== current) {
+        this.model.localPaintMgr.state.buffer.push(current);
+        this.model.localPaintMgr.state.saved = false;
+        // fabric.log(myjson);
+        this.model.localPaintMgr.state.empty = this.playground.isEmpty();
+        // console.log(this.state.buffer.length, this.state.backStep);
+      }
     },
     undoEvent(reverse = false) { // do redo when reverse is true
       const canvas = this.playground;
@@ -406,12 +452,20 @@ export default {
         checkValid = this.model.localPaintMgr.state.backStep < (size - 1);
         nextStep = this.model.localPaintMgr.state.backStep + 1;
       }
+      const backStep = this.model.localPaintMgr.state.backStep;
+      console.log(`model.localPaintMgr.state.buffer size = ${size}, backStep = ${backStep}, checkValid = ${checkValid}, reverse = ${reverse}`);
       if (checkValid) {
         canvas.clear().renderAll();
         this.model.localPaintMgr.state.backStep = nextStep;
         const loadJsonStr = this.model.localPaintMgr.state.buffer[size - nextStep - 1];
         canvas.loadFromJSON(loadJsonStr, canvas.renderAll.bind(canvas));
       }
+    },
+    onundo() {
+      this.undoEvent(false);
+    },
+    onredo() {
+      this.undoEvent(true);
     },
     duplicate() {
       const activeObject = this.playground.getActiveObject();
@@ -490,6 +544,18 @@ export default {
   watch: {
   },
   computed: {
+    curProj: {
+      get() {
+        return this.model.localPaintMgr.curProj || {};
+      },
+      set(value) {
+        this.model.localPaintMgr.curProj = value;
+      },
+    },
+    topTitle() {
+      const fullname = `${this.curProj.name}`;
+      return this.curProj.name !== undefined ? fullname : '';
+    },
   },
   components: {
     CommonTopMenu,
@@ -506,12 +572,16 @@ export default {
 <style scoped lang="scss">
 #paint-wrapper {
   #fabric {
-    background: white;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    background: '#ECEFF1';
+    // background: white; #D95E2E 100%
+    // box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
 }
 .fabric-container {
-  margin: auto;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: auto;
   width: fit-content;
 }
 a {
@@ -579,6 +649,61 @@ a {
       width: 120%;
     }
   }
+}
+
+.bottom-progress {
+  position:absolute;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  left: 0px;
+  right: 0px;
+  bottom: 100px;
+  margin: auto;
+  border: 1px solid #D8D8D8;
+  text-align: center;
+}
+
+.float-type {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:100px;
+  margin:auto;
+  width:145px;
+  height:30px;
+  line-height: 30px;
+  font-family: 'Gotham-Medium';
+  font-size: 14px;
+  color: #4A4A4A;
+  letter-spacing: -0.58px;
+  text-align: center;
+  background: #FFFFFF;
+  border-radius: 100px;
+  // border: 1px solid gray;
+  box-shadow: 0 0 4px 0 rgba(192,192,192,0.50);
+  // #D95E2E 100%  #E27347;
+  .point {
+    position: absolute;
+    left: 15px;
+    width: 4px;
+    height: 4px;
+    top: 13px;
+    border-radius: 2px;
+    background: #D95E2E
+  }
+}
+
+.paint-bottom {
+  position:absolute;
+  width:621px;
+  height:63px;
+  left: 0px;
+  right: 0px;
+  bottom: 30px;
+  margin:auto;
+  border: 1px solid #D8D8D8;
+  // background:lightgreen;
 }
 // .blockly-wrapper {
 //   width: 100%;

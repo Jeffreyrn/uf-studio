@@ -2,6 +2,7 @@
 <div class="blockly-wrapper">
   <CommonTopMenu
     title='App Editor'
+    :isFileSelected='enableRun'
     :issaved='saveStatus'
     :curFileName='model.localAppsMgr.curProName + notSaved'
     :onback='quitPage'
@@ -11,7 +12,7 @@
     :onstart='startRun'>
   </CommonTopMenu>
   <div class="main-wrapper">
-    <div id="blockly-area" class="blockly-workspace" tabindex="0">
+    <div id="blockly-area" class="blockly-workspace" v-bind:class="{'div-disable': divDisable}" tabindex="0">
       <div id="tab-blocks"></div>
       <div class="hide-button el-icon-arrow-right" v-bind:class="{rotate: !uiData.sideShow}" @click="toggleSideShow"></div>
     </div>
@@ -57,6 +58,8 @@ export default {
   props: ['blocklyData', 'moduleName'],
   data() {
     return {
+      enableRun: false,
+      divDisable: false,
       saveStatus: true,
       pre: '',
       category: 'myapp',
@@ -118,11 +121,16 @@ export default {
       this.backStr = 'AppStore';
       this.category = this.myAppData.category;
       this.getProject(name);
+      if (this.category !== 'myapp') {
+        this.divDisable = true
+      }
+      this.enableRun = this.blocksNotEmpty()
     }
     this.setOnline(true)
   },
   deactivated() {
     this.setOnline(false)
+    this.divDisable = false
   },
   components: {
     XarmModel,
@@ -184,6 +192,11 @@ export default {
     // load project
   },
   methods: {
+    backToEdit() {
+      this.enableRun = this.blocksNotEmpty()
+      this.category = 'myapp'
+      this.divDisable = false
+    },
     setOnline(value) {
       const data = {
         index: 'online',
@@ -221,6 +234,7 @@ export default {
           console.log('get xml text', xml.xmlData)
           Blockly.appendXML(xml.xmlData)
           this.block = {}
+          // this.enableRun = this.blocksNotEmpty() // ReferenceError: blocksNotEmpty is not defined FileList,vue
         }, (data) => {
           this.$message({
             type: 'info',
@@ -236,7 +250,8 @@ export default {
       }
       window.setTimeout(() => {
         this.xmlLoaded = true
-      }, 1800)
+        this.enableRun = this.blocksNotEmpty()
+      }, 1600)
     },
     popDialog(type) {
       if (Object.prototype.hasOwnProperty.call(this.dialog, type)) {
@@ -283,6 +298,9 @@ export default {
       });
     },
     newProject() {
+      // if (this.divDisable) {
+      //   return false
+      // }
       if (this.saveStatus || this.emptyProject()) {
         this.clearBlockly()
         // this.model.localAppsMgr.curProName = ''
@@ -310,6 +328,7 @@ export default {
       const block = Blockly.BlockWorkspace.getBlockById(blockId)
       // console.log(`on change ${event.type}`)
       // console.log(event, block)
+      this.backToEdit()
       if (block !== null && event.type === Blockly.Events.CREATE && this.xmlLoaded) {
         // eventBus.$emit('show', block)
         const type = block.type
@@ -374,6 +393,7 @@ export default {
     //   });
     // },
     loadProject(path) {
+      this.backToEdit()
       if (path === this.model.localAppsMgr.curProName) {
         console.log('selected')
       }
@@ -400,8 +420,10 @@ export default {
     },
     getProject(path) {
       this.disableLoadProject = true
+      self = this
       window.setTimeout(() => {
         this.disableLoadProject = false
+        this.enableRun = self.blocksNotEmpty()
       }, 1500)
       const data = {
         category: this.category,
@@ -462,6 +484,10 @@ export default {
     emptyProject() {
       return !this.blocksLength() && !this.model.localAppsMgr.curProName
     },
+    blocksNotEmpty() {
+      console.log('block length', this.blocksLength())
+      return this.blocksLength() > 0 ? true : false
+    },
     blocksLength() {
       if (Blockly.BlockWorkspace) {
         return Blockly.BlockWorkspace.getAllBlocks().length;
@@ -515,6 +541,10 @@ export default {
 <style lang="scss" src="./../assets/css/blockly.scss"></style>
 <style lang="scss" scoped>
   $themeOrange:#D95E2E;
+  .div-disable {
+    pointer-events: none;
+    opacity: 0.8;
+  }
   .main-wrapper {
     display: flex;
     flex-direction: row;
