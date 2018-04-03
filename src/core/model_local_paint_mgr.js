@@ -16,7 +16,8 @@ self.visible = {
   del: false,
 };
 
-self.curToDelIndex = -1;
+self.curToDelProj = null;
+self.curToDelProjTitle = '';
 
 self.state = {
   isRunnningPrint: false,

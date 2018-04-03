@@ -84,7 +84,7 @@
     </DialogPaintSetting>
 
     <DialogTeachAlert
-      title='Del this file ?'
+      :title='model.localPaintMgr.curToDelProjTitle'
       cancel='Cancel'
       ok='Delete'
       :onok='onDeleteOK'
@@ -176,12 +176,12 @@ export default {
   methods: {
     onDeleteOK() {
       this.closeDel();
-      const curToDelIndex = this.model.localPaintMgr.curToDelIndex;
-      const toDelProj = this.model.localPaintMgr.projList[curToDelIndex];
-      console.log(`curToDelIndex = ${curToDelIndex}, uuid = ${toDelProj.uuid}`);
-      window.CommandsPaintSocket.delProj(toDelProj.uuid, () => {
+      const toDelProj = this.model.localPaintMgr.curToDelProj;
+      const toDelUUID = toDelProj.uuid;
+      console.log(`toDelProj uuid = ${toDelUUID}`);
+      window.CommandsPaintSocket.delProj(toDelUUID, () => {
         if (this.model.localPaintMgr.curProj !== null) {
-          if (toDelProj.uuid === this.model.localPaintMgr.curProj.uuid) {
+          if (toDelUUID === this.model.localPaintMgr.curProj.uuid) {
             this.model.localPaintMgr.curProj = null;
           }
         }

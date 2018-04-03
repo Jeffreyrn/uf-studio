@@ -29,6 +29,9 @@
             label="Project name"
             width="150">
             <template slot-scope="scope">
+              <div class="proj-selected"
+                v-if="model.localPaintMgr.curProj===model.localPaintMgr.projList[scope.$index]">
+              </div>
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].name }}
               </div>
@@ -102,7 +105,9 @@ export default {
   },
   methods: {
     onDelete(index) {
-      this.model.localPaintMgr.curToDelIndex = index;
+      const curProj = this.model.localPaintMgr.projList[index];
+      this.model.localPaintMgr.curToDelProj = curProj;
+      this.model.localPaintMgr.curToDelProjTitle = `Delete project ${curProj.name} ?`;
       this.model.localPaintMgr.visible.del = true;
     },
     tableRowClassName({ row, rowIndex }) {
@@ -113,10 +118,12 @@ export default {
     //   this.$refs.singleTable.setCurrentRow(row);
     // },
     handleCurrentChange(val) {
-      this.currentRow = val;
-      this.currentRow = val.index;
-      console.log(`set Current this.currentRow = ${this.currentRow}`);
-      // this.model.localPaintMgr.curProj = val;
+      if (val !== null && val !== undefined) {
+        this.currentRow = val;
+        this.currentRow = val.index;
+        console.log(`set Current this.currentRow = ${this.currentRow}`);
+        // this.model.localPaintMgr.curProj = val;
+      }
     },
     cellMouse(row, column, cell, event) {
       console.log(`row = ${row}, column = ${column}, cell = ${cell}, event = ${event}`)
@@ -208,5 +215,16 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
+}
+.proj-selected {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 10px;
+  left: 30px;
+  background-image: url('./../../assets/img/pop/icon_select.svg');
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>
