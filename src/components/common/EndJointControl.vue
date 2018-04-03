@@ -889,8 +889,8 @@ span.text {
     input[type=range] {
       height: 8px;
       border-radius: 100px;
-      background-image: linear-gradient(90deg, #FF6868 0%, #8FFF94 100%);
-      transform: rotate(-90deg);
+      background-image: linear-gradient(90deg, #8FFF94 0%, #FF6868 100%);
+      transform: rotate(90deg);
       -webkit-appearance: none;
       height: 36px;
       width: 168px;
