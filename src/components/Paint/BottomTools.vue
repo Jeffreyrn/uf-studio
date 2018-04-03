@@ -77,10 +77,10 @@ export default {
   },
   computed: {
     redoOpacity: () => ({
-      'opacity0': GlobalUtil.model.localPaintMgr.state.backStep === 0,
+      opacity0: window.GlobalUtil.model.localPaintMgr.state.backStep === 0,
     }),
     undoOpacity: () => ({
-      'opacity0': GlobalUtil.model.localPaintMgr.state.buffer.length - GlobalUtil.model.localPaintMgr.state.backStep <= 1,
+      opacity0: window.GlobalUtil.model.localPaintMgr.state.buffer.length - window.GlobalUtil.model.localPaintMgr.state.backStep <= 1,
     }),
   },
   components: {

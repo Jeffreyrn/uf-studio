@@ -94,6 +94,16 @@ self.remoteProjs2Local = (dict) => {
   self.projList = projs;
 };
 
+self.findProjIndex = (uuid) => {
+  for (let i = 0; i < self.projList.length; i += 1) {
+    const proj = self.projList[i];
+    if (proj.uuid === uuid) {
+      return i;
+    }
+  }
+  return -1;
+};
+
 self.dialog = {
   textInput: '', // text value
   fontSelect: 0, // select font

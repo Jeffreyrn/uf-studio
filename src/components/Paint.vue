@@ -6,7 +6,7 @@
       :isFileSelected="model.localPaintMgr.curProj!==null"
       title='Draw / Laser'
       :issaved='model.localPaintMgr.state.saved'
-      :curFileName="topTitle"
+      :curFileName="curProj.name"
       :onback='onBack'
       :onsave='saveProject'
       :onnew='newProject'
@@ -100,7 +100,8 @@ import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogPaintSetting from './Paint/DialogPaintSetting';
-
+// import { setTimeout } from 'timers';
+// const path = require('path');
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
 
@@ -188,7 +189,7 @@ export default {
       // console.log('save project');
       const jsonStr = JSON.stringify(this.playground);
       console.log(jsonStr);
-      window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, (dict) => {
+      window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, () => {
         // console.log(`dict = ${JSON.stringify(dict)}`);
         this.model.localPaintMgr.state.saved = true;
       });
@@ -277,8 +278,12 @@ export default {
       // console.log('create proj');
       this.closeDialog();
       const projType = this.model.localPaintMgr.projTypeSelected;
-      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, () => {
-        this.model.localPaintMgr.state.saved = false;
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, (dict, filePath) => {
+        console.log(`dict = ${JSON.stringify(dict)}`);
+        this.model.localPaintMgr.state.saved = true;
+        const curProjIndex = this.model.localPaintMgr.findProjIndex(filePath);
+        console.log(`curProjIndex = ${curProjIndex}`);
+        this.selectProj(curProjIndex);
       });
     },
     newProject() {
@@ -539,8 +544,13 @@ export default {
   watch: {
   },
   computed: {
-    curProj() {
-      return this.model.localPaintMgr.curProj || {};
+    curProj: {
+      get() {
+        return this.model.localPaintMgr.curProj || {};
+      },
+      set(value) {
+        this.model.localPaintMgr.curProj = value;
+      },
     },
     topTitle() {
       const fullname = `${this.curProj.name}`;

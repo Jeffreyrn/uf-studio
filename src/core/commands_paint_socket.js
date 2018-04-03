@@ -38,13 +38,15 @@ self.createProj = (name, proType, callback) => {
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
       root: filePath,
-      name: '',
+      // name: '',
+      // file" '',
+      data: JSON.stringify(window.GlobalConstant.exampleData),
     }),
   };
   self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_FILE, params, () => {
     self.listProjs((dict) => {
       if (callback) {
-        callback(dict)
+        callback(dict, filePath);
       }
     });
   });

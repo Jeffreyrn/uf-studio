@@ -78,8 +78,8 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      // const html = document.getElementById('proj-id').innerHTML;
-      // console.log(`html = ${html}`);
+      const html = document.getElementById('proj-id').innerHTML;
+      console.log(`html = ${html}`);
       // const trs = document.getElementsByTag("tr"); // .onmouseover = null;
       // for (let i = 0; i < trs.length; i += 1) {
       //   const tr = trs[i];

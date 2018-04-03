@@ -14,16 +14,16 @@
         <img src="./../../assets/img/blockly/btn_save.svg"/>
         <span>save</span>
       </div>
-      <div v-else style="opacity: 0.3;padding-right:18px;">
-        <img src="./../../assets/img/blockly/btn_save.svg" style="width:35px;"/>
+      <div v-else style="opacity: 0.3;width:35px;padding-right:18px;">
+        <img src="./../../assets/img/blockly/btn_save.svg"/>
         <span>save</span>
       </div>
-      <div class="cursor-pointer" @click='onnew' style="padding-right:10px;">
-        <img src="./../../assets/img/blockly/btn_addfile.svg"  style="width:35px;"/>
+      <div class="cursor-pointer" @click='onnew' style="width:35px;padding-right:10px;">
+        <img src="./../../assets/img/blockly/btn_addfile.svg" />
         <span>new</span>
       </div>
-      <div class="cursor-pointer" v-if="type==='paint'" @click='onlist' style="padding-right:10px;">
-        <img src="./../../assets/img/blockly/btn_list.svg" style="width:35px;"/>
+      <div class="cursor-pointer" v-if="type==='paint'" @click='onlist' style="width:35px;padding-right:10px;">
+        <img src="./../../assets/img/blockly/btn_list.svg" style=""/>
         <span>list</span>
       </div>
       <div v-if="isRunning===false">

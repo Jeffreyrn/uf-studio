@@ -80,7 +80,7 @@ export default {
     }),
     visableCount() {
       return (this.parentWidth / 60) + 1
-    }
+    },
   },
 };
 
