@@ -91,7 +91,9 @@ self.remoteProjs2Local = (dict) => {
       index += 1;
     }
   }
-  self.projList = projs;
+  self.projList = window.GlobalUtil.bubbleSort(projs, (a, b) => {
+    return a.ctime_secs < b.ctime_secs;
+  });
 };
 
 self.findProjIndex = (uuid) => {

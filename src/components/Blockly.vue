@@ -419,8 +419,8 @@ export default {
       }
     },
     getProject(path) {
-      this.disableLoadProject = true
-      self = this
+      const self = this;
+      this.disableLoadProject = true;
       window.setTimeout(() => {
         this.disableLoadProject = false
         this.enableRun = self.blocksNotEmpty()
@@ -485,8 +485,8 @@ export default {
       return !this.blocksLength() && !this.model.localAppsMgr.curProName
     },
     blocksNotEmpty() {
-      console.log('block length', this.blocksLength())
-      return this.blocksLength() > 0 ? true : false
+      console.log('block length', this.blocksLength());
+      return this.blocksLength() > 0 ? true : false;
     },
     blocksLength() {
       if (Blockly.BlockWorkspace) {

@@ -668,7 +668,7 @@ a {
   position:absolute;
   left:0;
   right:0;
-  bottom:100px;
+  bottom:110px;
   margin:auto;
   width:145px;
   height:30px;

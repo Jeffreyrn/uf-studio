@@ -10,20 +10,20 @@
     </div>
     <div class="file-name" v-text="curFileName"></div>
     <div class="menu-wrapper">
-      <div class="cursor-pointer" v-if="issaved===false" @click='onsave' style="width:35px;padding-right:18px;">
-        <img src="./../../assets/img/blockly/btn_save.svg"/>
+      <div class="cursor-pointer icon-width" v-if="issaved===false" @click='onsave' style="padding-right:18px;">
+        <img src="./../../assets/img/blockly/btn_save.svg" style="width:35px;" />
         <span>save</span>
       </div>
-      <div v-else style="opacity: 0.3;width:35px;padding-right:18px;">
-        <img src="./../../assets/img/blockly/btn_save.svg"/>
+      <div v-else style="opacity: 0.3;padding-right:18px;" class="icon-width">
+        <img src="./../../assets/img/blockly/btn_save.svg" style="width:35px;" />
         <span>save</span>
       </div>
-      <div class="cursor-pointer" @click='onnew' style="width:35px;padding-right:10px;">
-        <img src="./../../assets/img/blockly/btn_addfile.svg" />
+      <div class="cursor-pointer icon-width" @click='onnew' style="padding-right:10px;">
+        <img src="./../../assets/img/blockly/btn_addfile.svg" style="width:35px;" />
         <span>new</span>
       </div>
-      <div class="cursor-pointer" v-if="type==='paint'" @click='onlist' style="width:35px;padding-right:10px;">
-        <img src="./../../assets/img/blockly/btn_list.svg" style=""/>
+      <div class="cursor-pointer icon-width" v-if="type==='paint'" @click='onlist' style="padding-right:10px;">
+        <img src="./../../assets/img/blockly/btn_list.svg" style="width:35px;" />
         <span>list</span>
       </div>
       <div v-if="isRunning===false">
@@ -78,6 +78,10 @@ export default {
 //   cursor: pointer;
 // }
 
+.icon-width {
+  width: 50px;
+}
+
 .com-header-wrapper {
   height: 60px;
   line-height: 60px;
@@ -119,7 +123,7 @@ export default {
     span {
       // font-size: 0.7em;
       font-size: 10px;
-      padding-top: 5px;
+      padding-top: 3px;
       margin: 0;
       line-height: 1.2vw;
       text-transform: capitalize;

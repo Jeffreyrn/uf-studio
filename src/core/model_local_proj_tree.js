@@ -789,19 +789,19 @@ self.remoteCmdResult2Local = (dict) => {
   }
 };
 
-function bubbleSort(arr) {
-  const len = arr.length;
-  for (let i = 0; i < len; i += 1) {
-    for (let j = 0; j < len - 1 - i; j += 1) {
-      if (arr[j].ctime_secs < arr[j + 1].ctime_secs) {
-        const temp = arr[j + 1];
-        arr[j + 1] = arr[j];
-        arr[j] = temp;
-      }
-    }
-  }
-  return arr;
-}
+// function bubbleSort(arr) {
+//   const len = arr.length;
+//   for (let i = 0; i < len; i += 1) {
+//     for (let j = 0; j < len - 1 - i; j += 1) {
+//       if (arr[j].ctime_secs < arr[j + 1].ctime_secs) {
+//         const temp = arr[j + 1];
+//         arr[j + 1] = arr[j];
+//         arr[j] = temp;
+//       }
+//     }
+//   }
+//   return arr;
+// }
 
 self.remoteProjs2Local = (dict) => {
   if (dict.code !== 0) {
@@ -877,7 +877,9 @@ self.remoteProjs2Local = (dict) => {
   // projs.sort((a,b) => {
   //   a.ctime_secs - b.ctime_secs;
   // });
-  const sortProjs = bubbleSort(projs);
+  const sortProjs = window.GlobalUtil.bubbleSort(projs, (a, b) => {
+    return a.ctime_secs < b.ctime_secs;
+  });
   self.curProjList = sortProjs;
   if (self.curProj === null || self.curProj === undefined || self.curProj.uuid === undefined) {
     self.changeProj(self.curProjList[0].uuid);

@@ -62,6 +62,21 @@ self.decode = (str) => {
   return Base64.atob(str);
 };
 
+self.bubbleSort = (arr, callback) => {
+  const len = arr.length;
+  for (let i = 0; i < len; i += 1) {
+    for (let j = 0; j < len - 1 - i; j += 1) {
+      // if (arr[j].ctime_secs < arr[j + 1].ctime_secs) {
+      if (callback(arr[j], arr[j + 1])) {
+        const temp = arr[j + 1];
+        arr[j + 1] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  return arr;
+}
+
 self.isFileStr = (str) => {
   const errStr = `'Name contains "only letter, numbers, '_' and no more than 15 characters in total.${[]}`;
   if (str === null || str === undefined) {
