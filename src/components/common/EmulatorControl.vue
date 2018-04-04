@@ -7,7 +7,7 @@
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
-            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.joint.max[j-1]" :min="config.joint.min[j-1]" 
+            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.jointMax" :min="config.jointMin" 
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>

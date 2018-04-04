@@ -3,12 +3,12 @@
     <div class="container-title">TCP</div>
     <ul class="position-set">
       <li v-for="li in config.position.nameArray" :key="li">
-        <div>{{li}}</div><input v-model.number="position[li]" type="number" :max="config.position.max" :min="config.position.min" @input="validatePosition(li)"><span>mm</span>
+        <div>{{li}}</div><input v-model="position[li]" type="number" :max="config.position.max" :min="config.position.min" @input="validatePosition(li)"><span>mm</span>
       </li>
       <!-- <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
       <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li> -->
       <li v-for="li in config.orientation.nameArray" :key="li">
-        <div>{{li}}</div><input v-model.number="orientation[li]" type="number" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><span>degree </span>
+        <div>{{li}}</div><input v-model="orientation[li]" type="number" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><span>degree </span>
       </li>
       <!-- <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><sup>&deg;</sup></li>
       <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><sup>&deg;</sup></li> -->
@@ -48,6 +48,10 @@ export default {
       if (this.position[index] < this.config.position.min) {
         this.$set(this.position, index, this.config.position.min)
       }
+      console.log(this.position[index])
+      // if (window.isNaN(this.position[index])) {
+      //   this.$set(this.position, index, 0)
+      // }
     },
     validateOrientation(index) {
       if (this.orientation[index] > this.config.orientation.max) {
@@ -56,6 +60,9 @@ export default {
       if (this.orientation[index] < this.config.orientation.min) {
         this.$set(this.orientation, index, this.config.orientation.min)
       }
+      // if (window.isNaN(this.orientation[index])) {
+      //   this.$set(this.orientation, index, 0)
+      // }
     },
     resetEnd() {
       // vuex reset position&orientation
@@ -69,24 +76,49 @@ export default {
       // });
     },
     setEnd() {
-      this.$store.commit(types.MOVE_END, {
+      const sendData = {
         position: this.position,
         orientation: this.orientation,
-      });
+      }
+      Object.keys(sendData.position).forEach((index) => {
+        if (sendData.position[index] === '') {
+          sendData.position[index] = 0
+        }
+      })
+      Object.keys(sendData.orientation).forEach((index) => {
+        if (sendData.orientation[index] === '') {
+          sendData.orientation[index] = 0
+        }
+      })
+      this.$store.commit(types.MOVE_END, sendData);
     },
   },
   computed: {
     position() {
       const position = this.$store.getters.end.position;
       Object.keys(position).forEach((key) => {
-        position[key] = position[key] ? Number(position[key].toFixed(2)) : 0;
+        let t = position[key]
+        if (position[key] === undefined) {
+          t = position[key]
+        }
+        else if (typeof position[key] !== 'number') {
+          t = Number(position[key])
+        }
+        position[key] = position[key] ? Number(t.toFixed(2)) : position[key];
       });
       return position;
     },
     orientation() {
       const orientation = this.$store.getters.end.orientation;
       Object.keys(orientation).forEach((key) => {
-        orientation[key] = orientation[key] ? Number(orientation[key].toFixed(2)) : 0;
+        let t = orientation[key]
+        if (orientation[key] === undefined) {
+          t = orientation[key]
+        }
+        else if (typeof orientation[key] !== 'number') {
+          t = Number(orientation[key])
+        }
+        orientation[key] = orientation[key] ? Number(t.toFixed(2)) : orientation[key];
       });
       return orientation;
     },
