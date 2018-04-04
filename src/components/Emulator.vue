@@ -100,6 +100,7 @@ export default {
     if (this.$route.params.data !== undefined) {
       this.backStr = 'AppStore';
     }
+    this.getModelCotainerSize();
   },
   methods: {
     setRobotState(index, value) {

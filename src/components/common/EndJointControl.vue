@@ -306,6 +306,7 @@ export default {
         this.setRangeMask(index, value);
       });
     };
+    this.onWindowResize()
     this.getLeftControlSize();
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('resize', this.getLeftControlSize, false);
@@ -720,6 +721,7 @@ export default {
 <style scoped lang="scss">
 .left-control {
   padding-right: 3px;
+  width: 100%;
 }
 input[type=range] {
   cursor: pointer;
