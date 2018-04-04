@@ -50,7 +50,9 @@ export default {
   mounted() {
     if (this.isdelete !== undefined && this.isdelete === true) {
       const bottomBtn = document.getElementById('bottom-ok-btn');
-      bottomBtn.style.background = '#E24D4A';
+      if (bottomBtn !== null && bottomBtn !== undefined) {
+        bottomBtn.style.background = '#E24D4A';
+      }
     }
   },
   computed: {

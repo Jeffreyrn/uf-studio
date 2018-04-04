@@ -27,8 +27,11 @@
             style=""
             prop="name"
             label="Project name"
-            width="200">
+            width="150">
             <template slot-scope="scope">
+              <div class="proj-selected"
+                v-if="model.localPaintMgr.curProj===model.localPaintMgr.projList[scope.$index]">
+              </div>
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].name }}
               </div>
@@ -37,7 +40,7 @@
           <el-table-column
             prop="created"
             label="Date"
-            width="200">
+            width="180">
             <template slot-scope="scope">
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].created }}
@@ -46,11 +49,19 @@
           </el-table-column>
           <el-table-column
             prop="type"
-            label="Type">
+            label="Type"
+            width="150">
             <template slot-scope="scope">
               <div class="table-td">
                 {{ model.localPaintMgr.projList[scope.$index].projType }}
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop=""
+            label="Done">
+            <template slot-scope="scope">
+              <div class="proj-icon-trash float-left" @click="onDelete(scope.$index)"></div>
             </template>
           </el-table-column>
         </el-table>
@@ -93,6 +104,12 @@ export default {
     },
   },
   methods: {
+    onDelete(index) {
+      const curProj = this.model.localPaintMgr.projList[index];
+      this.model.localPaintMgr.curToDelProj = curProj;
+      this.model.localPaintMgr.curToDelProjTitle = `Delete project ${curProj.name} ?`;
+      this.model.localPaintMgr.visible.del = true;
+    },
     tableRowClassName({ row, rowIndex }) {
       console.log(`row = ${row}, rowIndex = ${rowIndex}`);
       return rowIndex === this.currentRow ? 'selected' : 'normal';
@@ -101,10 +118,12 @@ export default {
     //   this.$refs.singleTable.setCurrentRow(row);
     // },
     handleCurrentChange(val) {
-      this.currentRow = val;
-      this.currentRow = val.index;
-      console.log(`set Current this.currentRow = ${this.currentRow}`);
-      // this.model.localPaintMgr.curProj = val;
+      if (val !== null && val !== undefined) {
+        this.currentRow = val;
+        this.currentRow = val.index;
+        console.log(`set Current this.currentRow = ${this.currentRow}`);
+        // this.model.localPaintMgr.curProj = val;
+      }
     },
     cellMouse(row, column, cell, event) {
       console.log(`row = ${row}, column = ${column}, cell = ${cell}, event = ${event}`)
@@ -182,9 +201,30 @@ export default {
 // }
 .table-head {
   font-family: 'Gotham-Medium';
-  font-size: 16px;
+  font-size: 12px;
   color: #3C3C3C;
   letter-spacing: -1px;
   text-align: center;
+}
+.proj-icon-trash {
+  margin-left: 20px;
+  width: 30px;
+  height: 30px;
+  background-image: url('./../../assets/img/pop/btn_trash.svg');
+  background-size: 8px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+.proj-selected {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 10px;
+  left: 30px;
+  background-image: url('./../../assets/img/pop/icon_select.svg');
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>

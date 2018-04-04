@@ -111,10 +111,11 @@ html, body {
 }
 .el-table th {
   font-family: 'Gotham-Medium';
-  font-size: 16px;
+  font-size: 13px;
   color: #3C3C3C;
   letter-spacing: -1px;
   text-align: center;
+  /* height: 20px; */
 }
 /* .el-table tr:hover {
   background: #A5A7A9;

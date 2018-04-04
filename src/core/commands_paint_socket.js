@@ -74,17 +74,13 @@ self.renameProj = (originName, name, callback) => {
 };
 
 self.delProj = (proId, callback) => {
-  const filePath = proId; // path.join(self.ROOT_DIR, name);
-  console.log(`filePath = ${filePath}`);
+  const filePath = proId;
   const params = {
     data: merge(window.GlobalConstant.COMMON_PARAMS, {
-      // userId: self.userId, // 默认是test，用来区分不同用户
-      root: filePath, // 文件夹的父目录，必须
-      file: '', // 文件夹名称, 可省略
+      root: path.dirname(filePath),
     }),
   };
   self.sendCmd(window.GlobalConstant.FILE_ID_DELETE_DIR, params, () => {
-    // window.GlobalUtil.model.localTeach.setCurSelectedTreeItem('');
     self.listProjs(callback);
   });
 };

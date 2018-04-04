@@ -83,6 +83,16 @@
       v-if="model.localPaintMgr.visible.setting">
     </DialogPaintSetting>
 
+    <DialogTeachAlert
+      :title='model.localPaintMgr.curToDelProjTitle'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='onDeleteOK'
+      :isdelete=true
+      :oncancel='closeDel'
+      v-if="model.localPaintMgr.visible.del">
+    </DialogTeachAlert>
+
     <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
 
   </div>
@@ -100,6 +110,7 @@ import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogPaintSetting from './Paint/DialogPaintSetting';
+// import { constants } from 'http2';
 // import { setTimeout } from 'timers';
 // const path = require('path');
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
@@ -163,6 +174,22 @@ export default {
     }, 50);
   },
   methods: {
+    onDeleteOK() {
+      this.closeDel();
+      const toDelProj = this.model.localPaintMgr.curToDelProj;
+      const toDelUUID = toDelProj.uuid;
+      console.log(`toDelProj uuid = ${toDelUUID}`);
+      window.CommandsPaintSocket.delProj(toDelUUID, () => {
+        if (this.model.localPaintMgr.curProj !== null) {
+          if (toDelUUID === this.model.localPaintMgr.curProj.uuid) {
+            this.model.localPaintMgr.curProj = null;
+          }
+        }
+      });
+    },
+    closeDel() {
+      this.model.localPaintMgr.visible.del = false;
+    },
     closeDialog() {
       this.model.localPaintMgr.visible.text = false;
       this.model.localPaintMgr.visible.setting = false;
@@ -171,6 +198,7 @@ export default {
       this.model.localPaintMgr.visible.icons = false;
       this.model.localPaintMgr.visible.text = false;
       this.model.localPaintMgr.visible.clear = false;
+      this.model.localPaintMgr.visible.del = false;
     },
     addIconsDialog() {
       this.model.localPaintMgr.selectedIcon = null;
