@@ -486,7 +486,7 @@ export default {
           // window.setTimeout(() => {
           //   this.jointRangeMoved.state = false;
           // }, 5000);
-          this.setJointCmd(index);
+          this.setJointCmd();
         }
       }
     },

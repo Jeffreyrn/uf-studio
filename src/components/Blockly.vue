@@ -485,8 +485,8 @@ export default {
       return !this.blocksLength() && !this.model.localAppsMgr.curProName
     },
     blocksNotEmpty() {
-      console.log('block length', this.blocksLength());
-      return this.blocksLength() > 0 ? true : false;
+      // console.log('block length', this.blocksLength());
+      return this.blocksLength() > 0;
     },
     blocksLength() {
       if (Blockly.BlockWorkspace) {
