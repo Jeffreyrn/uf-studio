@@ -3,7 +3,7 @@
     <div :style="{width: leftControlWidth + 'px'}" class="left-control">
       <div class="control-wrapper dark-backgroud">
         <div class="control-header">
-          <div class="header-text" style="width: 38%">Orientation Control</div>
+          <div class="header-text" style="width: 38%">Attitude Control</div>
           <div class="header-text" style="width: 38%">Position Control</div>
           <div class="header-text" style="width: 24%">Speed Control</div>
         </div>
@@ -35,8 +35,8 @@
               <span class="config-title">Speed</span>
             </div>
             <div class="img-middle">
-              <img class="img1" src="./../../assets/img/control/icon_speed.svg" alt="">
               <img class="img2" src="./../../assets/img/control/icon_speed2.svg" alt="">
+              <img class="img1" src="./../../assets/img/control/icon_speed.svg" alt="">
             </div>
             <div class="range-left">
               <span class="config-value" v-text="stateAcceleration"></span>
@@ -324,20 +324,21 @@ export default {
         mode,
         position: {
           right: '50%',
-          left: '50%',
+//          left: '50%',
           top: '50%',
-          bottom: '50%',
+//          bottom: '50%',
         },
         restOpacity,
       });
       let positionInterval;
       positionManager.on('move', (evt, nipple) => {
-        console.log('event type', evt.type);
+        console.log('event type---', evt.type, Number(this.joystick.step.position.x), Number(this.joystick.step.position.y));
         this.setJoystickStep(nipple, 'position');
         // this.state.position.z = nipple.direction.angle;
       }).on('start', () => {
         const nextX = Number((this.joystick.step.position.x).toFixed(2));
         const nextY = Number((this.joystick.step.position.y).toFixed(2));
+        console.log(nextX, nextY, 'dd');
         // if (nextX > 800 || nextX < -800) {
         //   this.$message('X value unreachable')
         // }
@@ -361,9 +362,9 @@ export default {
         mode,
         position: {
           right: '50%',
-          left: '50%',
+//          left: '50%',
           top: '50%',
-          bottom: '50%',
+//          bottom: '50%',
         },
         restOpacity,
       });
@@ -488,7 +489,7 @@ export default {
         }
       }
     },
-    setJointCmd(index) {
+    setJointCmd() {
       // this.$store.commit(types.MOVE_ONE_JOINT, {
       //   index,
       //   value: this.joints[index],
@@ -746,11 +747,7 @@ span.text {
   .control-header {
     display: flex;
     justify-content: space-around;
-    opacity: 0.69;
     background: #4d4d4d;
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*width: 100%;*/
     .header-text {
       text-align: center;
     }
@@ -774,14 +771,14 @@ span.text {
       justify-content: center;
       position: relative;
       .joystick-wrapper {
+        /*margin-left: 40px;*/
         position: absolute;
-        margin-left: 40px;
       }
       .height-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-right: 160px;
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*align-items: center;*/
+        margin-right: 238px;
         #z-control {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 171px;
@@ -888,10 +885,9 @@ span.text {
       width: 18px
     }
     input[type=range] {
-      height: 8px;
       border-radius: 100px;
       background-image: linear-gradient(90deg, #8FFF94 0%, #FF6868 100%);
-      transform: rotate(90deg);
+      transform: rotate(-90deg);
       -webkit-appearance: none;
       height: 36px;
       width: 168px;
@@ -907,9 +903,8 @@ span.text {
     }
     span {
       font-family: 'Gotham-Book';
-      font-size: 10px;
+      font-size: 9px;
       color: #FFF;
-      letter-spacing: -0.75px;
       text-align: center;
     }
     .config-value {
@@ -938,7 +933,6 @@ span.text {
   justify-content: space-between;
   position: relative;
   .header-text {
-    opacity: 0.69;
     padding-left: 12px;
   }
   .degree-text {
@@ -948,6 +942,7 @@ span.text {
     position: absolute;
     top: 14px;
     right: 14px;
+    font-family: 'Gotham-Medium';
   }
   .joint-range-wrapper {
     display: flex;
@@ -967,7 +962,7 @@ span.text {
     width: 100%;
     /*padding: 6px 0;*/
     span {
-      font-size: 12px;
+      font-size: 10px;
       font-family: "Gotham-Book";
     }
     .j-text {
@@ -990,8 +985,8 @@ span.text {
         position: absolute;
       }
       input[type=range]::-webkit-slider-thumb {
-        width: 16px;
-        height: 16px;
+        width: 15px;
+        height: 15px;
         -webkit-appearance: none;
         border: none;
         border-radius: 50%;
@@ -1002,7 +997,7 @@ span.text {
         background-color: #E27347;
         height: 4px;
         line-height: 4px;
-        z-index: 200;
+        /*z-index: 200;*/
         border-radius: 100px;
         padding: 0;
         margin: 0;

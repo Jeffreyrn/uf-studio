@@ -119,6 +119,7 @@ $liInputWidth : 50%;
   background: #434343;
   height: 100%;
   position: relative;
+  font-family: 'Gotham-book';
   .container-title {
     padding: 1vh 1vw .6vh;
     font-size: 14px;
@@ -147,7 +148,7 @@ $liInputWidth : 50%;
       width: 50%;
       color: #fff;
       letter-spacing: -0.42px;
-      font-size: 12px;
+      font-size: 10px;
       font-family: "Gotham-Book";
       outline: none;
       border-left: 1px solid #343232;
@@ -185,7 +186,7 @@ ul.position-set li{
     outline: none;
   }
   span {
-    font-size: 0.8rem;
+    font-size: 10px;
     color: #AEAEAE;
   }
 }
