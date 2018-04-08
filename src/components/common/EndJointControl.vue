@@ -830,6 +830,7 @@ span.text {
       // }
       .yaw-wrapper {
         padding-bottom: 142px;
+        padding-right: 11px;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
