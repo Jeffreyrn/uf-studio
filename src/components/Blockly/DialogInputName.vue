@@ -11,7 +11,7 @@
           </div>
         </div>
         <div>
-          <input id="input-text" v-model="inputName" type="text" autofocus="autofocus" class="position-absolute dialog-input" />
+          <input id="input-text" v-model="inputName" type="text" autofocus="autofocus" class="position-absolute dialog-input input-focus" />
         </div>
         <div class="position-absolute dialog-error"> {{errorTip}}</div>
         <!-- {{ model.localProjTree.dialogErrorTips }} -->
@@ -49,7 +49,8 @@ export default {
     }
   },
   mounted() {
-    document.getElementById('input-text').focus()
+    // document.getElementById('input-text').focus()
+    window.GlobalUtil.setInputFocus();
   },
   methods: {
     contentClick() {

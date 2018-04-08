@@ -310,9 +310,10 @@ export default {
       this.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = false;
-      setTimeout(() => {
-        document.getElementById('input-text').focus();
-      });
+      // setTimeout(() => {
+      //   document.getElementById('input-text').focus();
+      // });
+      window.GlobalUtil.setInputFocus();
     },
     addFile() {
       // console.log('add file');
@@ -329,9 +330,10 @@ export default {
       this.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
       this.model.localProjTree.curDialogIsExtend = true;
-      setTimeout(() => {
-        document.getElementById('input-text').focus();
-      });
+      // setTimeout(() => {
+      //   document.getElementById('input-text').focus();
+      // });
+      window.GlobalUtil.setInputFocus();
     },
     rename() {
       console.log('Rename');
@@ -343,9 +345,10 @@ export default {
         this.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
-        setTimeout(() => {
-          document.getElementById('input-text').focus();
-        });
+        // setTimeout(() => {
+        //   document.getElementById('input-text').focus();
+        // });
+        window.GlobalUtil.setInputFocus();
         return;
       }
       const curFile = this.getCurFile();
@@ -359,12 +362,13 @@ export default {
         this.model.localProjTree.dialogErrorTips = '';
         this.model.localProjTree.fileDialogShow = true;
         this.model.localProjTree.curDialogIsExtend = false;
-        setTimeout(() => {
-          document.getElementById('input-text').focus();
-        });
+        // setTimeout(() => {
+        //   document.getElementById('input-text').focus();
+        // });
         // this.model.localProjTree.dialogVisible = true;
         this.model.localProjTree.fileSelected = '';
         // this.textFocus();
+        window.GlobalUtil.setInputFocus();
         return;
       }
       this.model.localProjTree.folderOrFile = 'rename';
@@ -381,9 +385,10 @@ export default {
       }
       // this.textFocus();
       this.model.localProjTree.curDialogIsExtend = true;
-      setTimeout(() => {
-        document.getElementById('input-text').focus();
-      });
+      // setTimeout(() => {
+      //   document.getElementById('input-text').focus();
+      // });
+      window.GlobalUtil.setInputFocus();
     },
     // tableRowClassName({ row, rowIndex }) {
       // console.log(`tableRowClassName = ${JSON.stringify(row)}, ${rowIndex}`);

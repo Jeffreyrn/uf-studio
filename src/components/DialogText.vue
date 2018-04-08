@@ -11,11 +11,11 @@
           </div>
         </div> -->
         <div v-if="isExtInput">
-          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext" />
+          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input dialog-input-ext input-focus" />
           <custom-select class="position-absolute dialog-select-origin dialog-select-bg dialog-select-size" style=""></custom-select>
         </div>
         <div v-if="!isExtInput">
-          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input" />
+          <input id="input-text" v-model="model.localProjTree.curDialogInputText" type="text" class="position-absolute dialog-input input-focus" />
         </div>
         <div class="position-absolute dialog-error"> {{ model.localProjTree.dialogErrorTips }} </div>
         <div class="position-absolute" style="bottom:0px;">

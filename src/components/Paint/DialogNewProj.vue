@@ -32,8 +32,9 @@
 
         <input
           v-model="model.localPaintMgr.curDialogProjInputText"
-          type="text" class="position-absolute dialog-input"
+          type="text" class="position-absolute dialog-input input-focus"
           placeholder="Please enter a project name"/>
+          <!--  -->
         <div class="position-absolute dialog-error"> {{ model.localPaintMgr.dialogErrorTips }} </div>
         <span v-if="isFileNameCorrect">
           <div class="position-absolute btn-create cursor-pointer" @click="onok">
@@ -62,6 +63,7 @@ export default {
     }
   },
   activated: function() {
+    console.log('paint new proj activated activated');
   },
   mounted() {
     this.showSelected = true;
@@ -82,11 +84,16 @@ export default {
       if (text === null || text === '') {
         this.model.localPaintMgr.dialogErrorTips = '';
       }
-      const isFileStr = window.GlobalUtil.isFileStr(this.model.localPaintMgr.curDialogProjInputText);
+      const isFileStr = window.GlobalUtil.isFileStr(text);
       if (!isFileStr) {
         return false;
       }
-      return isFileStr;
+      const isHasProj = this.model.localPaintMgr.isHasProj(text);
+      if (isHasProj) {
+        this.model.localPaintMgr.dialogErrorTips = 'Project name is the same';
+        return false;
+      }
+      return true;
     },
     bgColor1: () => ({
       'selected-bg-color': window.GlobalUtil.model.localPaintMgr.projTypeSelected === 'gray',
@@ -155,9 +162,9 @@ export default {
   outline:none;
 }
 .dialog-error {
-  left:120px;
+  left: 115px;
   /* top:335px; */
-  bottom: 50px;
+  bottom: 55px;
   width: 400px;
   font-family: 'Gotham-Book';
   font-size: 9px;

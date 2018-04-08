@@ -26,7 +26,7 @@
         <input
           id="teach-input-text"
           v-model="model.localTeach.curDialogProjInputText"
-          type="text" class="position-absolute dialog-input"
+          type="text" class="position-absolute dialog-input input-focus"
           placeholder="Please enter a project name"/>
         <div class="position-absolute dialog-error"> {{ model.localTeach.dialogErrorTips }} </div>
         <span v-if="isFileNameCorrect">

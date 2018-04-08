@@ -86,8 +86,9 @@ self.isFileStr = (str) => {
     return false;
   }
   if (str.length > 15) {
-    GlobalUtil.model.localProjTree.dialogErrorTips = errStr;
-    GlobalUtil.model.localTeach.dialogErrorTips = errStr;
+    self.model.localProjTree.dialogErrorTips = errStr;
+    self.model.localTeach.dialogErrorTips = errStr;
+    self.model.localPaintMgr.dialogErrorTips = errStr;
     return false;
   }
   // const firstChar = str[0];
@@ -99,11 +100,13 @@ self.isFileStr = (str) => {
     if (!((aChar >= 'a' && aChar <= 'z') || (aChar >= 'A' && aChar <= 'Z') || aChar === '_' || (aChar >= '0' && aChar <= '9'))) {
       self.model.localProjTree.dialogErrorTips = errStr;
       self.model.localTeach.dialogErrorTips = errStr;
+      self.model.localPaintMgr.dialogErrorTips = errStr;
       return false;
     }
   }
   GlobalUtil.model.localProjTree.dialogErrorTips = '';
   GlobalUtil.model.localTeach.dialogErrorTips = '';
+  self.model.localPaintMgr.dialogErrorTips = '';
   return true;
 }
 
@@ -167,6 +170,16 @@ self.pad = (num, n) => {
     len += 1;
   }
   return num;
+};
+
+self.setInputFocus = () => {
+  setTimeout(() => {
+    const inputs = document.getElementsByClassName('input-focus');
+    for (let i = 0; i < inputs.length; i += 1) {
+      const input = inputs[i];
+      input.focus();
+    }
+  });
 };
 
 self.getUrlParam = (lan) => {

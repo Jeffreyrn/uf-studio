@@ -322,9 +322,10 @@ export default {
       else {
         window.GlobalUtil.model.localTeach.projTypeSelected = '1';
       }
-      setTimeout(() => {
-        document.getElementById('teach-input-text').focus();
-      }, 100);
+      // setTimeout(() => {
+      //   document.getElementById('teach-input-text').focus();
+      // }, 100);
+      window.GlobalUtil.setInputFocus();
     },
     fileLength(uuid) {
       if (uuid.indexOf('.json') < 0) {
@@ -523,9 +524,10 @@ export default {
     newProj() {
       window.GlobalUtil.model.localTeach.curDialogProjInputText = '';
       window.GlobalUtil.model.localTeach.projTypeSelectedShow = true;
-      setTimeout(() => {
-        document.getElementById('teach-input-text').focus();
-      }, 100);
+      // setTimeout(() => {
+      //   document.getElementById('teach-input-text').focus();
+      // }, 100);
+      window.GlobalUtil.setInputFocus();
     },
     addFile() {
       console.log('add file');

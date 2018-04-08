@@ -132,6 +132,9 @@ el-table .normal .table-td {
 .el-table .selected {
   background: #A5A7A9;
 }
+.el-table .selected:hover {
+  background: #A5A7A9;
+}
 
 .el-table .selected .table-td {
   color: white;

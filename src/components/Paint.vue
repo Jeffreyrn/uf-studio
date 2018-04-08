@@ -50,11 +50,13 @@
       :onok='createProj'
       v-if="model.localPaintMgr.visible.pattern">
     </DialogNewProj>
+
     <DialogProjs
       :onclose='closeDialog'
       :onopen='selectProj'
       v-if="model.localPaintMgr.visible.projs">
     </DialogProjs>
+
     <DialogIcons
       :onclose='closeDialog'
       :onok='addEmotion'
@@ -110,8 +112,8 @@ import DialogIcons from './Paint/DialogIcons';
 import DialogFontSelect from './Paint/DialogFontSelect';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogPaintSetting from './Paint/DialogPaintSetting';
+
 // import { constants } from 'http2';
-// import { setTimeout } from 'timers';
 // const path = require('path');
 // const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
 // const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
@@ -319,6 +321,7 @@ export default {
       this.model.localPaintMgr.state.buffer = [];
       this.model.localPaintMgr.curDialogProjInputText = '';
       this.model.localPaintMgr.visible.pattern = true;
+      window.GlobalUtil.setInputFocus();
     },
     initFabric() {
       this.playground = new fabric.Canvas('fabric', {

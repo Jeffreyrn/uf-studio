@@ -64,9 +64,10 @@ export default {
       this.model.localProjTree.curDialogTitle = 'new project name';
       window.GlobalUtil.model.localProjTree.dialogErrorTips = '';
       this.model.localProjTree.fileDialogShow = true;
-      setTimeout(() => {
-        document.getElementById('input-text').focus();
-      });
+      // setTimeout(() => {
+      //   document.getElementById('input-text').focus();
+      // });
+      window.GlobalUtil.setInputFocus();
     },
     onSelect(uuid) {
       console.log(uuid);

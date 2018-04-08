@@ -48,6 +48,20 @@ self.projTypeSelected = 'outline'; // outline gray
 self.projList = [];
 self.curProj = null;
 
+self.isHasProj = (name) => {
+  const projType = self.projTypeSelected;
+  const basename = projType === 'outline' ? 'outline.json' : 'gray.json';
+  name = path.join(name, basename);
+  const filePath = path.join(window.CommandsPaintSocket.ROOT_DIR, name);
+  for (let i = 0; i < self.projList.length; i += 1) {
+    const uuid = self.projList[i].uuid;
+    if (uuid === filePath) {
+      return true;
+    }
+  }
+  return false;
+};
+
 self.realProjName = (proj) => {
   if (proj === null || proj === undefined) {
     return '';
