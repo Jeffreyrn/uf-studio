@@ -43,7 +43,7 @@
         <div class="block end-range config-wrapper">
           <span class="config-title">Speed</span>
           <img src="./../../assets/img/control/icon_speed3.svg" alt="">
-          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="100" :min="5">
+          <input type="range" v-model="state.speed" @change="setSpeed" :step="1" :max="50" :min="1">
           <img src="./../../assets/img/control/icon_speed2.svg" alt="">
           <span class="config-value" v-text="state.speed"></span>
         </div>

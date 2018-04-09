@@ -31,7 +31,7 @@
           <div class="config-wrapper">
             <div class="range-right">
               <span class="config-value" v-text="stateSpeed"></span>
-              <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
+              <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="50" :min="1">
               <span class="config-title">Speed</span>
             </div>
             <div class="img-middle">
