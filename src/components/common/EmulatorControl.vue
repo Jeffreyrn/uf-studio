@@ -2,7 +2,9 @@
   <div class="control-container">
     <!--<div class="container-title">Control Panel</div>-->
     <div class="control-block">
-      <div class="block-title">Joints Control</div>
+      <div class="block-title">Joints Control
+        <el-button round @click="resetEnd()">Reset</el-button>
+      </div>
       <div class="control-wrapper">
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
@@ -177,6 +179,11 @@ export default {
       };
       this.$store.commit(types.SET_ROBOT_STATE, data);
     },
+    resetEnd() {
+      // vuex reset position&orientation
+      this.$store.commit(types.GO_HOME);
+      console.log('reset action');
+    },
   },
   computed: {
     position: {
@@ -308,6 +315,13 @@ $fontColor : #444;
       padding: 10px;
       text-align: left;
       font-family: "Gotham-Book";
+      display: flex;
+      justify-content: space-between;
+      button {
+        width: 70px;
+        height: 30px;
+        padding: 0;
+      }
     }
     .control-wrapper .block {
       color: $fontColor;
