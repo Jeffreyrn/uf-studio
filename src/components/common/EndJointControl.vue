@@ -1019,6 +1019,7 @@ span.text {
         font-size: 12px;
         outline:none;
         padding-right: 1px;
+        width: 56px;
       }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button{
