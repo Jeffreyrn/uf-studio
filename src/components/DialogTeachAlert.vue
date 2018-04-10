@@ -6,6 +6,7 @@
       <div class="dialog-content">
         <span class="top-title">System Notice</span>
         <span class="top-tips">{{ title }}</span>
+        <span class="subtitle-tips">{{ subtitle }}</span>
         <div class="bottom-btns">
           <div class="float-left btn-cancel font-style cursor-pointer" @click="oncancel">
             {{ cancel }}
@@ -23,7 +24,7 @@
 // import * as types from './../store/mutation-types';
 // const path = require('path');
 export default {
-  props: ['onok', 'oncancel', 'title', 'cancel', 'ok', 'isdelete'],
+  props: ['onok', 'oncancel', 'title', 'subtitle', 'cancel', 'ok', 'isdelete'],
   data() {
     return {
       model: window.GlobalUtil.model,
@@ -76,7 +77,7 @@ export default {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 126px;
+  top: 100px;
   margin: auto;
   font-family: 'Gotham-Medium';
   font-size: 16px;
@@ -84,6 +85,18 @@ export default {
   letter-spacing: -0.57px;
   text-align: center;
 }
+.subtitle-tips {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 126px;
+  margin: auto;
+  font-size: 12px;
+  letter-spacing: -0.38px;
+  font-family: 'Gotham-Book';
+  text-align: center;
+}
+
 .bottom-btns {
   position: absolute;
   bottom: 0px;

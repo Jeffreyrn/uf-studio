@@ -113,13 +113,6 @@
       <el-button style="background:green;width:450px;" @click="finishRecordOK">Ok</el-button>
     </el-dialog> -->
 
-    <DialogAlert
-      title='Stop Recording and save automatically.'
-      subtitle='The recording file will be saved to my project list'
-      :onok='finishRecordOK'
-      v-if="model.localTeach.saveDialogShow===true">
-    </DialogAlert>
-
     <DialogTeachProjName
       title="Please choose the way you want to record with xArm in this project"
       :onok='oncreate'
@@ -153,6 +146,24 @@
       :isdelete=true
       :oncancel='closeAlert'
       v-if="isDeleteFileDialogShow===true">
+    </DialogTeachAlert>
+
+    <!-- <DialogAlert
+      title='Stop Recording and save automatically.'
+      subtitle='The recording file will be saved to my project list'
+      :onok='finishRecordOK'
+      v-if="model.localTeach.saveDialogShow===true">
+    </DialogAlert> -->
+
+    <DialogTeachAlert
+      title='Stop Recording and save automatically.'
+      subtitle='The recording file will be saved to my project list'
+      cancel='Cancel'
+      ok='OK'
+      :onok='finishRecordOK'
+      :isdelete=false
+      :oncancel='closeSaveAlert'
+      v-if="model.localTeach.saveDialogShow===true">
     </DialogTeachAlert>
 
   </div>
@@ -292,11 +303,15 @@ export default {
         this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
       });
     },
+    closeSaveAlert() {
+      this.model.localTeach.saveDialogShow = false;
+    },
     closeAlert() {
       this.isDeleteFileDialogShow = false;
-      window.GlobalUtil.model.localTeach.changeSelectedShow = false;
-      window.GlobalUtil.model.localTeach.hasChange = false;
-      window.GlobalUtil.model.localTeach.onSelect(null, window.GlobalUtil.model.localTeach.willOnSelectIndex);
+      this.model.localTeach.changeSelectedShow = false;
+      this.model.localTeach.saveDialogShow = false;
+      this.model.localTeach.hasChange = false;
+      this.model.localTeach.onSelect(null, window.GlobalUtil.model.localTeach.willOnSelectIndex);
       this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
     },
     onrename() {
@@ -509,6 +524,8 @@ export default {
           this.isDeleteFileDialogShow = false;
           window.CommandsTeachSocket.delFiles(uuid, () => {
             // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+            const dirname = path.dirname(uuid);
+            this.handleNodeClick({ uuid: dirname });
           });
         };
         this.deleteFileDialogTitle = `Are you sure you want to delete ${realName}?`;
@@ -520,6 +537,10 @@ export default {
         this.isDeleteFileDialogShow = false;
         window.CommandsTeachSocket.delProj(curProj.uuid, () => {
           // console.log(`localTeach.delProj = ${curProj.uuid}, dict = ${JSON.stringify(dict)}`);
+          if (window.GlobalUtil.model.localTeach.curProjList.length > 0) {
+            const firstProj = window.GlobalUtil.model.localTeach.curProjList[0];
+            this.handleNodeClick({ uuid: firstProj.uuid });
+          }
         });
       };
       this.isDeleteFileDialogShow = true;
