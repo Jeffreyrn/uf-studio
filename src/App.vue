@@ -6,7 +6,11 @@
       </router-link> -->
     </div>
     <div class="main-container">
-      <keep-alive><router-view/></keep-alive>
+      <keep-alive>
+        <router-view>
+          <slot name=""></slot>
+        </router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
