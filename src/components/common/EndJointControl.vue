@@ -31,7 +31,7 @@
           <div class="config-wrapper">
             <div class="range-right">
               <span class="config-value" v-text="stateSpeed"></span>
-              <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="100" :min="5">
+              <input type="range" v-model="stateSpeed" @change="setSpeed" :step="1" :max="50" :min="1">
               <span class="config-title">Speed</span>
             </div>
             <div class="img-middle">
@@ -830,6 +830,7 @@ span.text {
       // }
       .yaw-wrapper {
         padding-bottom: 142px;
+        padding-right: 11px;
         input {
           // appearance: slider-vertical; // abandoned, can not set width with css
           width: 100%;
@@ -1018,6 +1019,7 @@ span.text {
         font-size: 12px;
         outline:none;
         padding-right: 1px;
+        width: 56px;
       }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button{
