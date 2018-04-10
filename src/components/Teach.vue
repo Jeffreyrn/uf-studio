@@ -53,7 +53,7 @@
                   <button v-if="model.localTeach.visible.starRecording===false" class="bottom-btn start-recording-btn" @click='startRecord()'>Start Recording</button>
                   <button v-if="model.localTeach.visible.starRecording===true" class="bottom-btn finish-recording-btn" @click="finishRecord(model.localTeach.curEditingFileUUID)">Finish Recording</button>
                   <!-- start btn -->
-                  <button v-if="model.localTeach.isTeachRunningUUID===''" @click="onstart" class="bottom-btn" v-bind:class="startBtn"><i class="el-icon-caret-right"></i></button>
+                  <button v-if="model.localTeach.isTeachRunningUUID===''" @click="onstart" class="bottom-btn" v-bind:class="startProjBtn"><i class="el-icon-caret-right"></i></button>
                   <button v-else class="bottom-btn edit-cancel-btn" @click="onstop">
                     <div class="">Stop</div>
                   </button>
@@ -62,7 +62,7 @@
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
                   <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
                   <!-- start btn -->
-                  <button v-if="model.localTeach.isTeachRunningUUID===''" class="bottom-btn start-btn" @click="onstart"><i class="el-icon-caret-right"></i></button>
+                  <button v-if="model.localTeach.isTeachRunningUUID===''" class="bottom-btn" v-bind:class="startFileBtn" @click="onstart"><i class="el-icon-caret-right"></i></button>
                   <button v-else class="bottom-btn edit-cancel-btn" @click="onstop">
                     <div class="">Stop</div>
                   </button>
@@ -254,6 +254,9 @@ export default {
       window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onstart() {
+      if (!window.GlobalUtil.store.state.robot.info.online) {
+        return;
+      }
       console.log('on start');
       if (this.model.localTeach.curProj.files.length > 0) {
         const uuid = this.model.localTeach.curSelectedTreeItem.uuid;
@@ -670,9 +673,13 @@ export default {
       const tempArr = this.model.localTeach.curEditingFileUUID.split('/');
       return tempArr[tempArr.length - 1];
     },
-    startBtn: () => ({
-      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false,
-      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true,
+    startProjBtn: () => ({
+      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false && window.GlobalUtil.store.state.robot.info.online,
+      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true || !window.GlobalUtil.store.state.robot.info.online,
+    }),
+    startFileBtn: () => ({
+      'start-btn': window.GlobalUtil.store.state.robot.info.online,
+      'start-btn-dark': !window.GlobalUtil.store.state.robot.info.online,
     }),
     saveChange: () => ({
       'save-change-btn': window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0,

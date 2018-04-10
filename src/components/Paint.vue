@@ -3,7 +3,7 @@
     <CommonTopMenu
       type='paint'
       :onlist='listProjects'
-      :isFileSelected="model.localPaintMgr.curProj!==null"
+      :isFileSelected="model.localPaintMgr.curProj!==null&&store.state.robot.info.online"
       title='Draw / Laser'
       :issaved='model.localPaintMgr.state.saved'
       :curFileName="curProj.name"
@@ -150,6 +150,7 @@ export default {
   data() {
     return {
       model: window.GlobalUtil.model,
+      store: window.GlobalUtil.store,
       playground: null,
       // backStr: 'AppStore',
       emotions: {},

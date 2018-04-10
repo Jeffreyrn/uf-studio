@@ -43,7 +43,7 @@ import { setTimeout } from 'timers';
       </div>
     </span>
     <span v-if="model.localProjTree.isCmdRunning===false">
-      <div class="run-icon float-right" @click="run()" title='Run'>
+      <div class="float-right" v-bind:class="startRunBtn" @click="run()" title='Run'>
       </div>
     </span>
 
@@ -160,6 +160,9 @@ export default {
   },
   methods: {
     run() {
+      if (!window.GlobalUtil.store.state.robot.info.online) {
+        return;
+      }
       const curFile = window.GlobalUtil.model.localProjTree.curFile; // this.getCurFile();
       if (curFile === null) {
         return;
@@ -411,6 +414,10 @@ export default {
   watch: {
   },
   computed: {
+    startRunBtn: () => ({
+      'run-icon': window.GlobalUtil.store.state.robot.info.online,
+      'run-icon-dark': !window.GlobalUtil.store.state.robot.info.online,
+    }),
     proListData() {
       const proList = this.model.localProjTree.curProjList;
       const tmpList = [];
@@ -501,6 +508,14 @@ export default {
   height: 16px;
   background-image: url('./../../assets/img/ide/icon_running.svg');
   cursor: pointer;
+}
+.run-icon-dark {
+  margin-right: 30px;
+  margin-top: 8px;
+  width: 16px;
+  height: 16px;
+  background-image: url('./../../assets/img/ide/icon_running.svg');
+  opacity: 0.3;
 }
 .el-table .warning-row {
   background: oldlace;

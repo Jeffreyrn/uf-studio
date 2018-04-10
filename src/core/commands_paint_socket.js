@@ -40,7 +40,7 @@ self.createProj = (name, proType, callback) => {
       root: filePath,
       // name: '',
       // file" '',
-      data: JSON.stringify(window.GlobalConstant.exampleData),
+      data: '', // JSON.stringify(window.GlobalConstant.exampleData),
     }),
   };
   self.sendCmd(window.GlobalConstant.FILE_ID_CREATE_FILE, params, () => {

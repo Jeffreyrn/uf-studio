@@ -5,6 +5,7 @@
       <span class="com-font-GB-24 com-module-name">EDITOR</span>
       <img class="com-module-icon" src="../assets/img/edit/edit-home/icon_developers.svg" alt="developers" />
     </div>
+    <!-- <button @click="back()">backtoselect</button> -->
     <section class="section1-wrapper com-font-GB-22">
       <div class="box1-wrapper com-text-center">
         <router-link class="com-text-center"  :to="{ name: 'Teach'}">RECORDING</router-link>
@@ -22,6 +23,9 @@ export default {
     };
   },
   methods: {
+    back() {
+      window.location = 'web/index.html';
+    },
   },
 };
 </script>

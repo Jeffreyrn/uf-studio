@@ -1,46 +1,48 @@
 
 <template>
   <div id="root-list" class="noselected">
-    <div class="dialog-wrap">
-      <div class="dialog-cover" @click="onclose"></div>
-      <div class="dialog-content">
-        <div class="dialog-top">
-          <span class="top-title">
-            Setting
-          </span>
-          <!-- <div class="dialog-close" @click="onclose">
-          </div> -->
-        </div>
-
-        <div class="adjust-tips">
-          Please adjust the <span style="color:rgba(191,71,61,1)">zero point</span> before start the project
-        </div>
-
-        <!-- <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="zero-control"
-                @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ"> -->
-
-        <span class="left-title">
-          Adjust Zero Point
+    <!-- <div class="dialog-wrap"> -->
+      <!-- <div class="dialog-cover1"></div> -->
+    <div class="dialog-content">
+      <div class="dialog-top">
+        <span class="top-title">
+          Setting
         </span>
-
-        <input
-          v-model="curZeroHeight"
-          type="range"
-          min="-50"
-          max="50"
-          value="0"
-          @mouseup="onZeroUp"
-          id="zero-control">
-
-        <input
-          v-model="curZeroHeight"
-          class="show-input" />
-
-        <div class="btn-ok cursor-pointer" @click="onok">
-          Print
+        <div class="position-absolute dialog-close" @click="onclose">
         </div>
+        <!-- <div class="dialog-close" @click="onclose">
+        </div> -->
+      </div>
+
+      <div class="adjust-tips">
+        Please adjust the <span style="color:rgba(191,71,61,1)">zero point</span> before start the project
+      </div>
+
+      <!-- <input v-model="joystick.step.position.z" type="range" min="-5" max="5" value="0" id="zero-control"
+              @mousedown="setPositionZ" @touchstart="setPositionZ" @touchend="resetPositionZ" @mouseup="resetPositionZ"> -->
+
+      <span class="left-title">
+        Adjust Zero Point
+      </span>
+
+      <input
+        v-model="curZeroHeight"
+        type="range"
+        min="-100"
+        max="200"
+        value="0"
+        @mouseup="onZeroUp"
+        id="zero-control">
+
+      <input
+        v-model="curZeroHeight"
+        class="show-input" />
+
+      <div class="btn-ok cursor-pointer" @click="onok">
+        Print
       </div>
     </div>
+    <!-- </div> -->
   </div>
 
 </template>
@@ -102,6 +104,16 @@ export default {
   width: 100%;
   height: 67px;
   background: #484848;
+}
+.dialog-cover1 {
+  // background: #000;
+  // opacity: .3;
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 .dialog-close {
   position: absolute;
