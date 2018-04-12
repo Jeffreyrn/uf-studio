@@ -14,7 +14,8 @@
       <div class="recording-area-wrapper"  id="left-teach-frame">
         <div class="left-top-area" id="left-top-area">
           <div class="left-emulator" id="left-emulator">
-            <XarmModel :size="emulatorHeight"></XarmModel>
+            <!-- <XarmModel :size="emulatorHeight"></XarmModel> -->
+            <slot name="xarm" :size="emulatorHeight"></slot>
           </div>
         </div>
         <div class="left-bottom-area" id="left-bottom-area">
@@ -134,6 +135,7 @@
       cancel='Discard'
       ok='Save Change'
       :onok='onsave'
+      :oncover='closeAlert'
       :oncancel='closeAlert'
       v-if="model.localTeach.changeSelectedShow===true">
     </DialogTeachAlert>
@@ -144,6 +146,7 @@
       ok='Delete'
       :onok='delProjOK'
       :isdelete=true
+      :oncover='closeAlert'
       :oncancel='closeAlert'
       v-if="isDeleteFileDialogShow===true">
     </DialogTeachAlert>
@@ -158,10 +161,11 @@
     <DialogTeachAlert
       title='Stop Recording and save automatically.'
       subtitle='The recording file will be saved to my project list'
-      cancel='Cancel'
+      cancel='Discard'
       ok='OK'
       :onok='finishRecordOK'
       :isdelete=false
+      :oncover='closeAlert'
       :oncancel='closeSaveAlert'
       v-if="model.localTeach.saveDialogShow===true">
     </DialogTeachAlert>
@@ -176,8 +180,7 @@ import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
 // import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
-// import { setTimeout } from 'timers';
-import XarmModel from './common/XarmModel';
+// import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
 import EmulatorControl from './common/EmulatorControl';
@@ -305,6 +308,18 @@ export default {
     },
     closeSaveAlert() {
       this.model.localTeach.saveDialogShow = false;
+      this.model.localTeach.changeSelectedShow = false;
+      this.model.localTeach.hasChange = false;
+      this.model.localTeach.visible.starRecording = false;
+      this.model.localTeach.curDuration = 0;
+      this.model.localTeach.fileDatas.temp = [];
+      // GlobalUtil.model.localTeach.curFileDatas = [];
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, () => {
+      });
+      setTimeout(() => {
+        const curProj = this.model.localTeach.curProj;
+        this.handleNodeClick({ uuid: curProj.uuid });
+      }, 100);
     },
     closeAlert() {
       this.isDeleteFileDialogShow = false;
@@ -317,7 +332,7 @@ export default {
     onrename() {
       const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
-      window.GlobalUtil.model.localTeach.projRenameShow = false;
+      this.model.localTeach.projRenameShow = false;
       const projTypeSelected = window.GlobalUtil.model.localTeach.projTypeSelected;
       const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
       text = `${pre}${text}`;
@@ -326,19 +341,19 @@ export default {
         setTimeout(() => {
           const filePath = path.join(window.CommandsTeachSocket.ROOT_DIR, text);
           self.$refs.tree.setCurrentKey(filePath);
-          window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          this.model.localTeach.setCurSelectedTreeItem(filePath);
         });
       });
     },
     rename(data) {
       console.log(`rename data uuid = ${data.uuid}`)
-      window.GlobalUtil.model.localTeach.projRenameShow = true;
-      window.GlobalUtil.model.localTeach.curDialogProjInputText = window.GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
+      this.model.localTeach.projRenameShow = true;
+      this.model.localTeach.curDialogProjInputText = this.model.localTeach.getRealProjFileName(path.basename(data.uuid));
       if (data.uuid.indexOf('discontinuous_') >= 0) {
-        window.GlobalUtil.model.localTeach.projTypeSelected = '2';
+        this.model.localTeach.projTypeSelected = '2';
       }
       else {
-        window.GlobalUtil.model.localTeach.projTypeSelected = '1';
+        this.model.localTeach.projTypeSelected = '1';
       }
       // setTimeout(() => {
       //   document.getElementById('teach-input-text').focus();
@@ -423,7 +438,7 @@ export default {
     },
     startRecord() {
       window.GlobalUtil.model.localTeach.curEditingFileUUID = '';
-      this.visible.starRecording = false;
+      // this.visible.starRecording = false;
       // const dateStr = GlobalUtil.getTimeString();
       const curSelectedTreeItemUUID = window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       const proj = window.GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
@@ -682,7 +697,6 @@ export default {
     OnePointSetting,
     ListProj,
     DialogTeachProjName,
-    XarmModel,
     EndSet,
     // EndJointControl,
     EmulatorControl,
