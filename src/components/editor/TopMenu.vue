@@ -160,7 +160,7 @@ export default {
   },
   methods: {
     run() {
-      if (!window.GlobalUtil.store.state.robot.info.online) {
+      if (!window.GlobalUtil.store.state.robot.status.connected) {
         return;
       }
       const curFile = window.GlobalUtil.model.localProjTree.curFile; // this.getCurFile();
@@ -415,8 +415,8 @@ export default {
   },
   computed: {
     startRunBtn: () => ({
-      'run-icon': window.GlobalUtil.store.state.robot.info.online,
-      'run-icon-dark': !window.GlobalUtil.store.state.robot.info.online,
+      'run-icon': window.GlobalUtil.store.state.robot.status.connected,
+      'run-icon-dark': !window.GlobalUtil.store.state.robot.status.connected,
     }),
     proListData() {
       const proList = this.model.localProjTree.curProjList;

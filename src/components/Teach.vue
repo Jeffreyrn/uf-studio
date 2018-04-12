@@ -268,7 +268,7 @@ export default {
       window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onstart() {
-      if (!window.GlobalUtil.store.state.robot.info.online) {
+      if (!window.GlobalUtil.store.state.robot.status.connected) {
         return;
       }
       console.log('on start');
@@ -320,6 +320,7 @@ export default {
         const curProj = this.model.localTeach.curProj;
         this.handleNodeClick({ uuid: curProj.uuid });
       }, 100);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
     },
     closeAlert() {
       this.isDeleteFileDialogShow = false;
@@ -333,7 +334,7 @@ export default {
       const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
       this.model.localTeach.projRenameShow = false;
-      const projTypeSelected = window.GlobalUtil.model.localTeach.projTypeSelected;
+      const projTypeSelected = this.localTeach.projTypeSelected;
       const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
       text = `${pre}${text}`;
       console.log(`onrename text = ${text}`);
@@ -709,12 +710,12 @@ export default {
       return tempArr[tempArr.length - 1];
     },
     startProjBtn: () => ({
-      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false && window.GlobalUtil.store.state.robot.info.online,
-      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true || !window.GlobalUtil.store.state.robot.info.online,
+      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false && window.GlobalUtil.store.state.robot.status.connected,
+      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true || !window.GlobalUtil.store.state.robot.status.connected,
     }),
     startFileBtn: () => ({
-      'start-btn': window.GlobalUtil.store.state.robot.info.online,
-      'start-btn-dark': !window.GlobalUtil.store.state.robot.info.online,
+      'start-btn': window.GlobalUtil.store.state.robot.status.connected,
+      'start-btn-dark': !window.GlobalUtil.store.state.robot.status.connected,
     }),
     saveChange: () => ({
       'save-change-btn': window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0,
@@ -722,7 +723,7 @@ export default {
     }),
     stateOnline: {
       get() {
-        return this.$store.state.robot.info.online
+        return this.$store.state.robot.status.connected
       },
       set(value) {
         this.setRobotState('online', value);

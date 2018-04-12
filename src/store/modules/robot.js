@@ -46,7 +46,7 @@ const state = {
   },
   status: {
     warning: null,
-    connected: null,
+    connected: false,
     printed: null,
     paused: null,
     error: null,
