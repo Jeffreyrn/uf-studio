@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import * as types from '../mutation-types';
+import { fail } from 'assert';
 
 // import SocketCom from '../../core/socket_com';
 function getReverseKinematics(data, callback) {
@@ -43,6 +44,7 @@ const state = {
     speed: 22,
     acceleration: 500,
     online: false,
+    lastOnline: false,
   },
   status: {
     warning: null,
@@ -142,7 +144,15 @@ const mutations = {
   [types.SET_ROBOT_STATUS](state, data) {
     state.status.connected = data.xarm_connected;
     if (!state.status.connected) {
+      if (state.info.online) {
+        state.info.lastOnline = state.info.online;
+      }
       state.info.online = false;
+    }
+    else if (state.info.lastOnline) {
+      // console.log(`last_online: ${state.info.lastOnline}`);
+      state.info.online = state.info.lastOnline;
+      state.info.lastOnline = false;
     }
     const end = data.xarm_tcp_pose;
     const joint = data.xarm_joint_pose;
