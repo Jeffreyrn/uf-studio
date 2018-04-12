@@ -41,14 +41,14 @@ const state = {
     axis: [0, 0, 0, 0, 0, 0, 0],
     test: null,
     socket: null,
-    speed: 22,
+    speed: 25,
     acceleration: 500,
     online: false,
     lastOnline: false,
   },
   status: {
     warning: null,
-    connected: null,
+    connected: false,
     printed: null,
     paused: null,
     error: null,
@@ -444,7 +444,7 @@ const mutations = {
   },
   [types.GO_HOME](state) {
     state.info.acceleration = 500
-    state.info.speed = 50
+    state.info.speed = 25
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_gohome',

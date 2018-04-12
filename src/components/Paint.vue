@@ -3,7 +3,7 @@
     <CommonTopMenu
       type='paint'
       :onlist='listProjects'
-      :isFileSelected="model.localPaintMgr.curProj!==null&&store.state.robot.info.online"
+      :isFileSelected="model.localPaintMgr.curProj!==null&&store.state.robot.status.connected"
       title='Draw / Laser'
       :issaved='model.localPaintMgr.state.saved'
       :curFileName="curProj.name"

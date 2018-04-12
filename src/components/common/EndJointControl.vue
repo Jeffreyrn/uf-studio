@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; justify-content: space-between">
-    <div :style="{width: leftControlWidth + 'px'}" class="left-control">
+    <div :style="{width: leftControlWidth + 'px'}" :class="['left-control', { nonePointerEvent: isOnline }]">
       <div class="control-wrapper dark-backgroud">
         <div class="control-header">
           <div class="header-text" style="width: 38%">Attitude Control</div>
@@ -715,6 +715,9 @@ export default {
     //     this.$store.commit('test', value);
     //   },
     // },
+    isOnline() {
+      return !this.$store.state.robot.info.online;
+    },
   },
 };
 </script>
@@ -1031,6 +1034,9 @@ span.text {
 .data-display {
   background: blue;
   color: yellow;
+}
+.nonePointerEvent {
+  pointer-events: none;
 }
 
 </style>
