@@ -75,6 +75,7 @@
       ok='Delete'
       :onok='removeAllOK'
       :isdelete=true
+      :oncover='closeDialog'
       :oncancel='closeDialog'
       v-if="model.localPaintMgr.visible.clear">
     </DialogTeachAlert>
@@ -91,6 +92,7 @@
       ok='Delete'
       :onok='onDeleteOK'
       :isdelete=true
+      :oncover='closeDel'
       :oncancel='closeDel'
       v-if="model.localPaintMgr.visible.del">
     </DialogTeachAlert>

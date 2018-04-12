@@ -140,6 +140,10 @@ const mutations = {
     );
   },
   [types.SET_ROBOT_STATUS](state, data) {
+    state.status.connected = data.xarm_connected;
+    if (!state.status.connected) {
+      state.info.online = false;
+    }
     const end = data.xarm_tcp_pose;
     const joint = data.xarm_joint_pose;
     const error = data.xarm_error_code;
@@ -237,7 +241,7 @@ const mutations = {
     else { // offline mode
       getReverseKinematics(state, (response) => {
         state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-        console.log('get 7 angle, socket res', response);
+        // console.log('get 7 angle, socket res', response);
       });
     }
   },

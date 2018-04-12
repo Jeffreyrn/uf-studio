@@ -19,7 +19,8 @@
     <div class="main-wrapper">
       <div class="main-view">
         <div class="model-container" :style="{width: modelCotainerWidth + 'px', height: modelCotainerHeight + 'px'}">
-          <xarm-model></xarm-model>
+          <!-- <xarm-model></xarm-model> -->
+          <slot name="xarm"></slot>
         </div>
         <div class="end-col">
           <end-set></end-set>
@@ -35,7 +36,6 @@
 <script>
 import Vue from 'vue';
 import ToggleButton from 'vue-js-toggle-button';
-import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 import EndJointControl from './common/EndJointControl';
 import EmulatorControl from './common/EmulatorControl';
@@ -49,6 +49,7 @@ export default {
       test: null,
       backStr: 'Home',
       testtest: 0,
+      toggled: false,
       state: {
         speed: 500,
         acceleration: 500,
@@ -136,12 +137,21 @@ export default {
         if (value) {
           this.$store.commit(types.GET_ROBOT_STATUS, value);
         }
+        // console.log(`control xarm connected: ${this.$store.state.robot.status.connected}`);
+        if (!this.$store.state.robot.status.connected) {
+          setTimeout(() => {
+            console.log('can not connect xArm');
+            this.setRobotState('online', false);
+            if (value) {
+              this.$store.commit(types.GET_ROBOT_STATUS, value);
+            }
+          }, 500);
+        }
         // this.$store.commit('test', value);
       },
     },
   },
   components: {
-    XarmModel,
     EndSet,
     EndJointControl,
     EmulatorControl,

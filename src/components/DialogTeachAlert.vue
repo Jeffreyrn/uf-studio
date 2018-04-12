@@ -2,7 +2,7 @@
 <template>
   <div id="root-delete" class="noselected">
     <div class="dialog-wrap">
-      <div class="dialog-cover" @click="oncancel"></div>
+      <div class="dialog-cover" @click="oncover"></div>
       <div class="dialog-content">
         <span class="top-title">System Notice</span>
         <span class="top-tips">{{ title }}</span>
@@ -24,7 +24,7 @@
 // import * as types from './../store/mutation-types';
 // const path = require('path');
 export default {
-  props: ['onok', 'oncancel', 'title', 'subtitle', 'cancel', 'ok', 'isdelete'],
+  props: ['onok', 'oncancel', 'oncover', 'title', 'subtitle', 'cancel', 'ok', 'isdelete'],
   data() {
     return {
       model: window.GlobalUtil.model,
