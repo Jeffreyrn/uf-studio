@@ -123,8 +123,7 @@ export default {
       return orientation;
     },
     isOnline() {
-      console.log(`2222222: ${!this.$store.state.robot.info.connected}`);
-      return !this.$store.state.robot.info.connected;
+      return !this.$store.state.robot.info.online;
     },
     // end: {
     //   get() {
