@@ -723,7 +723,8 @@ export default {
     }),
     stateOnline: {
       get() {
-        return this.$store.state.robot.status.connected
+        // return this.$store.state.robot.status.connected
+        return this.$store.state.robot.info.online;
       },
       set(value) {
         this.setRobotState('online', value);
