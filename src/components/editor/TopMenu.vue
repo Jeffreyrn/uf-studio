@@ -160,9 +160,9 @@ export default {
   },
   methods: {
     run() {
-      if (!window.GlobalUtil.store.state.robot.status.connected) {
-        return;
-      }
+      // if (!window.GlobalUtil.store.state.robot.status.connected) {
+      //   return;
+      // }
       const curFile = window.GlobalUtil.model.localProjTree.curFile; // this.getCurFile();
       if (curFile === null) {
         return;
@@ -415,8 +415,8 @@ export default {
   },
   computed: {
     startRunBtn: () => ({
-      'run-icon': window.GlobalUtil.store.state.robot.status.connected,
-      'run-icon-dark': !window.GlobalUtil.store.state.robot.status.connected,
+      'run-icon': 1 == 1, // window.GlobalUtil.store.state.robot.status.connected,
+      // 'run-icon-dark': !window.GlobalUtil.store.state.robot.status.connected,
     }),
     proListData() {
       const proList = this.model.localProjTree.curProjList;
