@@ -61,7 +61,7 @@
                   <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
                 </div>
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
-                  <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
+                  <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" :disabled="model.localTeach.isTeachRunningUUID !=='' " :class="cannotEdit" @click='startEdit'>Edit</button>
                   <!-- start btn -->
                   <button v-if="model.localTeach.isTeachRunningUUID===''" class="bottom-btn" v-bind:class="startFileBtn" @click="onstart"><i class="el-icon-caret-right"></i></button>
                   <button v-else class="bottom-btn edit-cancel-btn" @click="onstop">
@@ -721,6 +721,9 @@ export default {
       'save-change-btn': window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0,
       'save-change-btn-dark': !(window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0),
     }),
+    cannotEdit: () => ({
+      'edit-btn-dark': window.GlobalUtil.model.localTeach.isTeachRunningUUID !== '',
+    }),
     stateOnline: {
       get() {
         // return this.$store.state.robot.status.connected
@@ -926,6 +929,10 @@ export default {
           .start-btn-dark {
             bottom: 0;
             background: #E3E3E3;;
+          }
+          .edit-btn-dark {
+            background: #E3E3E3;;
+            cursor: default;
           }
           /*.start-btn:hover {*/
             /*background: rgba(212,212,212,0.6);*/
