@@ -1,7 +1,7 @@
 <template>
   <div class="end-container">
     <div class="container-title">TCP</div>
-    <ul class="position-set">
+    <ul :class="['position-set', { nonePointerEvent: isOnline }]">
       <li v-for="li in config.position.nameArray" :key="li">
         <div>{{li}}</div><input v-model="position[li]" type="number" :max="config.position.max" :min="config.position.min" @input="validatePosition(li)"><span>mm</span>
       </li>
@@ -122,6 +122,10 @@ export default {
       });
       return orientation;
     },
+    isOnline() {
+      console.log(`2222222: ${!this.$store.state.robot.info.connected}`);
+      return !this.$store.state.robot.info.connected;
+    },
     // end: {
     //   get() {
     //     const end = this.$store.getters.end;
@@ -221,6 +225,9 @@ ul.position-set li{
     font-size: 10px;
     color: #AEAEAE;
   }
+}
+.nonePointerEvent {
+  pointer-events: none;
 }
 </style>
 
