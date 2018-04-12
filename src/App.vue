@@ -8,7 +8,7 @@
     <div class="main-container">
       <keep-alive>
         <router-view>
-          <slot name=""></slot>
+          <xarm-model slot="xarm"></xarm-model>
         </router-view>
       </keep-alive>
     </div>

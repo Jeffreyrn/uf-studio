@@ -27,7 +27,7 @@
           <button class="button" @click="onApp()">test app list</button>
           <div v-text="xmlCode"></div>
         </div> -->
-        <xarm-model></xarm-model>
+        <slot name="xarm"></slot>
       </div>
       <div class="file-list">
         <file-list @loadProject="loadProject" :selected="model.localAppsMgr.curProName"></file-list>
@@ -46,7 +46,6 @@ import Dialogs from './Blockly/Dialogs'
 import DialogInputName from './Blockly/DialogInputName'
 import FileList from './Blockly/FileList'
 import CommonTopMenu from './common/CommonTopMenu';
-import XarmModel from './common/XarmModel';
 import * as types from '../store/mutation-types';
 
 const BLOCK_TYPES = {
@@ -133,7 +132,6 @@ export default {
     this.divDisable = false
   },
   components: {
-    XarmModel,
     Dialogs,
     FileList,
     DialogInputName,

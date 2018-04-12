@@ -14,7 +14,8 @@
       <div class="recording-area-wrapper"  id="left-teach-frame">
         <div class="left-top-area" id="left-top-area">
           <div class="left-emulator" id="left-emulator">
-            <XarmModel :size="emulatorHeight"></XarmModel>
+            <!-- <XarmModel :size="emulatorHeight"></XarmModel> -->
+            <slot name="xarm" :size="emulatorHeight"></slot>
           </div>
         </div>
         <div class="left-bottom-area" id="left-bottom-area">
@@ -177,7 +178,7 @@ import ListProj from './Teach/ListProj';
 // import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
 // import { setTimeout } from 'timers';
-import XarmModel from './common/XarmModel';
+// import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
 import EmulatorControl from './common/EmulatorControl';
@@ -682,7 +683,6 @@ export default {
     OnePointSetting,
     ListProj,
     DialogTeachProjName,
-    XarmModel,
     EndSet,
     // EndJointControl,
     EmulatorControl,
