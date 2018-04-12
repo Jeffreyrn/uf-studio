@@ -10,8 +10,8 @@
         </el-col>
         <el-col :span="6">
           <div class="title-online">Live Control</div>
-          <toggle-button v-model="state.online" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
-            :labels="{checked: 'ON', unchecked: 'OFF'}" @change="setOnline"
+          <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true" 
+            :labels="{checked: 'ON', unchecked: 'OFF'}"
             :width="71" :height="36"/>
         </el-col>
       </el-row>
@@ -93,6 +93,12 @@ export default {
     setOnline(value) {
       const data = Object.prototype.hasOwnProperty.call(value, 'value') ? value.value : value;
       this.setRobotState('online', data);
+      if (!this.$store.state.robot.status.connected) {
+        setTimeout(() => {
+          console.log('can not connect xArm');
+          this.setRobotState('online', false);
+        }, 500);
+      }
     },
     setRobotState(index, value) {
       const data = {
@@ -112,6 +118,28 @@ export default {
     // },
   },
   computed: {
+    stateOnline: {
+      get() {
+        return this.$store.state.robot.info.online
+      },
+      set(value) {
+        this.setRobotState('online', value);
+        if (value) {
+          this.$store.commit(types.GET_ROBOT_STATUS, value);
+        }
+        // console.log(`teach edit xarm connected: ${this.$store.state.robot.status.connected}`);
+        if (!this.$store.state.robot.status.connected) {
+          setTimeout(() => {
+            console.log('can not connect xArm');
+            this.setRobotState('online', false);
+            if (value) {
+              this.$store.commit(types.GET_ROBOT_STATUS, value);
+            }
+          }, 500);
+        }
+        // this.$store.commit('test', value);
+      },
+    },
     // testtest: {
     //   get() {
     //     return this.$store.state.robot.info.test;
