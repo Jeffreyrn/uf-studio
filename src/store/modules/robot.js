@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import * as types from '../mutation-types';
-import { fail } from 'assert';
 
 // import SocketCom from '../../core/socket_com';
 function getReverseKinematics(data, callback) {
