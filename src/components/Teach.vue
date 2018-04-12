@@ -180,7 +180,6 @@ import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
 // import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
-// import { setTimeout } from 'timers';
 // import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
@@ -189,7 +188,6 @@ import EmulatorControl from './common/EmulatorControl';
 import * as types from './../store/mutation-types';
 import DialogTeachAlert from './DialogTeachAlert';
 import DialogAlert from './DialogAlert';
-import { setTimeout } from 'timers';
 
 Vue.use(ToggleButton);
 const path = require('path');
@@ -312,11 +310,11 @@ export default {
       this.model.localTeach.saveDialogShow = false;
       this.model.localTeach.changeSelectedShow = false;
       this.model.localTeach.hasChange = false;
-	    this.model.localTeach.visible.starRecording = false;
-	    this.model.localTeach.curDuration = 0;
+      this.model.localTeach.visible.starRecording = false;
+      this.model.localTeach.curDuration = 0;
       this.model.localTeach.fileDatas.temp = [];
       // GlobalUtil.model.localTeach.curFileDatas = [];
-      window.CommandsTeachSocket.debugSetBeart(false, 0.1, (dict) => {
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, () => {
       });
       setTimeout(() => {
         const curProj = this.model.localTeach.curProj;
