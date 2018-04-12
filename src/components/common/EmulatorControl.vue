@@ -84,7 +84,7 @@ export default {
       test: null,
       testtest: [],
       state: {
-        speed: 50,
+        speed: 25,
         acceleration: 500,
       },
       config: {
