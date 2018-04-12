@@ -32,6 +32,7 @@
       ok='Delete'
       :onok='delApp'
       :isdelete=true
+      :oncover='closeAlert'
       :oncancel='closeAlert'
       v-if="isDeleteApp===true">
     </DialogTeachAlert>
