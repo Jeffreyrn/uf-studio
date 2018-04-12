@@ -19,7 +19,7 @@
     <el-main class="main-wrapper">
       <el-row :gutter="20" class="main-view">
         <el-col :span="18" class="model-container">
-          <xarm-model></xarm-model>
+          <slot name="xarm"></slot>
         </el-col>
         <el-col :span="6" class="end-col">
           <!-- <end-set></end-set> -->

@@ -19,7 +19,8 @@
     <div class="main-wrapper">
       <div class="main-view">
         <div class="model-container" :style="{width: modelCotainerWidth + 'px', height: modelCotainerHeight + 'px'}">
-          <xarm-model></xarm-model>
+          <!-- <xarm-model></xarm-model> -->
+          <slot name="xarm"></slot>
         </div>
         <div class="end-col">
           <end-set></end-set>
@@ -35,7 +36,6 @@
 <script>
 import Vue from 'vue';
 import ToggleButton from 'vue-js-toggle-button';
-import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 import EndJointControl from './common/EndJointControl';
 import EmulatorControl from './common/EmulatorControl';
@@ -141,7 +141,6 @@ export default {
     },
   },
   components: {
-    XarmModel,
     EndSet,
     EndJointControl,
     EmulatorControl,

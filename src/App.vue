@@ -6,7 +6,11 @@
       </router-link> -->
     </div>
     <div class="main-container">
-      <keep-alive><router-view/></keep-alive>
+      <keep-alive>
+        <router-view>
+          <xarm-model slot="xarm"></xarm-model>
+        </router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
