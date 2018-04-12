@@ -49,6 +49,7 @@ export default {
       test: null,
       backStr: 'Home',
       testtest: 0,
+      toggled: false,
       state: {
         speed: 500,
         acceleration: 500,
@@ -135,6 +136,16 @@ export default {
         this.setRobotState('online', value);
         if (value) {
           this.$store.commit(types.GET_ROBOT_STATUS, value);
+        }
+        // console.log(`control xarm connected: ${this.$store.state.robot.status.connected}`);
+        if (!this.$store.state.robot.status.connected) {
+          setTimeout(() => {
+            console.log('can not connect xArm');
+            this.setRobotState('online', false);
+            if (value) {
+              this.$store.commit(types.GET_ROBOT_STATUS, value);
+            }
+          }, 500);
         }
         // this.$store.commit('test', value);
       },

@@ -731,6 +731,16 @@ export default {
           this.$store.commit(types.GET_ROBOT_STATUS, value);
         }
         // this.$store.commit('test', value);
+        // console.log(`teach xarm connected: ${this.$store.state.robot.status.connected}`);
+        if (!this.$store.state.robot.status.connected) {
+          setTimeout(() => {
+            console.log('can not connect xArm');
+            this.setRobotState('online', false);
+            if (value) {
+              this.$store.commit(types.GET_ROBOT_STATUS, value);
+            }
+          }, 500);
+        }
       },
     },
   },

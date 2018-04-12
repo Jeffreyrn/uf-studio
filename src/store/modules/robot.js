@@ -40,7 +40,7 @@ const state = {
     axis: [0, 0, 0, 0, 0, 0, 0],
     test: null,
     socket: null,
-    speed: 22,
+    speed: 25,
     acceleration: 500,
     online: false,
   },
@@ -140,6 +140,10 @@ const mutations = {
     );
   },
   [types.SET_ROBOT_STATUS](state, data) {
+    state.status.connected = data.xarm_connected;
+    if (!state.status.connected) {
+      state.info.online = false;
+    }
     const end = data.xarm_tcp_pose;
     const joint = data.xarm_joint_pose;
     const error = data.xarm_error_code;
@@ -237,7 +241,7 @@ const mutations = {
     else { // offline mode
       getReverseKinematics(state, (response) => {
         state.info.axis = response.data.map(num => Number(num.toFixed(2))).slice();
-        console.log('get 7 angle, socket res', response);
+        // console.log('get 7 angle, socket res', response);
       });
     }
   },
@@ -430,7 +434,7 @@ const mutations = {
   },
   [types.GO_HOME](state) {
     state.info.acceleration = 500
-    state.info.speed = 50
+    state.info.speed = 25
     if (state.info.online) {
       window.GlobalUtil.socketCom.sendCmd(
         'xarm_move_gohome',
