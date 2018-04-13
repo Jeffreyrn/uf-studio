@@ -1,9 +1,9 @@
 <template>
   <div class="end-container">
     <div class="container-title">TCP</div>
-    <ul :class="['position-set', { nonePointerEvent: isOnline }]">
+    <ul :class="['position-set', { comNonePointerEvent: isOnline }]">
       <li v-for="li in config.position.nameArray" :key="li">
-        <div>{{li}}</div><input v-model="position[li]" type="number" :max="config.position.max" :min="config.position.min" @input="validatePosition(li)"><span>mm</span>
+        <div>{{li}}</div><input onfocus="this.select()" v-model="position[li]" type="number" :max="config.position.max" :min="config.position.min" @input="validatePosition(li)"><span>mm</span>
       </li>
       <!-- <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
       <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li> -->
@@ -15,7 +15,7 @@
       <!-- test data "X":172,"Y":5.091591617724031e-14,"Z":45.93000030517578,"A":-180.00000500895632,"B":0,"C":0 -->
     </ul>
     <div class="set-button">
-      <button class="confirm" @click="setEnd">Apply</button>
+      <button @click="setEnd" :class="['confirm', { comNonePointerEvent: isOnline }]">Apply</button>
       <button class="confirm" @click="resetEnd">Reset</button>
     </div>
   </div>
@@ -224,9 +224,6 @@ ul.position-set li{
     font-size: 10px;
     color: #AEAEAE;
   }
-}
-.nonePointerEvent {
-  pointer-events: none;
 }
 </style>
 
