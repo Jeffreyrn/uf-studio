@@ -306,7 +306,7 @@ export default {
         this.setRangeMask(index, value);
       });
     };
-    this.onWindowResize()
+//    this.onWindowResize();
     this.getLeftControlSize();
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('resize', this.getLeftControlSize, false);
