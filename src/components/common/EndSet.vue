@@ -8,7 +8,7 @@
       <!-- <li><div>Y</div><input v-model.number="position.y" type="number"><span>mm</span></li>
       <li><div>Z</div><input v-model.number="position.z" type="number"><span>mm</span></li> -->
       <li v-for="li in config.orientation.nameArray" :key="li">
-        <div>{{li}}</div><input v-model="orientation[li]" type="number" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><span>degree </span>
+        <div>{{li}}</div><input v-model="orientation[li]" type="number" onfocus="this.select()" :max="config.orientation.max" :min="config.orientation.min" @input="validateOrientation(li)"><span>degree </span>
       </li>
       <!-- <li><div>Yaw</div><input v-model.number="orientation.yaw" type="number"><sup>&deg;</sup></li>
       <li><div>Pitch</div><input v-model.number="orientation.pitch" type="number"><sup>&deg;</sup></li> -->

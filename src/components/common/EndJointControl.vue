@@ -77,7 +77,7 @@
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
           <span class="joints-number">
-            <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]"
+            <input :id="'joint-input' + j" type="number" onfocus="this.select()" v-model.number="joints[j-1]"
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
             :max="config.jointMax" :min="config.jointMin">
           </span>
