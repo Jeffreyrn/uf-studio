@@ -8,7 +8,7 @@
           </router-link>
           <span class="title-ide">Control</span>
         </el-col>
-        <el-col :span="5" class="control-toggle">
+        <el-col :span="10" class="control-toggle">
           <div class="title-online">Live Control</div>
           <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true"
             :labels="{checked: 'ON', unchecked: 'OFF'}"
@@ -191,7 +191,7 @@ footer{
     .control-toggle {
       display: flex;
       justify-content: flex-end;
-      margin-right: 2%;
+      margin-right: 2vw;
     }
   }
   .main-wrapper{
@@ -232,7 +232,7 @@ footer{
   padding-left: 2%;
 }
 .title-online {
-  margin-right: 5%;
+  margin-right: 1vw;
   font-size: 1.2rem;
   font-family: Gotham-Medium;
   color: #434343;

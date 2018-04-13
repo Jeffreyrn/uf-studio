@@ -4,6 +4,7 @@
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
        <!-- {{ JSON.stringify(realData) }} -->
        <div class="control-toggle">
+        <el-button round @click="resetEnd()">Reset</el-button>
           <div class="title-online">Live Control</div>
           <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true"
             :labels="{checked: 'ON', unchecked: 'OFF'}"
@@ -26,7 +27,7 @@
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
                   <span v-if="model.localTeach.curSelectedIndex>=0"> {{ model.localTeach.curSelectedIndex+1 }} / {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>
-                  <span v-if="model.localTeach.curSelectedIndex<0"> {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>            
+                  <span v-if="model.localTeach.curSelectedIndex<0"> {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
@@ -255,6 +256,10 @@ export default {
     this.onwinresize();
   },
   methods: {
+    resetEnd() {
+      // vuex reset position&orientation
+      this.$store.commit(types.GO_HOME);
+    },
     setRobotState(index, value) {
       const data = {
         index,
@@ -779,6 +784,12 @@ export default {
       .title-online {
         padding-right: 14px;
         font-family: 'Gotham-Bold';
+      }
+      button {
+        width: 70px;
+        height: 30px;
+        padding: 0;
+        margin-right: 20px;
       }
     }
   }

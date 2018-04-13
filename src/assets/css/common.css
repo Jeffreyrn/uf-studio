@@ -190,6 +190,10 @@
 .input-focus {
   outline: none;
 }
+.comNonePointerEvent {
+  pointer-events: none;
+  opacity: 0.4;
+}
 
 
 
