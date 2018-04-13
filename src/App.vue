@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" unselectable="on" onselectstart="return false;">
     <div>
       <!-- <router-link :to="{ name: 'Home'}">
         <el-button >Home</el-button>
