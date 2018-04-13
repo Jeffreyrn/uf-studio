@@ -320,7 +320,7 @@ export default {
       });
     },
     newProject() {
-      this.playground.clear().renderAll();
+      // this.playground.clear().renderAll();
       this.model.localPaintMgr.state.buffer = [];
       this.model.localPaintMgr.curDialogProjInputText = '';
       this.model.localPaintMgr.visible.pattern = true;
