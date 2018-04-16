@@ -3,44 +3,43 @@
     <!--<div class="container-title">Control Panel</div>-->
     <div class="control-block">
       <div class="block-title">Joints Control
-        <el-button round @click="resetEnd()">Reset</el-button>
       </div>
       <div class="control-wrapper">
         <div class="block joint-range" v-for="j in 7" :key="j">
           <span class="text">J{{j}}</span>
           <div class="range-wrapper">
-            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.jointMax" :min="config.jointMin" 
+            <input :id="'joint' + j" v-model.number="joints[j-1]" type="range" :step="config.step" :max="config.jointMax" :min="config.jointMin"
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)">
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
-          <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)"><sup>°</sup>
+          <input :id="'joint-input' + j" type="number" onfocus="this.select()" v-model.number="joints[j-1]" @input="setJointOffline(j-1)" @change="setJointOnline(j-1)"><sup>°</sup>
         </div>
       </div>
     </div>
-    <div class="control-block">
+    <div :class="['control-block', { comNonePointerEvent: isOnline }]">
       <div class="block-title">Position and Attitude Control</div>
       <div class="control-wrapper">
         <div class="block end-range" v-for="(value, index) in position" :key="index">
           <span class="text">{{index}}</span>
           <div class="range-wrapper">
-            <input :id="'end' + index" v-model.number="position[index]" type="range" :step="config.step" :max="config.position.max" :min="config.position.min" 
+            <input :id="'end' + index" v-model.number="position[index]" type="range" :step="config.step" :max="config.position.max" :min="config.position.min"
             @input="setEndOffline()" @change="setEndOnline(index, 'position')">
             <p :id="'mask' + index" class="mask-bar"></p>
           </div>
-          <input :id="'end-input' + index" type="number" v-model.number="position[index]" @input="setEndOffline()" @change="setEndOnline(index, 'position')"><em class="mm-unit">mm</em>
+          <input :id="'end-input' + index" type="number" onfocus="this.select()" v-model.number="position[index]" @input="setEndOffline()" @change="setEndOnline(index, 'position')"><em class="mm-unit">mm</em>
         </div>
         <div class="block end-range" v-for="(value, index) in orientation" :key="index">
           <span class="text">{{index}}</span>
           <div class="range-wrapper">
-            <input :id="'end' + index" v-model.number="orientation[index]" type="range" :step="config.step" :max="config.orientation.max" :min="config.orientation.min" 
+            <input :id="'end' + index" v-model.number="orientation[index]" type="range" :step="config.step" :max="config.orientation.max" :min="config.orientation.min"
             @input="setEndOffline()" @change="setEndOnline(index, 'orientation')">
             <p :id="'mask' + index" class="mask-bar"></p>
           </div>
-          <input :id="'end-input' + index" type="number" v-model.number="orientation[index]" @input="setEndOffline()" @change="setEndOnline(index, 'orientation')"><sup>°</sup>
+          <input :id="'end-input' + index" type="number" onfocus="this.select()" v-model.number="orientation[index]" @input="setEndOffline()" @change="setEndOnline(index, 'orientation')"><sup>°</sup>
         </div>
       </div>
     </div>
-    <div class="control-block">
+    <div :class="['control-block', { comNonePointerEvent: isOnline }]">
       <div class="control-wrapper">
         <div class="block end-range config-wrapper">
           <span class="config-title">Speed</span>
@@ -84,7 +83,7 @@ export default {
       test: null,
       testtest: [],
       state: {
-        speed: 50,
+        speed: 25,
         acceleration: 500,
       },
       config: {
@@ -179,11 +178,6 @@ export default {
       };
       this.$store.commit(types.SET_ROBOT_STATE, data);
     },
-    resetEnd() {
-      // vuex reset position&orientation
-      this.$store.commit(types.GO_HOME);
-      console.log('reset action');
-    },
   },
   computed: {
     position: {
@@ -267,6 +261,9 @@ export default {
         // this.$store.commit(types.ROBOT_MOVE_JOINT, value.map(str => Number(str)));
       },
     },
+    isOnline() {
+      return !this.$store.state.robot.info.online;
+    },
     // end: {
     //   get() {
     //     const end = this.$store.getters.end;
@@ -317,11 +314,6 @@ $fontColor : #444;
       font-family: "Gotham-Book";
       display: flex;
       justify-content: space-between;
-      button {
-        width: 70px;
-        height: 30px;
-        padding: 0;
-      }
     }
     .control-wrapper .block {
       color: $fontColor;

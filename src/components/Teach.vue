@@ -4,6 +4,7 @@
       <div><router-link :to="{name: 'EditHome'}"><img src="../assets/img/common/icon_back.svg" alt="back"/></router-link><span>Recording</span></div>
        <!-- {{ JSON.stringify(realData) }} -->
        <div class="control-toggle">
+        <el-button round @click="resetEnd()">Reset</el-button>
           <div class="title-online">Live Control</div>
           <toggle-button v-model="stateOnline" :color="{checked: '#52BF53', unchecked: '#D3D5DB'}" :sync="true"
             :labels="{checked: 'ON', unchecked: 'OFF'}"
@@ -26,7 +27,7 @@
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='discontinuous'">
                   <span v-if="model.localTeach.curSelectedIndex>=0"> {{ model.localTeach.curSelectedIndex+1 }} / {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>
-                  <span v-if="model.localTeach.curSelectedIndex<0"> {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>            
+                  <span v-if="model.localTeach.curSelectedIndex<0"> {{ fileLength(model.localTeach.curEditingFileUUID) }} </span>
                 </div>
                 <div v-if="model.localTeach.curSelectedTreeItem.type==='file' && model.localTeach.curProj.type==='continuous'">
                   {{ fileLength(model.localTeach.curEditingFileUUID) }}
@@ -61,7 +62,7 @@
                   <button v-if="model.localTeach.visible.starRecording && model.localTeach.curProj.type==='discontinuous'" class="bottom-btn press-btn" @click='addRecord()'>Press to record</button>
                 </div>
                 <div class="" v-if="model.localTeach.curSelectedTreeItem.type==='file'">
-                  <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" @click='startEdit'>Edit</button>
+                  <button v-if="model.localTeach.curProj.type==='discontinuous'" class="bottom-btn eidt-btn" :disabled="model.localTeach.isTeachRunningUUID !=='' " :class="cannotEdit" @click='startEdit'>Edit</button>
                   <!-- start btn -->
                   <button v-if="model.localTeach.isTeachRunningUUID===''" class="bottom-btn" v-bind:class="startFileBtn" @click="onstart"><i class="el-icon-caret-right"></i></button>
                   <button v-else class="bottom-btn edit-cancel-btn" @click="onstop">
@@ -135,6 +136,7 @@
       cancel='Discard'
       ok='Save Change'
       :onok='onsave'
+      :oncover='closeAlert'
       :oncancel='closeAlert'
       v-if="model.localTeach.changeSelectedShow===true">
     </DialogTeachAlert>
@@ -145,6 +147,7 @@
       ok='Delete'
       :onok='delProjOK'
       :isdelete=true
+      :oncover='closeAlert'
       :oncancel='closeAlert'
       v-if="isDeleteFileDialogShow===true">
     </DialogTeachAlert>
@@ -159,10 +162,11 @@
     <DialogTeachAlert
       title='Stop Recording and save automatically.'
       subtitle='The recording file will be saved to my project list'
-      cancel='Cancel'
+      cancel='Discard'
       ok='OK'
       :onok='finishRecordOK'
       :isdelete=false
+      :oncover='closeAlert'
       :oncancel='closeSaveAlert'
       v-if="model.localTeach.saveDialogShow===true">
     </DialogTeachAlert>
@@ -177,7 +181,6 @@ import OnePointSetting from './Teach/OnePointSetting';
 import ListProj from './Teach/ListProj';
 // import ElButton from "../../node_modules/element-ui/packages/button/src/button";
 import DialogTeachProjName from './DialogTeachProjName';
-// import { setTimeout } from 'timers';
 // import XarmModel from './common/XarmModel';
 import EndSet from './common/EndSet';
 // import EndJointControl from './common/EndJointControl';
@@ -253,6 +256,10 @@ export default {
     this.onwinresize();
   },
   methods: {
+    resetEnd() {
+      // vuex reset position&orientation
+      this.$store.commit(types.GO_HOME);
+    },
     setRobotState(index, value) {
       const data = {
         index,
@@ -266,7 +273,7 @@ export default {
       window.GlobalUtil.model.localTeach.projTypeSelectedShow = false;
     },
     onstart() {
-      if (!window.GlobalUtil.store.state.robot.info.online) {
+      if (!window.GlobalUtil.store.state.robot.status.connected) {
         return;
       }
       console.log('on start');
@@ -306,6 +313,19 @@ export default {
     },
     closeSaveAlert() {
       this.model.localTeach.saveDialogShow = false;
+      this.model.localTeach.changeSelectedShow = false;
+      this.model.localTeach.hasChange = false;
+      this.model.localTeach.visible.starRecording = false;
+      this.model.localTeach.curDuration = 0;
+      this.model.localTeach.fileDatas.temp = [];
+      // GlobalUtil.model.localTeach.curFileDatas = [];
+      window.CommandsTeachSocket.debugSetBeart(false, 0.1, () => {
+      });
+      setTimeout(() => {
+        const curProj = this.model.localTeach.curProj;
+        this.handleNodeClick({ uuid: curProj.uuid });
+      }, 100);
+      this.$store.commit(types.ROBOT_MOVE_JOINT, window.GlobalUtil.model.localTeach.curPoint);
     },
     closeAlert() {
       this.isDeleteFileDialogShow = false;
@@ -318,8 +338,8 @@ export default {
     onrename() {
       const self = this;
       let text = this.model.localTeach.curDialogProjInputText;
-      window.GlobalUtil.model.localTeach.projRenameShow = false;
-      const projTypeSelected = window.GlobalUtil.model.localTeach.projTypeSelected;
+      this.model.localTeach.projRenameShow = false;
+      const projTypeSelected = this.localTeach.projTypeSelected;
       const pre = projTypeSelected === '1' ? 'continuous_' : 'discontinuous_';
       text = `${pre}${text}`;
       console.log(`onrename text = ${text}`);
@@ -327,19 +347,19 @@ export default {
         setTimeout(() => {
           const filePath = path.join(window.CommandsTeachSocket.ROOT_DIR, text);
           self.$refs.tree.setCurrentKey(filePath);
-          window.GlobalUtil.model.localTeach.setCurSelectedTreeItem(filePath);
+          this.model.localTeach.setCurSelectedTreeItem(filePath);
         });
       });
     },
     rename(data) {
       console.log(`rename data uuid = ${data.uuid}`)
-      window.GlobalUtil.model.localTeach.projRenameShow = true;
-      window.GlobalUtil.model.localTeach.curDialogProjInputText = window.GlobalUtil.model.localTeach.getRealProjFileName(path.basename(data.uuid));
+      this.model.localTeach.projRenameShow = true;
+      this.model.localTeach.curDialogProjInputText = this.model.localTeach.getRealProjFileName(path.basename(data.uuid));
       if (data.uuid.indexOf('discontinuous_') >= 0) {
-        window.GlobalUtil.model.localTeach.projTypeSelected = '2';
+        this.model.localTeach.projTypeSelected = '2';
       }
       else {
-        window.GlobalUtil.model.localTeach.projTypeSelected = '1';
+        this.model.localTeach.projTypeSelected = '1';
       }
       // setTimeout(() => {
       //   document.getElementById('teach-input-text').focus();
@@ -424,7 +444,7 @@ export default {
     },
     startRecord() {
       window.GlobalUtil.model.localTeach.curEditingFileUUID = '';
-      this.visible.starRecording = false;
+      // this.visible.starRecording = false;
       // const dateStr = GlobalUtil.getTimeString();
       const curSelectedTreeItemUUID = window.GlobalUtil.model.localTeach.curSelectedTreeItem.uuid;
       const proj = window.GlobalUtil.model.localTeach.getCurProj(curSelectedTreeItemUUID);
@@ -695,20 +715,24 @@ export default {
       return tempArr[tempArr.length - 1];
     },
     startProjBtn: () => ({
-      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false && window.GlobalUtil.store.state.robot.info.online,
-      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true || !window.GlobalUtil.store.state.robot.info.online,
+      'start-btn': window.GlobalUtil.model.localTeach.curProj.files.length > 0 && window.GlobalUtil.model.localTeach.visible.starRecording === false && window.GlobalUtil.store.state.robot.status.connected,
+      'start-btn-dark': window.GlobalUtil.model.localTeach.curProj.files.length === 0 || window.GlobalUtil.model.localTeach.visible.starRecording === true || !window.GlobalUtil.store.state.robot.status.connected,
     }),
     startFileBtn: () => ({
-      'start-btn': window.GlobalUtil.store.state.robot.info.online,
-      'start-btn-dark': !window.GlobalUtil.store.state.robot.info.online,
+      'start-btn': window.GlobalUtil.store.state.robot.status.connected,
+      'start-btn-dark': !window.GlobalUtil.store.state.robot.status.connected,
     }),
     saveChange: () => ({
       'save-change-btn': window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0,
       'save-change-btn-dark': !(window.GlobalUtil.model.localTeach.hasChange === true && window.GlobalUtil.model.localTeach.curSelectedIndex >= 0),
     }),
+    cannotEdit: () => ({
+      'edit-btn-dark': window.GlobalUtil.model.localTeach.isTeachRunningUUID !== '',
+    }),
     stateOnline: {
       get() {
-        return this.$store.state.robot.info.online
+        // return this.$store.state.robot.status.connected
+        return this.$store.state.robot.info.online;
       },
       set(value) {
         this.setRobotState('online', value);
@@ -716,6 +740,16 @@ export default {
           this.$store.commit(types.GET_ROBOT_STATUS, value);
         }
         // this.$store.commit('test', value);
+        // console.log(`teach xarm connected: ${this.$store.state.robot.status.connected}`);
+        if (!this.$store.state.robot.status.connected) {
+          setTimeout(() => {
+            console.log('can not connect xArm');
+            this.setRobotState('online', false);
+            if (value) {
+              this.$store.commit(types.GET_ROBOT_STATUS, value);
+            }
+          }, 500);
+        }
       },
     },
   },
@@ -750,6 +784,12 @@ export default {
       .title-online {
         padding-right: 14px;
         font-family: 'Gotham-Bold';
+      }
+      button {
+        width: 70px;
+        height: 30px;
+        padding: 0;
+        margin-right: 20px;
       }
     }
   }
@@ -900,6 +940,10 @@ export default {
           .start-btn-dark {
             bottom: 0;
             background: #E3E3E3;;
+          }
+          .edit-btn-dark {
+            background: #E3E3E3;;
+            cursor: default;
           }
           /*.start-btn:hover {*/
             /*background: rgba(212,212,212,0.6);*/

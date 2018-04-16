@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; justify-content: space-between">
-    <div :style="{width: leftControlWidth + 'px'}" class="left-control">
+    <div :style="{width: leftControlWidth + 'px'}" :class="['left-control', { comNonePointerEvent: isOnline }]">
       <div class="control-wrapper dark-backgroud">
         <div class="control-header">
           <div class="header-text" style="width: 38%">Attitude Control</div>
@@ -77,7 +77,7 @@
             <p :id="'mask' + j" class="mask-bar"></p>
           </div>
           <span class="joints-number">
-            <input :id="'joint-input' + j" type="number" v-model.number="joints[j-1]"
+            <input :id="'joint-input' + j" type="number" onfocus="this.select()" v-model.number="joints[j-1]"
             @input="setJointOffline(j-1)" @change="setJointOnline(j-1)" :disabled="rangeDisable"
             :max="config.jointMax" :min="config.jointMin">
           </span>
@@ -306,7 +306,7 @@ export default {
         this.setRangeMask(index, value);
       });
     };
-    onWindowResize()
+//    this.onWindowResize();
     this.getLeftControlSize();
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('resize', this.getLeftControlSize, false);
@@ -715,6 +715,9 @@ export default {
     //     this.$store.commit('test', value);
     //   },
     // },
+    isOnline() {
+      return !this.$store.state.robot.info.online;
+    },
   },
 };
 </script>

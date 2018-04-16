@@ -3,7 +3,7 @@
     <CommonTopMenu
       type='paint'
       :onlist='listProjects'
-      :isFileSelected="model.localPaintMgr.curProj!==null&&store.state.robot.info.online"
+      :isFileSelected="model.localPaintMgr.curProj!==null&&store.state.robot.status.connected"
       title='Draw / Laser'
       :issaved='model.localPaintMgr.state.saved'
       :curFileName="curProj.name"
@@ -75,6 +75,7 @@
       ok='Delete'
       :onok='removeAllOK'
       :isdelete=true
+      :oncover='closeDialog'
       :oncancel='closeDialog'
       v-if="model.localPaintMgr.visible.clear">
     </DialogTeachAlert>
@@ -91,6 +92,7 @@
       ok='Delete'
       :onok='onDeleteOK'
       :isdelete=true
+      :oncover='closeDel'
       :oncancel='closeDel'
       v-if="model.localPaintMgr.visible.del">
     </DialogTeachAlert>
@@ -318,7 +320,7 @@ export default {
       });
     },
     newProject() {
-      this.playground.clear().renderAll();
+      // this.playground.clear().renderAll();
       this.model.localPaintMgr.state.buffer = [];
       this.model.localPaintMgr.curDialogProjInputText = '';
       this.model.localPaintMgr.visible.pattern = true;
