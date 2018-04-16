@@ -17,3 +17,4 @@ export const SET_ERROR = 'SET_ERROR';
 export const MOVE_END_STEP = 'MOVE_END_STEP';
 // geometry.is
 export const SET_XARM_SRC = 'SET_XARM_SRC'
+export const XARM_SRC_LOADED = 'XARM_SRC_LOADED'

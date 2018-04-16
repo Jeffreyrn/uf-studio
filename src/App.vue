@@ -4,7 +4,6 @@
       <!-- <router-link :to="{ name: 'Home'}">
         <el-button >Home</el-button>
       </router-link> -->
-      <div @click="tabClick">switch</div>
     </div>
     <div class="main-container">
       <router-view>
@@ -19,7 +18,8 @@
 
 <script>
 import XarmModel from './components/common/XarmModel';
-import baseg from './lib/threeJSLoader'
+import meshResource from './lib/threeJSLoader'
+import * as types from './store/mutation-types';
 
 export default {
   name: 'app',
@@ -31,8 +31,10 @@ export default {
   mounted() {
     window.GlobalUtil.store = this.$store;
     this.$store.dispatch('openWebsocket');
-    baseg.init().then(() => {
+    // preload meshs of threeJS
+    meshResource.init().then(() => {
       console.log('load geometry promise resolve')
+      this.$store.commit(types.XARM_SRC_LOADED)
     })
   },
   components: {

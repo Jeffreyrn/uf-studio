@@ -45,7 +45,6 @@
     </div> -->
     <div class="hello-row">
       <div id="emulator-overlay">
-        <button @click="createRobotModel">create</button>
           <!-- <input v-model="testtest"/> -->
         <!-- <span v-for="j in 7" :key="j" class="text">#{{j-1}}:{{joints[j-1]}}</span> -->
         <!-- <el-slider v-model="joints[j-1]" :step="config.step" :max="config.jointMax" :min="config.jointMin"></el-slider> -->
@@ -61,7 +60,6 @@
 
 <script>
 import * as THREE from 'three';
-import * as THREESTLLoader from 'three-stl-loader';
 import OrbitControls from 'three-orbitcontrols';
 import baseg from '../../lib/threeJSLoader'
 
@@ -113,11 +111,17 @@ export default {
         this.three.camera.updateProjectionMatrix();
       }
     },
+    shouldLoad() {
+      this.createRobotModel()
+    },
     // robotJointsAngle() {
     //   this.$set(this.robotJointsAngle, 0, this.robotJointsAngle[0]);
     // },
   },
   computed: {
+    shouldLoad() {
+      return this.$store.state.geometry.preloaded
+    },
     joints: {
       get() {
         const arr = this.$store.getters.joints;
@@ -191,7 +195,9 @@ export default {
     };
   },
   mounted() {
-    // this.createRobotModel();
+    if (this.shouldLoad) {
+      this.createRobotModel();
+    }
   },
   // activated() {
   //   const sizeArray = this.getRenderSize();
@@ -220,18 +226,6 @@ export default {
       //   spinner: 'el-icon-loading',
       //   background: 'rgba(0, 0, 0, 0.7)',
       // });
-      const RAINBOW_COLOR_LIST = [0x4B0082, 0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x9400D3];
-      const JOINT_MODEL_SRC = [];
-      for (let i = 0; i < 8; i += 1) {
-        // const src = `${MODEL_DIR + (i + 1) + FILE_FORMAT}`;
-        // console.log('sss', src);
-        JOINT_MODEL_SRC[i] = require(`../../assets/three-stl/${(i + 1)}.stl`);
-      }
-      const materialList = [];
-      RAINBOW_COLOR_LIST.forEach((hex) => {
-        hex = 0xffffff;
-        materialList.push(new THREE.MeshPhongMaterial({ color: hex }));
-      });
       // console.log(materialList);
       const scene = new THREE.Scene();
       // console.log(this.three.scene, scene);
@@ -267,39 +261,15 @@ export default {
       // renderer.setSize(...sizeArray);
       document.getElementById('emulator-container').appendChild(renderer.domElement);
       // new THREE.CylinderGeometry(0.5, 0.5, 2, 4, 4);
-      const STLLoader = new THREESTLLoader(THREE);
-      const loader = new STLLoader();
-      let base;
-      // const cache = this.$store.getters.geometry('xarm', 0)
-      const cache = null
-      if (cache) {
-        console.log('NO.0 cache loaded.', cache);
-        // base = new THREE.Mesh(cache, new THREE.MeshPhongMaterial({ color: 0xffffff }));
-        // const position = [7.66, 0.04 + this.config.offsetY, -0.86];
-        // base.position.set(...position);
-        // this.setDiff(base);
-        // scene.add(base);
-      }
-      else {
-        // loader.load(JOINT_MODEL_SRC[0], (geometry) => {
-        //   // this.$setItem('geometry0', geometry)
-        //   // this.$store.commit(types.SET_XARM_SRC, {
-        //   //   index: 0,
-        //   //   geometry,
-        //   // })
-        //   base = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
-        //   const position = [7.66, 0.04 + this.config.offsetY, -0.86];
-        //   base.position.set(...position);
-        //   this.setDiff(base);
-        //   scene.add(base);
-        // });
-        console.log('baseg', baseg.geometry)
-        base = new THREE.Mesh(baseg.geometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+      // load first model
+      const base = baseg.geometryList[0]
+      // base = new THREE.Mesh(baseg.geometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+      window.setTimeout(() => {
         const position = [7.66, 0.04 + this.config.offsetY, -0.86];
         base.position.set(...position);
         this.setDiff(base);
-        scene.add(base);
-      }
+        scene.add(base)
+      }, 0)
       const groups = [];
       const joints = [];
       // const geometry1 = new THREE.CylinderGeometry(0.3, 0.3, 1, 4, 4);
@@ -336,30 +306,31 @@ export default {
         // }
       };
       const addMesh = (index, geometry) => {
-        // joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
-        joints[index] = geometry;
-        joints[index].position.set(...JOINT_POSITION[index]);
-        if (index < 7) {
-          groups[index - 1].add(joints[index], groups[index]);
-        }
-        else {
-          groups[index - 1].add(joints[index]);
-        }
-        groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
+        return new Promise((resolve) => {
+          // joints[index] = new THREE.Mesh(geometry, materialList[index - 1]);
+          joints[index] = geometry;
+          joints[index].position.set(...JOINT_POSITION[index]);
+          if (index < 7) {
+            groups[index - 1].add(joints[index], groups[index]);
+          }
+          else {
+            groups[index - 1].add(joints[index]);
+          }
+          groups[index - 1].position.set(...GROUP_POSITION[index - 1]);
+          resolve()
+        })
       }
       const loadModel = (index) => { // model index: 1-6
-        if (index < 8) {
-          // console.log(`NO.${index} mesh loaded.`);
-          // // const mesh = new THREE.Mesh(baseg.geometryList[index], materialList[index - 1]);
-          // addMesh(index, baseg.geometryList[index - 1])
-          // loadModel(index + 1); // load next model
+        // return new Promise((resolve) => {
 
-          loader.load(JOINT_MODEL_SRC[index], (geometry) => {
-            console.log(`NO.${index} model loaded.`, geometry);
-            const mesh = new THREE.Mesh(geometry, materialList[index - 1]);
-            addMesh(index, mesh)
+        // })
+        if (index < 8) {
+          addMesh(index, baseg.geometryList[index])
+          window.setTimeout(() => {
+            console.log(`NO.${index} mesh loaded.`, baseg.geometryList[index]);
+            // const mesh = new THREE.Mesh(baseg.geometryList[index], materialList[index - 1]);
             loadModel(index + 1); // load next model
-          });
+          }, 0)
         }
         else {
           console.log('loading all');
@@ -367,7 +338,7 @@ export default {
           groups[0].position.y += this.config.offsetY;
           // window.GlobalUtil.xarm = groups[0];
           scene.add(groups[0]);
-          // animate();
+          animate();
           renderer.render(scene, camera);
           // this.loading.close(); // hide loading overlay
         }
