@@ -31,7 +31,7 @@
         min="-100"
         max="200"
         value="0"
-        @mouseup="onZeroUp"
+        @change="onZeroUp"
         id="zero-control">
 
       <input
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       model: window.GlobalUtil.model,
+      testStr: '',
     };
   },
   mounted() {
@@ -86,6 +87,7 @@ export default {
   },
   methods: {
     onZeroUp() {
+      this.testStr = 'onZeroUp';
       console.log(`on Zero Up on Zero Up = ${this.curZeroHeight}`);
       window.CommandsPaintSocket.setZeroHeight(this.curZeroHeight, (dict) => {
         console.log(`on Zero Up on Zero Up = ${JSON.stringify(dict)}`);
