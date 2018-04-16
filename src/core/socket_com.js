@@ -25,7 +25,7 @@ self.init_socket = (args) => {
   // const ws_url = `ws:${self.socket_info.host}/ws`;
   console.log(`ws_url ws_url = ${ws_url}`);
   self.socket_info.socket = new ReconnectingWebSocket(ws_url, null, {
-    debug: true,
+    debug: false,
     logger: args.logger,
     reconnectInterval: 1000,
   });
