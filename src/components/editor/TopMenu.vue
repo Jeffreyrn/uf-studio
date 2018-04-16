@@ -415,7 +415,7 @@ export default {
   },
   computed: {
     startRunBtn: () => ({
-      'run-icon': 1 == 1, // window.GlobalUtil.store.state.robot.status.connected,
+      'run-icon': true, // window.GlobalUtil.store.state.robot.status.connected,
       // 'run-icon-dark': !window.GlobalUtil.store.state.robot.status.connected,
     }),
     proListData() {
