@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="12px" height="20px" viewBox="0 0 12 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_speed</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图专用recording13" transform="translate(-1583.000000, -967.000000)" fill="#FFFEAD">
+            <g id="recordingpagev1.0_waypoint07">
+                <g id="MYPROJECTLIST" transform="translate(1481.000000, 60.000000)">
+                    <g id="control-panel" transform="translate(16.000000, 60.000000)">
+                        <g id="speedbar" transform="translate(0.000000, 832.000000)">
+                            <g id="bar_speed" transform="translate(39.000000, 9.000000)">
+                                <g id="icon_speed" transform="translate(47.000000, 6.000000)">
+                                    <path d="M6.06578502,1.34995534 C6.06578502,0.52520158 5.77122188,0.45311538 5.40058131,1.20368577 L0.623784764,10.8769982 C0.256402898,11.6209696 0.635493121,12.2240775 1.46822735,12.2240775 L4.55613873,12.2240775 C5.38989335,12.2240775 6.06578502,12.8880728 6.06578502,13.7174263 L6.06578502,19.1926825 C6.06578502,20.0174362 6.36034816,20.0895224 6.73098874,19.338952 L11.5077853,9.66563955 C11.8751671,8.92166824 11.4960769,8.31856033 10.6633427,8.31856033 L7.57543132,8.31856033 C6.74167669,8.31856033 6.06578502,7.65456501 6.06578502,6.82521154 L6.06578502,1.34995534 Z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

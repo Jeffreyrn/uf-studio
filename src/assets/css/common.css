@@ -1,0 +1,199 @@
+
+@font-face{
+  font-family:'Gotham-Bold';
+  src: url('../fonts/Gotham-Bold_0.otf');
+}
+@font-face{
+  font-family:'Gotham-Book';
+  src: url('../fonts/Hiragino_gb_W3.ttf');
+  unicode-range: U+4E00-9FFF;
+}
+@font-face{
+  font-family:'Gotham-Black';
+  src: url('../fonts/Gotham-Black_0.otf');
+}
+@font-face{
+  font-family:'Gotham-Book';
+  src: url('../fonts/Gotham-Book_0.otf');
+}
+@font-face{
+  font-family:'Gotham-Medium';
+  src: url('../fonts/Gotham-Medium_0.otf');
+}
+@font-face {
+  font-family: 'ufbigfont';
+  src: url('../fonts/BIG-JOHN.otf');
+}
+@font-face {
+  font-family: 'black-light';
+  src: url('../fonts/blackLight.ttf');
+}
+@font-face {
+  font-family: 'xing-kai';
+  src: url('../fonts/STXingkai-SC-Bold.ttf');
+}
+@font-face {
+  font-family: 'lan-ting';
+  src: url('../fonts/lanting.ttf');
+}
+@font-face {
+  font-family: 'kan-ti';
+  src: url('../fonts/kanti.ttf');
+}
+/*@font-face {*/
+  /*font-family: 'gotham-medium';*/
+  /*src: url('../fonts/gotham-medium.otf');*/
+/*}*/
+
+.noselected {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+
+.limitWH {
+  position: absolute;
+  border:1px;
+  background-color: #fffaf0;
+  overflow:scroll;
+}
+.page-01-bg {
+  background-color: #e9e6d3;
+}
+.float-clear {
+  clear: both;
+}
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
+}
+.over-hiden {
+  overflow: scroll;
+}
+.display-none {
+  display: none;
+}
+.position-absolute {
+  position: absolute;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.col2{
+  width: 50%;
+}
+.col3{
+  width: 33.33%;
+}
+.col4{
+  width: 25%;
+}
+.col6{
+  width: 16.66%;
+}
+.textarea-style {
+  width: 350px;
+  height: 80px;
+}
+/**  common shadow  **/
+.com-box-shadow {
+  box-shadow: 0 0 8px 0 rgba(192,192,192,0.50);
+  border-radius: 20px;
+}
+/**  common radial-gradient  **/
+.com-radial-gradient {
+  background: -webkit-radial-gradient(#FFF,#E7E7E7); /* Safari 5.1 - 6.0 */
+  background: -o-radial-gradient(#FFF,#E7E7E7); /* Opera 11.6 - 12.0 */
+  background: -moz-radial-gradient(#FFF,#E7E7E7); /* Firefox 3.6 - 15 */
+  background: radial-gradient(#FFF,#E7E7E7); /* */
+}
+/**  common font  **/
+.com-text-center{
+  /*text-align: center;*/
+  display: flex;
+  align-items: center;
+}
+.com-font-GB-22 {
+  font-family: 'Gotham-Black';
+  font-size: 2.2rem;
+  color: #444;
+  letter-spacing: -1px;
+}
+.com-font-GB-24 {
+  font-family: 'Gotham-Black';
+  font-size: 2.4rem;
+  color: #444;
+  letter-spacing: -1.17px;
+}
+.com-font-GM-20 {
+  font-family:'Gotham-Medium';;
+  font-size: 2rem;
+  color: #444;
+  letter-spacing: -2px;
+}
+/**  img a  **/
+.com-block {
+  display: block;
+}
+/**  width   **/
+
+.com-width-80-persents {
+  width: 80%;
+  margin: 0 auto;
+}
+
+/**  common module  **/
+.com-module-wrapper {               /**组件的包裹层**/
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.com-back-home-wrapper {                /**组件的返回包裹层**/
+  width: 100%;
+  height: 10%;
+  background: #FAFAFB;
+}
+.com-icon-back {                      /**组件的返回icon**/
+  width: 2rem;
+  margin-left: 4rem;
+  cursor: pointer;
+}
+.com-module-icon {                   /**组件的模块icon**/
+  width: 2.4rem;
+}
+.com-module-name {                    /**组件的模块名**/
+  padding: 0 1.5rem 0 3rem;
+}
+.com-app-icon {
+  /* width: 8rem;
+  height: 8rem; */
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  /* margin: 1.4rem; */
+  margin: 20px;
+  display: inline-block;
+  text-align: center;
+  background: #F3F5F7;
+}
+.com-app-icon-hover {
+  transition: all .4s ease-in-out;
+  transform: scale(1);
+}
+.com-app-icon-hover:hover, .com-app-icon-hover:focus {
+  transform: scale(1.3);
+}
+.input-focus {
+  outline: none;
+}
+.comNonePointerEvent {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+
+

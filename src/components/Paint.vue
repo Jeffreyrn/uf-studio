@@ -1,107 +1,125 @@
 <template>
   <div class="main-wrapper" id="paint-wrapper">
-    <div class="menu-bar">
-      <div class="paint-mode">
-        {{$t('paintApp.dailog.setting.mode')}}: 
-        <span v-if="state.mode === 'greyscale'" v-text="$t('paintApp.dailog.addImage.option1')"></span>
-        <span v-else-if="state.mode === 'outline'" v-text="$t('paintApp.dailog.addImage.option2')"></span>
-      </div>
-      <el-button @click="newProject()" type="info" round>
-        <img src="../assets/img/icon_new_project.svg" alt="New Project">
-      </el-button>
-      <el-button @click="visible.setting = true" type="info" round>
-        <img src="../assets/img/icon_start.svg" alt="start print">
-      </el-button>
+    <CommonTopMenu
+      type='paint'
+      :onlist='listProjects'
+      :isFileSelected="model.localPaintMgr.curProj!==null&&store.state.robot.status.connected"
+      title='Draw / Laser'
+      :issaved='model.localPaintMgr.state.saved'
+      :curFileName="curProj.name"
+      :onback='onBack'
+      :onsave='saveProject'
+      :onnew='newProject'
+      :isRunning='model.localPaintMgr.state.isRunnningPrint'
+      :onstart='startPrint'
+      :onstop='stopPrint'>
+    </CommonTopMenu>
+
+    <div style="" class="fabric-container" v-show="model.localPaintMgr.curProj!==null">
+      <!-- <canvas style="" id="fabric" tabindex='1' width="825" height="385"></canvas> -->
+      <canvas style="" id="fabric" tabindex='1' width="900" height="450"></canvas>
     </div>
-    <div class="fabric-container">
-      <canvas id="fabric" tabindex='1' width="800" height="400"></canvas>
+
+    <!-- buffer : {{ this.model.localPaintMgr.state.buffer.length }} -- backStep: {{ model.localPaintMgr.state.backStep }} -->
+
+    <div class="float-type" style="" v-show="model.localPaintMgr.curProj!==null">
+      <span class="point">
+      </span>
+      Mode: {{ curProj.projType }}
     </div>
-    
-    <el-button @click="undoEvent()">
-      <img src="../assets/img/tool-undo.svg" alt="undo">
-    </el-button>
-    <el-button @click="undoEvent('redo')">
-      <img src="../assets/img/tool-redo.svg" alt="redo">
-    </el-button>
-    <el-button @click="visible.text = true">
-      <img src="../assets/img/tool-text.svg" alt="text">
-    </el-button>
-    <el-button @click="$refs.addFile.click()">
-      <img src="../assets/img/tool-image.svg" alt="image">
-    </el-button>
-    <el-button @click="visible.pattern = true" icon="el-icon-plus">
-    </el-button>
-    <el-button @click="duplicate()">
-      <img src="../assets/img/tool-copy.svg" alt="copy">
-    </el-button>
-    <el-button @click="removeSelected()">
-      <img src="../assets/img/tool-delete.svg" alt="delete">
-    </el-button>
-    <el-button @click="removeAll()" :disabled="state.empty">
-      <img src="../assets/img/tool-clear.svg" alt="clear">
-    </el-button>
-    <el-dialog
-      :title="$t('paintApp.sidebar.picture_name')"
-      :visible.sync="visible.pattern"
-      width="80%">
-      <div class="emotion-wrapper">
-        <img v-for="(src, index) in emotions" :src="src" :key="index" :alt="index" @click="addEmotion(index)"/>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <!-- <el-button @click="visible.text = false">Cancel</el-button> -->
-        <!-- <el-button type="primary" >Confirm</el-button> -->
-      </span>
-    </el-dialog>
-    <el-dialog
-      :title="$t('paintApp.dailog.addText.title')"
-      :visible.sync="visible.text"
-      width="30%"
-      @close="dialog.textInput=''">
-      <span>
-        <el-input type="textarea" :rows="2" placeholder="Please input" v-model="dialog.textInput" :autofocus="true"></el-input>
-        <el-select v-model="dialog.fontSelect" placeholder="Select">
-          <el-option
-            v-for="(item, index) in FONT_LIST"
-            :key="index"
-            :label="item.name"
-            :value="index">
-          </el-option>
-        </el-select>
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <!-- <el-button @click="visible.text = false">Cancel</el-button> -->
-        <el-button type="primary" @click="addTextAsPath(dialog.textInput)">Confirm</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      :title="$t('paintApp.dailog.setting.title')"
-      :visible.sync="visible.setting"
-      width="80%">
-      <div class="setting-wrapper">
-        <span class="set-item">{{$t('paintApp.dailog.setting.adjustzero')}}</span>
-        <el-slider
-          v-model="state.zero"
-          show-input>
-        </el-slider>
-        <span class="set-item">{{$t('paintApp.dailog.setting.speed')}}</span>
-        <el-slider v-model="state.speed"></el-slider>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible.setting = false">{{$t('paintApp.dailog.cancelBtn')}}</el-button>
-        <el-button type="primary" @click="startPrint()">{{$t('paintApp.dailog.setting.startButton')}}</el-button>
-      </span>
-    </el-dialog>
-    <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​​​​​​
+
+    <div class="bottom-progress" v-if="model.localPaintMgr.state.isRunnningPrint && 1===2">
+      {{ Number(progressNum) * 1 }} %
+    </div>
+
+    <BottomTools
+      class="paint-bottom"
+      v-if="model.localPaintMgr.curProj!==null"
+      :onredo='onredo'
+      :onundo='onundo'
+      :onimage="openImage"
+      :onadd="addIconsDialog"
+      :ondelete="removeSelected"
+      :oncopy="duplicate"
+      :onremoveall='removeAll'
+      :ontext="textDialog">
+    </BottomTools>
+
+    <DialogNewProj
+      :onclose='closeDialog'
+      :onok='createProj'
+      v-if="model.localPaintMgr.visible.pattern">
+    </DialogNewProj>
+
+    <DialogProjs
+      :onclose='closeDialog'
+      :onopen='selectProj'
+      v-if="model.localPaintMgr.visible.projs">
+    </DialogProjs>
+
+    <DialogIcons
+      :onclose='closeDialog'
+      :onok='addEmotion'
+      v-if="model.localPaintMgr.visible.icons">
+    </DialogIcons>
+
+    <DialogFontSelect
+      :onclose='closeDialog'
+      :onopen='addTextAsPath'
+      v-if="model.localPaintMgr.visible.text">
+    </DialogFontSelect>
+
+    <DialogTeachAlert
+      title='Clear all ?'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='removeAllOK'
+      :isdelete=true
+      :oncover='closeDialog'
+      :oncancel='closeDialog'
+      v-if="model.localPaintMgr.visible.clear">
+    </DialogTeachAlert>
+
+    <DialogPaintSetting
+      :onclose='closeDialog'
+      :onok='startPrintOK'
+      v-if="model.localPaintMgr.visible.setting">
+    </DialogPaintSetting>
+
+    <DialogTeachAlert
+      :title='model.localPaintMgr.curToDelProjTitle'
+      cancel='Cancel'
+      ok='Delete'
+      :onok='onDeleteOK'
+      :isdelete=true
+      :oncover='closeDel'
+      :oncancel='closeDel'
+      v-if="model.localPaintMgr.visible.del">
+    </DialogTeachAlert>
+
+    <input type="file" v-show="false" ref="addFile" @change="addImage()"/>​​​​​​​​​
+
   </div>
 </template>
+
 <script>
 import { fabric } from 'fabric-webpack';
 import opentype from 'opentype.js';
 import Potrace from '../assets/lib/potrace';
-// import robot from '../assets/lib/robot';
+import CommonTopMenu from './common/CommonTopMenu';
+import BottomTools from './Paint/BottomTools';
+import DialogNewProj from './Paint/DialogNewProj';
+import DialogProjs from './Paint/DialogProjs';
+import DialogIcons from './Paint/DialogIcons';
+import DialogFontSelect from './Paint/DialogFontSelect';
+import DialogTeachAlert from './DialogTeachAlert';
+import DialogPaintSetting from './Paint/DialogPaintSetting';
 
-const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
-const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
+// import { constants } from 'http2';
+// const path = require('path');
+// const SVG_LIST2 = require.context('../assets/svg/shapes2', false, /\.svg$/);
+// const SVG_LIST1 = require.context('../assets/svg/shapes1', false, /\.svg$/);
+
 const CONFIG = {
   addPosition: {
     left: 350,
@@ -133,101 +151,201 @@ export default {
   },
   data() {
     return {
+      model: window.GlobalUtil.model,
+      store: window.GlobalUtil.store,
       playground: null,
-      state: {
-        buffer: [],
-        saved: true,
-        empty: true,
-        backStep: 0,
-        mode: 'outline',
-        zero: 50,
-        speed: 200,
-      },
-      visible: {
-        text: false,
-        setting: false,
-        pattern: false,
-      },
-      dialog: {
-        textInput: '', // text value
-        fontSelect: 0, // select font
-      },
-      FONT_LIST: [
-        {
-          name: this.$t('paintApp.fontNameList.blacklight'),
-          src: require('../assets/fonts/blackLight.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.xingkai'),
-          src: require('../assets/fonts/STXingkai-SC-Bold.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.lanting'),
-          src: require('../assets/fonts/lanting.ttf'),
-        },
-        {
-          name: this.$t('paintApp.fontNameList.kaiti'),
-          src: require('../assets/fonts/kanti.ttf'),
-        },
-      ],
+      // backStr: 'AppStore',
       emotions: {},
+      progressNum: '0',
     };
   },
   mounted() {
     this.initFabric();
-    this.fabricModified();
+    // this.fabricModified();
     this.loadEmotions();
     console.log(this.playground.toSVG());
+    setTimeout(() => {
+      this.model.localPaintMgr.state.saved = true;
+    });
+  },
+  activated: function() {
+    setTimeout(() => {
+      if (this.model.localPaintMgr.projList.length === 0) {
+        this.newProject();
+      }
+      else if (this.model.localPaintMgr.curProj === null) {
+        this.listProjects();
+      }
+    }, 50);
   },
   methods: {
+    onDeleteOK() {
+      this.closeDel();
+      const toDelProj = this.model.localPaintMgr.curToDelProj;
+      const toDelUUID = toDelProj.uuid;
+      console.log(`toDelProj uuid = ${toDelUUID}`);
+      window.CommandsPaintSocket.delProj(toDelUUID, () => {
+        if (this.model.localPaintMgr.curProj !== null) {
+          if (toDelUUID === this.model.localPaintMgr.curProj.uuid) {
+            this.model.localPaintMgr.curProj = null;
+          }
+        }
+      });
+    },
+    closeDel() {
+      this.model.localPaintMgr.visible.del = false;
+    },
+    closeDialog() {
+      this.model.localPaintMgr.visible.text = false;
+      this.model.localPaintMgr.visible.setting = false;
+      this.model.localPaintMgr.visible.pattern = false;
+      this.model.localPaintMgr.visible.projs = false;
+      this.model.localPaintMgr.visible.icons = false;
+      this.model.localPaintMgr.visible.text = false;
+      this.model.localPaintMgr.visible.clear = false;
+      this.model.localPaintMgr.visible.del = false;
+    },
+    addIconsDialog() {
+      this.model.localPaintMgr.selectedIcon = null;
+      this.model.localPaintMgr.visible.icons = true;
+    },
+    textDialog() {
+      this.model.localPaintMgr.curDialogFontInputText = '';
+      this.model.localPaintMgr.visible.text = true;
+    },
+    listProjects() {
+      // console.log('list projects');
+      this.model.localPaintMgr.curProj = this.model.localPaintMgr.curProj;
+      this.model.localPaintMgr.visible.projs = true;
+    },
+    saveProject() {
+      // console.log('save project');
+      const jsonStr = JSON.stringify(this.playground);
+      console.log(jsonStr);
+      window.CommandsPaintSocket.saveOrUpdateFile(this.model.localPaintMgr.curProj.uuid, jsonStr, () => {
+        // console.log(`dict = ${JSON.stringify(dict)}`);
+        this.model.localPaintMgr.state.saved = true;
+      });
+    },
+    selectProj(index) {
+      // console.log(`select project = ${JSON.stringify(this.model.localPaintMgr.curProj)}`);
+      this.closeDialog();
+      const curProj = this.model.localPaintMgr.projList[index];
+      window.CommandsPaintSocket.getFile(curProj.uuid, (dict) => {
+        // console.log(`dict = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          const canvas = this.playground;
+          this.removeAllOK();
+          const jsonStr = dict.data; // GlobalUtil.decode(dict.data);
+          // console.log(`jsonStr = ${jsonStr}`);
+          canvas.loadFromJSON(jsonStr, canvas.renderAll.bind(canvas));
+          this.model.localPaintMgr.curProj = curProj;
+          setTimeout(() => {
+            this.model.localPaintMgr.state.saved = true;
+          });
+        }
+      });
+    },
+    // startPrinting(setting) {
+    //   setting.canvasMode = this.ui_data.canvasMode;
+    //   // console.log(setting);
+    //   let sendData;
+    //   if (setting.mode === '0') { // pen / outline mode
+    //     setting.zero = setting.zero0;
+    //   }
+    //   else { // laser mode
+    //     setting.zero = setting.zero1;
+    //   }
+    //   if (setting.canvasMode === '1') { // black white mode
+    //     sendData = this.mainCanvas.toDataURL('png');
+    //   }
+    //   else { // outline mode setting.canvasMode === 2
+    //     sendData = this.mainCanvas.toSVG();
+    //   }
+    //   // console.log(sendData, setting);
+    //   window.CommandsAppsSocket.startPrinting(sendData, setting, (dict) => {
+    //     console.log(`start printing = ${JSON.stringify(dict)}`);
+    //   });
+    //   sendData = null;
+    // },
     startPrint() {
-      const sendStrategy = {
-        outline() {
-          return this.playground.toSVG();
-        },
-        greyscale() {
-          return this.playground.toDataURL('png');
-        },
+      window.CommandsPaintSocket.getZeroConfig((dict) => {
+        this.model.localPaintMgr.state.zero = dict.data;
+        this.model.localPaintMgr.visible.setting = true;
+      });
+    },
+    startPrintOK() {
+      this.closeDialog();
+      const projType = this.model.localPaintMgr.curProj.projType;
+      const sendData = projType === 'outline' ? this.playground.toSVG() : this.playground.toDataURL('png');
+      const end_type = 'pen'; // 0: 'pen', 1: 'laser',
+      const zeroHeightDict = projType === 'outline' ? this.model.localPaintMgr.state.zero.outline : this.model.localPaintMgr.state.zero.grayscale;
+      const config = {
+        speed: this.model.localPaintMgr.state.speed || 100,
+        canvasMode: projType === 'outline' ? 2 : 1, // 2. outline 1. gray
+        zeropoint_height: end_type === 'pen' ? zeroHeightDict.pen : zeroHeightDict.laser, // Number(this.model.localPaintMgr.state.zero),
+        end_type: end_type,
+        drawing_feedrate: 500,
       };
-      const work = sendStrategy[this.state.mode].bind(this);
-      const setting = {
-        zero: this.state.zero,
-        speed: this.state.speed,
-      };
-      console.log(work(), setting);
-      // robot.printing.startPrinting(work(), setting);
+      window.CommandsPaintSocket.startPrinting(sendData, config, (dict) => {
+        // console.log(`start printing = ${JSON.stringify(dict)}`);
+        if (dict.code === 0) {
+          this.model.localPaintMgr.state.isRunnningPrint = true;
+        }
+        if (dict.code === 1) {
+          this.progressNum = dict.data.progress;
+        }
+        if (dict.code === 1111) {
+          this.model.localPaintMgr.state.isRunnningPrint = false;
+        }
+      });
+    },
+    stopPrint() {
+      window.CommandsPaintSocket.stopPrinting((dict) => {
+        if (dict.code === 0) {
+          this.model.localPaintMgr.state.isRunnningPrint = false;
+        }
+      });
+    },
+    createProj() {
+      // console.log('create proj');
+      this.closeDialog();
+      const projType = this.model.localPaintMgr.projTypeSelected;
+      window.CommandsPaintSocket.createProj(this.model.localPaintMgr.curDialogProjInputText, projType, (dict, filePath) => {
+        console.log(`dict = ${JSON.stringify(dict)}`);
+        this.model.localPaintMgr.state.saved = true;
+        const curProjIndex = this.model.localPaintMgr.findProjIndex(filePath);
+        console.log(`curProjIndex = ${curProjIndex}`);
+        this.selectProj(curProjIndex);
+      });
     },
     newProject() {
-      this.playground.clear().renderAll();
-      this.state.buffer = [];
-      this.$confirm(this.$t('selectMode.title'), {
-        confirmButtonText: this.$t('selectMode.outline'),
-        cancelButtonText: this.$t('selectMode.grayscale'),
-        type: 'info',
-        showClose: false,
-        closeOnClickModal: false,
-      }).then(() => {
-        this.state.mode = 'outline';
-      }).catch(() => {
-        this.state.mode = 'greyscale';
-      });
+      // this.playground.clear().renderAll();
+      this.model.localPaintMgr.state.buffer = [];
+      this.model.localPaintMgr.curDialogProjInputText = '';
+      this.model.localPaintMgr.visible.pattern = true;
+      window.GlobalUtil.setInputFocus();
     },
     initFabric() {
       this.playground = new fabric.Canvas('fabric', {
         fireRightClick: true,
+        backgroundColor: '#ECEFF1',
+        // selectionBorderColor: 'yellow',
       });
       this.playground.on({
         'object:modified': () => {
-          this.fabricModified();
+          // this.fabricModified();
         },
         'object:added': (options) => {
           options.target.bringToFront();
-          this.fabricModified();
+          // this.fabricModified();
         },
       });
     },
-    addEmotion(index) {
-      fabric.loadSVGFromURL(this.emotions[index], (objects, options) => {
+    addEmotion() {
+      this.closeDialog();
+      const data = this.model.localPaintMgr.selectedIcon;
+      fabric.loadSVGFromURL(data, (objects, options) => {
         Object.keys(objects).forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(objects, 'key')) {
             objects[key].set({ strokeWidth: 0.3 });
@@ -253,6 +371,9 @@ export default {
         this.visible.pattern = false;
       });
     },
+    openImage() {
+      this.$refs.addFile.click();
+    },
     addImage() {
       const file = this.$refs.addFile.files[0];
       this.$refs.addFile.value = '';
@@ -270,7 +391,7 @@ export default {
           });
         }
         else if (fileType.match('image.*')) { // not svg
-          const edge = (this.state.mode === 'outline');
+          const edge = (this.model.localPaintMgr.curProj.projType === 'outline');
           Potrace.loadImageFromFile(file);
           Potrace.setParameter({
             optcurve: true,
@@ -299,9 +420,13 @@ export default {
         }
       }
     },
-    addTextAsPath(text) {
+    addTextAsPath() {
+      this.closeDialog();
+      const text = this.model.localPaintMgr.curDialogFontInputText;
+      const fontList = this.model.localPaintMgr.FONT_LIST;
+      const fontSelect = this.model.localPaintMgr.dialog.fontSelect;
       if (text.trim()) {
-        opentype.load(this.FONT_LIST[this.dialog.fontSelect].src, (err, font) => {
+        opentype.load(fontList[fontSelect].src, (err, font) => {
           if (err) {
             this.$message(`Could not load font: ${err}`);
           }
@@ -322,7 +447,7 @@ export default {
             });
             this.playground.add(path);
             this.fabricModified();
-            this.visible.text = false; // close dialog
+            // this.visible.text = false; // close dialog
           }
           // console.log(font);
         });
@@ -332,31 +457,49 @@ export default {
       }
     },
     fabricModified() {
-      this.state.buffer.push(JSON.stringify(this.playground));
-      this.state.saved = false;
-      // fabric.log(myjson);
-      this.state.empty = this.playground.isEmpty();
-      // console.log(this.state.buffer.length, this.state.backStep);
+      const backStep = this.model.localPaintMgr.state.backStep;
+      const size = this.model.localPaintMgr.state.buffer.length;
+      const last = this.model.localPaintMgr.state.buffer[size - 1];
+      const current = JSON.stringify(this.playground);
+      if (backStep > 0) {
+        this.model.localPaintMgr.state.buffer = this.model.localPaintMgr.state.buffer.slice(0, size - backStep);
+        this.model.localPaintMgr.state.backStep = 0;
+      }
+      if (last !== current) {
+        this.model.localPaintMgr.state.buffer.push(current);
+        this.model.localPaintMgr.state.saved = false;
+        // fabric.log(myjson);
+        this.model.localPaintMgr.state.empty = this.playground.isEmpty();
+        // console.log(this.state.buffer.length, this.state.backStep);
+      }
     },
     undoEvent(reverse = false) { // do redo when reverse is true
       const canvas = this.playground;
-      const size = this.state.buffer.length;
+      const size = this.model.localPaintMgr.state.buffer.length;
       let checkValid;
       let nextStep;
       if (reverse) { // redo
-        checkValid = this.state.backStep > 0;
-        nextStep = this.state.backStep - 1;
+        checkValid = this.model.localPaintMgr.state.backStep > 0;
+        nextStep = this.model.localPaintMgr.state.backStep - 1;
       }
       else { // undo
-        checkValid = this.state.backStep < (size - 1);
-        nextStep = this.state.backStep + 1;
+        checkValid = this.model.localPaintMgr.state.backStep < (size - 1);
+        nextStep = this.model.localPaintMgr.state.backStep + 1;
       }
+      const backStep = this.model.localPaintMgr.state.backStep;
+      console.log(`model.localPaintMgr.state.buffer size = ${size}, backStep = ${backStep}, checkValid = ${checkValid}, reverse = ${reverse}`);
       if (checkValid) {
         canvas.clear().renderAll();
-        this.state.backStep = nextStep;
-        const loadJsonStr = this.state.buffer[size - nextStep - 1];
+        this.model.localPaintMgr.state.backStep = nextStep;
+        const loadJsonStr = this.model.localPaintMgr.state.buffer[size - nextStep - 1];
         canvas.loadFromJSON(loadJsonStr, canvas.renderAll.bind(canvas));
       }
+    },
+    onundo() {
+      this.undoEvent(false);
+    },
+    onredo() {
+      this.undoEvent(true);
     },
     duplicate() {
       const activeObject = this.playground.getActiveObject();
@@ -410,19 +553,23 @@ export default {
       }
     },
     removeAll() {
-      this.$confirm(this.$t('paintApp.dailog.deleteall.msg'), {
-        confirmButtonText: this.$t('paintApp.dailog.okBtn'),
-        cancelButtonText: this.$t('paintApp.dailog.cancelBtn'),
-        type: 'warning',
-        dangerouslyUseHTMLString: true,
-      }).then(() => {
-        this.playground.clear().renderAll();
-        this.fabricModified();
-      }).catch(() => {});
+      this.model.localPaintMgr.visible.clear = true;
+    },
+    removeAllOK() {
+      this.model.localPaintMgr.visible.clear = false;
+      this.playground.clear().renderAll();
+      this.fabricModified();
     },
     loadEmotions() {
-      SVG_LIST2.keys().forEach(key => this.emotions[key] = SVG_LIST2(key));
-      SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
+      // [1, 2, 3].findIndex(() => 0);
+      // this.emotions.list2 = SVG_LIST2;
+      // this.emotions.list1 = SVG_LIST1;
+      // SVG_LIST2.keys().forEach(key => this.emotions.list2 = SVG_LIST2(key));
+      // SVG_LIST1.keys().forEach(key => this.emotions[key] = SVG_LIST1(key));
+      // console.log(`this.emotions = ${JSON.stringify(this.emotions)}`);
+    },
+    onBack() {
+      this.$router.push({ name: 'AppStore' });
     },
   },
   beforeDestroy() {
@@ -431,20 +578,44 @@ export default {
   watch: {
   },
   computed: {
+    curProj: {
+      get() {
+        return this.model.localPaintMgr.curProj || {};
+      },
+      set(value) {
+        this.model.localPaintMgr.curProj = value;
+      },
+    },
+    topTitle() {
+      const fullname = `${this.curProj.name}`;
+      return this.curProj.name !== undefined ? fullname : '';
+    },
   },
   components: {
+    CommonTopMenu,
+    BottomTools,
+    DialogNewProj,
+    DialogProjs,
+    DialogIcons,
+    DialogFontSelect,
+    DialogTeachAlert,
+    DialogPaintSetting,
   },
 };
 </script>
 <style scoped lang="scss">
 #paint-wrapper {
   #fabric {
-    background: white;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    background: '#ECEFF1';
+    // background: white; #D95E2E 100%
+    // box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
 }
 .fabric-container {
-  margin: auto;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: auto;
   width: fit-content;
 }
 a {
@@ -462,6 +633,133 @@ a {
     background-color: #eee;
   }
 }
+
+.paint-header-wrapper {
+  height: 60px;
+  line-height: 60px;
+  background: #575C62;
+  display: flex;
+  justify-content: space-between;
+  img {
+    width: 1.6rem;
+  }
+  span {
+    margin-left: 1rem;
+    font-family: 'Gotham-Bold';
+    font-size: 2rem;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+}
+.back-wrapper {
+  .btn {
+    cursor: pointer;
+  }
+  padding-left: 1vw;
+}
+.menu-wrapper {
+  display: flex;
+  & > div {
+    padding: 0 1vw;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    span {
+      font-size: 0.7em;
+      padding: 0;
+      margin: 0;
+      line-height: 1.2vw;
+      text-transform: capitalize;
+    }
+  }
+  .run-btn {
+    background-color: #52BF53;
+    line-height: 0.2;
+    padding: 1.2vw;
+    img{
+      width: 120%;
+    }
+  }
+}
+
+.bottom-progress {
+  position:absolute;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  left: 0px;
+  right: 0px;
+  bottom: 100px;
+  margin: auto;
+  border: 1px solid #D8D8D8;
+  text-align: center;
+}
+
+.float-type {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:110px;
+  margin:auto;
+  width:145px;
+  height:30px;
+  line-height: 30px;
+  font-family: 'Gotham-Medium';
+  font-size: 14px;
+  color: #4A4A4A;
+  letter-spacing: -0.58px;
+  text-align: center;
+  background: #FFFFFF;
+  border-radius: 100px;
+  // border: 1px solid gray;
+  box-shadow: 0 0 4px 0 rgba(192,192,192,0.50);
+  // #D95E2E 100%  #E27347;
+  .point {
+    position: absolute;
+    left: 15px;
+    width: 4px;
+    height: 4px;
+    top: 13px;
+    border-radius: 2px;
+    background: #D95E2E
+  }
+}
+
+.paint-bottom {
+  position:absolute;
+  width:621px;
+  height:63px;
+  left: 0px;
+  right: 0px;
+  bottom: 30px;
+  margin:auto;
+  border: 1px solid #D8D8D8;
+  // background:lightgreen;
+}
+// .blockly-wrapper {
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   position: relative;
+// }
+// .blockly-wrapper.notfull{
+//   width: 80%;
+// }
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .2s ease;
+}
+.slide-fade-leave-active {
+  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  // opacity: 0;
+}
 </style>
-
-

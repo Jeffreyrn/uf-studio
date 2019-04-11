@@ -5,3 +5,7 @@
 /test/unit/coverage/
 /src/assets/lib-external/*
 /src/assets/lib/*
+/src/lib/*
+/src/components/params/
+/src/components/Params.vue
+/src/core/global_constant.js

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_gripper</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图专用" transform="translate(-430.000000, -58.000000)" fill="#3E3E3E">
+            <g id="icon_gripper" transform="translate(430.000000, 58.000000)">
+                <g transform="translate(9.000000, 4.000000)">
+                    <path d="M18,0 L22,0 C27.5228475,-1.01453063e-15 32,4.4771525 32,10 L32,32 L8,32 L8,10 C8,4.4771525 12.4771525,1.01453063e-15 18,0 Z" id="Rectangle-45"></path>
+                    <path d="M5.35109767,35.0824418 L5.35109767,47.9776127 L5.15143483e-14,47.9776127 L5.15143483e-14,31.9211917 L0.400657519,31.9211917 L0.331580166,31.8015462 L12.1967631,24.9511796 L14.8723119,29.5853661 L5.35109767,35.0824418 Z M5.9424986,37.8779515 L7.28027302,37.8779515 L7.28027302,48 L5.9424986,48 L5.9424986,37.8779515 Z" id="Combined-Shape"></path>
+                    <path d="M29.4787857,35.0824418 L29.4787857,47.9776127 L24.1276881,47.9776127 L24.1276881,31.9211917 L24.5283456,31.9211917 L24.4592682,31.8015462 L36.3244512,24.9511796 L39,29.5853661 L29.4787857,35.0824418 Z M30.0701867,37.8779515 L31.4079611,37.8779515 L31.4079611,48 L30.0701867,48 L30.0701867,37.8779515 Z" id="Combined-Shape" transform="translate(31.563844, 36.475590) scale(-1, 1) translate(-31.563844, -36.475590) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

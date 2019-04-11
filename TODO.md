@@ -1,0 +1,13 @@
+- **done** disable input when robot move in online mode
+- **done** init state when online mode active
+- **hold** remove console.log
+- position value match visual model
+- **hold** handle unreachable position
+- roll yaw pitch match
+- write 'get/set state function' in actions instead of mutations in robot.js
+- **done** reset gohome
+- handle robot.status.error when disconnected or reconnected
+- loading model progress percentage show
+- $set(array, index, value) v-model not work, array compute set() not work
+
+- 统一一个window.resize 子组件监听这一个resize 事件

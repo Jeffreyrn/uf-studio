@@ -18,7 +18,10 @@
 </template>
 <script>
 import debounce from 'lodash.debounce';
-import robot from '../assets/lib/robot';
+import GlobalUtil from '../core/global_util';
+
+// import robot from '../assets/lib/robot';
+const robot = GlobalUtil.model.robot;
 
 const DEFAULT_RADIAN = -(Math.PI / 2);
 // const PI2 = Math.PI * 2;
@@ -247,5 +250,3 @@ a, .text {
   color: white;
 }
 </style>
-
-

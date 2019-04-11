@@ -10,6 +10,9 @@ function resolve (dir) {
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
+  node: {
+    fs: 'empty'
+  },
   entry: {
     app: './src/main.js'
   },
@@ -76,6 +79,18 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.stl/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('stl/[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.xml/,
+        loader: 'raw-loader',
       }
     ]
   }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>btn_edit</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图专用" transform="translate(-988.000000, -59.000000)">
+            <g id="btn_edit" transform="translate(988.000000, 59.000000)">
+                <g>
+                    <circle id="Oval-11" fill="#616468" opacity="0.5" cx="18" cy="18" r="18"></circle>
+                    <g id="icon_pen" transform="translate(11.000000, 11.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                        <path d="M14.0061987,2.94140743 C14.315591,2.63148831 14.315591,2.11495646 14.0061987,1.82093063 L12.1498451,-0.0385840566 C11.8563191,-0.348503171 11.3406653,-0.348503171 11.0312731,-0.0385840566 L9.57157623,1.41565179 L12.5465019,4.39564327 L14.0061987,2.94140743 Z M-0.165816,11.3442065 L-0.165816,14.2962983 L2.78826908,14.2962983 L11.5008507,5.58172342 L8.54676559,2.62963165 L-0.165816,11.3442065 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

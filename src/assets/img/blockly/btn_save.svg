@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>btn_save</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板切图专用" transform="translate(-787.000000, -28.000000)">
+            <g id="btn_save" transform="translate(787.000000, 28.000000)">
+                <g transform="translate(8.000000, 7.000000)">
+                    <polygon id="Shape" fill="#2D2D2D" fill-rule="nonzero" points="14.0945833 0.0452599564 0.534708035 0.0452599564 0.534708035 22.4971662 19.6308941 22.4971662 19.6308941 6.00012654"></polygon>
+                    <rect id="Rectangle-3" fill="#6B6E72" x="2.72944743" y="4.776533" width="12.2825134" height="3.41180929"></rect>
+                    <rect id="Rectangle-3" fill="#6B6E72" x="2.72944743" y="10.9177897" width="14.329599" height="8.18834228"></rect>
+                    <path d="M6.79957701,13.9884181 L12.6104896,13.9884181" id="Line" stroke="#2D2D2D" stroke-linecap="square"></path>
+                    <path d="M6.79957701,16.0355036 L12.6104896,16.0355036" id="Line" stroke="#2D2D2D" stroke-linecap="square"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

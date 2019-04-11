@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="5px" height="9px" viewBox="0 0 5 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>btn_close/expand</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图专用" transform="translate(-140.000000, -33.000000)" fill="#767676" fill-rule="nonzero">
+            <g id="btn_close/expand" transform="translate(140.000000, 33.000000)">
+                <path d="M0.717302201,4.20806165 L0.717302201,4.79193835 L4.8769304,0.704801512 C5.0410232,0.543568416 5.0410232,0.282157918 4.8769304,0.120924822 C4.7128376,-0.040308274 4.4467906,-0.040308274 4.2826978,0.120924822 L0.123069601,4.20806165 C-0.0410232003,4.36929475 -0.0410232003,4.63070525 0.123069601,4.79193835 L4.2826978,8.87907518 C4.4467906,9.04030827 4.7128376,9.04030827 4.8769304,8.87907518 C5.0410232,8.71784208 5.0410232,8.45643158 4.8769304,8.29519849 L0.717302201,4.20806165 Z" transform="translate(2.500000, 4.500000) scale(1, -1) rotate(-180.000000) translate(-2.500000, -4.500000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>
